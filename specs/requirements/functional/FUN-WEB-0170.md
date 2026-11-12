@@ -72,8 +72,10 @@ DEC-0018's search phrase "Veranstaltungskalender".
   (`COMMUNITY_HELP_URL`, the `/hilfe` redirect's own target), sitemap and
   robots. `/llms.txt` does not list itself.
 - **Landing-only domains** list only what they serve (`/` and the legal route,
-  both languages, in one section) and no help link; the summary and the facts
-  stay, since they name no URL of another domain.
+  both languages, in one section) and no help link; the summary stays, the
+  facts block does not. Owner decision 2026-11-12: the side domains (`.at`,
+  `.pl`, `sheepoutside.com`) do not go online for now and are considered
+  separately later, so their `llms.txt` stays as lean as before #202.
 - No product name (CON-WEB-0058) and no competitor (TS-WEB-0011-A11, Q-0009).
 
 `TS-WEB-0004-A13` is the criterion; `src/lib/routes/llms-txt.test.ts` reads the

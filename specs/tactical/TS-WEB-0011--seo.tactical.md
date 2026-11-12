@@ -4,8 +4,8 @@ id: TS-WEB-0011
 kind: rule
 status: DRAFT
 version: 0.1.0
-implements: [FUN-WEB-0070, FUN-WEB-0071, FUN-WEB-0072, FUN-WEB-0074, CON-WEB-0075, FUN-WEB-0076, FUN-WEB-0077, FUN-WEB-0078]
-sources: [SRC-0003, SRC-0006, SRC-0010]
+implements: [FUN-WEB-0070, FUN-WEB-0071, FUN-WEB-0072, FUN-WEB-0074, CON-WEB-0075, FUN-WEB-0076, FUN-WEB-0077, FUN-WEB-0078, FUN-WEB-0207, FUN-WEB-0208, FUN-WEB-0209, FUN-WEB-0210, FUN-WEB-0213, NFR-WEB-0066, NFR-WEB-0067]
+sources: [SRC-0003, SRC-0006, SRC-0010, SRC-0019]
 decisions: [DEC-0018, DEC-0020, DEC-0022, DEC-0026, DEC-0035, DEC-0036, DEC-0037]
 ai_provenance:
   prompt_id: UNKNOWN
@@ -22,7 +22,10 @@ How the relaunch keeps the rank the old site earned and makes every new
 page legible to search engines and answer engines: the redirect map from
 the legacy URLs, the semantic skeleton every page is built on, which
 structured-data type sits on which page type, titles, descriptions and
-share metadata, and what an SEO landing page may be.
+share metadata, the share image, the site icons and the manifest, and what an
+SEO landing page may be. D11 is the inventory: every search and sharing surface
+of a page, with the requirement and the criterion that hold it — including the
+ones specified elsewhere.
 
 Not here: sitemaps, `robots.txt`, `llms.txt` (TS-WEB-0004 D1, FUN-WEB-0073 and
 FUN-WEB-0169, FUN-WEB-0170), hreflang and the canonical rule itself (TS-WEB-0001 D6 — D9 below
@@ -142,12 +145,11 @@ Emitted types:
 
 | Page | JSON-LD | Microdata |
 | --- | --- | --- |
-| every page | `WebPage` (`inLanguage`, `isPartOf` → `WebSite`, `primaryImageOfPage`, `description`) | — |
-| `/` | `WebSite` + `Organization` (the full node, `@id` = site root) | — |
+| every page | `WebPage` (`inLanguage`, `isPartOf` → `WebSite`, `primaryImageOfPage`, `description`) and `Organization` (the one full node: `name`, `url`, `logo`, `@id` = site root; FUN-WEB-0213, `Q-0098`) | — |
+| `/` | `WebSite` | — |
 | second-level pages (`/dein-ort/starten`, `/mitmachen/registrieren`, `/dein-kalender/bestellen`, `/deine-region/angebot`, `/ueber-uns/archiv`) | `BreadcrumbList` — **all five** (DEC-0071) | — (one entity, one representation: the trail is described in JSON-LD, so it is not also marked up in microdata) |
 | `/dein-kalender` | `Service` + `Offer` with a `priceSpecification` (`price` 480, `priceCurrency` EUR, `valueAddedTaxIncluded: false`, `unitCode` ANN, `referenceQuantity` 1 with `unitText` naming the **organisation**, `provider` → `Organization` `@id`) — see D4a | — |
 | `/deine-region` | `Service` **without** any price or `Offer` (BUS-WEB-0015, FUN-WEB-0202: the region price is not published) | — |
-| `/ueber-uns` | `Organization` (reference by `@id`, not a second full node) | — |
 | `/ueber-uns/archiv` | — | `ItemList` of `NewsArticle`/`CreativeWork`, each with the **outlet** as `publisher` and `url` to the original — a citation list, never authored content |
 | any page with a visible Q&A block | `FAQPage` | alternatively microdata on the block; one of the two, per the one-entity rule |
 | `/rechtliches` | `WebPage` only | — |
@@ -192,7 +194,14 @@ runtime from body copy or from the `h1`.
 | Landing pages | Same contract, no exception (D7). |
 | Error pages | Title required, description not (they are `noindex`, D9). |
 
-### D6 — Social sharing metadata [FIXED: convention / FUN-WEB-0078; image system PROPOSED]
+Decided by the owner on 2026-11-12: the separator before the brand is the
+middle dot (`Q-0094`), built in the layout template
+(`app/[lang]/layout.tsx`: `%s · Schafe vorm Fenster`); the home title keeps
+its brand-first form with the em dash, as the row above writes it. And no
+page emits `<meta name="keywords">`, on purpose (`Q-0096`): search engines
+ignore the tag, and none is wanted.
+
+### D6 — Social sharing metadata [FIXED: SRC-0019 / FUN-WEB-0078, FUN-WEB-0207, FUN-WEB-0208, NFR-WEB-0066, NFR-WEB-0067; image system PROPOSED]
 
 Every indexable page emits the complete set. Values derive from D5 and
 from TS-WEB-0001 D6, so title, canonical and `og:url` cannot drift apart.
@@ -211,7 +220,7 @@ from TS-WEB-0001 D6, so title, canonical and `og:url` cannot drift apart.
 | `og:image:alt` | localized, from frontmatter |
 | `twitter:card` | `summary_large_image` |
 | `twitter:title` / `:description` / `:image` | emitted explicitly, same values — never left to parser fallback |
-| `twitter:site` | only if an account exists (Open points) |
+| `twitter:site` | never emitted: there is no account (`Q-0097`, owner 2026-11-12) |
 
 Per-page image: generated at build time with `next/og` from the page
 frontmatter (title line, brand mark, theme tokens) and stored per
@@ -221,6 +230,17 @@ named in frontmatter overrides the generated one. Format JPEG or PNG
 (scrapers do not reliably render AVIF/WebP), ≤ 300 KB — outside the
 TS-WEB-0003 D1 image budget, because the page never loads it. No third-party
 image service (DEC-0013).
+
+Built (issue 195): `app/api/og/[lang]/[route]/route.tsx` draws one 1200×630
+PNG per (route, language) at build time from `seo.title`, the brand mark,
+the brand paper/lime/ink tokens and the brand typeface, all read from the
+brand package (TS-WEB-0017-A6). Its address is `/api/og/<lang>/<route>` and
+not a file-convention path, because the proxy answers an unknown
+asset-shaped URL with the 404 and lets `/api/` through. `og:image:alt` is
+derived (`Schafe vorm Fenster — <title>`, `src/lib/seo/share-image.ts`)
+since the frontmatter carries no alt field; the hand-made override named in
+frontmatter and the `twitter:site` tag are not built (no source, no account).
+The site icons and the manifest are D10; keywords are D5 (`Q-0096`).
 
 ### D7 — Interest-oriented landing pages [PROPOSED — bounded by DEC-0037, DEC-0036]
 
@@ -285,6 +305,60 @@ ambiguity would open an unbounded set of indexable URLs. The refinement:
 Rule of thumb behind the table: a query parameter changes what a page
 *shows*, never which page it *is*.
 
+### D10 — Site icons and the web app manifest [FIXED: SRC-0019 / FUN-WEB-0209, FUN-WEB-0210; sizes and manifest fields PROPOSED]
+
+Every icon is the brand mark of `@schafe-vorm-fenster/brand-design`, read at
+build time; no logo file is committed here (`TS-WEB-0017-A6`, `pnpm
+check:brand`).
+
+| Surface | Value |
+| --- | --- |
+| `rel="icon"` | the package's SVG mark (`./logo.svg` subpath), emitted under `/_next/static/…` (F-3-13) |
+| `rel="icon"` PNG | 32 px, from `/api/icon/32` |
+| `rel="apple-touch-icon"` | 180 px, from `/api/icon/180` |
+| manifest icons | 192 px and 512 px PNG, from `/api/icon/<size>` |
+| `rel="manifest"` | `/manifest.webmanifest` (`app/manifest.ts`), which the proxy lets through |
+| manifest fields | `name` and `short_name` = the site name of the default language; `start_url` `/`; `display` `standalone`; background and theme colour from the brand tokens |
+
+The four sizes and the manifest fields beyond name and icons are what the
+build chose (issue #195); no source names them. They stay [PROPOSED] until a
+decision point takes them.
+
+Shape: a full circle on every surface, favicon included (`logo.radius` =
+`radius.pill`); the owner decided so on 2026-11-12 (`Q-0095`). The round
+artwork is new in the brand package, not CSS here; until it ships, the barely
+rounded square of today stays (`state/open.md` row 214). Open until then:
+the brand-package issue the orchestrator opens (number to be entered here).
+
+The JSON-LD `Organization.logo` is the 512 px rendition above (FUN-WEB-0213, `Q-0098`); the round rendition follows with issue #199.
+
+### D11 — Inventory of the search and sharing surfaces [FIXED: the requirements named]
+
+One row per surface, so none of them is specified only in code. A surface
+specified in another tactical spec is listed with its home; this spec does not
+restate it.
+
+| Surface | Requirement | Specified in | Verified by |
+| --- | --- | --- | --- |
+| `<title>` | FUN-WEB-0076 | D5 (separator ` · `, `Q-0094`) | TS-WEB-0011-A7, A15 |
+| `<meta name="description">` | FUN-WEB-0076 | D5 | TS-WEB-0011-A7, A15 |
+| `<meta name="keywords">` | none, by decision (`Q-0096`) | D5 | — |
+| `rel="canonical"` | FUN-WEB-0073 | TS-WEB-0001 D6; parameters D9 | TS-WEB-0011-A10, A15 |
+| `hreflang` incl. `x-default` | FUN-WEB-0065, FUN-WEB-0073 | TS-WEB-0001 D6 | TS-WEB-0011-A15 |
+| `robots` meta and `X-Robots-Tag` | CON-WEB-0023, FUN-WEB-0145 | D9 | TS-WEB-0011-A10 |
+| `/sitemap.xml` | FUN-WEB-0073 | TS-WEB-0004 D1 | TS-WEB-0004-A5 |
+| `/robots.txt` | FUN-WEB-0169 | TS-WEB-0004 D1, DEC-0164 | TS-WEB-0004-A5 |
+| Open Graph set (`og:type`, `og:site_name`, `og:title`, `og:description`, `og:url`, `og:locale`) | FUN-WEB-0078 | D6 | TS-WEB-0011-A8, A15 |
+| `og:image` with `:width`, `:height`, `:type` | FUN-WEB-0078, FUN-WEB-0207, NFR-WEB-0066 | D6 | TS-WEB-0011-A8, A9, A15 |
+| `og:image:alt`, `twitter:image:alt` | FUN-WEB-0208 | D6 | TS-WEB-0011-A15 |
+| `twitter:card` = `summary_large_image`, `twitter:title`, `twitter:description`, `twitter:image` | FUN-WEB-0078 | D6 | TS-WEB-0011-A8, A15 |
+| `twitter:site` | none, by decision: there is no account (`Q-0097`) | D6 | — |
+| Share image (per page and language, title and brand mark) | FUN-WEB-0207, NFR-WEB-0066, NFR-WEB-0067 | D6 | TS-WEB-0011-A9 |
+| Favicon, touch icon, app icons | FUN-WEB-0209 (shape `Q-0095`) | D10 | TS-WEB-0011-A16 |
+| Web app manifest | FUN-WEB-0210 | D10 | TS-WEB-0011-A16 |
+| Structured data (JSON-LD, microdata) | FUN-WEB-0072, FUN-WEB-0213 (`Organization` with logo, `Q-0098`) | D4 | TS-WEB-0011-A5, A6, A14, A17 |
+| `/llms.txt` | FUN-WEB-0170 | TS-WEB-0004 D1, DEC-0018 | TS-WEB-0004-A5 |
+
 ## Free for the generator
 
 - [FREE] Emission mechanics for JSON-LD (Next.js Metadata API, a helper
@@ -315,6 +389,9 @@ Rule of thumb behind the table: a query parameter changes what a page
 | TS-WEB-0011-A12 | manual | Each interest landing page passes the SRC-0001 page-brief compliance check and is reviewed against D7.4 (not a keyword permutation of an existing page) before publication. |
 | TS-WEB-0011-A13 | manual | Post-cutover watch: Search Console shows no rise in 404s on formerly indexed URLs, and the previously best-ranking legacy URLs keep their impressions within the agreed corridor eight weeks after launch. |
 | TS-WEB-0011-A14 | integration | Each of the five second-level pages emits exactly one `BreadcrumbList` whose `itemListElement` positions match the visible trail of TS-WEB-0006 D2 item for item, and whose last item is the current page. No other page emits one, and no page emits the trail twice (JSON-LD and microdata both). |
+| TS-WEB-0011-A15 | e2e | On every (path, language) of the route table, the rendered head carries a non-empty title, a description of 120–160 characters, the self-canonical, one hreflang per language plus `x-default`, `og:title`, `og:description` equal to the description, `og:type` `website`, `og:url` equal to the canonical, `og:image` equal to the page's own share image with width 1200 and height 630, a non-empty `og:image:alt`, `twitter:card` `summary_large_image`, explicit `twitter:title`, `twitter:description` and `twitter:image`, and a non-empty `twitter:image:alt`. |
+| TS-WEB-0011-A16 | e2e | `/` links `rel="icon"`, `rel="apple-touch-icon"` and `rel="manifest"` (the root layout emits them, so every page does); the touch icon, the manifest and the 32, 192 and 512 px app icons each answer 200, the 192 px icon as `image/png`. |
+| TS-WEB-0011-A17 | e2e | On every (path, language) of the route table the one JSON-LD graph holds exactly one `Organization` node with a non-empty `name`, `url` equal to the site origin and a `logo` whose `url` answers 200 as `image/png`. |
 
 ## Coverage
 
@@ -327,7 +404,14 @@ Rule of thumb behind the table: a query parameter changes what a page
 | CON-WEB-0075 (never publish a keyword-oriented landing page targeting a competitor …) | D8 · A11 |
 | FUN-WEB-0076 (purposeful titles + descriptions) | D5 · A7 |
 | FUN-WEB-0077 (secondary content identifiable) | D3 demotion registry · A4 |
-| FUN-WEB-0078 (OG + Twitter, per-page image) | D6 · A8, A9 |
+| FUN-WEB-0078 (OG + Twitter, per-page image) | D6, D11 · A8, A9, A15 |
+| FUN-WEB-0207 (a share image per page and language, with title and brand mark) | D6 · A9, A15 |
+| FUN-WEB-0208 (a text alternative for the share image, in the page language) | D6 · A15 |
+| FUN-WEB-0209 (favicon, touch icon and app icons from the brand mark) | D10 · A16 |
+| FUN-WEB-0210 (a web app manifest naming the site and its icons) | D10 · A16 |
+| FUN-WEB-0213 (a JSON-LD `Organization` with name, URL and logo on every page) | D4 · A17 |
+| NFR-WEB-0066 (share image 1200 × 630 px) | D6 · A9 |
+| NFR-WEB-0067 (share image ≤ 300 KB) | D6 · A9 |
 
 ## Open points
 
@@ -353,12 +437,17 @@ Rule of thumb behind the table: a query parameter changes what a page
 - **New question: do the three D7 landing-page candidates enter the IA?**
   They are buildable only after the IA amendment (DEC-0022) and the
   content phase (CON-WEB-0087).
-- **New question: which social profiles exist?** Needed for
-  `Organization.sameAs` (D4) and `twitter:site` (D6). Both are omitted
-  rather than guessed until answered.
+- **Answered 2026-11-12 by the owner:** `Q-0094` the title separator is ` · `;
+  `Q-0095` the favicon is a full circle (round artwork pending in the brand
+  package); `Q-0096` no meta keywords, on purpose; `Q-0097` no `twitter:site`,
+  there is no account (`Organization.sameAs` lists only profiles that exist,
+  none now).
+- **Answered 2026-11-12 by the owner:** `Q-0098` yes, the `Organization` node
+  carries the brand mark as `logo`, on all pages (FUN-WEB-0213); the round
+  rendition follows with issue #199.
 - **Amendment owed to TS-WEB-0004 D3:** the legacy redirect map is a new
   step 0 in the proxy's evaluation order (D1).
 - **Amendment owed to TS-WEB-0001 D6:** the query-parameter canonical rule of
   D9 refines "self, exactly as served".
 - [PROPOSED] and awaiting a decision point: D2, D4, D6's image system,
-  D7, D9.
+  D7, D9, D10's sizes and manifest fields.

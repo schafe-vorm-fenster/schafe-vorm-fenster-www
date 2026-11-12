@@ -9,6 +9,27 @@ import type { MetadataRoute } from "next";
 
 import { isIndexable } from "@/src/lib/seo/indexable";
 
+/**
+ * The AI crawlers `robots.txt` allows by name in production (FUN-WEB-0169,
+ * DEC-0018: "AI crawlers are explicitly permitted"). DEC-0018 names no list;
+ * these are the vendors' documented user-agent tokens for training, search
+ * and user-triggered fetching. One place: add or remove an agent here only.
+ */
+export const AI_CRAWLERS = [
+  "GPTBot",
+  "ChatGPT-User",
+  "OAI-SearchBot",
+  "ClaudeBot",
+  "Claude-User",
+  "Claude-SearchBot",
+  "PerplexityBot",
+  "Perplexity-User",
+  "Google-Extended",
+  "Applebot-Extended",
+  "CCBot",
+  "meta-externalagent",
+] as const;
+
 export function robotsFor(
   vercelEnv: string | undefined,
   host: string | null | undefined,
@@ -18,7 +39,10 @@ export function robotsFor(
     return { rules: [{ userAgent: "*", disallow: "/" }] };
   }
   return {
-    rules: [{ userAgent: "*", allow: "/" }],
+    rules: [
+      ...AI_CRAWLERS.map((userAgent) => ({ userAgent, allow: "/" })),
+      { userAgent: "*", allow: "/" },
+    ],
     sitemap: `https://${normalise(host)}/sitemap.xml`,
   };
 }

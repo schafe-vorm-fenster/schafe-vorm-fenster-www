@@ -99,6 +99,13 @@ const PUBLIC_FILES: readonly string[] = [
 ];
 
 /**
+ * Asset-shaped URLs the app itself generates, not files in `public/`:
+ * `app/manifest.ts` (TS-WEB-0011 D6, issue 195). The share images and app icons
+ * live under `/api/`, which the proxy never treats as unknown.
+ */
+const METADATA_FILES: readonly string[] = ["/manifest.webmanifest"];
+
+/**
  * True for a path that is **shaped** like a file — the landing-only rule's
  * own question, which is "could this be an asset the landing page needs",
  * not "does this file exist".
@@ -128,7 +135,10 @@ export function isAssetPath(pathname: string): boolean {
 export function isServableAssetPath(pathname: string): boolean {
   if (pathname.startsWith("/_next/")) return true;
   if (!isAssetPath(pathname)) return false;
-  return PUBLIC_FILES.includes(pathname.toLowerCase());
+  return (
+    PUBLIC_FILES.includes(pathname.toLowerCase()) ||
+    METADATA_FILES.includes(pathname.toLowerCase())
+  );
 }
 
 /**

@@ -6,6 +6,7 @@ import { describe, expect, it } from "vitest";
 import { contactDisplayValue } from "@/src/lib/contact/contact-channels";
 import { pageDescription, pageTitle } from "@/src/lib/routes/metadata";
 
+import { llmsFacts } from "./llms-facts";
 import { llmsTxtFor } from "./llms-txt";
 import { COMMUNITY_HELP_URL } from "./redirect-map";
 import { href, ROUTE_IDS } from "./routes";
@@ -196,7 +197,8 @@ describe("TS-WEB-0004-A13: the core facts, each read from the hub", () => {
   });
 
   it("TS-WEB-0004-A13: the English facts mirror the German ones line for line", () => {
-    const en = factsBlock(llmsTxtFor("www.sheepoutside.com"));
+    // No domain renders the English facts today (side domains carry none), so read the module.
+    const en = llmsFacts("en").map((fact) => `- ${fact}`);
     const de = factsBlock(llmsTxtFor(DE));
     expect(en).toHaveLength(de.length);
     expect(en.join("\n")).toMatch(/^- Village calendar \(Dorfkalender\): €0/mu);
@@ -213,6 +215,8 @@ describe("TS-WEB-0004-A13: a landing-only domain stays lean", () => {
       expect(body).not.toContain("/mitmachen");
       expect(body).not.toContain("/dein-kalender");
       expect(body).not.toContain(COMMUNITY_HELP_URL);
+      // No facts block on the side domains (owner decision 2026-11-12).
+      expect(factsBlock(body)).toEqual([]);
       expect(body.split("\n").filter((line) => line.startsWith("## "))).toEqual([
         expect.stringMatching(/^## (Seiten|Pages)$/u),
         "## Optional",

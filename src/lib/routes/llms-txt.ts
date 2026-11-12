@@ -27,8 +27,9 @@
  *    `.de` URLs;
  *  - a **landing-only** domain lists only what it serves — `/`, the legal
  *    route and the machine surfaces — in one page section, and no help link,
- *    because that one lives on the `.de` apex. It keeps the summary and the
- *    facts, which name no URL of another domain.
+ *    because that one lives on the `.de` apex. It keeps the summary but has
+ *    no facts block (owner decision 2026-11-12: the side domains do not go
+ *    online for now and are considered separately later).
  *
  * Kept beside the inventory rather than inside the route for the reason
  * `robots.ts` gives: the route is the wiring, this is the decision, and a
@@ -113,8 +114,11 @@ export function llmsTxtFor(host: string | null | undefined): string {
   const isFullSite = domain.kind === "full-site";
 
   const lines: string[] = [`# ${dictionary(primary).siteName}`, "", `> ${llmsSummary(primary)}`, ""];
-  for (const fact of llmsFacts(primary)) lines.push(`- ${fact}`);
-  lines.push("");
+  // The side domains carry no facts block (owner, 2026-11-12): they stay as lean as before the facts block.
+  if (isFullSite) {
+    for (const fact of llmsFacts(primary)) lines.push(`- ${fact}`);
+    lines.push("");
+  }
 
   const mainRoutes = routes.filter((route) => !OPTIONAL_ROUTES.includes(route));
   if (isFullSite) {

@@ -1004,6 +1004,11 @@ export function checkPage(page: PageContent, resolver: HubResolver): Finding[] {
  * The page is reported once; a slot is reported only when it is *more*
  * restricted than its page, so a wholly-draft artefact costs one line and
  * not thirty.
+ *
+ * Since DEC-0222 (issue 206) `pnpm check` and CI ask with the production
+ * target on every run (`check:content:production`): production must render
+ * what preview renders, so new content is committed as `approved` once the
+ * owner has approved it in its PR, and a `draft` left in the tree is red.
  */
 export function checkLifecycle(
   page: PageContent,
@@ -1021,7 +1026,7 @@ export function checkLifecycle(
       level,
       file: page.file,
       check: "lifecycle",
-      message: `\`status: ${page.status}\` — a production build contains only ${allowed} content (TS-WEB-0007 D11, A14); this page renders in preview and reaches no production page`,
+      message: `\`status: ${page.status}\` — a production build contains only ${allowed} content (TS-WEB-0007 D11, A14); this page renders in preview and reaches no production page — commit it as \`approved\` once the owner approves it in the PR (DEC-0222)`,
     });
 
   for (const slot of [...page.slots, ...page.gatedSlots.map((id) => ({ id, status: null }))]) {
@@ -1033,7 +1038,7 @@ export function checkLifecycle(
       file: page.file,
       slot: slot.id,
       check: "lifecycle",
-      message: `\`status: ${status}\` — a production build contains only ${allowed} content (TS-WEB-0007 D11, A14)`,
+      message: `\`status: ${status}\` — a production build contains only ${allowed} content (TS-WEB-0007 D11, A14); the slot renders in preview and is dropped in production — commit it as \`approved\` once the owner approves it in the PR (DEC-0222)`,
     });
   }
 

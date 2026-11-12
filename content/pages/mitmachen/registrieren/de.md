@@ -8,7 +8,9 @@ seo:
     description: "In drei Schritten zum Zugang: Ort wählen, sagen wer veröffentlicht, loslegen. Ohne Klarnamen, ohne E-Mail-Adresse, ohne Anmeldegebühr."
     provenance: generated
 content_type: section
-status: draft
+status: approved
+reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
+reviewed_at: "2026-11-12"
 locale: de
 sources:
   - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
@@ -39,7 +41,7 @@ Schritt 1 (TS-WEB-0023 D7).
 
 ## Schritt 1 — Welcher Ort
 
-<!-- id: registrieren-1-ort; content_type: form; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: registrieren-1-ort; content_type: form; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Frage:** Für welchen Ort willst du veröffentlichen?
 
@@ -52,7 +54,7 @@ Vorausgefüllt, sichtbar und änderbar, wenn `?ort=` aus `/dein-ort/starten`,
 ## Schritt 2 — Wer veröffentlicht
 
 <!-- source_note: Die Optionsliste ist aus den Aufzählungen der Audience-Records selbst gezogen (`actors` Feld „Context": Vereine, Feuerwehr, Kirchengemeinde, Initiativen, Kulturbetriebe, mobile Dienste wie Bäckerwagen oder Arztbus, örtliche Betriebe mit gelegentlichen Terminen; `municipalities` Feld „Context": Gemeinden, Städte, Ämter, Samtgemeinden, Verbandsgemeinden). Reihenfolge nach Audience-Priorität dieser Seite aus gtm:concept/website-information-architecture.concept.md, Seitenbrief `/mitmachen/registrieren` (1 actors). -->
-<!-- id: registrieren-2-wer; content_type: form; provenance: sourced; derived_from: ["@schafe-vorm-fenster/audiences@0.3.3#actors", "@schafe-vorm-fenster/audiences@0.3.3#municipalities"]; status: draft -->
+<!-- id: registrieren-2-wer; content_type: form; provenance: sourced; derived_from: ["@schafe-vorm-fenster/audiences@0.3.3#actors", "@schafe-vorm-fenster/audiences@0.3.3#municipalities"]; status: approved -->
 
 **Frage:** Wer veröffentlicht die Termine?
 
@@ -82,7 +84,7 @@ Kontoauskunft für die App (TS-WEB-0023 D8).
 
 ## Schritt 3 — Welcher Publizierweg
 
-<!-- id: registrieren-3-weg; content_type: form; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: draft -->
+<!-- id: registrieren-3-weg; content_type: form; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: approved -->
 
 **Frage:** Wie kommen eure Termine zu uns?
 
@@ -97,13 +99,13 @@ vierte Option.
 
 ## Schrittanzeige
 
-<!-- id: registrieren-4-step-indicator; content_type: section; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: registrieren-4-step-indicator; content_type: section; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Label:** Schritt {n} von 3
 
 ## Übergabe
 
-<!-- id: registrieren-5-handover; content_type: closing-cta; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: registrieren-5-handover; content_type: closing-cta; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Button-Label:** Weiter in der App
 
@@ -118,7 +120,7 @@ dieser Website — das übernimmt vollständig die App.
 ## Kontextband (nur Schritt 1)
 
 <!-- source_note: Angebotsformulierung statt Menü aus gtm:concept/website-communication-principles.concept.md Prinzip 2; die drei Jobs und ihre Formulierung aus der Job-Tabelle in Prinzip 1. Das Band rendert nur auf Schritt 1 (TS-WEB-0023 D7, state/open.md #24). Beantwortet state/open.md Zeile 95 für diese Seite. -->
-<!-- id: registrieren-6-context-band; content_type: context-band; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: registrieren-6-context-band; content_type: context-band; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Kicker:** Erfahre mehr über unsere Kalenderplattform
 

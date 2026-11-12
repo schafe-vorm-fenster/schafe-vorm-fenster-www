@@ -69,8 +69,9 @@ robots; the file does not list itself). A page line is
 `<title>` and meta description. Facts a page also shows are read from the
 module that page reads (prices, imprint identity, contact record, locales);
 the others are hub records, cited per line in `src/lib/routes/llms-facts.ts`.
-A landing-only domain keeps summary and facts, lists its served pages in one
-section and carries no help link.
+A landing-only domain keeps the summary but carries no facts block (owner
+decision 2026-11-12: the side domains do not go online for now), lists its
+served pages in one section and carries no help link.
 
 ### D1a — Route naming system [FIXED: DEC-0036, IA amended]
 
@@ -300,7 +301,7 @@ labels (D4).
 | TS-WEB-0004-A4 | integration | 404 renders place search + jobs band with status 404 and `noindex`; 500 renders without any data dependency. |
 | TS-WEB-0004-A5 | integration | `sitemap.xml`, `robots.txt`, `llms.txt` respond per domain; sitemap lists only that domain's URLs in its languages. |
 | TS-WEB-0004-A12 | integration | `/llms.txt` and the 404 are build-time files. There is one prerendered `llms.txt` per D1 domain and one 404 document per served language, each at its own path, and neither reads the request. The proxy rewrites `/llms.txt` onto the request domain's variant (unknown hosts mirror `.de`) and every unservable URL onto the 404 of the URL's language (path prefix first, then the TLD default). The 404 document carries status 404 from the build. |
-| TS-WEB-0004-A13 | unit | `llmsTxtFor(host)` opens with the H1, one `>` summary and the core facts before any H2; on `.de` German leads and English is its own section; `## Optional` is last and holds press, legal and help. Every page line is `- [title](url): description` with the page's own title and meta description. The three prices equal the offerings package (0 €, 480 € / Jahr zzgl. USt., auf Anfrage; the enterprise figure absent); provider, founder, award, region, age and contact match the imprint, the people, proof and goals records read at test time. A landing-only domain links only its own origin, no help, and has one page section plus `## Optional`. |
+| TS-WEB-0004-A13 | unit | `llmsTxtFor(host)` opens with the H1, one `>` summary and the core facts before any H2; on `.de` German leads and English is its own section; `## Optional` is last and holds press, legal and help. Every page line is `- [title](url): description` with the page's own title and meta description. The three prices equal the offerings package (0 €, 480 € / Jahr zzgl. USt., auf Anfrage; the enterprise figure absent); provider, founder, award, region, age and contact match the imprint, the people, proof and goals records read at test time. A landing-only domain links only its own origin, no help, no facts block, and has one page section plus `## Optional`. |
 | TS-WEB-0004-A6 | e2e | No external API host appears in any client-initiated request except envoy and Portalize (verified via CSP report / network trace). |
 | TS-WEB-0004-A7 | integration | BFF routes return 429 beyond the rate limit and reject foreign origins. |
 | TS-WEB-0004-A8 | e2e | Navigation labels match D4 exactly on every page; every internal link resolves within the D1 inventory. |

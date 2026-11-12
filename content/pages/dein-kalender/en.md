@@ -8,7 +8,9 @@ seo:
     description: "Your calendar on your website. Nobody types dates anymore. See the real calendar, configure your own view, or book a briefing appointment first."
     provenance: generated
 content_type: section
-status: draft
+status: approved
+reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
+reviewed_at: "2026-11-12"
 locale: en
 sources:
   - "@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"
@@ -113,7 +115,7 @@ in the focus block (TS-WEB-0024 D3).
 
 ## Slot 1 — Focus block
 
-<!-- id: dein-kalender-1-focus; content_type: hero; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"]; status: draft -->
+<!-- id: dein-kalender-1-focus; content_type: hero; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"]; status: approved -->
 
 **Headline:** Your calendar on your website. Nobody types dates anymore.
 
@@ -133,7 +135,7 @@ office" as the only addressee).
 
 ## Slot 2 — Contrast: today and with your calendar (4 rows)
 
-<!-- id: dein-kalender-2-contrast; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar", "@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"]; status: draft -->
+<!-- id: dein-kalender-2-contrast; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar", "@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"]; status: approved -->
 
 **Heading:** Why a dates module of your own rarely works
 
@@ -165,7 +167,7 @@ names a postcode — the copy guide's avoid list (DEC-0079).
 
 ## Slot 3 — Embedding demo
 
-<!-- id: dein-kalender-3-embed-demo; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: dein-kalender-3-embed-demo; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Heading:** A real calendar from three neighbouring villages
 
@@ -180,7 +182,7 @@ it is no text level of its own. The place names come from
 
 ## Slot 3b — What it holds is up to you (configuration block)
 
-<!-- id: dein-kalender-3b-embed-config; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar", ia]; status: draft -->
+<!-- id: dein-kalender-3b-embed-config; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar", ia]; status: approved -->
 
 **Heading:** What it holds is up to you.
 
@@ -223,7 +225,7 @@ configured URL the link does not render.
 
 ## Slot 4 — Three tiers under one question
 
-<!-- id: dein-kalender-4-tiers; content_type: tier; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar", "@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar", "@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise"]; status: draft -->
+<!-- id: dein-kalender-4-tiers; content_type: tier; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar", "@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar", "@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise"]; status: approved -->
 
 **Heading:** Three ways to your calendar
 
@@ -283,7 +285,7 @@ on area and scope" (DEC-0205). The CTA target is unchanged, `/deine-region`.
 
 ## Slot 4b — Checks per tier (draft, unconfirmed)
 
-<!-- id: dein-kalender-4-tiers-checks-demo; content_type: tier; provenance: generated; derived_from: []; status: draft; demo: true -->
+<!-- id: dein-kalender-4-tiers-checks-demo; content_type: tier; provenance: generated; derived_from: []; status: approved; demo: true -->
 
 **Checks per tier (draft, not yet confirmed by the owner):**
 
@@ -311,7 +313,7 @@ stands on the owner's instruction, DEM-0078 against the source.
 
 ## Slot 5 — Proof (3 elements, with images)
 
-<!-- id: dein-kalender-5-proof; content_type: proof-card; provenance: sourced-empty-by-design; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar"]; status: draft -->
+<!-- id: dein-kalender-5-proof; content_type: proof-card; provenance: sourced-empty-by-design; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar"]; status: approved -->
 
 Pool: the four proof ids `portalize-calendar` references
 (`kulturlandbuero-broellin`, `eichler-wasserschloss-quilow`,
@@ -321,7 +323,7 @@ exists. In the protected preview the slot below shows three of those
 elements verbatim, clearance open; the clearance is tracked in the
 frontmatter and in `state/open.md`, not on the page.
 
-<!-- id: dein-kalender-5-proof-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow", "@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow", "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow"]; status: draft -->
+<!-- id: dein-kalender-5-proof-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow", "@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow", "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow"]; status: approved -->
 
 **Proof cards (real quotes, clearance pending):** Three voices from
 `portalize-calendar`'s pool, verbatim from the proof records:
@@ -359,7 +361,7 @@ never a borrowed photo.
 
 ## Slot 6 — Trust block: data protection, operations, AI
 
-<!-- id: dein-kalender-6-trust; content_type: section; provenance: mixed; derived_from: [ia, "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel", "@schafe-vorm-fenster/proof@0.3.5#in-operation-since-2018"]; status: draft -->
+<!-- id: dein-kalender-6-trust; content_type: section; provenance: mixed; derived_from: [ia, "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel", "@schafe-vorm-fenster/proof@0.3.5#in-operation-since-2018"]; status: approved -->
 
 **Heading:** How your data is handled here
 
@@ -379,7 +381,7 @@ address live in the imprint and in no hub record, so they stay out of
 this block. The AI statement stays unpublished until a hub record
 exists (`state/open.md` #19).
 
-<!-- id: dein-kalender-6-trust-demo; content_type: section; provenance: generated; derived_from: []; status: draft; demo: true -->
+<!-- id: dein-kalender-6-trust-demo; content_type: section; provenance: generated; derived_from: []; status: approved; demo: true -->
 
 **Interim sentence on AI use (prototype, `demo: true` in the frontmatter):**
 For the full prototype impression, this view shows one sentence instead
@@ -395,7 +397,7 @@ sentence has a source as of this pass and sits in the slot above.
 ## Slot 7 — Closing CTA
 
 <!-- source_note: The heading repeats what slot 3 already shows (the calendar runs as soon as the code sits on the page) and claims no lead time: nothing cleared backs "next week". -->
-<!-- id: dein-kalender-7-closing; content_type: closing-cta; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: dein-kalender-7-closing; content_type: closing-cta; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Closing heading:** Your calendar is running as soon as the code sits on your page.
 
@@ -410,7 +412,7 @@ TS-WEB-0024-A15).
 
 ## Verification — local advertising
 
-<!-- id: dein-kalender-9-no-advertising; content_type: section; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: dein-kalender-9-no-advertising; content_type: section; provenance: sourced; derived_from: [ia]; status: approved -->
 
 A negative check, not a text slot: `local-advertising` (`promotion:
 withheld`) must occur zero times on this page — no sentence, no field,

@@ -1,0 +1,63 @@
+# STRICT decision record beside DEC-0222 (DEC-0100). Immutable once written:
+# a reversal is a new record naming this one in `supersedes`.
+#
+# It names its policy by title, not by identifier, on purpose: check:specs E15
+# lets a record that names an artefact and cites the policy identifier anchor
+# that artefact's status move, whatever this record's own status. This record
+# approves content under `content/pages/**` and moves no specification status
+# (DEC-0222 §5).
+decision_record:
+  id: SDR-2026-1112-0002
+  dp: DP-04
+  subject:
+    artefact_id: TS-WEB-0007
+    version: 0.1.0
+  impact: High
+  mode: HUMAN
+  executor: jan-henrik.hempel
+  accountable: "@domain-requirements-engineer"
+  criteria:
+    - name: conflict
+      value: >-
+        TS-WEB-0007 D11 renders only approved content in production while all
+        22 page artefacts stood on draft, and state/open.md row 140 left the
+        approval to a later hardening round; the owner requires production to
+        render exactly what next-2026 renders.
+      evidence: specs/decisions/DEC-0222--production-renders-what-preview-renders-and-the-owner-approved-the-content-tree.md#L17
+      basis: issue #206, the owner's finding and decision of 2026-11-12
+    - name: resolution
+      value: >-
+        The owner approves every page and slot the preview renders; all of
+        them carry status approved, and a CI gate on PRs into next-2026 and
+        main fails on any page or slot a production build would drop.
+      evidence: specs/decisions/DEC-0222--production-renders-what-preview-renders-and-the-owner-approved-the-content-tree.md#L29
+      basis: the owner's decision, quoted verbatim in DEC-0222
+    - name: impact level
+      value: High
+      evidence: null
+      basis: >-
+        Every page artefact in both languages and the production release of
+        the whole site depend on it — the method's high row.
+  outcome: RESOLVED
+  status: PROPOSED
+  evidence_sufficiency: S3
+  rationale: >-
+    The owner resolved the gap between the editorial gate and the rendered
+    preview in favour of the preview: what next-2026 shows is approved and
+    must reach production unchanged. DEC-0222 carries the reasoning, the gate
+    and its scope. Mode, executor and accountable role are copied off the
+    DP-04 row of the graded-by-impact decision policy, which binds DP-04 to
+    HUMAN at every impact level.
+  evidence:
+    - source_id: DEC-0222
+      loc: specs/decisions/DEC-0222--production-renders-what-preview-renders-and-the-owner-approved-the-content-tree.md#L25
+      excerpt: "Alles, was wir gerade bauen, ist auch textuell und visuell komplett bestätigt. Das muss natürlich alles auf Produktion gehen, wenn wir das mergen."
+    - source_id: DEC-0222
+      loc: specs/decisions/DEC-0222--production-renders-what-preview-renders-and-the-owner-approved-the-content-tree.md#L25
+      excerpt: "Wir dürfen auf gar keinen Fall riskieren, dass das, was auf dem Branch ist, nochmal verändert oder schlimmstenfalls sogar reduziert wird"
+    - source_id: DEC-0222
+      loc: specs/decisions/DEC-0222--production-renders-what-preview-renders-and-the-owner-approved-the-content-tree.md#L36
+      excerpt: "Production renders what preview renders."
+  timestamp: "2026-11-12T18:25:37Z"
+  supersedes: null
+  recorded_by: "Claude Opus 5.5 (developer agent), from the owner's issue #206"
