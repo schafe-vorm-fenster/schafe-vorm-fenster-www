@@ -338,7 +338,7 @@ TS-WEB-0018 D8's budget constant is 0 for this route.
 | TS-WEB-0024-A19 | manual | Every sentence in `data-block="trust"` about operations and AI names a hub record in its `derived_from`. A sentence without one blocks the block from shipping; the data-protection sentences alone may ship. |
 | TS-WEB-0024-A20 | e2e | With the Portalize host reachable, once the widget has rendered on `/dein-kalender`: every element inside its shadow root that carries its own text has a contrast of at least 4.5:1 (3:1 for large text) against its composited background, read across the shadow boundary; every bordered button's border clears 3:1 against the ground around it; axe's `color-contrast` rule reports nothing inside `data-block="embed-demo"` (DEC-0173 §1). |
 | TS-WEB-0024-A21 | e2e | The mount in `data-block="embed-demo"` carries `data-own-events-showcase="false"` and `data-own-events-highlight="false"`; with the host reachable, the rendered widget contains no "Termine von" heading (DEC-0173 §2). |
-| TS-WEB-0024-A22 | e2e | With the host reachable, the rendered widget contains no word "TEST" (DEC-0173 §3). Pending: the case is `fixme` until portalize#144 is deployed with `MATEO_TEST_USER_IDS` set. Until then the rule is evidenced by that repository's route tests. |
+| TS-WEB-0024-A22 | e2e | With the host reachable, the rendered widget contains no word "test", any case (DEC-0173 §3). The case is active; the test dates were deleted in events-api and calendar-api#177 stops new ones under the Kulturverein. |
 
 ## Coverage
 
