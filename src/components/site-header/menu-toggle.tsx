@@ -2,6 +2,36 @@ import type { CSSProperties } from "react";
 
 import styles from "./site-header.module.css";
 
+/** The four jobs the track hints at (`HEADER_JOBS`); three of them sit beside the pill. */
+const TRACK_JOBS = 4;
+
+/**
+ * The room on one side of the pill, with a layer for each job on that side
+ * (DEC-0191). The slot grows in proportion to its job count, so the pill sits
+ * `index` thirds along the free width of the track and each layer reaches one
+ * third further out than the one before.
+ */
+function TrackSlot({ count, side }: { readonly count: number; readonly side: "before" | "after" }) {
+  if (count <= 0) return null;
+  return (
+    <span
+      aria-hidden="true"
+      className={styles.trackSlot}
+      data-count={count}
+      data-side={side}
+    >
+      {Array.from({ length: count }, (_, k) => (
+        <span
+          className={styles.trackGhost}
+          data-ghost={side}
+          key={k}
+          style={{ "--track-layer-k": k + 1, "--track-layer-n": count } as CSSProperties}
+        />
+      ))}
+    </span>
+  );
+}
+
 export interface MenuToggleProps {
   /** `burger` is the three stripes, `close` the same three crossed into an X. */
   readonly variant: "burger" | "close";
@@ -63,13 +93,13 @@ export function MenuToggle({
       type="button"
     >
       {track ? (
-        <span
-          aria-hidden="true"
-          className={styles.trackLabel}
-          style={{ "--track-index": track.index } as CSSProperties}
-        >
-          {track.label}
-        </span>
+        <>
+          <TrackSlot count={track.index} side="before" />
+          <span aria-hidden="true" className={styles.trackLabel} data-track-label="true">
+            {track.label}
+          </span>
+          <TrackSlot count={TRACK_JOBS - 1 - track.index} side="after" />
+        </>
       ) : null}
       <span aria-hidden="true" className={styles.stripes}>
         <span className={styles.stripe} />

@@ -47,7 +47,6 @@ export interface Dictionary {
      * page; the slug is `ueber-uns` and the label says what the page is).
      */
     whyUs: string;
-    calendarButton: string;
     /**
      * The breadcrumb `nav`'s own accessible name — distinct from the header
      * `nav`'s (`home`), so the two landmarks of the same role are
@@ -527,7 +526,6 @@ const de: Dictionary = {
     publishDates: "Termine veröffentlichen",
     yourCalendar: "Dein Kalender",
     whyUs: "Über uns",
-    calendarButton: "Kalender",
     breadcrumb: "Seitenpfad",
     logoHome: "Schafe vorm Fenster — zur Startseite",
     menuOpen: "Menü öffnen",
@@ -739,7 +737,6 @@ const en: Dictionary = {
     publishDates: "Publish dates",
     yourCalendar: "Your calendar",
     whyUs: "About us",
-    calendarButton: "Calendar",
     breadcrumb: "Page path",
     logoHome: "Schafe vorm Fenster — to the home page",
     menuOpen: "Open menu",

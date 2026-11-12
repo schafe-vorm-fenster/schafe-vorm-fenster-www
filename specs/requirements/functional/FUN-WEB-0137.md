@@ -33,3 +33,7 @@ In the header, the website SHALL carry a persistent "Kalender" entry to `/dein-o
 ## Source
 
 SRC-0003#navigation, DEC-0012, DEC-0039, DEC-0052, DEC-0081
+
+Deviation: `go-to-market-os/concept/website-information-architecture.concept.md#L40` asks for "also the header button \"Kalender\", always visible". The owner removed the button from the header on 2026-11-12 (DEC-0191 §3), at every width; its destination stays the first job label. The specification carries the truth (DEC-0104 §1); DEM-0077 asks for the source that states it.
+
+Amendment 2026-11-12: the statement above no longer holds. The header carries no "Kalender" button; `/dein-ort` is reached through the first job label "Was ist los" (DEC-0191).
