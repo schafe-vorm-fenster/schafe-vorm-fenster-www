@@ -226,9 +226,9 @@ Geschichte ausdrücklich).
 
 **Überschrift:** Angefangen hat es mit Brötchen.
 
-**Absatz (Anfang):** Angefangen hat es mit der Suche nach frischen Brötchen. Nach dem Umzug von Berlin nach Schlatkow fragte die Familie zwei Wochen lang nach einem Bäckerwagen, legte sich schließlich morgens auf die Lauer und fuhr dem Wagen ins Nachbardorf hinterher, um einen Halt in Schlatkow zu vereinbaren.
+**Absatz (Anfang):** Nach dem Umzug von Berlin nach Schlatkow fragte die Familie zwei Wochen lang nach einem Bäckerwagen, legte sich schließlich morgens auf die Lauer und fuhr dem Wagen ins Nachbardorf hinterher, um einen Halt in Schlatkow zu vereinbaren.
 
-**Absatz (Name):** Von 2019 bis 2024 war Jan-Henrik Hempel ehrenamtlicher Bürgermeister von Schmatzin, zu dem auch Schlatkow gehört. An diese Zeit erinnert der Name Schafe vorm Fenster: Vom Küchenfenster aus sah man auf die Schafweide der Gemeinde.
+**Absatz (Name):** Von 2019 bis 2024 war Jan-Henrik Hempel ehrenamtlicher Bürgermeister von Schmatzin, zu dem auch Schlatkow gehört. An diese Zeit erinnert der Name Schafe vorm Fenster.
 
 **Zitat (Gründer):** Wenn man alles sammelt, ist plötzlich in jedem Dorf jeden Tag irgendwas los. Wir müssen das nur sichtbar machen.
 
@@ -336,7 +336,7 @@ die Webseite nie (Review 2026-10-27, #105, DEC-0175 §3).
 
 **Überschrift:** Ein Dorfprojekt, ausgezeichnet in Rostock.
 
-**Auszeichnung:** NØRD AWARD 2026, Kategorie Smart Community, unter Bitkom-Schirmherrschaft, verliehen am 28. Mai 2026 auf der NØRD digital convention in Rostock.
+**Auszeichnung:** Verliehen am 28. Mai 2026 unter Bitkom-Schirmherrschaft, auf der NØRD digital convention.
 
 **Quelle:** NØRD digital convention / digitales MV, Mai 2026
 
@@ -344,8 +344,10 @@ die Webseite nie (Review 2026-10-27, #105, DEC-0175 §3).
 
 **Link-Text:** Presse und Auszeichnungen → `/ueber-uns/archiv`
 
-Die Auszeichnung ist das frühere Element 1 des Belegstroms, wörtlich
-(`noerd-award-2026-smart-community`, `usage_rights: cleared`). Überschrift und
+Die Auszeichnung ist das frühere Element 1 des Belegstroms
+(`noerd-award-2026-smart-community`, `usage_rights: cleared`). Seit #163 (DEC-0206)
+trägt das Siegel Name und Kategorie, der Text nur noch Datum, Schirmherrschaft
+und Veranstaltung; Rostock steht in der Überschrift. Die Tatsachen sind dieselben. Überschrift und
 Link-Text sind die des Entwurfs vom 2026-10-12 (#55). Der Block trägt genau
 einen Link ins Archiv, keine Vorschau, keine Liste, keinen Zähler (TS-WEB-0027
 D6); das Archiv wird mit #56 zur Presseseite (`Q-0093`), das Ziel bleibt.
