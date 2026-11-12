@@ -43,6 +43,7 @@
 }
 
 .point {
+  align-items: flex-start;
   display: flex;
   font-size: 1.0625rem;
   gap: var(--space-4);
@@ -101,7 +102,10 @@
   width: 100%;
 }
 
+/* `flex-start`, not the default stretch: from `lg` the row takes a min-height
+   for the graphic's overhang, and a stretched button would grow with it. */
 .cta {
+  align-items: flex-start;
   display: flex;
 }
 
