@@ -106,12 +106,13 @@ rules and conventions. These guardrails bind every change under `specs/`:
 2. A difference between the archive (`legacy-content/`, `content/`) and the concept documents is expected; leave it unreported. The archive folders stay where they are.
 3. While the specification phase runs, page copy is a marked placeholder.
 4. A new technical foundation updates `README.md` and `CONTRIBUTING.md` in the same change.
-5. Every change lives on its own branch, in its own worktree, and reaches `next-2026` through a PR (`CONTRIBUTING.md` → Branches and Pull Requests). `main` and production belong to the owner.
+5. Every change lives on its own branch, in its own worktree, and reaches `next-2026` through a PR (`CONTRIBUTING.md` → Branches and Pull Requests). The main checkout stays on a clean, current `next-2026`. `main` and production belong to the owner.
 
 ## Change Queue
 
-When the chat names two or more fixes, adjustments or change requests — or
-the user asks for an orchestrator — this session becomes the **orchestrator**:
+When the chat names two or more fixes, adjustments or change requests, names
+an issue selection to work through (a title prefix, a label, issue numbers),
+or asks for an orchestrator, this session becomes the **orchestrator**:
 it turns each change into an issue, delegates each issue to a subagent in its
 own worktree, and merges the PRs into `next-2026` itself, in queue order,
 without a round trip per PR. Read `.agents/roles/orchestrator.md` before the
