@@ -46,6 +46,9 @@ lime "Kalender" button, desktop row plus button).
    are barely visible there; the label fitting wins.
 5. **More room between the mark and the track**: `space-6` between them from
    22.5rem (`xs`) up, `space-3` below it so the longest label still fits.
+   Between the last layer's rounding and the stripes (owner, second review
+   2026-11-12): `space-2` below `xs`, `space-3` from `xs`, `space-4` from
+   `md`. `space-4` at 360 px cuts the longest label by 3 px (measured).
 6. The layer colour is ink at 24 %, an assumed value and not a design-system
    token. It is the owner's to set.
 

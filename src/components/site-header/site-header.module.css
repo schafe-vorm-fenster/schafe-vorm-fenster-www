@@ -677,6 +677,13 @@
   .inner {
     gap: var(--space-6);
   }
+
+  /* More air between the last layer's rounding and the stripes (owner,
+     2026-11-12, DEC-0191): space-3 here, space-4 from `md`. space-4 at 360 px
+     cuts "TERMINE VERÖFFENTLICHEN" by 3 px (measured). */
+  .toggle[data-track="true"] .stripes {
+    margin-inline-start: var(--space-3);
+  }
 }
 
 /* ── md — 40rem / 640 px up: the wordmark comes back beside the mark. ───── */
@@ -684,6 +691,10 @@
 @media (min-width: 40rem) {
   .logo {
     margin-inline-end: var(--space-2);
+  }
+
+  .toggle[data-track="true"] .stripes {
+    margin-inline-start: var(--space-4);
   }
 }
 
