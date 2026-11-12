@@ -259,7 +259,6 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
                 <SectionShell
                   dataBlock="scene"
                   id="scene-1"
-                  kicker={fieldAt(sceneWhatsapp.blocks, 1)}
                   /* A light ground, because the module inside it only reads on one.
                      The active step's disc is `lime-500` and the two inactive ones
                      are `surface` — "a fill on a light ground means active"
@@ -272,14 +271,13 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
                      TS-WEB-0019 D3a assumes exactly this: "the active step is
                      `lime-500` on a light ground" (DEC-0129 §11). */
                   surface="paper"
-                  transition={fieldAt(sceneWhatsapp.blocks, 2)}
                 >
-                  {/* No body: the module's three step lines say what the paragraph
-                      said, and a line that repeats the previous one is cut, not
-                      softened (SRC-0017 CG-007/CG-016 — the review asks for exactly
-                      this substitution). It is also what brings the section back
-                      inside the 1270 px budget of polish brief G-4. */}
+                  {/* Heading and one intro line, no kicker and no transition above
+                      the heading (DEC-0206): the module's three step lines say what
+                      the old paragraph said (SRC-0017 CG-007/CG-016), the intro
+                      says only who enters the dates. */}
                   <SceneBlock
+                    body={fieldAt(sceneWhatsapp.blocks, 1)}
                     /* DEC-0192 §4 (owner): the scene's one CTA is a teaser (other
                        ways exist) and one button on the topic "Termine
                        veröffentlichen". It stands below the module, not in it, so
@@ -288,7 +286,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
                        carries exactly one `data-cta`. */
                     cta={
                       <>
-                        <p className={styles.sceneHint}>{fieldAt(sceneWhatsapp.blocks, 4)}</p>
+                        <p className={styles.sceneHint}>{fieldAt(sceneWhatsapp.blocks, 3)}</p>
                         <Button
                           dataCta="secondary"
                           locale={locale}
@@ -347,7 +345,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
                             threeSteps(listAt(whatsappSteps.blocks, 0), "home-4a-scene-whatsapp-steps-demo"),
                             locale,
                           )}
-                          title={fieldAt(sceneWhatsapp.blocks, 3) ?? ""}
+                          title={fieldAt(sceneWhatsapp.blocks, 2) ?? ""}
                         />
                       </div>
                     }
@@ -441,7 +439,6 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
                   id="scene-3"
                   /* TS-WEB-0019 D3's own rhythm column for block 2b: COLOUR violet. */
                   surface="violet-500"
-                  transition={fieldAt(sceneProvenance.blocks, 2)}
                 >
                   <SceneBlock
                     bleed

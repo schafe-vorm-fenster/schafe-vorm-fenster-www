@@ -75,6 +75,16 @@ does, the rows below are the confirmed floor.
 | `/hilfe/{slug}` | help articles | `https://schafe-vorm-fenster.de/hilfe/{slug}` | same slug, per article (community-site#204) |
 | apex `/:community` | village calendars | TS-WEB-0004 D3 rule 6 | not this spec's row |
 
+Inventory check of 2026-11-12 (issues 192 and 193): the live legacy site lists
+exactly six pages (`/`, `/funktionen`, `/start`, `/presse`, `/impressum`,
+`/hilfe`) and 36 `/hilfe/{slug}` articles, the same 36 as `content/support/`;
+it has no sitemap.xml and no robots.txt (both answer 404). All 36 targets on
+community-site answered 200. `/` and `/start` stay live (no row; see the module
+doc of `redirect-map.ts`). The slug list is `LEGACY_HELP_SLUGS` there and
+`redirect-map.test.ts` holds it against the archived articles. The apex
+`/hilfe/{slug}` row is therefore complete for the known legacy site; Q-0016
+stays open only for URLs that were indexed but never linked.
+
 ### D3 — Semantic skeleton and the demotion registry [FIXED: SRC-0006 / FUN-WEB-0071, FUN-WEB-0077; ties TS-WEB-0002 D5]
 
 One skeleton per page: `header > nav` · `main > article` · `aside`\* ·

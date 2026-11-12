@@ -339,12 +339,11 @@ export default async function Page({
           written for. */}
       <SectionShell
         dataBlock="wege"
-        kicker={fieldAt(pathWhatsapp.blocks, 0)}
         labelledBy="wege-heading"
         surface="paper"
       >
-        <h2 id="wege-heading">{fieldAt(pathWhatsapp.blocks, 1)}</h2>
-        <p data-wege-subline>{fieldAt(pathWhatsapp.blocks, 2)}</p>
+        <h2 id="wege-heading">{fieldAt(pathWhatsapp.blocks, 0)}</h2>
+        <p data-wege-subline>{fieldAt(pathWhatsapp.blocks, 1)}</p>
         <PathModule
           cta={{
             // The number is the hub's, through the generated file — never a
@@ -352,7 +351,7 @@ export default async function Page({
             // no `?text` prefill exists for it (D14 §6).
             href: contactHref("whatsapp"),
             icon: "smartphone",
-            label: fieldAt(pathWhatsapp.blocks, 4) ?? "",
+            label: fieldAt(pathWhatsapp.blocks, 3) ?? "",
             // `wa.me` is another origin, so the chat opens a new tab (DEC-0169).
           }}
           demo={isDemoSlot(whatsappSteps)}
@@ -390,7 +389,7 @@ export default async function Page({
             threeSteps(listAt(whatsappSteps.blocks, 0), "mitmachen-3a-path-whatsapp-steps-demo"),
             locale,
           )}
-          title={fieldAt(pathWhatsapp.blocks, 3) ?? ""}
+          title={fieldAt(pathWhatsapp.blocks, 2) ?? ""}
         />
       </SectionShell>
 

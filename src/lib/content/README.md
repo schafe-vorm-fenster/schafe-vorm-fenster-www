@@ -258,7 +258,7 @@ the positional rule did.
 | `home-8-proof-stream` | the candidate list | `app/[lang]/page.tsx:153` |
 | `home-4a-scene-whatsapp-steps-demo` | lists 0 and 1 — step lines, sample rows | `app/[lang]/page.tsx:350`, `:343` |
 | `mitmachen-2-objections` | the three comparison pairs and the head (DEC-0203) | `app/[lang]/mitmachen/page.tsx:237` |
-| `mitmachen-3a/4a/5a-path-*-steps-demo` | lists 0 and 1 each | `app/[lang]/mitmachen/page.tsx:390`/`:383`, `:431`/`:425`, `:480`/`:474` |
+| `mitmachen-3a/4a/5a-path-*-steps-demo` | lists 0 and 1 each | `app/[lang]/mitmachen/page.tsx:389`/`:382`, `:430`/`:424`, `:479`/`:473` |
 | `mitmachen-7-proof-demo` | **every** list (`listItems`) | `app/[lang]/mitmachen/page.tsx:194` |
 | `ueber-uns-3-proof-stream` | the five proof items under *Pool: …* | `app/[lang]/ueber-uns/page.tsx:166` |
 | `deine-region-6-proof-demo` | the three quote items | `app/[lang]/deine-region/page.tsx:196` |

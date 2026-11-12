@@ -218,9 +218,9 @@ the list.
 
 **Heading:** It started with bread rolls.
 
-**Paragraph (how it started):** It began with the search for fresh bread rolls. After the family moved from Berlin to Schlatkow, they asked about a baker's van for two weeks, finally lay in wait one morning, and chased the van to the next village to arrange a stop in Schlatkow.
+**Paragraph (how it started):** After the family moved from Berlin to Schlatkow, they asked about a baker's van for two weeks, finally lay in wait one morning, and chased the van to the next village to arrange a stop in Schlatkow.
 
-**Paragraph (the name):** From 2019 to 2024 Jan-Henrik Hempel was the volunteer mayor of Schmatzin, which Schlatkow is part of. The name Schafe vorm Fenster recalls that time: from the kitchen window you looked out on the municipality's sheep pasture.
+**Paragraph (the name):** From 2019 to 2024 Jan-Henrik Hempel was the volunteer mayor of Schmatzin, which Schlatkow is part of. The name Schafe vorm Fenster recalls that time.
 
 **Quote (founder):** Collect all of it, and suddenly every village has something on every day. All we have to do is make it visible.
 
@@ -326,7 +326,7 @@ missing proof renders nothing, and a placeholder never reaches the website
 
 **Heading:** A village project, awarded in Rostock.
 
-**Award:** NØRD AWARD 2026, Smart Community category, under Bitkom patronage, awarded on 28 May 2026 at the NØRD digital convention in Rostock.
+**Award:** Presented on 28 May 2026 under Bitkom patronage, at the NØRD digital convention.
 
 **Source:** NØRD digital convention / digitales MV, May 2026
 
@@ -334,8 +334,10 @@ missing proof renders nothing, and a placeholder never reaches the website
 
 **Link text:** Press and awards → `/ueber-uns/archiv`
 
-The award is the stream's former element 1, verbatim
-(`noerd-award-2026-smart-community`, `usage_rights: cleared`). Exactly one link
+The award is the stream's former element 1
+(`noerd-award-2026-smart-community`, `usage_rights: cleared`). Since #163
+(DEC-0206) the seal carries name and category, the text only date, patronage
+and event; Rostock stands in the heading. The facts are the same. Exactly one link
 to the archive, no preview, no list, no count (TS-WEB-0027 D6).
 
 ## Slot 5 — Team

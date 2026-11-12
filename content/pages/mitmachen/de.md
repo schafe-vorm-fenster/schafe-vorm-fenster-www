@@ -220,8 +220,6 @@ eintragen, sondern einmal per WhatsApp rausschicken.
 
 <!-- id: mitmachen-3-path-whatsapp; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: draft -->
 
-**Kicker des Wege-Slots:** So geht's einfacher
-
 **Überschrift des Wege-Slots:** So kommen eure Termine rein
 
 **Unterzeile des Wege-Slots:** Drei Wege. Alle nutzt ihr eh schon.
@@ -235,10 +233,13 @@ Der CTA öffnet den Chat unter der Nummer aus dem Hub-Datensatz
 (`src/lib/contact/`), nie eine hier getippte Nummer, und trägt nie
 `data-cta="primary"` (TS-WEB-0022 D4, DEC-0082 §4).
 
-Kicker, Überschrift und Unterzeile gehören dem ganzen Wege-Slot und stehen
-deshalb beim ersten Weg. Alle drei sind Wortlaut des Reviews beziehungsweise
-des Entwurfs vom 2026-09-23 („SO GEHT'S EINFACHER · So kommen eure Termine
-rein · Drei Wege. Alle nutzt ihr eh schon.", CG-014).
+Überschrift und Unterzeile gehören dem ganzen Wege-Slot und stehen
+deshalb beim ersten Weg. Beide sind Wortlaut des Reviews beziehungsweise
+des Entwurfs vom 2026-09-23 („So kommen eure Termine rein · Drei Wege. Alle
+nutzt ihr eh schon.", CG-014). Die Dachzeile „So geht's einfacher“ aus
+demselben Entwurf entfällt seit DEC-0206: Sie sagte dasselbe wie die
+Überschrift („so“, wie es geht) und trug dazu „einfacher“ aus der Meidliste
+(CG-017); der Kopf hat nur noch Überschrift und Einleitung.
 
 ### Slot 3a — Schrittzeilen und Bühnentexte von Weg 1 (Platzhalter)
 

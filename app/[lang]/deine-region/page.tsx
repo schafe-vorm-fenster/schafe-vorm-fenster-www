@@ -400,12 +400,14 @@ export default async function Page({
           no distance language anywhere (A2). */}
       {/* `label`, not `labelledBy`: `live-module-frame` renders its own
           heading with no id to point to. */}
+      {/* DEC-0206 / issue 163: no kicker and no transition line. The kicker
+          said what the heading says ("live now" over "already today"), and
+          the transition ("not a statement of intent — it runs already")
+          repeated the heading's "already". The heading is the head. */}
       <SectionShell
         dataBlock="bestand"
-        kicker={words.kickers.liveAnswer}
         label={interimFallbackHeading}
         surface="ink"
-        transition={fieldAt(interim.blocks, 4)}
       >
         <MotionReveal>
           {/* The examples come off `regionExamples()` — TS-WEB-0008 position 3 at
@@ -442,9 +444,9 @@ export default async function Page({
       {/* Block 4 — the product: embed demo, position 1' (TS-WEB-0008 D6). `label`,
           not `labelledBy`: `embed-frame` renders its own heading with no id
           to point to. */}
+      {/* DEC-0206: no kicker; "how it works" restated the heading. */}
       <SectionShell
         dataBlock="einbindung"
-        kicker={words.kickers.howItWorks}
         label={fieldAt(embedDemo.blocks, 0) ?? copy.embedFallback}
         surface="surface-2"
       >

@@ -219,8 +219,6 @@ more important one — nobody wants to enter the same date several times.
 
 <!-- id: mitmachen-3-path-whatsapp; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: draft -->
 
-**Kicker of the paths slot:** There's an easier way
-
 **Heading of the paths slot:** How your dates get in
 
 **Sub-line of the paths slot:** Three ways. You use all of them anyway.
@@ -234,10 +232,12 @@ CTA opens the chat on the number from the hub record
 (`src/lib/contact/`), never a number typed here, and never carries
 `data-cta="primary"` (TS-WEB-0022 D4, DEC-0082 §4).
 
-Kicker, heading and sub-line belong to the whole paths slot and therefore
-stand at the first path. All three are the German review's wording, in
-English; the English sentences are an engineering translation and travel
-with the German ones.
+Heading and sub-line belong to the whole paths slot and therefore stand at
+the first path. Both are the German review's wording, in English; the
+English sentences are an engineering translation and travel with the German
+ones. The kicker "There's an easier way" is gone since DEC-0206: it said the
+same as the heading (how it works) and carried "easier" from the avoid list
+(CG-017); the head is the heading and the sub-line.
 
 ### Slot 3a — Step lines and stage words of path 1 (placeholder)
 

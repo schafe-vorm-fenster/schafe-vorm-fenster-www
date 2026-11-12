@@ -188,7 +188,9 @@ neu, und der Titel behält seinen Bezug: ohne die Frage darüber hätte
 
 **Überschrift (ohne Landkreis):** So sieht das heute schon aus: Orte, die schon dabei sind
 
-**Überleitung:** Und das ist keine Absichtserklärung — es läuft schon:
+Die frühere Überleitung („Und das ist keine Absichtserklärung — es läuft
+schon:") ist entfallen, ebenso der Kicker des Abschnitts (DEC-0206): Sie
+wiederholte das „schon" der Überschrift und war keine eigene Ebene mehr.
 
 Solange kein Landkreis bekannt ist, nennt die Überschrift keinen: der
 Fallback benannte bis hierher „den Landkreis deiner Region", was kein

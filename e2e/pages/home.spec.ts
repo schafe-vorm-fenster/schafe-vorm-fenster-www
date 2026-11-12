@@ -1237,7 +1237,9 @@ test.describe("TS-WEB-0019 — home", () => {
             });
           }),
       );
-      expect(lines.length).toBeGreaterThan(3);
+      // Two own lines remain since DEC-0206 (issue 163): the embed scene and
+      // the proof stream keep a kicker; the measure only has to be non-empty.
+      expect(lines.length).toBeGreaterThan(1);
       for (const line of lines) {
         expect(line.left, `${line.where} @ ${width}`).toBeGreaterThanOrEqual(15);
         expect(line.right, `${line.where} @ ${width}`).toBeLessThanOrEqual(width - 15);
