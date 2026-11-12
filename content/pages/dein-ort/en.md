@@ -348,12 +348,6 @@ calendar, on the record.
 
 <!-- id: dein-ort-6-story-radius; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#regional-footprint"]; status: draft -->
 
-**Title:** What's happening fifteen minutes away
-
-**Why it matters:** What's going on two villages over belongs in your calendar just as much as what's happening right outside your door.
-
-**Transition:** And it doesn't stop at the municipal boundary.
-
 **Example:** dates from around {place}, live from the calendar (position 2, "this week nearby").
 
 The village calendar runs today in four German states, and each region

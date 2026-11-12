@@ -3,8 +3,6 @@ import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
 import { PlaceSearch } from "@/src/components/place-search/place-search";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { StoryStage, type StageStory } from "@/src/components/story-stage/story-stage";
-import { ValueStory } from "@/src/components/value-story/value-story";
-import { dictionary } from "@/src/lib/i18n/dictionary";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { pageImage } from "@/src/lib/content/images";
 import { HERO_IMAGE_ID } from "@/src/lib/pages/hero-images";
@@ -12,6 +10,7 @@ import { slot } from "@/src/lib/content/loader";
 import { ctaLabelOnly } from "@/src/lib/content/text";
 import { fillTemplate, parseDemoProofElement } from "@/src/lib/pages/demo-content";
 
+import { NearbySection } from "../_nearby-section";
 import { PageJsonLd } from "../_structured-data";
 import { pageContent } from "../_content";
 import { localeFrom, pageMetadataFor } from "../_locale";
@@ -27,7 +26,7 @@ import {
   StoryExample,
   type PlaceCopy,
 } from "./place-islands";
-import { RADIUS_STORY, STORIES } from "./stories";
+import { STORIES } from "./stories";
 
 import type { QuoteFragment } from "@/src/components/content-fragments";
 import type { ContentSlot } from "@/src/lib/content/types";
@@ -141,7 +140,6 @@ function testimonialOf(source: ContentSlot): QuoteFragment | undefined {
 
 export default async function PlacePage({ params }: { params: Promise<{ lang: string }> }) {
   const locale = await localeFrom(params);
-  const words = dictionary(locale);
   const page = await pageContent(ROUTE, locale);
   // The hero photograph from the page's image inventory; `undefined` while
   // none exists, and the surface renders its "Foto gesucht" hatch instead.
@@ -152,7 +150,6 @@ export default async function PlacePage({ params }: { params: Promise<{ lang: st
   const stateB = slot(page, "dein-ort-2-state-b");
   const homescreenSlot = slot(page, "dein-ort-7-homescreen");
   const permanence = slot(page, "dein-ort-8-permanence");
-  const radiusStory = slot(page, RADIUS_STORY.slotId);
 
   /** S0's placeholder — "Tipp den Ortsnamen ein" (issue #20); `undefined` lets the module use the dictionary's. */
   const s0Placeholder = fieldAt(stateS0.blocks, 3);
@@ -289,27 +286,13 @@ export default async function PlacePage({ params }: { params: Promise<{ lang: st
         <PlaceModuleSlot copy={copy} />
       </MotionReveal>
 
-      {/* Story 4 *is* TS-WEB-0008 position 2: the fifteen-minute radius, argued in
-          prose and then shown as the five rows from around here, every row
-          naming its own place (TS-WEB-0008 D1). */}
-      <MotionReveal>
-        <SectionShell
-          dataBlock="value-story"
-          id="nearby"
-          kicker={words.kickers.widerRadius}
-          surface="surface"
-          transition={fieldAt(radiusStory.blocks, 2)}
-        >
-          <ValueStory
-            aspect={fieldAt(radiusStory.blocks, 0) ?? ""}
-            example={<PlaceNearby locale={locale} titleTemplate={fieldAt(stateS0.blocks, 1) ?? fallbackCopy.nearby} />}
-            exampleLevel="surrounding"
-            exampleVariant="module"
-            headingLevel="h2"
-            whyItMatters={fieldAt(radiusStory.blocks, 1) ?? ""}
-          />
-        </SectionShell>
-      </MotionReveal>
+      {/* TS-WEB-0008 position 2: the fifteen-minute radius, shown as the five
+          rows from around here, every row naming its own place (D1). One
+          heading and one sentence over the list (issue 152); the section is
+          the same one the home page uses. */}
+      <NearbySection>
+        <PlaceNearby locale={locale} titleTemplate={fieldAt(stateS0.blocks, 1) ?? fallbackCopy.nearby} />
+      </NearbySection>
 
       {/* Block 2a — the story stage (DEC-0153): the three single-category
           stories as one module, "ein Tag im Dorf". Each hour carries its

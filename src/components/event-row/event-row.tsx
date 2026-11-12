@@ -52,6 +52,12 @@ export interface EventRowProps extends DataStateProps, LinkOptions {
    * §Event row). The default is the one 76 px line every list row keeps.
    */
   readonly metaLayout?: "line" | "stacked";
+  /**
+   * `below` puts the category pill on a line of its own under the meta in a
+   * narrow row, indented to the title (issue 152, the nearby list); a row
+   * wide enough for the pill beside the meta keeps it there. Default `side`.
+   */
+  readonly categoryPlacement?: "side" | "below";
   readonly className?: string;
 }
 
@@ -157,6 +163,7 @@ export function EventRow({
   to,
   tone = "light",
   metaLayout = "line",
+  categoryPlacement = "side",
   state = "ready",
   locale,
   query,
@@ -164,7 +171,7 @@ export function EventRow({
   className,
 }: EventRowProps) {
   const toneClass = tone === "dark" ? styles.dark : styles.light;
-  const classes = [styles.row, toneClass, className].filter(Boolean).join(" ");
+  const classes = [styles.row, toneClass, categoryPlacement === "below" ? styles.below : undefined, className].filter(Boolean).join(" ");
 
   if (isPending(state)) {
     // The skeleton brings the row's 76 px geometry itself and must not

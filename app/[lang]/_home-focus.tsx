@@ -22,10 +22,7 @@ import { Button } from "@/src/components/button/button";
 import { ConversionTracker } from "@/src/components/conversion-tracker/conversion-tracker";
 import { EventList } from "@/src/components/event-list/event-list";
 import { HeroContent, type HeroContentProps } from "@/src/components/hero-block/hero-block";
-import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
 import { OutboundLink } from "@/src/components/outbound-link/outbound-link";
-import { SectionShell } from "@/src/components/section-shell/section-shell";
-import { dictionary } from "@/src/lib/i18n/dictionary";
 import { calendarUrl } from "@/src/lib/live/app-handover";
 import { liveRoutes, useLive } from "@/src/lib/live/browser";
 import { SHOWCASE_COMMUNITY } from "@/src/lib/live/showcase";
@@ -34,6 +31,7 @@ import { fillTemplate } from "@/src/lib/pages/demo-content";
 import { pickStoryExamples } from "@/src/lib/pages/story-examples";
 
 import { NearbyIsland } from "./_islands";
+import { NearbySection, nearbyHead } from "./_nearby-section";
 import { toListItems } from "./_live-items";
 
 import styles from "./_pages.module.css";
@@ -152,21 +150,19 @@ export function HomeHeroContent({ copy }: { readonly copy: HomeFocusCopy }) {
 export function HomeNearby({ copy }: { readonly copy: HomeFocusCopy }) {
   const { place, hasDates } = useFocus();
   const { locale } = copy;
-  const words = dictionary(locale);
   const emptyPlace = place !== undefined && hasDates === false ? place : undefined;
 
   return emptyPlace ? (
-    <MotionReveal>
-      <SectionShell id="nearby" kicker={words.kickers.widerRadius} surface="surface-2">
-        <NearbyIsland
-          anchor={emptyPlace}
-          locale={locale}
-          point={{ lat: emptyPlace.lat, lng: emptyPlace.lng }}
-          role="answering"
-          rowCount={5}
-          titleTemplate={copy.nearbyHeading}
-        />
-      </SectionShell>
-    </MotionReveal>
+    <NearbySection>
+      <NearbyIsland
+        {...nearbyHead(locale)}
+        anchor={emptyPlace}
+        locale={locale}
+        point={{ lat: emptyPlace.lat, lng: emptyPlace.lng }}
+        role="answering"
+        rowCount={5}
+        titleTemplate={copy.nearbyHeading}
+      />
+    </NearbySection>
   ) : null;
 }
