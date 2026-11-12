@@ -421,7 +421,7 @@ test.describe("TS-WEB-0019 — home", () => {
     // `/` itself renders no uncovered place as data.
     await page.goto("/?ort=99999");
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-      "Was wann wo in deinem Ort los ist.",
+      "Was ist los in deinem Dorf?",
     );
     const main = await page.locator("main").innerText();
     expect(main).not.toContain("99999");
@@ -1176,7 +1176,7 @@ test.describe("TS-WEB-0019 — home", () => {
     await page.goto("/en");
     await expect(page.locator("html")).toHaveAttribute("lang", "en");
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-      "What's on where you live, and when.",
+      "What's up in your village?",
     );
     await expect(page.locator("#proof-stream article")).toHaveCount(4);
     await expect(page.locator('form[role="search"] [data-cta="primary"]')).toHaveCount(1);
