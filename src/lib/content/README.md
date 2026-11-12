@@ -262,11 +262,11 @@ the positional rule did.
 | `mitmachen-7-proof-demo` | **every** list (`listItems`) | `app/[lang]/mitmachen/page.tsx:189` |
 | `ueber-uns-3-proof-stream` | the five proof items under *Pool: …* | `app/[lang]/ueber-uns/page.tsx:156` |
 | `deine-region-6-proof-demo` | the three quote items | `app/[lang]/deine-region/page.tsx:196` |
-| `dein-kalender-5-proof-demo` | **every** list (`listItems`) | `app/[lang]/dein-kalender/page.tsx:286` |
+| `dein-kalender-5-proof-demo` | **every** list (`listItems`) | `app/[lang]/dein-kalender/page.tsx:273` |
 | `archiv-2-rows-demo` | the 192-cell archive table | `app/[lang]/ueber-uns/archiv/page.tsx:95` |
-| `dein-kalender-2-contrast` | the four comparison rows and the head | `app/[lang]/dein-kalender/page.tsx:218`, `:219` |
-| `dein-kalender-3-embed-demo` | paragraph 0 — the two embed sentences | `app/[lang]/dein-kalender/page.tsx:194` |
-| `dein-kalender-3b-embed-config` | paragraph 0, and the settings table | `app/[lang]/dein-kalender/page.tsx:198`, `content.ts:58` |
+| `dein-kalender-2-contrast` | the four comparison rows and the head | `app/[lang]/dein-kalender/page.tsx:211`, `:212` |
+| `dein-kalender-3-embed-demo` | paragraph 0 — the two embed sentences | `app/[lang]/dein-kalender/page.tsx:191` |
+| `dein-kalender-3b-embed-config` | paragraph 0, and the settings table | `app/[lang]/dein-kalender/page.tsx:195`, `content.ts:58` |
 | `dein-kalender-4-tiers-checks-demo` | the tier-checks table | `app/[lang]/dein-kalender/content.ts:58` |
 | `rechtliches-2-registry` | the section-title table | `app/[lang]/rechtliches/page.tsx:91` |
 | `registrieren-2-wer`, `registrieren-3-weg` | **every** list — the option labels | `app/[lang]/mitmachen/registrieren/page.tsx:189`, `:193` |
@@ -308,7 +308,7 @@ silenced.
 
 | Row | Runs | Left to review |
 | --- | --- | --- |
-| 11 avoid list (CG-040, CG-009, CG-017, CG-018, CG-035, CG-036, CG-039) | every term of the guide's DE and EN tables and of the glossary's avoid column; `AVOID_TERMS` is the list and two drift tests bind it to all three sources — the glossary's avoid column and the two CG-040 tables of `concept/website-copy-guide.md` §9 (39 terms today) | the generic-claims row as an *adverb* (`einfach` inside a sentence): the row carries no replacement, so failing it would force an invention — TS-WEB-0006-A16 |
+| 11 avoid list (CG-040, CG-009, CG-017, CG-018, CG-035, CG-036, CG-039) | every term of the guide's DE and EN tables and of the glossary's avoid column; `AVOID_TERMS` is the list and two drift tests bind it to all three sources — the glossary's avoid column and the two CG-040 tables of `concept/website-copy-guide.md` §9 (46 terms today) | the generic-claims row as an *adverb* (`einfach` inside a sentence): the row carries no replacement, so failing it would force an invention — TS-WEB-0006-A16 |
 | 11 product name (CG-038) | `Portalize` **once** per locale — counted as occurrences, not as carrier fields, so `Portalize bleibt Portalize` in the one allowed field fails too — and only in the `/dein-kalender` tier slot; case-sensitive, so the offering id `portalize-calendar` in a data cell is not a hit | — |
 | 13 copy structure (CG-005, CG-004) | a question mark in a section-title-role field (a field whose page renders it as a paragraph is relabelled, never reworded — DEC-0136 §2); the back-reference phrases; `im Amt` without a second addressee | CG-015 word-stem doubling and CG-034 volatile numerals stay review-level (`copy-contract.md`); "states what works" is meaning |
 | 14 register (CG-003) | a capitalised `Sie`/`Ihnen`/`Ihre*` mid-sentence and an imperative `<Verb> Sie`, with `/rechtliches` exempt whole and by route | CG-002's other half — one field mixing `du` and `ihr` — and the imported legal bodies under `content/legal/`, which the page scan does not reach |

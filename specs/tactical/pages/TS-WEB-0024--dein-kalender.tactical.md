@@ -54,7 +54,7 @@ TS-WEB-0006 D2 block 2, expanded. Each block carries a stable `data-block` id.
 | 2 | `contrast` | today versus with the product, four rows (D4) | |
 | 3 | `embed-demo` | the real widget, position 1′ (D5) | |
 | 4 | `embed-config` | what the visitor decides about the widget above: the sources it draws from, and the settings that cut the view (D5's "Heading"/"Label" rules apply) | added 2026-09-26, DEC-0131 §1 |
-| 5 | `tiers` | three tiers under one heading (D6) | carries the one product name (D7) |
+| 5 | `tiers` | three tiers under one heading (D6), three columns from `xl` (DEC-0205) | names no product (D7) |
 | 6 | `proof` | proof, sell-weighted, as a proof stream of voices (D9) | `lime-100` |
 | 7 | `trust` | data protection, operations, AI — one block (D10) | `violet-500`, never the proof's ground (DEC-0172 §4) |
 | — | — | closing CTA, context band, then the contact section | rendered by the layout (TS-WEB-0006 D2/D5/D6, DEC-0081). The closing CTA — *"Euer Kalender läuft, sobald der Code auf eurer Seite steht."* — stands **before** the band, so the conversion stays with the argument it closes (owner's review 2026-10-27, issue #93, DEC-0174 §4) |
@@ -171,9 +171,9 @@ explanatory module, and the **weight differs by tier**:
 
 | # | Tier | Offering id | Price shown | Its one CTA | Weight |
 | --- | --- | --- | --- | --- | --- |
-| 1 | your village | `community-calendar` | free — a permanence statement, not a price (TS-WEB-0006 D10) | publish dates → `/mitmachen` via the route facade | **Quiet** |
-| 2 | under your name | `portalize-calendar` | 480 €/year, net (D8) | order → `/dein-kalender/bestellen` | **Primary on light** — the strong button (D3) |
-| 3 | for a whole region | `portalize-enterprise` | "auf Anfrage" — no figure, no range, no "ab" | continue to `/deine-region` via the route facade | Quiet |
+| 1 | your village | `community-calendar` | "0 €", explained "dauerhaft kostenfrei" (DEC-0205) | sign up → `/mitmachen/registrieren` via the route facade | **Secondary** (outlined) |
+| 2 | under your name | `portalize-calendar` | 480 €, explained "pro Jahr, zzgl. USt." (D8) | order → `/dein-kalender/bestellen` | **Primary on light** — the strong button (D3) |
+| 3 | as a regional calendar | `portalize-enterprise` | "Auf Anfrage" at the figure size, explained "je nach Gebiet und Umfang" — no figure, no range, no "ab" | request → `/deine-region` via the route facade | **Secondary** (outlined) |
 
 **Why one each, and why these.** DEC-0082 §4 fixes one CTA per explanatory
 module pointing at *"the deeper page's primary conversion"*. Tier 1 carried two
@@ -189,7 +189,7 @@ the order is **free first**, as the IA, this determination and the design draft
 have it (`plan/reviews/2026-09-23/decisions.md` point 9). What the review was
 reaching for — that the paid tier should not be the quietest thing on the page —
 is answered by the weight instead of by the order: the paid tier takes the
-strong button, the free tier one quiet CTA. Recorded here so the next reader
+strong button, the free tier one outlined CTA (quiet until DEC-0205). Recorded here so the next reader
 does not take the order for an oversight and re-flip it.
 
 Tier 3's CTA is the link onward: `/deine-region` owns the quote conversion
@@ -208,25 +208,26 @@ at it.
   registration, **not** a declared conversion of this page (D1) — an in-body
   link to another page's goal is a link, not a declaration (DEC-0082 §4).
 
-### D7 — "Portalize" is named exactly once [FIXED: DEC-0052 §1, resolves Q-0012]
+### D7 — "Portalize" is not named [FIXED: DEC-0205, supersedes DEC-0052 §1 on the count]
 
-The name appears once in the rendered text of this route, in tier 2's body
-copy, in one sentence saying the calendar under your name is called
-Portalize. Absent everywhere else: headings, tier and CTA labels, `<title>`,
-meta description, structured data, nav, footer, breadcrumb, URL.
+The name appears nowhere in the rendered text of this route: the one sentence
+that said the calendar under your name is called Portalize (tier 2) is
+removed by the owner's review of 2026-11-12 (#165). Absent everywhere:
+headings, tier and CTA labels, `<title>`, meta description, structured data,
+nav, footer, breadcrumb, URL.
 
-This **fixes the floor** TS-WEB-0018 D5 left open: on this route the count is
-exactly 1, not ≤ 1. Its exemptions (loader origin, CSP, `data-*`) stand and
+This sets the count TS-WEB-0018 D5 left open (DEC-0052 §1 had fixed it at
+exactly 1) to 0. Its exemptions (loader origin, CSP, `data-*`) stand and
 do not count towards it.
 
 ### D8 — Pricing on this page [FIXED: BUS-WEB-0015, FUN-WEB-0202, TS-WEB-0006 D10]
 
 | Rule | Realisation |
 | --- | --- |
-| one figure | exactly one numeric price token renders on this page: `portalize-calendar`'s 480 |
+| figures | the three tier rows each show one figure line of the same size (DEC-0205): "0 €" (`community-calendar`, `price.amount` 0 from the package), "480 €" (`portalize-calendar`) and "Auf Anfrage"; no other numeric price token renders on this page |
 | sourced, not typed | amount, currency, interval and `vat: excluded` are read from the offering package; the net qualifier is rendered because the package says `excluded`, not because copy remembers to add it |
 | enterprise | `portalize-enterprise` is `price_status: on-request` and `promotion: promoted` — mentioned, never priced. The internal 4.000 € figure may not appear in markup, comment, JSON-LD, or `data-*` |
-| free tier | not a price; its permanence statement is content, backed by the 2022 public commitment |
+| free tier | shown as "0 €" with the explanation "dauerhaft kostenfrei" (DEC-0205; supersedes "not a price", TS-WEB-0006 D10, for this tier on this page only); the permanence statement stays content, backed by the 2022 public commitment |
 | structured data | the `Offer` of TS-WEB-0011 carries the same 480 from the same source — one number, two renderings, no second constant |
 
 ### D9 — Proof: job fit outranks proximity [FIXED: TS-WEB-0005 D5, DEC-0048]
@@ -306,8 +307,8 @@ TS-WEB-0018 D8's budget constant is 0 for this route.
 | TS-WEB-0024-A5 | e2e | `data-block="contrast"` contains exactly four rows, each with a today cell and a with-your-calendar cell; no checkmark/cross column and no row beyond four. Neither column label nor any cell contains a product name or the words the avoid list carries for it ("das Produkt", "mit dem Produkt" — SRC-0017 CG-039). The criterion asserts the two cells and the absence, never their wording (DEC-0083, DEC-0106 §2). |
 | TS-WEB-0024-A6 | e2e | With the loader host blocked, `data-block="embed-demo"` still renders its copy and a working CTA, shows no empty frame and no error text, and the page height above the block is unchanged from the unblocked run (no reflow). |
 | TS-WEB-0024-A7 | e2e | With the loader allowed, the only third-party script request from this block goes to the allowlisted Portalize host; after full load `document.cookie` is empty and `localStorage`/`sessionStorage` hold no entry set by the embed. |
-| TS-WEB-0024-A8 | e2e | `data-block="tiers"` has exactly one heading element and exactly three tier elements in the order `community-calendar`, `portalize-calendar`, `portalize-enterprise` (readable from each tier's `data-offering`); **each tier carries exactly one CTA** and none of them carries `data-cta="primary"`. Tier 1's resolves to `/mitmachen`, tier 2's to `/dein-kalender/bestellen`, tier 3's to `/deine-region`. Tier 2's CTA carries the strong button variant and tiers 1 and 3 the quiet one; no tier CTA uses the Pulse fill, which occurs only in `data-block="focus"` (A3). No tab, toggle, radio or `select` exists anywhere on the page. The heading's wording and form are not asserted (DEC-0083). |
-| TS-WEB-0024-A9 | e2e | The rendered text of the page contains the string "Portalize" exactly once (case-insensitive), and that occurrence is inside `data-block="tiers"`, inside the `portalize-calendar` tier, and not inside any heading, link label, `<title>`, meta description or JSON-LD. |
+| TS-WEB-0024-A8 | e2e | `data-block="tiers"` has exactly one heading element and exactly three tier elements in the order `community-calendar`, `portalize-calendar`, `portalize-enterprise` (readable from each tier's `data-offering`); **each tier carries exactly one CTA** and none of them carries `data-cta="primary"`. Tier 1's resolves to `/mitmachen/registrieren`, tier 2's to `/dein-kalender/bestellen`, tier 3's to `/deine-region`. Tier 2's CTA carries the strong button variant (filled) and tiers 1 and 3 the secondary one (outlined); the three buttons are one size, and the three tiers stand in three equal columns from `xl` with kicker, heading, figure, list and button on shared heights (DEC-0205); no tier CTA uses the Pulse fill, which occurs only in `data-block="focus"` (A3). No tab, toggle, radio or `select` exists anywhere on the page. The heading's wording and form are not asserted (DEC-0083). |
+| TS-WEB-0024-A9 | e2e | The rendered text of the page contains the string "Portalize" zero times (case-insensitive), and neither `<title>` nor any heading carries it (DEC-0205). |
 | TS-WEB-0024-A10 | e2e | Exactly one numeric price token renders: 480, with currency, the annual interval and the net qualifier. The strings "4.000", "4000", "ab " and any second price figure do not occur in the DOM, in JSON-LD, in HTML comments or in `data-*` attributes. |
 | TS-WEB-0024-A11 | static | The rendered 480 value, its currency, interval and VAT flag come from the offering package import; no literal `480` appears in page or component source. The JSON-LD `Offer` reads from the same import. |
 | TS-WEB-0024-A12 | unit | With the `run our own calendar` weight profile and a stage-2 trait outside the covered region, a high job-fit proof element outranks a geographically nearer element with low job fit; the page's profile equals TS-WEB-0005 D5's row for this focus job. |
@@ -359,7 +360,7 @@ copy, not a form this spec fixes (D6, DEC-0083).
 | --- | --- | --- |
 | 1 | **The operations and AI sentences have no source.** SRC-0003 names the block's three subjects and nothing more; nothing in the hub states what is claimed about operations or about AI use on publisher data. Until a record exists, D10 ships the data-protection part only. | jan-henrik / gtm hub |
 | 2 | **Q-0026 gates the strongest block.** Without the loader's place-filter parameter the demo stays a labelled example rather than "your place", and the cookie-freedom of the embed is unverified — which is also what A7 and the D10 claim depend on. | portalize |
-| 3 | **TS-WEB-0018 D5 still reads "≤ 1, no floor"** (Q-0012 open) and **TS-WEB-0018 D8/A10 still budget one advertising sentence on this page** (Q-0006 open). DEC-0052 §1 and §3 resolved both; D7 and D11 here implement exactly 1 and exactly 0. TS-WEB-0018 must be tightened to match, or the specs disagree about a passing page. | TS-WEB-0018 owner / spec work |
+| 3 | **TS-WEB-0018 D5 still reads "≤ 1, no floor"** (Q-0012 open) and **TS-WEB-0018 D8/A10 still budget one advertising sentence on this page** (Q-0006 open). DEC-0052 §1 and §3 resolved both; D7 (0 since DEC-0205; 1 under DEC-0052) and D11 (0) are the counts implemented here. TS-WEB-0018 must be tightened to match, or the specs disagree about a passing page. | TS-WEB-0018 owner / spec work |
 | 4 | **The two equal-weight conversions are not equally observable.** `request-product-briefing` emits on this page; `buy-calendar-licence` completes only on `/dein-kalender/bestellen`. Comparing the two arms needs the internal CTA click as a measured step — TS-WEB-0012 D7 deliberately has no such event. Decide: accept the asymmetry, or add one step event. | TS-WEB-0012 owner |
 | 5 | ~~**Tier-1 CTAs point at goals this page does not declare.**~~ **Closed by DEC-0082 §4:** an in-body link to another page's goal is a link, not a declaration, and TS-WEB-0006 D9's check reads declarations only. | — |
 | 6 | ~~**Pulse at tier 2.**~~ **Closed by DEC-0082 amendment B and audit A4, 2026-09-25.** Pulse stays in the focus block and occurs once; the tier-2 order button takes the **strong button variant** instead, which is what the point was reaching for — the paid tier is no longer the quieter of the two at the moment the price is read, and the one-himbeere rule is untouched. Rung and weight are two things, and only the marker is one-per-page. | — |

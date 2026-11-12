@@ -106,8 +106,7 @@ images:
 
 # Your calendar (`/dein-kalender`)
 
-"Portalize" appears on this page **exactly once** (slot 4, tier 2;
-TS-WEB-0024 D7). No local `local-advertising` anywhere on the page
+"Portalize" appears on this page **never** (TS-WEB-0024 D7, DEC-0205). No local `local-advertising` anywhere on the page
 (TS-WEB-0024 D11). Two equally weighted conversions: order (Pulse, primary)
 and book a briefing (secondary, same visibility) — Pulse appears only
 in the focus block (TS-WEB-0024 D3).
@@ -233,50 +232,47 @@ business anyway (TS-WEB-0024 D6, DEC-0083 §2).
 
 **Tier kicker:** In the village calendar
 
-**Title:** The calendar for your place
+**Title:** The village calendar / for your place
 
-**CTA (quiet):** Publish dates → `/mitmachen`
+**CTA (secondary):** Sign up now → `/take-part/register`
 
-Offering id: `community-calendar`; the price "free, permanent" renders as
-the permanence statement from the package, never as a figure
-(TS-WEB-0006 D10). The two CTAs became one with DEC-0082 §4: "open
-calendar" was a link into the app, not a next step in this decision
-(TS-WEB-0024 D6).
+Offering id: `community-calendar`; price from the package (`interval: forever`,
+`price_status: fixed`) — rendered as a figure with the explanation "free,
+permanently", the number read from the package (DEC-0205).
+The two CTAs became one with DEC-0082 §4 (TS-WEB-0024 D6). The title's line
+break is the ` / ` in the copy and is fixed (DEC-0205).
 
 ### Tier 2 — on your own website
 
 **Tier kicker:** On your website
 
-**Title:** Your own calendar
+**Title:** Your own / calendar
 
-**CTA (primary on light):** Order the calendar
+**CTA (primary on light):** Order the calendar → `/your-calendar/order`
 
-**Product name:** The calendar under your own name is called Portalize.
+<!-- note: from here an authoring note, not copy — it records the removal of the product-name sentence (DEC-0142 §1) -->
 
-<!-- note: from here to the next field an authoring note, not copy — the passage quotes the product name in order to record its one place (DEC-0142 §1) -->
+Offering id: `portalize-calendar`; price 480/EUR/year, `vat: excluded` —
+read from the package, never typed (TS-WEB-0024 D8), explained as "per year,
+excl. VAT". The sentence that named the product is gone (DEC-0205). The
+tier's briefing link is gone: it is reachable through the contact section,
+and every tier carries exactly one CTA (TS-WEB-0024 D6, DEC-0082 §4).
 
-Offering id: `portalize-calendar`; price 480/EUR/year, `vat: excluded`
-— read from the package, never typed (TS-WEB-0024 D8). "Portalize" appears
-on this entire page in this one sentence only (D7). The tier's briefing
-link is gone: it is reachable on this very page through the contact
-section, and every tier carries exactly one CTA (TS-WEB-0024 D6,
-DEC-0082 §4).
+### Tier 3 — as a regional calendar
 
-### Tier 3 — for a whole region
+**Tier kicker:** As a regional calendar
 
-**Tier kicker:** For a whole region
+**Title:** A calendar for / your region
 
-**Title:** A calendar for the county
+**CTA (secondary):** Request a calendar → `/your-region`
 
 <!-- note: author note from here, not copy — the paragraph names the internal €4,000 figure in order to forbid it (DEC-0142 §1, DEC-0145) -->
 
 Offering id: `portalize-enterprise`, `price_status: on-request` — never
-a number, never "from", never an order of magnitude, and without the
-draft's size qualifier (TS-WEB-0024 D8,
-`plan/reviews/2026-09-23/decisions.md` line 19). The internal €4,000
-figure from the package must never appear anywhere on this page. The CTA
-label is `/deine-region`'s page title from the route facade — not a
-sentence of its own.
+a number, never "from", never an order of magnitude (TS-WEB-0024 D8). The
+internal €4,000 figure from the package must never appear anywhere on this
+page. "On request" is as large as the other prices, explained as "depending
+on area and scope" (DEC-0205). The CTA target is unchanged, `/deine-region`.
 
 ## Slot 4b — Checks per tier (draft, unconfirmed)
 
@@ -288,7 +284,7 @@ sentence of its own.
 | --- | --- | --- | --- |
 | community-calendar | The calendar for your place and around it | Publish dates, over WhatsApp too | For clubs, municipalities, traders, everyone |
 | portalize-calendar | Under your name, in your design | With your places, categories and organisers | Dates arrive by themselves |
-| portalize-enterprise | For counties, authorities, large cities | Map view from January 2027 | Your own registration under your name |
+| portalize-enterprise | For regions, foundations or counties | Also as a topic calendar, for culture for example | Map view from January 2027 |
 
 The nine lines are the ones in `Design - Preis Section 1.png` and
 `Design - Preis Section 2.png`. The owner has not confirmed them, so the
@@ -297,6 +293,14 @@ slot is `provenance: generated; demo: true` with a row in `state/open.md`
 becomes "map view from January 2027" — the map view is announced with its
 date, never listed as a shipped feature (DEC-0061,
 `plan/reviews/2026-09-23/decisions.md` line 19).
+
+Tier 3 follows the wording of owner issue #165 since DEC-0205. Checked against
+the hub (`@schafe-vorm-fenster/offerings@0.3.5`): "foundations" is carried by
+`portalize-enterprise` (audience "Landesbehörde, Stiftung, or network"), "map
+view from January 2027" by DEC-0061. Deviation: "Also as a topic calendar, for
+culture for example" — the hub lists no topic calendar as a feature of
+`portalize-enterprise` (only "cultural categories" as a filter); the claim
+stands on the owner's instruction, DEM-0078 against the source.
 
 ## Slot 5 — Proof (3 elements, with images)
 

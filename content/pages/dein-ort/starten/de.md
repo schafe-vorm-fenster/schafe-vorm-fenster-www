@@ -178,7 +178,7 @@ verspricht dadurch auch keinen (state/open.md Zeile 94).
 <!-- source_note: Angebotsformulierung statt Menü aus gtm:concept/website-communication-principles.concept.md Prinzip 2; die drei Jobs und ihre Formulierung aus der Job-Tabelle in Prinzip 1. Beantwortet state/open.md Zeile 95 für diese Seite. -->
 <!-- id: dein-ort-starten-7-context-band; content_type: context-band; provenance: sourced; derived_from: [ia]; status: draft -->
 
-**Kicker:** Heute mit einem anderen Anliegen hier?
+**Kicker:** Erfahre mehr über unsere Kalenderplattform
 
 - **Sehen, was los ist:** Was in deinem Ort als Nächstes ansteht → `/dein-ort`
 - **Eigenen Kalender betreiben:** Unter eigenem Namen, auf eurer Website → `/dein-kalender`

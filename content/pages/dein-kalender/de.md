@@ -108,8 +108,7 @@ images:
 
 # Dein Kalender (`/dein-kalender`)
 
-„Portalize" fällt auf dieser Seite **genau einmal** (Slot 4, Tarif 2;
-TS-WEB-0024 D7). Kein lokales `local-advertising` irgendwo auf der Seite
+„Portalize" fällt auf dieser Seite **nie** (TS-WEB-0024 D7, DEC-0205). Kein lokales `local-advertising` irgendwo auf der Seite
 (TS-WEB-0024 D11). Zwei gleichwertige Conversions: bestellen (Pulse, primär)
 und Beratungstermin buchen (sekundär, gleiche Sichtbarkeit) — Pulse
 kommt nur im Fokusblock vor (TS-WEB-0024 D3).
@@ -242,40 +241,42 @@ Gegenstand der Spec (TS-WEB-0024 D6, DEC-0083 §2).
 
 **Stufen-Kicker:** Im Dorfkalender
 
-**Titel:** Der Kalender für euren Ort
+**Titel:** Der Dorfkalender / für euren Ort
 
-**CTA (Quiet):** Termine veröffentlichen → `/mitmachen`
+**CTA (Secondary):** Jetzt anmelden → `/mitmachen/registrieren`
 
-Offering-ID: `community-calendar`; Preis „kostenlos, dauerhaft" — als
-Dauerhaftigkeits-Aussage aus dem Paket gerendert, nicht als Zahl
-(TS-WEB-0006 D10). Die beiden CTAs sind seit DEC-0082 §4 einer: „Kalender
-öffnen" war ein Link in die App, kein nächster Schritt in dieser
-Entscheidung (TS-WEB-0024 D6).
+Offering-ID: `community-calendar`; Preis aus dem Paket (`interval: forever`, `price_status: fixed`) — als
+Figur mit der Erläuterung „dauerhaft kostenfrei“ gerendert, die Zahl aus dem Paket (DEC-0205, löst die
+frühere Regel „keine Zahl“ aus TS-WEB-0006 D10 für diese Stufe ab). Die beiden
+CTAs sind seit DEC-0082 §4 einer: „Kalender öffnen“ war ein Link in die App,
+kein nächster Schritt in dieser Entscheidung (TS-WEB-0024 D6). Der Umbruch
+des Titels steht als ` / ` in der Copy und ist fest (DEC-0205).
 
 ### Tarif 2 — auf eurer eigenen Website
 
 **Stufen-Kicker:** Auf eurer Website
 
-**Titel:** Euer eigener Kalender
+**Titel:** Euer eigener / Kalender
 
-**CTA (primär auf hell):** Kalender bestellen
+**CTA (primär auf hell):** Kalender bestellen → `/dein-kalender/bestellen`
 
-**Produktname:** Der Kalender unter eurem Namen heißt Portalize.
-
-<!-- note: ab hier bis zum nächsten Feld Autorennotiz, keine Copy — der Absatz zitiert den Produktnamen, um seine eine Stelle zu belegen (DEC-0142 §1) -->
+<!-- note: ab hier Autorennotiz, keine Copy — der Absatz zitiert den Produktnamen, um seine Streichung zu belegen (DEC-0142 §1) -->
 
 Offering-ID: `portalize-calendar`; Preis 480/EUR/Jahr, `vat: excluded` —
-aus dem Paket gelesen, nicht getippt (TS-WEB-0024 D8). „Portalize" erscheint
-in der gesamten Seite ausschließlich in diesem einen Satz (D7). Der
-Beratungstermin-Link dieser Stufe ist weg: er ist auf derselben Seite über
-die Kontakt-Section erreichbar, und jede Stufe trägt genau einen CTA
-(TS-WEB-0024 D6, DEC-0082 §4).
+aus dem Paket gelesen, nicht getippt (TS-WEB-0024 D8), mit der Erläuterung
+„pro Jahr, zzgl. USt.“. Der Satz, der den Produktnamen Portalize nannte,
+entfällt (DEC-0205): Der Name steht damit auf dieser Seite nicht mehr
+(TS-WEB-0024 D7). Der Beratungstermin-Link dieser Stufe ist weg: er ist auf
+derselben Seite über die Kontakt-Section erreichbar, und jede Stufe trägt
+genau einen CTA (TS-WEB-0024 D6, DEC-0082 §4).
 
-### Tarif 3 — für eine ganze Region
+### Tarif 3 — als Regionalkalender
 
-**Stufen-Kicker:** Für eine ganze Region
+**Stufen-Kicker:** Als Regionalkalender
 
-**Titel:** Ein Kalender für den Landkreis
+**Titel:** Ein Kalender für / eure Region
+
+**CTA (Secondary):** Kalender anfragen → `/deine-region`
 
 <!-- note: ab hier Autorennotiz, keine Copy — der Absatz nennt die interne 4.000-€-Marke, um sie zu verbieten (DEC-0142 §1, DEC-0145) -->
 
@@ -284,8 +285,9 @@ eine Zahl, nie „ab", nie eine Größenordnung und ohne den
 Größen-Zusatz des Entwurfs (TS-WEB-0024 D8,
 `plan/reviews/2026-09-23/decisions.md` Zeile 19). Die interne
 4.000-€-Marke aus dem Paket darf an keiner Stelle dieser Seite
-erscheinen. Das CTA-Label ist der Seitentitel von `/deine-region` aus dem
-Routen-Facade — kein eigener Satz.
+erscheinen. „Auf Anfrage“ steht groß wie die anderen Preise, die Erläuterung
+darunter lautet „je nach Gebiet und Umfang“ (DEC-0205). Das Ziel des CTA
+ist unverändert `/deine-region`.
 
 ## Slot 4b — Häkchen je Stufe (Entwurf, nicht bestätigt)
 
@@ -297,7 +299,7 @@ Routen-Facade — kein eigener Satz.
 | --- | --- | --- | --- |
 | community-calendar | Kalender eures Orts und der Umgebung | Termine veröffentlichen, auch per WhatsApp | Für Vereine, Gemeinden, Händler, alle |
 | portalize-calendar | Unter eurem Namen, in eurem Design | Mit euren Orten, Kategorien und Akteuren | Termine kommen von selbst rein |
-| portalize-enterprise | Für Landkreise, Behörden, große Städte | Kartenansicht ab Januar 2027 | Eigene Registrierung unter eurem Namen |
+| portalize-enterprise | Für Regionen, Stiftungen oder Landkreise | Auch als Themenkalender, etwa für Kultur | Kartenansicht ab Januar 2027 |
 
 Die neun Zeilen stehen so in den Entwürfen `Design - Preis Section 1.png`
 und `Design - Preis Section 2.png`. Sie sind vom Eigentümer nicht
@@ -307,6 +309,15 @@ Entwurf: „Zusätzlich mit Kartenansicht" wird zu „Kartenansicht ab Januar
 2027" — die Kartenansicht wird mit ihrem Datum angekündigt, nie als
 ausgeliefertes Merkmal geführt (DEC-0061,
 `plan/reviews/2026-09-23/decisions.md` Zeile 19).
+
+Stufe 3 folgt seit DEC-0205 dem Wortlaut des Owner-Issues #165. Gegen den Hub
+(`@schafe-vorm-fenster/offerings@0.3.5`) geprüft: „Stiftungen“ trägt
+`portalize-enterprise` (Zielgruppe „Landesbehörde, Stiftung, or network“),
+„Kartenansicht ab Januar 2027“ trägt DEC-0061 (der Hub nennt die Karte „expected
+before January 2027“). Deviation: „Auch als Themenkalender, etwa für Kultur“ —
+der Hub führt keinen Themenkalender als Merkmal von `portalize-enterprise`
+(nur „cultural categories“ als Filter); die Aussage steht auf Weisung des
+Owners, DEM-0078 liegt gegen die Quelle.
 
 ## Slot 5 — Beleg (3 Elemente, mit Bildern)
 

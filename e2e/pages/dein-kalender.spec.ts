@@ -172,9 +172,9 @@ test.describe("TS-WEB-0024: /dein-kalender", () => {
   }) => {
     await page.goto(ROUTE);
     const expected = [
-      { offering: "community-calendar", href: "/mitmachen", variant: "quiet" },
+      { offering: "community-calendar", href: "/mitmachen/registrieren", variant: "secondary" },
       { offering: "portalize-calendar", href: "/dein-kalender/bestellen", variant: "primary-light" },
-      { offering: "portalize-enterprise", href: "/deine-region", variant: "quiet" },
+      { offering: "portalize-enterprise", href: "/deine-region", variant: "secondary" },
     ] as const;
 
     for (const tier of expected) {
@@ -210,28 +210,13 @@ test.describe("TS-WEB-0024: /dein-kalender", () => {
     );
   });
 
-  test("TS-WEB-0024-A9: 'Portalize' occurs exactly once, inside the tiers block at the 480 € tier, never in a heading or the title", async ({
+  test("TS-WEB-0024-A9: 'Portalize' occurs zero times — not in the text, a heading or the title (DEC-0205)", async ({
     page,
   }) => {
     await page.goto(ROUTE);
     const bodyText = await page.locator("body").innerText();
-    const hits = bodyText.match(/Portalize/gi) ?? [];
-    expect(hits).toHaveLength(1);
-    // `price-tier-row` has no body-copy slot, so D7's one sentence stands
-    // directly under the row it belongs to, inside the tiers block
-    // (DEC-0131 §3).
-    const tiersText = await page.locator('[data-block="tiers"]').innerText();
-    expect(tiersText).toContain("Portalize");
-    // "at the 480 € tier" is asserted structurally: the sentence is the
-    // paragraph immediately following the `portalize-calendar` row, so it
-    // cannot drift to the community or the region tier.
-    await expect(page.locator('[data-offering="portalize-calendar"] + p')).toContainText(
-      "Portalize",
-    );
+    expect(bodyText.match(/Portalize/gi) ?? []).toHaveLength(0);
     expect(await page.title()).not.toContain("Portalize");
-    await expect(
-      page.locator('h1:has-text("Portalize"), h2:has-text("Portalize"), h3:has-text("Portalize")'),
-    ).toHaveCount(0);
   });
 
   test("TS-WEB-0024 D2 / DEC-0131: the configuration block carries six settings, bold example labels and no radius", async ({

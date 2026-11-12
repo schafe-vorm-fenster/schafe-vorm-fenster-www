@@ -106,3 +106,13 @@
     grid-area: cta;
   }
 }
+
+/* The module's own one-sentence lead under its title (issue 152). */
+.lead {
+  color: var(--color-neutral-text2);
+  font-size: var(--type-body-size);
+  font-weight: 600;
+  line-height: var(--leading-normal);
+  margin: var(--space-3) 0 0;
+  max-width: var(--measure-reading);
+}

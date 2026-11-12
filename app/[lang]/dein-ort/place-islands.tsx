@@ -41,6 +41,7 @@ import { fillTemplate, splitSteps } from "@/src/lib/pages/demo-content";
 import { selectStoryExamples } from "@/src/lib/pages/story-examples";
 
 import { NearbyIsland, PlaceDatesIsland } from "../_islands";
+import { nearbyHead } from "../_nearby-section";
 import { PlacePhotoLayer } from "../_place-photo";
 import { toListItems } from "../_live-items";
 
@@ -238,7 +239,7 @@ export function PlaceNearby({ locale, titleTemplate }: { readonly locale: Locale
     <NearbyIsland
       anchor={anchor}
       conversion={SAVE_CALENDAR}
-      headingLevel="h3"
+      {...nearbyHead(locale)}
       locale={locale}
       point={held ? undefined : { lat: anchor.lat, lng: anchor.lng }}
       role="answering"

@@ -9,10 +9,10 @@ describe("offer-tier (deprecated) shares the price-section's order and weight ta
     expect(OFFER_TIERS).toEqual(["community-calendar", "portalize-calendar", "portalize-enterprise"]);
   });
 
-  it("is the same table — one place says quiet · primary-light · quiet", () => {
+  it("is the same table — one place says secondary · primary-light · secondary", () => {
     expect(OFFER_TIER_CTA_VARIANT).toBe(PRICE_TIER_CTA_VARIANT);
-    expect(OFFER_TIER_CTA_VARIANT["community-calendar"]).toBe("quiet");
+    expect(OFFER_TIER_CTA_VARIANT["community-calendar"]).toBe("secondary");
     expect(OFFER_TIER_CTA_VARIANT["portalize-calendar"]).toBe("primary-light");
-    expect(OFFER_TIER_CTA_VARIANT["portalize-enterprise"]).toBe("quiet");
+    expect(OFFER_TIER_CTA_VARIANT["portalize-enterprise"]).toBe("secondary");
   });
 });

@@ -84,12 +84,12 @@ describe("TS-WEB-0020 D4: the homescreen instruction becomes an ordered list", (
   it("splits running prose at its sentence boundaries", () => {
     expect(
       splitSteps(
-        `Öffne den Kalender von Musterdorf in Safari. Tipp auf „Teilen", dann auf „Zum Home-Bildschirm". Fertig — er startet ab jetzt wie eine App.`,
+        `Öffne den Kalender von Musterdorf in Safari. Tipp auf „Teilen", dann auf „Zum Home-Bildschirm". Fertig - er startet ab jetzt wie eine App.`,
       ),
     ).toEqual([
       "Öffne den Kalender von Musterdorf in Safari.",
       `Tipp auf „Teilen", dann auf „Zum Home-Bildschirm".`,
-      "Fertig — er startet ab jetzt wie eine App.",
+      "Fertig - er startet ab jetzt wie eine App.",
     ]);
   });
 
