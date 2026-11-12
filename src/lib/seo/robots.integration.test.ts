@@ -69,9 +69,9 @@ describe("TS-WEB-0015-A1: noindex on everything that is not production", () => {
 
   it("allows all and names the sitemap on production under a canonical host", async () => {
     const robots = await robotsTxt("production", "www.schafe-vorm-fenster.de");
-    expect(robots).toBe(
-      "User-Agent: *\nAllow: /\n\nSitemap: https://www.schafe-vorm-fenster.de/sitemap.xml\n",
-    );
+    expect(robots).toContain("User-Agent: *\nAllow: /\n\n");
+    expect(robots).toContain("User-Agent: GPTBot\nAllow: /\n\n");
+    expect(robots.endsWith("Sitemap: https://www.schafe-vorm-fenster.de/sitemap.xml\n")).toBe(true);
   });
 });
 

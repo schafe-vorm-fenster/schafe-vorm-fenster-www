@@ -6,26 +6,26 @@ What verifies each acceptance criterion, at the level the criterion itself
 declares. `pnpm check:coverage` writes this file; `scripts/check-coverage.ts`
 says what the five verdicts mean and what gates.
 
-**516 criteria · 337 closed · 179 open (65 % closed)**
+**520 criteria · 343 closed · 177 open (66 % closed)**
 
 | Verdict | Count | What it means |
 | --- | --- | --- |
-| VERIFIED | 332 | a test title in a file a runner runs carries the id |
+| VERIFIED | 338 | a test title in a file a runner runs carries the id |
 | METERED | 5 | a `check:` meter in the chain, or a CI job, names it (`static` and `tool`) |
 | ATTESTED | 0 | a current row in `specs/verification/manual-checks.md` (`manual` only) |
 | NAMED ONLY | 30 | the id is in a runner file but in no test title — **not coverage** |
-| MISSING | 149 | nothing names it |
+| MISSING | 147 | nothing names it |
 
-Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this commit, 0 without an instrument.
+Rule 1 (a new criterion arrives with its instrument): 4 criterion(a) new in this commit, 0 without an instrument.
 
 ## By level
 
 | Level | Criteria | Closed | Open | Closed |
 | --- | --- | --- | --- | --- |
 | static | 92 | 62 | 30 | 67 % |
-| unit | 35 | 30 | 5 | 86 % |
-| integration | 78 | 53 | 25 | 68 % |
-| e2e | 241 | 190 | 51 | 79 % |
+| unit | 36 | 31 | 5 | 86 % |
+| integration | 78 | 54 | 24 | 69 % |
+| e2e | 244 | 194 | 50 | 80 % |
 | tool | 39 | 2 | 37 | 5 % |
 | manual | 31 | 0 | 31 | 0 % |
 
@@ -36,14 +36,14 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | TS-WEB-0001 | 12 | 10 | A9 A11 |
 | TS-WEB-0002 | 14 | 4 | A1 A2 A4 A5 A6 A7 A8 A10 A11 A12 |
 | TS-WEB-0003 | 8 | 2 | A1 A2 A3 A4 A5 A6 |
-| TS-WEB-0004 | 12 | 9 | A6 A7 A11 |
+| TS-WEB-0004 | 13 | 10 | A6 A7 A11 |
 | TS-WEB-0005 | 16 | 13 | A9 A10 A15 |
 | TS-WEB-0006 | 21 | 17 | A4 A13 A14 A16 |
 | TS-WEB-0007 | 19 | 9 | A2 A3 A4 A5 A6 A9 A10 A11 A15 A16 |
 | TS-WEB-0008 | 22 | 17 | A6 A7 A8 A12 A13 |
 | TS-WEB-0009 | 14 | 7 | A1 A2 A3 A8 A9 A12 A13 |
 | TS-WEB-0010 | 15 | 6 | A5 A6 A7 A9 A11 A12 A13 A14 A15 |
-| TS-WEB-0011 | 14 | 6 | A3 A5 A6 A8 A9 A11 A12 A13 |
+| TS-WEB-0011 | 17 | 11 | A3 A5 A6 A11 A12 A13 |
 | TS-WEB-0012 | 14 | 11 | A7 A8 A10 |
 | TS-WEB-0013 | 8 | 3 | A3 A4 A6 A7 A8 |
 | TS-WEB-0014 | 14 | 3 | A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 A13 |
@@ -129,8 +129,6 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | TS-WEB-0011-A3 | tool | MISSING | — | Every page: exactly one `main`, exactly one `h1`, no skipped heading level, every `nav` and `aside` named. Zero HTML-validator errors. |
 | TS-WEB-0011-A5 | tool | MISSING | — | Structured-data validation (schema.org validator + Rich Results Test) reports zero errors per page type, and each page emits exactly the D4 types assigned to it … |
 | TS-WEB-0011-A6 | static | MISSING | — | No entity `@id`/`itemtype` appears both as JSON-LD and as microdata on the same page. |
-| TS-WEB-0011-A8 | integration | MISSING | — | Every indexable page emits the complete D6 tag set with absolute URLs; `og:url` equals the canonical; `og:locale` matches `<html lang>`; `og:locale:alternate` m … |
-| TS-WEB-0011-A9 | e2e | MISSING | — | The OG image of every (path, language) responds 200, is 1200×630, within the size budget, and shows text in that language. |
 | TS-WEB-0011-A11 | static | MISSING | — | No route, content file, sitemap entry, metadata field, or `llms.txt` line names a competitor while Q-0009 is open. |
 | TS-WEB-0011-A12 | manual | MISSING | — | Each interest landing page passes the SRC-0001 page-brief compliance check and is reviewed against D7.4 (not a keyword permutation of an existing page) before p … |
 | TS-WEB-0011-A13 | manual | MISSING | — | Post-cutover watch: Search Console shows no rise in 404s on formerly indexed URLs, and the previously best-ranking legacy URLs keep their impressions within the … |

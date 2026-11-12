@@ -8,7 +8,9 @@ seo:
     description: "Euer Kalender auf eurer Webseite. Niemand tippt mehr Termine. Seht den echten Kalender, konfiguriert eure Ansicht oder bucht erst einen Beratungstermin."
     provenance: generated
 content_type: section
-status: draft
+status: approved
+reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
+reviewed_at: "2026-11-12"
 locale: de
 sources:
   - "@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"
@@ -115,7 +117,7 @@ kommt nur im Fokusblock vor (TS-WEB-0024 D3).
 
 ## Slot 1 — Fokusblock
 
-<!-- id: dein-kalender-1-focus; content_type: hero; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"]; status: draft -->
+<!-- id: dein-kalender-1-focus; content_type: hero; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"]; status: approved -->
 
 **Headline:** Euer Kalender auf eurer Webseite. Niemand tippt mehr Termine.
 
@@ -136,7 +138,7 @@ niemand bekommt) und CG-036 („im Amt" als einzige Adressierung).
 
 ## Slot 2 — Kontrast: heute und mit eurem Kalender (4 Zeilen)
 
-<!-- id: dein-kalender-2-contrast; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar", "@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"]; status: draft -->
+<!-- id: dein-kalender-2-contrast; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar", "@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"]; status: approved -->
 
 **Überschrift:** Warum ein eigenes Terminmodul selten trägt
 
@@ -170,7 +172,7 @@ herkommt, eine Postleitzahl ist eine Abstraktion).
 
 ## Slot 3 — Einbindungs-Demo
 
-<!-- id: dein-kalender-3-embed-demo; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: dein-kalender-3-embed-demo; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Überschrift:** Ein echter Kalender aus drei Nachbardörfern
 
@@ -185,7 +187,7 @@ entfällt, weil sie keine eigene Textebene ist. Die Ortsnamen kommen aus
 
 ## Slot 3b — Was drinsteht, bestimmt ihr (Konfigurationsblock)
 
-<!-- id: dein-kalender-3b-embed-config; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar", ia]; status: draft -->
+<!-- id: dein-kalender-3b-embed-config; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar", ia]; status: approved -->
 
 **Überschrift:** Was drinsteht, bestimmt ihr.
 
@@ -231,7 +233,7 @@ ohne konfigurierte URL rendert der Link nicht.
 
 ## Slot 4 — Drei Tarife unter einer Frage
 
-<!-- id: dein-kalender-4-tiers; content_type: tier; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar", "@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar", "@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise"]; status: draft -->
+<!-- id: dein-kalender-4-tiers; content_type: tier; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar", "@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar", "@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise"]; status: approved -->
 
 **Überschrift:** Drei Wege zu eurem Kalender
 
@@ -298,7 +300,7 @@ ist unverändert `/deine-region`.
 
 ## Slot 4b — Häkchen je Stufe (Entwurf, nicht bestätigt)
 
-<!-- id: dein-kalender-4-tiers-checks-demo; content_type: tier; provenance: generated; derived_from: []; status: draft; demo: true -->
+<!-- id: dein-kalender-4-tiers-checks-demo; content_type: tier; provenance: generated; derived_from: []; status: approved; demo: true -->
 
 **Häkchen je Stufe (Entwurf, vom Eigentümer noch nicht bestätigt):**
 
@@ -328,7 +330,7 @@ Owners, DEM-0078 liegt gegen die Quelle.
 
 ## Slot 5 — Beleg (3 Elemente, mit Bildern)
 
-<!-- id: dein-kalender-5-proof; content_type: proof-card; provenance: sourced-empty-by-design; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar"]; status: draft -->
+<!-- id: dein-kalender-5-proof; content_type: proof-card; provenance: sourced-empty-by-design; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar"]; status: approved -->
 
 Pool: die vier Proof-IDs, auf die `portalize-calendar` verweist
 (`kulturlandbuero-broellin`, `eichler-wasserschloss-quilow`,
@@ -338,7 +340,7 @@ vorliegt. Im geschützten Preview zeigt der Slot darunter drei dieser
 Elemente im Wortlaut, mit offener Freigabe; die Freigabe wird im
 Frontmatter und in `state/open.md` geführt, nicht auf der Seite.
 
-<!-- id: dein-kalender-5-proof-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow", "@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow", "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow"]; status: draft -->
+<!-- id: dein-kalender-5-proof-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow", "@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow", "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow"]; status: approved -->
 
 **Belegkarten (echte Zitate, Freigabe steht aus):** Drei Stimmen aus dem
 Pool von `portalize-calendar`, wörtlich aus den Proof-Datensätzen:
@@ -375,7 +377,7 @@ Markenfläche, nie ein geliehenes Foto (Jan, 2026-09-18).
 
 ## Slot 6 — Vertrauensblock: Datenschutz, Betrieb, KI
 
-<!-- id: dein-kalender-6-trust; content_type: section; provenance: mixed; derived_from: [ia, "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel", "@schafe-vorm-fenster/proof@0.3.5#in-operation-since-2018"]; status: draft -->
+<!-- id: dein-kalender-6-trust; content_type: section; provenance: mixed; derived_from: [ia, "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel", "@schafe-vorm-fenster/proof@0.3.5#in-operation-since-2018"]; status: approved -->
 
 **Überschrift:** Wie eure Daten hier behandelt werden
 
@@ -395,7 +397,7 @@ Betriebsanschrift stehen im Impressum und in keinem Hub-Datensatz — sie
 bleiben hier weg. Die KI-Aussage bleibt unveröffentlicht, bis ein
 Hub-Eintrag existiert (`state/open.md` #19).
 
-<!-- id: dein-kalender-6-trust-demo; content_type: section; provenance: generated; derived_from: []; status: draft; demo: true -->
+<!-- id: dein-kalender-6-trust-demo; content_type: section; provenance: generated; derived_from: []; status: approved; demo: true -->
 
 **Vorläufiger Satz zur KI-Nutzung (Prototyp, `demo: true` im Frontmatter):**
 Für den vollständigen Prototyp-Eindruck steht hier ein Satz statt einer
@@ -412,7 +414,7 @@ darüber.
 ## Slot 7 — Abschluss-CTA
 
 <!-- source_note: Die Überschrift wiederholt, was Slot 3 schon zeigt (der Kalender läuft, sobald der Code auf der Seite steht) und behauptet keine Vorlaufzeit: Für „nächste Woche" liegt kein freigegebener Beleg vor. -->
-<!-- id: dein-kalender-7-closing; content_type: closing-cta; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: dein-kalender-7-closing; content_type: closing-cta; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Abschluss-Überschrift:** Euer Kalender läuft, sobald der Code auf eurer Seite steht.
 
@@ -427,7 +429,7 @@ ersten Aktionszeile der Kontakt-Section direkt unter diesem Block
 
 ## Verifikation — lokale Werbung
 
-<!-- id: dein-kalender-9-no-advertising; content_type: section; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: dein-kalender-9-no-advertising; content_type: section; provenance: sourced; derived_from: [ia]; status: approved -->
 
 Negativabgleich, kein Text-Slot: `local-advertising` (`promotion:
 withheld`) darf auf dieser Seite null Mal vorkommen — kein Satz, kein

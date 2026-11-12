@@ -306,6 +306,62 @@ test.describe("/ueber-uns", () => {
     expect(box!.width / box!.height).toBeCloseTo(1.4, 1);
   });
 
+  // issue 205: photograph left and text right from `lg` (48rem), stacked below.
+  for (const { width, sideBySide } of [
+    { width: 390, sideBySide: false },
+    { width: 640, sideBySide: false },
+    { width: 768, sideBySide: true },
+    { width: 1024, sideBySide: true },
+    { width: 1280, sideBySide: true },
+  ]) {
+    test(`issue 205: "Wer dahintersteckt" is ${sideBySide ? "photo left, text right, centred" : "photo above text"} at ${width}px`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto("/ueber-uns");
+      const geometry = await page.evaluate(() => {
+        const team = document.querySelector("[data-block='team']")!;
+        const rect = (element: Element) => element.getBoundingClientRect();
+        const photo = rect(team.querySelector("img")!);
+        const textBox = team.querySelector("h2")!.parentElement!;
+        const text = rect(textBox);
+        const textStyle = getComputedStyle(textBox);
+        const heading = rect(team.querySelector("h2")!);
+        // The content box of the page container, read off another section.
+        const container = [...document.querySelectorAll("main .container")].find(
+          (element) => !element.closest('[data-hero="true"]') && !team.contains(element),
+        )!;
+        const style = getComputedStyle(container);
+        return {
+          photo: { left: photo.left, right: photo.right, top: photo.top, bottom: photo.bottom },
+          text: {
+            left: text.left,
+            right: text.right,
+            top: text.top,
+            bottom: text.bottom,
+            contentRight: text.right - parseFloat(textStyle.paddingRight),
+          },
+          headingLeft: heading.left,
+          containerLeft: rect(container).left + parseFloat(style.paddingLeft),
+          containerRight: rect(container).right - parseFloat(style.paddingRight),
+        };
+      });
+      const { photo, text } = geometry;
+      if (sideBySide) {
+        expect(photo.right).toBeLessThanOrEqual(text.left + 1);
+        const photoMiddle = (photo.top + photo.bottom) / 2;
+        const textMiddle = (text.top + text.bottom) / 2;
+        expect(Math.abs(photoMiddle - textMiddle)).toBeLessThan(4);
+        // The text stops at the container's content edge, not short of it.
+        expect(Math.abs(text.contentRight - geometry.containerRight)).toBeLessThan(2);
+      } else {
+        expect(photo.bottom).toBeLessThanOrEqual(text.top + 1);
+        // Stacked, the text indents to the container's left edge.
+        expect(Math.abs(geometry.headingLeft - geometry.containerLeft)).toBeLessThan(2);
+      }
+    });
+  }
+
   test("DEC-0162 §1: the chapters carry the sourced story, and the founder quote is a quote card on the photo band", async ({
     page,
   }) => {
@@ -399,9 +455,9 @@ test.describe("/ueber-uns", () => {
     const persons = nodes.filter((node) => node["@type"] === "Person");
     expect(organizations).toHaveLength(1);
     expect(persons).toHaveLength(0);
-    // D4: a reference by `@id`, never a second full node — the page describes
-    // the organisation nowhere, it points at the description on `/`.
-    expect(Object.keys(organizations[0]!).sort()).toEqual(["@id", "@type"]);
+    // FUN-WEB-0213: the one full node, with name, URL and logo.
+    expect(organizations[0]).toMatchObject({ name: expect.any(String), url: expect.any(String) });
+    expect(organizations[0]).toHaveProperty("logo.url");
   });
 
   test("TS-WEB-0004-A1: no horizontal scroll at 360px", async ({ page }) => {

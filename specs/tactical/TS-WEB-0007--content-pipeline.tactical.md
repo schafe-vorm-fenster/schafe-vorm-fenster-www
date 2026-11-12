@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0143, FUN-WEB-0144, CON-WEB-0063, FUN-WEB-0039, FUN-WEB-0171, CON-WEB-0077, FUN-WEB-0172, FUN-WEB-0173, FUN-WEB-0174, CON-WEB-0078, FUN-WEB-0083, FUN-WEB-0175, FUN-WEB-0176, FUN-WEB-0177, FUN-WEB-0178, CON-WEB-0079, FUN-WEB-0179, CON-WEB-0080, CON-WEB-0087, FUN-WEB-0180, FUN-WEB-0181, FUN-WEB-0182, FUN-WEB-0089]
 sources: [SRC-0006, SRC-0008, SRC-0009, SRC-0017, SRC-0018]
-decisions: [DEC-0012, DEC-0020, DEC-0022, DEC-0026, DEC-0027, DEC-0039, DEC-0041, DEC-0080, DEC-0161, DEC-0165, DEC-0168, DEC-0175]
+decisions: [DEC-0012, DEC-0020, DEC-0022, DEC-0026, DEC-0027, DEC-0039, DEC-0041, DEC-0080, DEC-0161, DEC-0165, DEC-0168, DEC-0175, DEC-0222]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -298,6 +298,15 @@ A missing `approved` file for a required slot is a build failure in
 production, not a silently empty section. During the specification phase
 no page copy is produced at all (CON-WEB-0087); specs and fixtures use
 marked placeholders, and a placeholder never carries `approved`.
+
+**Production renders what preview renders** (DEC-0222, issue #206). The
+editorial decision point is the owner's approval: on 2026-11-12 the owner
+approved every page and slot the preview showed, and all of them carry
+`approved` with `reviewed_by`/`reviewed_at`. New content is committed as
+`approved` once the owner approves it in its PR. `pnpm check:content:production`
+judges the tree for a production build in `pnpm check` and on every PR into
+`next-2026` and `main`, so a page or slot a production build would drop never
+reaches either branch.
 
 **A placeholder for missing proof never reaches a rendered page — in any
 build** (DEC-0175 §3, owner's review 2026-10-27, #105). Where no cleared proof

@@ -171,7 +171,8 @@ function chainMeters(root: string): string[] {
   };
   return (pkg.scripts.check ?? "")
     .split("&&")
-    .map((step) => /^pnpm\s+(check:[\w-]+)$/.exec(step.trim())?.[1])
+    // `[\w:-]`: a meter may carry a target suffix (`check:content:production`, DEC-0222).
+    .map((step) => /^pnpm\s+(check:[\w:-]+)$/.exec(step.trim())?.[1])
     .flatMap((name) => {
       const target = name ? /tsx\s+(scripts\/[\w.-]+\.ts)/.exec(pkg.scripts[name] ?? "")?.[1] : undefined;
       return target ? [target] : [];

@@ -12,6 +12,7 @@
  * mapping other content can rely on.
  */
 
+import { readFileSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
@@ -38,6 +39,17 @@ export async function organizationIdentity(
   if (cached) return cached;
   const text = await readFile(join(repoRoot, IMPRINT_PATH), "utf8");
   cached = parseOrganizationIdentity(text);
+  return cached;
+}
+
+/**
+ * The same read, synchronous — for a caller that builds a plain-text body in
+ * one pass (`/llms.txt`, FUN-WEB-0170) and must not invent a second source for
+ * the provider's name and seat. Shares the cache with `organizationIdentity()`.
+ */
+export function organizationIdentitySync(repoRoot: string = process.cwd()): OrganizationIdentity {
+  if (cached) return cached;
+  cached = parseOrganizationIdentity(readFileSync(join(repoRoot, IMPRINT_PATH), "utf8"));
   return cached;
 }
 

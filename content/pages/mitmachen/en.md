@@ -8,7 +8,9 @@ seo:
     description: "Photograph the flyer, send it by WhatsApp, done: your date shows up in your own village calendar and in the ones next door. Sign up for free."
     provenance: generated
 content_type: section
-status: draft
+status: approved
+reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
+reviewed_at: "2026-11-12"
 locale: en
 sources:
   - "@schafe-vorm-fenster/audiences@0.3.3#actors"
@@ -149,7 +151,7 @@ carries an em dash inside its own sentence.
 
 ## Slot 1 — Hero (mechanism: whatsapp)
 
-<!-- id: mitmachen-1-hero; content_type: hero; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"]; status: draft -->
+<!-- id: mitmachen-1-hero; content_type: hero; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"]; status: approved -->
 
 **Statement 1 (heading):** A photo of the flyer by WhatsApp.
 
@@ -173,7 +175,7 @@ the problem (DEC-0203).
 
 ## Slot 2 — Comparison: who doesn't hear about your date today
 
-<!-- id: mitmachen-2-objections; content_type: comparison; provenance: sourced; derived_from: ["@schafe-vorm-fenster/audiences@0.3.3#actors", "@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"]; status: draft -->
+<!-- id: mitmachen-2-objections; content_type: comparison; provenance: sourced; derived_from: ["@schafe-vorm-fenster/audiences@0.3.3#actors", "@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"]; status: approved -->
 
 **Heading:** Who doesn't hear about your date today
 
@@ -217,7 +219,7 @@ more important one — nobody wants to enter the same date several times.
 
 ## Slot 3 — Publishing path 1: flyer by WhatsApp
 
-<!-- id: mitmachen-3-path-whatsapp; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: draft -->
+<!-- id: mitmachen-3-path-whatsapp; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: approved -->
 
 **Heading of the paths slot:** How your dates get in
 
@@ -241,7 +243,7 @@ same as the heading (how it works) and carried "easier" from the avoid list
 
 ### Slot 3a — Step lines and stage words of path 1 (placeholder)
 
-<!-- id: mitmachen-3a-path-whatsapp-steps-demo; content_type: publishing-path; provenance: generated; derived_from: []; status: draft; demo: true -->
+<!-- id: mitmachen-3a-path-whatsapp-steps-demo; content_type: publishing-path; provenance: generated; derived_from: []; status: approved; demo: true -->
 
 **Steps:**
 
@@ -278,7 +280,7 @@ do not fit here (DEC-0124 §5, `state/open.md`). Marked like path 2's:
 
 ## Slot 4 — Publishing path 2: connect your own calendar
 
-<!-- id: mitmachen-4-path-calendar; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: draft -->
+<!-- id: mitmachen-4-path-calendar; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: approved -->
 
 **Title:** Connect your calendar
 
@@ -289,7 +291,7 @@ CTA points at `/mitmachen/registrieren` through the route facade.
 
 ### Slot 4a — Step lines and stage words of path 2 (placeholder)
 
-<!-- id: mitmachen-4a-path-calendar-steps-demo; content_type: publishing-path; provenance: generated; derived_from: []; status: draft; demo: true -->
+<!-- id: mitmachen-4a-path-calendar-steps-demo; content_type: publishing-path; provenance: generated; derived_from: []; status: approved; demo: true -->
 
 **Steps:**
 
@@ -315,7 +317,7 @@ place (DEC-0068 rule 3, DEC-0115).
 
 ## Slot 5 — Publishing path 3: your website as the source
 
-<!-- id: mitmachen-5-path-website; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: draft -->
+<!-- id: mitmachen-5-path-website; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: approved -->
 
 **Title:** Your website as the source
 
@@ -341,7 +343,7 @@ enumerates come from the offering record
 
 ### Slot 5a — Step lines and stage words of path 3 (placeholder)
 
-<!-- id: mitmachen-5a-path-website-steps-demo; content_type: publishing-path; provenance: generated; derived_from: []; status: draft; demo: true -->
+<!-- id: mitmachen-5a-path-website-steps-demo; content_type: publishing-path; provenance: generated; derived_from: []; status: approved; demo: true -->
 
 **Steps:**
 
@@ -366,7 +368,7 @@ in the offering record, not here (`specs/README.md` rule 1).
 
 ### Slot 5b — The price boundary in the hint banner
 
-<!-- id: mitmachen-5b-path-website-banner-demo; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: draft -->
+<!-- id: mitmachen-5b-path-website-banner-demo; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: approved -->
 
 **Price boundary:** Sources we can already read cost you nothing. Only a custom integration for a system we do not support yet is paid.
 
@@ -395,7 +397,7 @@ D1/D11, A12, A17).
 
 ## Slot 7 — Proof block (3 elements, publish-weighted)
 
-<!-- id: mitmachen-7-proof; content_type: proof-card; provenance: sourced-empty-by-design; derived_from: ["@schafe-vorm-fenster/proof@0.3.5"]; status: draft -->
+<!-- id: mitmachen-7-proof; content_type: proof-card; provenance: sourced-empty-by-design; derived_from: ["@schafe-vorm-fenster/proof@0.3.5"]; status: approved -->
 
 Selection and order are the relevance engine's job, with the
 "publish-our-dates" weight profile (TS-WEB-0005 D5, DEC-0048). An empty slot
@@ -405,7 +407,7 @@ weakens the claim, but is never replaced by invented text.
 
 <!-- clearance: pending — all three records are `usage_rights: unverified` (Q-0014): `lehre-lelender` (the foundation's written clearance is outstanding), `volkshochschule-uecker-randow` (the adult education centre's clearance is outstanding), `zukunftswege-ost-newsletter` (clearance outstanding). The protected preview shows them; the pre-go-live hardening round clears them. -->
 <!-- source_note: the "publish our dates" weighting comes from gtm:concept/website-relevance-model.concept.md (job_fit) and the job table in gtm:concept/website-communication-principles.concept.md principle 1. -->
-<!-- id: mitmachen-7-proof-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow", "@schafe-vorm-fenster/proof@0.3.5#zukunftswege-ost-newsletter"]; status: draft -->
+<!-- id: mitmachen-7-proof-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow", "@schafe-vorm-fenster/proof@0.3.5#zukunftswege-ost-newsletter"]; status: approved -->
 
 **Candidates (three, all publishing for themselves):**
 
@@ -448,7 +450,7 @@ No line is marked `demo`: all three institutions and records are real.
 ## Slot 8 — Closing CTA with permanence reassurance
 
 <!-- clearance: pending for the press record — the 2022 Nordkurier entry carries no `usage_rights` (Q-0045, `state/open.md` #1). The offering record itself is free to use. -->
-<!-- id: mitmachen-8-closing; content_type: closing-cta; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar", "@schafe-vorm-fenster/media-echo@0.3.3#2022-nordkurier-plattform-doerfer"]; status: draft -->
+<!-- id: mitmachen-8-closing; content_type: closing-cta; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar", "@schafe-vorm-fenster/media-echo@0.3.3#2022-nordkurier-plattform-doerfer"]; status: approved -->
 
 **Closing heading:** The next flyer can be the first date.
 
@@ -468,7 +470,7 @@ own gets minted for this stays open (`state/open.md` #17).
 ## Context band and closing
 
 <!-- source_note: the offer phrasing instead of a menu comes from gtm:concept/website-communication-principles.concept.md principle 2; the three jobs and their wording from the job table in principle 1. Answers state/open.md row 95 for this page: its own band text rather than the shared home sentence. -->
-<!-- id: mitmachen-9-context-band; content_type: context-band; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: mitmachen-9-context-band; content_type: context-band; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Kicker:** Learn more about our calendar platform
 

@@ -93,7 +93,7 @@ describe("TS-WEB-0011 D5: titles and descriptions come from the content frontmat
       // The stricter half is asserted here so both readings hold at once.
       // `/` is exempt by D5's own row: it carries the brand itself and the
       // layout template is bypassed (`title: { absolute }`).
-      const suffix = ` — ${dictionary(locale).siteName}`;
+      const suffix = ` · ${dictionary(locale).siteName}`;
       const rendered =
         route === "home" ? pageTitle(route, locale) : pageTitle(route, locale) + suffix;
       expect(rendered.length, `<title> of ${route}/${locale}: "${rendered}"`).toBeLessThanOrEqual(60);

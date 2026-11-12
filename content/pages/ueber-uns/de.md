@@ -8,7 +8,9 @@ seo:
     description: "Wer den Dorfkalender macht und warum er für die Orte kostenlos bleibt: ein Dorf in Vorpommern, das Ehrenamt und 25 Jahre IT an einer Stelle."
     provenance: generated
 content_type: section
-status: draft
+status: approved
+reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
+reviewed_at: "2026-11-12"
 locale: de
 sources:
   - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
@@ -142,7 +144,7 @@ Ortszahl (TS-WEB-0027 D4, DEC-0084 §3).
 
 ## Slot 1 — Herkunft (h1 und Dorfargument)
 
-<!-- id: ueber-uns-1-origin; content_type: hero; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/brand-identity@0.1.4#schafe-vorm-fenster", "@schafe-vorm-fenster/offerings@0.3.5#community-calendar", "@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar", "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor", "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel"]; status: draft -->
+<!-- id: ueber-uns-1-origin; content_type: hero; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/brand-identity@0.1.4#schafe-vorm-fenster", "@schafe-vorm-fenster/offerings@0.3.5#community-calendar", "@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar", "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor", "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel"]; status: approved -->
 
 **h1:** Vom Dorf fürs Dorf
 
@@ -175,7 +177,7 @@ ihrem Zeitraum im Text von Kapitel 02 (Review 2026-10-27, #104, DEC-0175 §2).
 
 ## Slot 1a — Kapitel (Bühne, Kapitelzeilen, Grundsätze, Auszeichnung)
 
-<!-- id: ueber-uns-1a-chapters; content_type: section; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel", "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor", "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community"]; status: draft -->
+<!-- id: ueber-uns-1a-chapters; content_type: section; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel", "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor", "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community"]; status: approved -->
 
 **Bühne — Kicker:** Über uns · Schlatkow, Vorpommern
 
@@ -220,7 +222,7 @@ Geschichte ausdrücklich).
 
 ## Slot 2 — Die Geschichte
 
-<!-- id: ueber-uns-2-story; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/brand-identity@0.1.4#schafe-vorm-fenster", "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel", "@schafe-vorm-fenster/media-echo@0.3.3#2026-01-zukunftswege-ost-vollblutdigitalisierer"]; status: draft -->
+<!-- id: ueber-uns-2-story; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/brand-identity@0.1.4#schafe-vorm-fenster", "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel", "@schafe-vorm-fenster/media-echo@0.3.3#2026-01-zukunftswege-ost-vollblutdigitalisierer"]; status: approved -->
 
 **Überschrift:** Angefangen hat es mit Brötchen.
 
@@ -263,7 +265,7 @@ Slot 3 und 3b).
 
 ## Slot 3 — Belegstrom (7 Plätze, 1 typreserviert)
 
-<!-- id: ueber-uns-3-proof-stream; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5", "@schafe-vorm-fenster/proof@0.3.5#homeoffice-mobile-anbieter", "@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis", "@schafe-vorm-fenster/proof@0.3.5#ukraine-integration-dorfleben", "@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow"]; status: draft -->
+<!-- id: ueber-uns-3-proof-stream; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5", "@schafe-vorm-fenster/proof@0.3.5#homeoffice-mobile-anbieter", "@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis", "@schafe-vorm-fenster/proof@0.3.5#ukraine-integration-dorfleben", "@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow"]; status: approved -->
 
 Pool: der volle `proof`-Bestand plus `media-echo` (31 Einträge). Seit dem
 Umbau nach dem Entwurf vom 2026-10-12 ist der Strom das Kapitel 03, „Dann
@@ -303,7 +305,7 @@ rendered as a module, no place count, no badge, no ‚seit …' claim anywhere o
 the page". Lücken verkürzen den Strom; ein leerer Platz wird nie gezeigt
 (D5, DEC-0175 §3).
 
-<!-- id: ueber-uns-3b-stories; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis", "@schafe-vorm-fenster/proof@0.3.5#ukraine-integration-dorfleben", "@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow", "@schafe-vorm-fenster/proof@0.3.5#homeoffice-mobile-anbieter"]; status: draft -->
+<!-- id: ueber-uns-3b-stories; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis", "@schafe-vorm-fenster/proof@0.3.5#ukraine-integration-dorfleben", "@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow", "@schafe-vorm-fenster/proof@0.3.5#homeoffice-mobile-anbieter"]; status: approved -->
 
 **Geschichte 1 (Impftermine):** Als es darauf ankam, trug der Dorfkalender die Daseinsvorsorge mit: Alle Impf- und Testangebote des Landkreises standen tagesaktuell und ortsgenau darin. Der Landkreis konnte die Daten nicht strukturiert übergeben, also wurden sie von Hand übernommen.
 
@@ -320,7 +322,7 @@ keine Person (`ukraine-integration-dorfleben`: „Keine Einzelpersonen benannt")
 beim Homeoffice keine Umsatzangabe („ausdrücklich nicht quantifizierbar").
 Die Geschichten sind die aufklappbaren Texte von Kapitel 03 (DEC-0162 §2).
 
-<!-- id: ueber-uns-3-testimonial-slot-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin"]; status: draft -->
+<!-- id: ueber-uns-3-testimonial-slot-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin"]; status: approved -->
 
 **Reservierter Platz (Typ `testimonial`, Freigabe steht aus):** „Das Projekt kann einen wertvollen Beitrag zum wirtschaftlichen Wiederaufbau und zur Sichtbarkeit im ländlichen Raum leisten." — Kulturlandbüro Uecker-Randow, Schloss Bröllin
 
@@ -339,7 +341,7 @@ die Webseite nie (Review 2026-10-27, #105, DEC-0175 §3).
 
 ## Slot 4 — Auszeichnung und Archiv-Verweis
 
-<!-- id: ueber-uns-4-archive; content_type: section; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community"]; status: draft -->
+<!-- id: ueber-uns-4-archive; content_type: section; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community"]; status: approved -->
 
 **Überschrift:** Ein Dorfprojekt, ausgezeichnet in Rostock.
 
@@ -361,7 +363,7 @@ D6); das Archiv wird mit #56 zur Presseseite (`Q-0093`), das Ziel bleibt.
 
 ## Slot 5 — Team
 
-<!-- id: ueber-uns-5-team; content_type: profile; provenance: sourced; derived_from: ["@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel", "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor"]; status: draft -->
+<!-- id: ueber-uns-5-team; content_type: profile; provenance: sourced; derived_from: ["@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel", "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor"]; status: approved -->
 
 **Person 1:** Jan-Henrik Hempel — Gründer, technische Leitung und Softwarearchitektur. Ich bin 2011 nach Schlatkow gezogen, habe hier den Kulturverein mitgegründet und sitze bis heute in der Gemeindevertretung. Beruflich mache ich seit 25 Jahren IT. Schafe vorm Fenster ist die Stelle, an der beides zusammenkommt: Ich weiß, wie Ehrenamt auf dem Dorf wirklich läuft — und ich weiß, was so eine Plattform braucht.
 
@@ -376,7 +378,7 @@ Datensatzes ist ebenfalls eine Hub-Forderung.
 
 ## Slot 6 — Newsletter
 
-<!-- id: ueber-uns-6-newsletter; content_type: section; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: ueber-uns-6-newsletter; content_type: section; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Überschrift:** Auf dem Laufenden bleiben
 

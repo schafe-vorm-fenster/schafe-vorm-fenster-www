@@ -182,9 +182,22 @@ DEC-0005. The canonical mechanism documentation stays in that repository.
 | [FUN-WEB-0074](FUN-WEB-0074.md) | SRC-0006 | S2 |
 | [FUN-WEB-0076](FUN-WEB-0076.md) | SRC-0006 | S2 |
 | [FUN-WEB-0077](FUN-WEB-0077.md) | SRC-0006 | S2 |
-| [FUN-WEB-0078](FUN-WEB-0078.md) | convention | S2 |
+| [FUN-WEB-0078](FUN-WEB-0078.md) | SRC-0019 (issue #195; was "convention") | S2 |
 | [FUN-WEB-0169](FUN-WEB-0169.md) | DEC-0018 | S3 |
 | [FUN-WEB-0170](FUN-WEB-0170.md) | DEC-0018 | S3 |
+| [FUN-WEB-0207](FUN-WEB-0207.md) | SRC-0019 (owner, 2026-11-12), TS-WEB-0011 D6 | S2 |
+| [FUN-WEB-0208](FUN-WEB-0208.md) | SRC-0019 (issue #195), TS-WEB-0011 D6 | S2 |
+| [FUN-WEB-0209](FUN-WEB-0209.md) | SRC-0019 (issue #195) | S2 |
+| [FUN-WEB-0210](FUN-WEB-0210.md) | SRC-0019 (issue #195) | S2 |
+| [FUN-WEB-0213](FUN-WEB-0213.md) | SRC-0019 (issue #195) | S2 |
+
+Where each search and sharing surface is specified — title, description,
+canonical, hreflang, robots, sitemap, Open Graph, Twitter card, share image,
+icons, manifest, structured data — is the inventory table in `TS-WEB-0011 D11`.
+Its measures (share-image size and budget) are `NFR-WEB-0066` and
+`NFR-WEB-0067`. Answered by the owner on 2026-11-12: the title separator (`Q-0094`), the
+favicon's shape (`Q-0095`, artwork still pending), keywords (`Q-0096`) and
+`twitter:site` (`Q-0097`). Open: the logo in the `Organization` node (`Q-0098`).
 
 ### Content Pipeline
 

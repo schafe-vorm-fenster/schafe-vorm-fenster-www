@@ -104,7 +104,7 @@ CSS-module class `<hash>_<local>` (vercel/next.js pull 97944, no opt-out),
 so the module's file name is no longer in the class attribute. `PriceTag`
 carries a `data-price-tag` hook and `deine-region.spec.ts` locates it there.
 Five more locators match a file name and are listed in `state/open.md`
-row 299, together with three `deine-region` tests that fail only under
+row 300, together with three `deine-region` tests that fail only under
 `next dev` on 16.4.
 
 The GitHub Actions move with them: `checkout` v7, `pnpm/action-setup` v6,
@@ -122,7 +122,7 @@ runtime, none with an input this repository uses changed.
   cite it at 0.4.1. Eight majors are a method migration with its own record.
 - **The eight `@schafe-vorm-fenster` content packages.** Page provenance cites
   their exact versions; `check:content` fails 192 references on a bump. A bump
-  is a content round, not a tooling one (`state/open.md` row 296).
+  is a content round, not a tooling one (`state/open.md` row 297).
 - **pnpm 11 and 12** (§2).
 
 ### 5. The remaining audit findings get same-major overrides
