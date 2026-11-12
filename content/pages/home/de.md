@@ -172,7 +172,7 @@ Lücke im eigenen Ort an, nicht die Lücke im System.
 
 **Kicker:** So kommen die Termine rein
 
-**Überleitung:** Die Termine oben tippt niemand bei uns ein. Sie kommen von den Vereinen, den Feuerwehren und allen, die hier im Ehrenamt etwas auf die Beine stellen — meistens so:
+**Überleitung:** Die Termine tippt niemand bei uns ein. Sie kommen von den Vereinen, den Feuerwehren und allen, die hier im Ehrenamt etwas auf die Beine stellen — meistens so:
 
 **Titel des Erklärmoduls:** Flyer per WhatsApp
 
