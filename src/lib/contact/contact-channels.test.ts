@@ -157,7 +157,7 @@ describe("TS-WEB-0016-A16: no contact value is hard-coded under src/", () => {
   });
 });
 
-describe("DEC-0191: copy carries a token, the number comes from the hub record", () => {
+describe("DEC-0192: copy carries a token, the number comes from the hub record", () => {
   it("replaces {whatsapp} with the record's number and leaves other braces alone", () => {
     const number = contactChannel("whatsapp").address;
     expect(withChannelTokens("An {whatsapp}.")).toBe(`An ${number}.`);

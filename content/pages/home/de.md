@@ -180,7 +180,7 @@ Lücke im eigenen Ort an, nicht die Lücke im System.
 
 **CTA-Label (sekundär):** Mehr zum Veröffentlichen von Terminen
 
-Hinweis und Button-Label sind Wortlaut des Owners (DEC-0191, 2026-11-12,
+Hinweis und Button-Label sind Wortlaut des Owners (DEC-0192, 2026-11-12,
 Issue #141, zweite Fassung): der Hinweis beschreibt die zwei anderen Wege,
 Weg 02 und Weg 03 auf `/mitmachen` (eigener Kalender, Webseite als Quelle),
 das Label führt auf `takePart`. Die Szene trägt weiter genau ein CTA (D3a,
@@ -218,7 +218,7 @@ und das Ziel dieser Szene ist die Seite, die den Job besitzt.
 - Laternenumzug | Fr · 17:30 · Kirche | culture | Kultur
 - Dorfflohmarkt | So · 11:00 · Dorfplatz | social | Vereinsleben
 
-Schritt 2 und 3 und die Chat-Antwort sind Wortlaut des Owners (DEC-0191, 2026-11-12, Issue #141): Schritt 2 trägt die WhatsApp-Nummer des Hubs als Token `{whatsapp}`, das zur Renderzeit aus `contactChannel("whatsapp")` ersetzt wird, nie als getippte Nummer; Schritt 3 sagt „automatisch online gestellt". Der Slot bleibt `demo: true`, solange Schritt 1 und die Beispielzeilen Platzhalter sind. Keine Frist, keine Bearbeitungsdauer (CG-031, CG-033).
+Schritt 2 und 3 und die Chat-Antwort sind Wortlaut des Owners (DEC-0192, 2026-11-12, Issue #141): Schritt 2 trägt die WhatsApp-Nummer des Hubs als Token `{whatsapp}`, das zur Renderzeit aus `contactChannel("whatsapp")` ersetzt wird, nie als getippte Nummer; Schritt 3 sagt „automatisch online gestellt". Der Slot bleibt `demo: true`, solange Schritt 1 und die Beispielzeilen Platzhalter sind. Keine Frist, keine Bearbeitungsdauer (CG-031, CG-033).
 
 Dasselbe Erklärmodul wie Weg 01 auf `/mitmachen`, deshalb derselbe
 Platzhaltersatz: die drei Schrittzeilen stehen so im Entwurf

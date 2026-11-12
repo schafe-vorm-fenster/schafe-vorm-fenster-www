@@ -252,7 +252,7 @@ rein · Drei Wege. Alle nutzt ihr eh schon.", CG-014).
 - Laternenumzug | Fr · 17:30 · Kirche | culture | Kultur
 - Dorfflohmarkt | So · 11:00 · Dorfplatz | social | Vereinsleben
 
-Schritt 2 und 3 und die Chat-Antwort sind Wortlaut des Owners (DEC-0191, 2026-11-12, Issue #141): Schritt 2 trägt die WhatsApp-Nummer des Hubs als Token `{whatsapp}`, das zur Renderzeit aus `contactChannel("whatsapp")` ersetzt wird, nie als getippte Nummer; Schritt 3 sagt „automatisch online gestellt". Der Slot bleibt `demo: true`, solange Schritt 1 und die Beispielzeilen Platzhalter sind. Keine Frist, keine Bearbeitungsdauer (CG-031, CG-033).
+Schritt 2 und 3 und die Chat-Antwort sind Wortlaut des Owners (DEC-0192, 2026-11-12, Issue #141): Schritt 2 trägt die WhatsApp-Nummer des Hubs als Token `{whatsapp}`, das zur Renderzeit aus `contactChannel("whatsapp")` ersetzt wird, nie als getippte Nummer; Schritt 3 sagt „automatisch online gestellt". Der Slot bleibt `demo: true`, solange Schritt 1 und die Beispielzeilen Platzhalter sind. Keine Frist, keine Bearbeitungsdauer (CG-031, CG-033).
 
 Die drei Zeilen stehen so im Entwurf „3-Schritte-erklären" vom 2026-09-23
 (11.20.03) und sind bis zur Freigabe Platzhalter: `provenance: generated`,

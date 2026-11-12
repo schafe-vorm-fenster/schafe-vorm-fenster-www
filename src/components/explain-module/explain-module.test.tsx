@@ -116,7 +116,7 @@ describe("one CTA, secondary by construction", () => {
     expect(html).not.toContain('data-cta="primary"');
   });
 
-  it("renders no CTA at all where the scene carries it (DEC-0191 §4)", () => {
+  it("renders no CTA at all where the scene carries it (DEC-0192 §4)", () => {
     const html = render({ cta: undefined });
     expect(count(html, "data-cta=")).toBe(0);
     expect(html).not.toContain("data-explain-cta");

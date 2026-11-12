@@ -483,7 +483,7 @@ test.describe("TS-WEB-0019 — home", () => {
     }
     await expect(explainModule.locator('[data-explain-step][aria-current="step"]')).toHaveCount(1);
 
-    // DEC-0191: step 2 carries the hub's WhatsApp number (substituted from the
+    // DEC-0192: step 2 carries the hub's WhatsApp number (substituted from the
     // record, not typed), and the module's one CTA is a teaser plus the
     // "Termine veröffentlichen" button on `takePart`; the flyer row is gone.
     await expect(steps.nth(1)).toContainText(/\+49[\d\s]{8,}/);
@@ -496,7 +496,7 @@ test.describe("TS-WEB-0019 — home", () => {
     await expect(whatsapp.getByText("Aus dem Flyer geworden")).toHaveCount(0);
 
     // DOM order inside the scene: opener · module. The flyer row that stood
-    // below the module as the scene's instance is gone (owner, DEC-0191 §5),
+    // below the module as the scene's instance is gone (owner, DEC-0192 §5),
     // so nothing but the module's own stage calendar renders event rows.
     const order = await whatsapp.evaluate((node) =>
       [...node.querySelectorAll("h2, [data-explain-module], article")]
@@ -514,7 +514,7 @@ test.describe("TS-WEB-0019 — home", () => {
         ),
     );
     expect(order[0]).toBe("opener");
-    expect(order).toEqual(["opener", "module"]); // DEC-0191 §5: the flyer row is gone
+    expect(order).toEqual(["opener", "module"]); // DEC-0192 §5: the flyer row is gone
 
     // The other two scenes carry neither.
     await expect(
@@ -692,7 +692,7 @@ test.describe("TS-WEB-0019 — home", () => {
 
     // The same opener · module · instance triple with the same three step
     // lines — the module is not forked for a position (DEC-0110 §2).
-    expect(professional.triple).toEqual(["opener", "module"]); // DEC-0191: no instance row
+    expect(professional.triple).toEqual(["opener", "module"]); // DEC-0192: no instance row
     expect(professional.triple).toEqual(direct.triple);
     expect(professional.steps).toHaveLength(3);
     expect(professional.steps).toEqual(direct.steps);

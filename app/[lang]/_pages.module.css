@@ -6,7 +6,7 @@
 
 /*
  * The sentence over the WhatsApp scene's one button on `/` — "other ways
- * exist" (DEC-0191 §4). It owns only the gap to the button.
+ * exist" (DEC-0192 §4). It owns only the gap to the button.
  */
 .sceneHint {
   margin: 0 0 var(--space-3);

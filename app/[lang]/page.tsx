@@ -132,7 +132,7 @@ const UI_STRING_FALLBACKS: Record<
   },
 };
 
-/** The one short UI string (the flyer caption went with DEC-0191), read off `home-12-ui-strings` where the slot
+/** The one short UI string (the flyer caption went with DEC-0192), read off `home-12-ui-strings` where the slot
  * has them, falling back to the stand-ins otherwise. */
 function uiStringsFrom(uiStrings: ContentSlot, locale: Locale) {
   const fallback = UI_STRING_FALLBACKS[locale];
@@ -332,7 +332,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
 
           Each block carries exactly one CTA at secondary treatment, pointing
           at the page that owns its job (D3a, DEC-0082 §4). In the `whatsapp`
-          block the module renders none since DEC-0191 §4 and the scene's own
+          block the module renders none since DEC-0192 §4 and the scene's own
           `cta` (teaser + button) is the one — "wrapping does not double the
           CTA" (DEC-0110 §1) still holds, the count is one. */}
       <HomeScenes
@@ -364,7 +364,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
                       this substitution). It is also what brings the section back
                       inside the 1270 px budget of polish brief G-4. */}
                   <SceneBlock
-                    /* DEC-0191 §4 (owner): the scene's one CTA is a teaser (other
+                    /* DEC-0192 §4 (owner): the scene's one CTA is a teaser (other
                        ways exist) and one button on the topic "Termine
                        veröffentlichen". It stands below the module, not in it, so
                        the module's own height stays inside the one-viewport budget

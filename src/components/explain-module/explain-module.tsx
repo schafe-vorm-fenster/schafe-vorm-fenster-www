@@ -66,7 +66,7 @@ export interface ExplainModuleProps {
   readonly stage: ThreeOf<ReactNode>;
   /**
    * Omitted only where the scene around the module carries the one CTA itself —
-   * `/` since DEC-0191 §4, whose teaser plus button stand below the module.
+   * `/` since DEC-0192 §4, whose teaser plus button stand below the module.
    */
   readonly cta?: ExplainModuleCta;
   /** `h3` under a scene opener or a section heading; `h2` where the module is the block. */

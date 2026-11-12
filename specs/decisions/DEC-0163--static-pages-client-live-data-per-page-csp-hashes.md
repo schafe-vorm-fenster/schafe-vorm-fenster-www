@@ -39,7 +39,7 @@ The owner's constraints (2026-10-13): no per-request rendering, no
 
 ## Decisions
 
-**Amendment 2026-11-12 (owner, DEC-0191):** the "flyer row" of this item no
+**Amendment 2026-11-12 (owner, DEC-0192):** the "flyer row" of this item no
 longer exists. The `FlyerExample` instance under the WhatsApp scene on `/`
 ("Aus dem Flyer geworden", polish brief page 1, fix 3) is removed; this
 reverses fix 3. The stage calendar on `/` and `/mitmachen` is unaffected.

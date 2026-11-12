@@ -1,5 +1,5 @@
 ---
-id: DEC-0191
+id: DEC-0192
 title: The WhatsApp scene names the real number and the check-and-approve flow, offers the other ways as its one CTA, and loses the flyer row
 status: accepted
 date: 2026-11-12

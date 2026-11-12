@@ -179,7 +179,7 @@ gap in the visitor's own place, not a gap in the system.
 
 **CTA label (secondary):** More on publishing dates
 
-The hint and the button label are the owner's wording (DEC-0191, 2026-11-12,
+The hint and the button label are the owner's wording (DEC-0192, 2026-11-12,
 issue #141, second version): the hint describes the two other ways, path 02
 and path 03 on `/mitmachen` (your own calendar, your website as the source),
 and the label leads to `takePart`. The scene still carries exactly one CTA
@@ -217,7 +217,7 @@ same one, and this scene's target is the page that owns the job.
 - Lantern parade | Fri · 17:30 · church | culture | Culture
 - Village flea market | Sun · 11:00 · village square | social | Community life
 
-Steps 2 and 3 and the chat reply are the owner's wording (DEC-0191, 2026-11-12, issue #141): step 2 carries the hub's WhatsApp number as the token `{whatsapp}`, substituted at render time from `contactChannel("whatsapp")` and never typed as a number; step 3 says "online automatically". The slot stays `demo: true` while step 1 and the sample rows are placeholders. No deadline, no turnaround (CG-031, CG-033).
+Steps 2 and 3 and the chat reply are the owner's wording (DEC-0192, 2026-11-12, issue #141): step 2 carries the hub's WhatsApp number as the token `{whatsapp}`, substituted at render time from `contactChannel("whatsapp")` and never typed as a number; step 3 says "online automatically". The slot stays `demo: true` while step 1 and the sample rows are placeholders. No deadline, no turnaround (CG-031, CG-033).
 
 The same explain module as path 01 on `/mitmachen`, so the same
 placeholder set: the three step lines are the 2026-09-23 draft
