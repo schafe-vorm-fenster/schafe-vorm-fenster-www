@@ -12,6 +12,7 @@ import {
 } from "@/src/lib/i18n/locales";
 import { QuerySync } from "@/src/lib/pages/query-store";
 import { SITE_ORIGIN } from "@/src/lib/routes/routes";
+import { appIconPath } from "@/src/lib/seo/app-icons";
 import { NOINDEX } from "@/src/lib/seo/indexable";
 
 import { heroPhotoByRoute } from "./_chrome-data";
@@ -131,8 +132,12 @@ export async function generateMetadata({
           url: sheepMark as unknown as string,
           type: "image/svg+xml",
         },
+        // Raster fallbacks for the agents that do not take an SVG icon.
+        { url: appIconPath(32), sizes: "32x32", type: "image/png" },
       ],
+      apple: [{ url: appIconPath(180), sizes: "180x180", type: "image/png" }],
     },
+    // `app/manifest.ts` → `/manifest.webmanifest`; Next adds the <link> itself.
     ...(INDEXABLE_BUILD ? {} : { robots: NOINDEX }),
   };
 }

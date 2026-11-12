@@ -212,6 +212,19 @@ named in frontmatter overrides the generated one. Format JPEG or PNG
 TS-WEB-0003 D1 image budget, because the page never loads it. No third-party
 image service (DEC-0013).
 
+Built (issue 195): `app/api/og/[lang]/[route]/route.tsx` draws one 1200×630
+PNG per (route, language) at build time from `seo.title`, the brand mark,
+the brand paper/lime/ink tokens and the brand typeface, all read from the
+brand package (TS-WEB-0017-A6). Its address is `/api/og/<lang>/<route>` and
+not a file-convention path, because the proxy answers an unknown
+asset-shaped URL with the 404 and lets `/api/` through. `og:image:alt` is
+derived (`Schafe vorm Fenster — <title>`, `src/lib/seo/share-image.ts`)
+since the frontmatter carries no alt field; the hand-made override named in
+frontmatter and the `twitter:site` tag are not built (no source, no account).
+The site icon set is the brand mark: the SVG as `rel="icon"`, PNG renditions
+at 32/180/192/512 px from `/api/icon/<size>` and `app/manifest.ts`.
+Keywords are not emitted: no source of this specification asks for them.
+
 ### D7 — Interest-oriented landing pages [PROPOSED — bounded by DEC-0037, DEC-0036]
 
 A landing page addresses an **interest** — a role with a need — and
