@@ -138,6 +138,93 @@ export const LEGACY_REDIRECTS: readonly RedirectRow[] = [
 ];
 
 /**
+ * The 36 help-article slugs the legacy site listed on `/hilfe` (read off the
+ * live legacy page on 2026-11-12; identical to the files in `content/support/`).
+ * community-site publishes every one at `/hilfe/{slug}` and answered 200 for
+ * each on the same day (issue 193). The `/hilfe` wildcard row above already
+ * redirects them; this list is the inventory the tests hold the row against,
+ * so an article that community-site drops shows up as a failing check, and a
+ * slug the legacy site gains is a deliberate edit here.
+ */
+export const LEGACY_HELP_SLUGS: readonly string[] = [
+  "app-icon",
+  "beschreibung",
+  "bild",
+  "dateifreigabe",
+  "dorffoto-aendern",
+  "dorffotos",
+  "druckansicht",
+  "finanzierung",
+  "geodaten",
+  "google-account",
+  "google-alternativen",
+  "google-kalender",
+  "kalender-anmelden",
+  "kalender-veroeffentlichen",
+  "kostenlos",
+  "nur-kalender",
+  "office-365",
+  "open-data",
+  "ortsangabe",
+  "pdf-anhang",
+  "pengueen",
+  "portalize-einbinden",
+  "portalize-konfiguration",
+  "portalize-styling",
+  "portalize-was-ist-das",
+  "qr-code",
+  "schutz-vor-missbrauch",
+  "start",
+  "teilen",
+  "terminreihen",
+  "umgebung",
+  "unterstuetzen",
+  "verbreiten",
+  "webtracking",
+  "woher-kommt-der-name",
+  "wordpress",
+];
+
+/**
+ * Every URL the legacy site exposed (route files in `legacy-content/app/`,
+ * header and footer navigation of the live site, and the `/hilfe` listing).
+ * `live` marks the paths that keep answering unchanged instead of redirecting:
+ * `/` ("Über das Projekt" is the new home) and `/start` (TS-WEB-0016's route).
+ * The legacy site had no sitemap.xml and no robots.txt (both 404).
+ */
+export const LEGACY_URLS: readonly string[] = [
+  "/",
+  "/funktionen",
+  "/start",
+  "/presse",
+  "/impressum",
+  "/hilfe",
+  ...LEGACY_HELP_SLUGS.map((slug) => `/hilfe/${slug}`),
+];
+
+/** Legacy paths that stay live instead of redirecting. */
+export const LEGACY_LIVE_PATHS: readonly string[] = ["/", "/start"];
+
+/**
+ * Resolves a legacy path to its destination the way `next-routing.ts` does
+ * (exact row, else the longest wildcard row), or `null` when no row matches.
+ */
+export function resolveLegacyRedirect(
+  path: string,
+  rows: readonly RedirectRow[] = LEGACY_REDIRECTS,
+): string | null {
+  const exact = rows.find((row) => row.from === path);
+  if (exact) return exact.to;
+  const wildcard = rows
+    .filter((row) => row.wildcard && path.startsWith(`${row.from}/`))
+    .sort((a, b) => b.from.length - a.from.length)[0];
+  if (!wildcard) return null;
+  return wildcard.preservePath
+    ? `${wildcard.to}${path.slice(wildcard.from.length)}`
+    : wildcard.to;
+}
+
+/**
  * The static half of TS-WEB-0011-A1: no chains, no duplicates, targets are either
  * an absolute URL on an owned host or a path. Returns the violations.
  */
