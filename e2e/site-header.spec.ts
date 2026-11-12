@@ -1,9 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-import { HEADER_CALENDAR_ENTRY } from "../src/lib/routes/navigation";
-import { everyRoute, href } from "../src/lib/routes/routes";
-
-import { dictionary } from "../src/lib/i18n/dictionary";
+import { href } from "../src/lib/routes/routes";
 
 /**
  * The header — TS-WEB-0004 D4, and Jan's round-3 points 2 and 3
@@ -11,10 +8,10 @@ import { dictionary } from "../src/lib/i18n/dictionary";
  *
  * Three things are under test, in this order:
  *
- *  1. **the inventory survives the disclosure.** The four job labels of D4
- *     and the persistent calendar entry are reachable at 360 and at 1280 —
- *     inline above `md`, behind the burger below it. A menu that hides a
- *     destination is a different navigation model, which D4 does not allow;
+ *  1. **two variants, nothing between** (DEC-0191). From `xl` the four job
+ *     labels are inline; below it, at every width down to the phone and on
+ *     the tablet too, the bar is the mark and the track, and the four labels
+ *     are behind it. The calendar button is in neither;
  *  2. **the overlay is operable from the keyboard alone.** Open, tab, escape,
  *     focus restored — the walk Jan asked for, run rather than described;
  *  3. **the two grounds.** Transparent over a hero photograph, solid once it
@@ -26,14 +23,16 @@ const PHONE = { width: 360, height: 640 };
 const DESKTOP = { width: 1280, height: 800 };
 
 /**
- * The disclosure switch point is `xl`, not the `md` Jan's wording names: the
- * four German labels do not fit an inline row below 1024 px, measured
- * (`state/open.md` row 201). The wordmark's own switch point is still `md`.
+ * The switch between the two variants is `xl` (64rem, 1024 px): logo and four
+ * labels need 823 px of content width, `lg` offers 704 and `xl` 928 (DEC-0191).
  */
 const BELOW_XL = { width: 768, height: 900 };
+const JUST_BELOW_XL = { width: 1023, height: 900 };
+const AT_XL = { width: 1024, height: 900 };
 
 /** The four jobs of TS-WEB-0004 D4, verbatim, in IA order. */
 const JOBS = ["Was ist los", "Termine veröffentlichen", "Dein Kalender", "Über uns"];
+/** The lime calendar button left the header in DEC-0191; no link of this name may stand in it. */
 const CALENDAR = "Kalender";
 
 /** The header is the document's `banner`; a page may carry other `header`s. */
@@ -82,7 +81,7 @@ async function expectColor(
 }
 
 test.describe("TS-WEB-0004-A8: the header inventory at both widths", () => {
-  test("above `xl` the four job labels and the calendar entry are inline", async ({
+  test("from `xl` the four job labels are inline and the calendar button is gone", async ({
     page,
   }) => {
     await page.setViewportSize(DESKTOP);
@@ -90,8 +89,28 @@ test.describe("TS-WEB-0004-A8: the header inventory at both widths", () => {
 
     const nav = header(page).getByRole("navigation", { name: "Startseite" });
     await expect(nav.getByRole("link")).toHaveText(JOBS);
-    await expect(header(page).getByRole("link", { exact: true, name: CALENDAR })).toBeVisible();
+    await expect(header(page).getByRole("link", { exact: true, name: CALENDAR })).toHaveCount(0);
     await expect(burger(page)).toBeHidden();
+  });
+
+  test("the switch between the two variants is `xl`, 1023 px against 1024 px", async ({
+    page,
+  }) => {
+    const nav = header(page).getByRole("navigation", { name: "Startseite" });
+    await page.setViewportSize(JUST_BELOW_XL);
+    await page.goto("/mitmachen");
+    await expect(nav).toBeHidden();
+    await expect(burger(page).locator("[data-track-label]")).toBeVisible();
+
+    await page.setViewportSize(AT_XL);
+    await expect(nav.getByRole("link")).toHaveText(JOBS);
+    await expect(burger(page)).toBeHidden();
+    // The four labels and the mark fit the row without it scrolling sideways.
+    const overflow = await header(page)
+      .locator(".container")
+      .first()
+      .evaluate((node) => node.scrollWidth - node.clientWidth);
+    expect(overflow).toBeLessThanOrEqual(0);
   });
 
   test("on the phone the bar is mark and burger, and the overlay reaches every destination", async ({
@@ -100,9 +119,9 @@ test.describe("TS-WEB-0004-A8: the header inventory at both widths", () => {
     await page.setViewportSize(PHONE);
     await page.goto("/");
 
-    // DEC-0189: no calendar pill below `md`. Its destination is the menu's
-    // first job, so nothing becomes unreachable.
-    await expect(header(page).getByRole("link", { exact: true, name: CALENDAR })).toBeHidden();
+    // DEC-0191: no calendar button anywhere in the header. Its destination is
+    // the menu's first job, so nothing becomes unreachable.
+    await expect(header(page).getByRole("link", { exact: true, name: CALENDAR })).toHaveCount(0);
     await expect(burger(page)).toBeVisible();
 
     await burger(page).click();
@@ -110,45 +129,55 @@ test.describe("TS-WEB-0004-A8: the header inventory at both widths", () => {
     await expect(menu).toBeVisible();
     const jobs = menu.getByRole("navigation", { name: "Menü" }).getByRole("link");
     await expect(jobs).toHaveText(JOBS);
-    await expect(jobs.first()).toHaveAttribute("href", href(HEADER_CALENDAR_ENTRY.route, "de"));
+    await expect(jobs.first()).toHaveAttribute("href", href("place", "de"));
     await expect(menu.getByRole("link", { exact: true, name: CALENDAR })).toHaveCount(0);
     await expect(menu.getByRole("navigation", { name: "Sprache" })).toBeVisible();
   });
 
-  test("DEC-0190: on the phone the burger is a track carrying the page's job, stepped by its place", async ({
+  test("DEC-0190/0191: the burger is a track carrying the page's job, the other jobs as layers, at phone and tablet width", async ({
     page,
   }) => {
+    for (const width of [360, 768]) {
+      await page.setViewportSize({ width, height: 900 });
+      const starts: number[] = [];
+      for (const [index, path] of ["/dein-ort", "/mitmachen", "/dein-kalender", "/ueber-uns"].entries()) {
+        await page.goto(path);
+        await expect(burger(page)).toHaveAccessibleName(new RegExp(`^${JOBS[index]} – `));
+        const pill = burger(page).locator("[data-track-label]");
+        await expect(pill).toHaveText(JOBS[index]!);
+        await expect(pill).toBeVisible();
+        // Not cut off: the longest label fits the track at 360 px.
+        const fit = await pill.evaluate((node) => `${node.scrollWidth}/${node.clientWidth}`);
+        expect(Number(fit.split("/")[0]), `${path} at ${width}: ${fit}`).toBeLessThanOrEqual(
+          Number(fit.split("/")[1]),
+        );
+        // The other three jobs are layers: `index` before the pill, the rest after it.
+        await expect(burger(page).locator('[data-ghost="before"]'), `${path} before`).toHaveCount(index);
+        await expect(burger(page).locator('[data-ghost="after"]'), `${path} after`).toHaveCount(3 - index);
+        // They are spread over the free width, not slivers: the outermost layer on a
+        // side reaches a third of the free width per job beyond the pill.
+        const track = (await burger(page).boundingBox())!;
+        const box = (await pill.boundingBox())!;
+        if (index === 3) {
+          expect(box.x - track.x, `${path} at ${width}: pill sits at the third step`).toBeGreaterThan(40);
+        }
+        starts.push(box.x - track.x);
+      }
+      // The pill walks along the track (its step is a third of the free width, which
+      // differs with the label's length, so only the direction is asserted).
+      for (let index = 1; index < starts.length; index += 1) {
+        expect(starts[index]!, `pill steps at ${width}`).toBeGreaterThan(starts[index - 1]!);
+      }
+    }
     await page.setViewportSize(PHONE);
-    const starts: number[] = [];
-    for (const [index, path] of ["/dein-ort", "/mitmachen", "/dein-kalender", "/ueber-uns"].entries()) {
-      await page.goto(path);
-      await expect(burger(page)).toHaveAccessibleName(new RegExp(`^${JOBS[index]} – `));
-      const pill = burger(page).locator("span[style*='--track-index']");
-      await expect(pill).toHaveText(JOBS[index]!);
-      await expect(pill).toBeVisible();
-      // Not cut off: the longest label fits the track at 360 px.
-      const fit = await pill.evaluate((node) => `${node.scrollWidth}/${node.clientWidth}`);
-      expect(Number(fit.split("/")[0]), `${path}: ${fit}`).toBeLessThanOrEqual(Number(fit.split("/")[1]));
-      // The other three jobs are hinted as layers: index on the left, the rest on the right.
-      const shadow = await pill.evaluate((node) => getComputedStyle(node).boxShadow);
-      const offsets = [...shadow.matchAll(/(-?[\d.]+)px 0px 0px 0px/g)].map((m) => Number(m[1]));
-      expect(offsets.length, `${path}: ${shadow}`).toBe(3);
-      expect(offsets.filter((x) => x < 0).length, `${path} left`).toBe(index);
-      expect(offsets.filter((x) => x > 0).length, `${path} right`).toBe(3 - index);
-      starts.push((await pill.boundingBox())!.x);
-    }
-    // The pill wanders along the track, one step per menu position.
-    for (let index = 1; index < starts.length; index += 1) {
-      expect(starts[index]!).toBeGreaterThan(starts[index - 1]!);
-    }
     // The whole track opens the menu, the pill included.
     await page.goto("/mitmachen");
-    await burger(page).locator("span[style*='--track-index']").click();
+    await burger(page).locator("[data-track-label]").click();
     await expect(dialog(page)).toBeVisible();
 
     // The home page carries its focus job, "Was ist los", at the first step.
     await page.goto("/");
-    await expect(burger(page).locator("span[style*='--track-index']")).toHaveText(JOBS[0]!);
+    await expect(burger(page).locator("[data-track-label]")).toHaveText(JOBS[0]!);
 
     // A page outside the four jobs keeps the round burger.
     await page.goto("/rechtliches");
@@ -170,7 +199,7 @@ test.describe("TS-WEB-0004-A8: the header inventory at both widths", () => {
     }
   });
 
-  test("at 768 px the labels are still disclosed, not squeezed", async ({ page }) => {
+  test("at 768 px the tablet has the phone's bar, labels disclosed, not squeezed", async ({ page }) => {
     await page.setViewportSize(BELOW_XL);
     await page.goto("/");
     await expect(burger(page)).toBeVisible();
@@ -429,63 +458,5 @@ test.describe("TS-WEB-0004-A8: without JavaScript the header is solid, items inc
     );
     await expect(bar.locator("[data-wordmark]").first()).toBeVisible();
 
-    // The calendar entry goes back to the "primary on light" pair as well.
-    const cta = bar.getByRole("link", { exact: true, name: CALENDAR });
-    await expectColor(page, cta, "background-color", INK);
-    await expectColor(page, cta, "color", PAPER);
   });
 });
-
-/**
- * TS-WEB-0017-A12 — "the persistent calendar entry is present in the header on
- * every page and resolves to the target TS-WEB-0004 D4 fixes."
- *
- * Until 2026-09-26 the identifier stood in a comment beside the phone case
- * above and in no test title, so `check:coverage` graded it NAMED ONLY — which
- * it was: the entry was asserted on `/`, at two widths, and "on every page" was
- * the half nothing walked (`state/open.md` row 30). This is that half.
- *
- * The target is read from the navigation inventory, not written down again: D4
- * puts the entry on `place` (the label says "Kalender", the destination is the
- * dates page), `src/lib/routes/navigation.ts` is where the inventory lives, and
- * `href()` is the facade every internal link goes through. So the assertion
- * stays true through a path change and fails on a hard-coded one — the second
- * clause of A12, which a literal string would have hidden.
- *
- * One case per width, twenty-four navigations each. The header is the same
- * component on every route, so a case per route would multiply the page loads
- * without multiplying what can be learned, and the development server pays for
- * every one of them (`e2e/smoke.spec.ts`). The **widths** do multiply it: below
- * `xl` the entry stands in the bar beside the burger and above it in the row,
- * two different renderings of "present", so the walk runs at the phone
- * reference width and at the desktop one rather than at whatever the Playwright
- * project's default happens to be.
- */
-// From `md` up (DEC-0189): below it the bar carries no pill, and the entry's
-// destination is the phone menu's first job, asserted in the phone test above.
-for (const width of [640, 1280]) {
-  test(`TS-WEB-0017-A12: the persistent calendar entry is in the header of every page at ${width}px, at the D4 target`, async ({
-    page,
-  }) => {
-    await page.setViewportSize({ height: 800, width });
-
-    for (const { route, locale } of everyRoute()) {
-      const path = href(route, locale);
-      const label = dictionary(locale).nav[HEADER_CALENDAR_ENTRY.label];
-      const target = href(HEADER_CALENDAR_ENTRY.route, locale);
-
-      await page.goto(path);
-
-      // Present: exactly one, in the banner, and reachable rather than merely
-      // in the markup — below `xl` it stands in the bar beside the burger, so
-      // the phone width is the one that could lose it.
-      const entry = header(page).getByRole("link", { exact: true, name: label });
-      await expect(entry, `calendar entry on ${path} at ${width}px`).toHaveCount(1);
-      await expect(entry, `calendar entry visible on ${path} at ${width}px`).toBeVisible();
-      await expect(entry, `calendar entry target on ${path} at ${width}px`).toHaveAttribute(
-        "href",
-        target,
-      );
-    }
-  });
-}

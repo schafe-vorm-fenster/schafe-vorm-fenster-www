@@ -84,9 +84,6 @@
   --header-label-hover: var(--color-neutral-surface);
   --header-current-fill: var(--color-neutral-surface2);
   --header-current-ink: var(--color-neutral-ink);
-  --header-cta-fill: var(--color-neutral-ink);
-  --header-cta-ink: var(--color-neutral-paper);
-  --header-cta-hover: var(--fill-ink-hover); /* hover on ink, DEC-0160 */
   --header-wordmark: visible;
 }
 
@@ -140,9 +137,6 @@
   --header-label-hover: color-mix(in srgb, var(--color-neutral-paper) 16%, transparent);
   --header-current-fill: var(--color-neutral-paper);
   --header-current-ink: var(--color-neutral-ink);
-  --header-cta-fill: var(--color-lime-500);
-  --header-cta-ink: var(--color-neutral-ink);
-  --header-cta-hover: var(--color-lime-400);
   /*
    * The wordmark is paper *text*, and paper text on a bare hero photograph
    * measures 1.09–5.01:1 against a 4.5:1 floor — it fails on five of the six
@@ -211,17 +205,7 @@
     --header-label-hover: var(--color-neutral-surface);
     --header-current-fill: var(--color-neutral-surface2);
     --header-current-ink: var(--color-neutral-ink);
-    --header-cta-fill: var(--color-neutral-ink);
-    --header-cta-ink: var(--color-neutral-paper);
-    --header-cta-hover: var(--fill-ink-hover); /* hover on ink, DEC-0160 */
     --header-wordmark: visible;
-  }
-
-  /* The burger needs JavaScript to open, so without it the phone keeps the
-     calendar pill as its one way into the dates (DEC-0189). Three classes, so
-     it outranks the phone's `.header .cta` further down. */
-  .header .inner .cta {
-    display: inline-flex;
   }
 }
 
@@ -327,27 +311,6 @@
   color: var(--header-current-ink);
 }
 
-/*
- * The calendar entry is already a filled control, so it needs no well: on
- * the photograph it takes the design system's "primary on dark" pair
- * (`lime-500` behind `ink`, SRC-0014 §Button) — the swap the boards draw —
- * and on paper the "primary on light" pair the Button itself would use.
- * Both are declared, so the `scripting: none` branch can put it back.
- */
-.header .cta {
-  background: var(--header-cta-fill);
-  color: var(--header-cta-ink);
-  /* Not on the phone (owner, 2026-10-29, DEC-0189): the bar is the mark and
-     the burger, and the entry's destination is the menu's first item. It
-     comes back at `md` (below). */
-  display: none;
-  flex: none;
-}
-
-.header .cta:hover {
-  background: var(--header-cta-hover);
-}
-
 /* ── The disclosure control ─────────────────────────────────────────────── */
 
 .burger {
@@ -420,8 +383,6 @@
   font-weight: 700;
   height: 100%;
   letter-spacing: 0.04em;
-  margin-inline-end: calc((3 - var(--track-index, 0)) * var(--space-2));
-  margin-inline-start: calc(var(--track-index, 0) * var(--space-2));
   min-width: 0;
   overflow: hidden;
   /* 10 px, not space-3: the three steps of ghost room cost the longest label 3 px. */
@@ -432,53 +393,62 @@
 }
 
 /*
- * The other three jobs, hinted (issue 139): translucent, fully rounded layers
- * stacked behind the paper pill. Jobs before the current one peek out on its
- * left, one step each; jobs after it on its right, one step each. A layer is a
- * zero-blur `box-shadow` offset by n steps, so it follows the pill's radius and
- * overlapping layers darken each other, the nearer one most. The pill's side
- * margins add up to three steps, so the left layers start at the track start.
- * `--track-ghost` is ink at 24 %: not a design-system token, an assumed value
- * (recorded in DEC-0190); it must read over the header's `scrim-38` well and
- * over bare paper.
+ * The other three jobs, hinted (issue 139, DEC-0191). The track is a flex row:
+ * a slot before the pill, the pill, a slot after it, the stripes. The slots
+ * grow in the ratio index : (3 - index) and the pill takes its own width, so
+ * the free width of the track is shared in thirds and the pill sits `index`
+ * thirds from the start — it walks along the track at every width. Jobs before
+ * the current one are layers inside the first slot, jobs after it layers inside
+ * the second: layer k reaches k thirds out from the pill (a percentage of its
+ * slot) and runs on under the pill, which is opaque and hides its end.
+ * Translucent, fully rounded, so layers that overlap darken each other, the
+ * nearer ones most. The layer colour is ink at 24 %: not a design-system token,
+ * an assumed value (recorded in DEC-0190 and DEC-0191).
  */
 .trackLabel {
-  --track-ghost: color-mix(in srgb, var(--color-neutral-ink) 24%, transparent);
-  --step: var(--space-2);
+  position: relative;
+  z-index: 1;
 }
 
-.trackLabel[data-ghosts="0"] {
-  box-shadow:
-    calc(var(--step) * 1) 0 0 0 var(--track-ghost),
-    calc(var(--step) * 2) 0 0 0 var(--track-ghost),
-    calc(var(--step) * 3) 0 0 0 var(--track-ghost);
+.trackSlot {
+  align-self: stretch;
+  flex-basis: 0;
+  flex-shrink: 1;
+  min-width: 0;
+  position: relative;
 }
 
-.trackLabel[data-ghosts="1"] {
-  box-shadow:
-    calc(var(--step) * -1) 0 0 0 var(--track-ghost),
-    calc(var(--step) * 1) 0 0 0 var(--track-ghost),
-    calc(var(--step) * 2) 0 0 0 var(--track-ghost);
+.trackSlot[data-count="1"] {
+  flex-grow: 1;
 }
 
-.trackLabel[data-ghosts="2"] {
-  box-shadow:
-    calc(var(--step) * -2) 0 0 0 var(--track-ghost),
-    calc(var(--step) * -1) 0 0 0 var(--track-ghost),
-    calc(var(--step) * 1) 0 0 0 var(--track-ghost);
+.trackSlot[data-count="2"] {
+  flex-grow: 2;
 }
 
-.trackLabel[data-ghosts="3"] {
-  box-shadow:
-    calc(var(--step) * -3) 0 0 0 var(--track-ghost),
-    calc(var(--step) * -2) 0 0 0 var(--track-ghost),
-    calc(var(--step) * -1) 0 0 0 var(--track-ghost);
+.trackSlot[data-count="3"] {
+  flex-grow: 3;
+}
+
+.trackGhost {
+  background: color-mix(in srgb, var(--color-neutral-ink) 24%, transparent);
+  border-radius: var(--radius-pill);
+  inset-block: 0;
+  position: absolute;
+  width: calc(var(--track-layer-k) / var(--track-layer-n) * 100% + var(--space-12));
+}
+
+.trackSlot[data-side="before"] .trackGhost {
+  right: calc(-1 * var(--space-12));
+}
+
+.trackSlot[data-side="after"] .trackGhost {
+  left: calc(-1 * var(--space-12));
 }
 
 .toggle[data-track="true"] .stripes {
   flex: none;
-  /* The pill's right margin (the ghost layers' room) is the gap. */
-  margin-inline-start: 0;
+  margin-inline-start: var(--space-2);
 }
 
 /* The mark matches the track's height on the phone. */
@@ -700,37 +670,20 @@
   padding-top: var(--space-2);
 }
 
-/* ── md — 40rem / 428–640 px up: the wordmark comes back beside the mark. ─ */
+/* xs — 22.5rem / 360 px up: room between the mark and the track (owner,
+   2026-11-12, DEC-0191). Below it the track needs the room, so the longest
+   label still fits. The inline row from `xl` sets its own. */
+@media (min-width: 22.5rem) {
+  .inner {
+    gap: var(--space-6);
+  }
+}
+
+/* ── md — 40rem / 640 px up: the wordmark comes back beside the mark. ───── */
 
 @media (min-width: 40rem) {
   .logo {
     margin-inline-end: var(--space-2);
-  }
-
-  .header .cta {
-    display: inline-flex;
-  }
-
-  /* The round burger again (DEC-0190). */
-  .header .toggle[data-track="true"] {
-    flex: none;
-    height: var(--target-min);
-    justify-content: center;
-    padding-inline-end: 0;
-    width: var(--target-min);
-  }
-
-  .trackLabel {
-    display: none;
-  }
-
-  .toggle[data-track="true"] .stripes {
-    margin-inline-start: 0;
-  }
-
-  .inner .logo img {
-    height: 40px;
-    width: 40px;
   }
 }
 
@@ -761,6 +714,16 @@
 
   .logo {
     margin-inline-end: 0;
+  }
+
+  .inner {
+    gap: var(--space-3);
+  }
+
+  /* The inline row has no track beside the mark, so the mark is the small one. */
+  .inner .logo img {
+    height: 40px;
+    width: 40px;
   }
 }
 

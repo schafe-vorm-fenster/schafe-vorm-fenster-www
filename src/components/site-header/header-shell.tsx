@@ -36,7 +36,7 @@ export interface HeaderShellProps {
     readonly close: string;
     readonly menu: string;
   };
-  /** The bar itself — logo, the inline job labels, the calendar pill. Server-rendered. */
+  /** The bar itself — logo and the inline job labels. Server-rendered. */
   readonly children: ReactNode;
   /** The overlay's own top-bar brand: the mark, without the wordmark. */
   readonly overlayBrand: ReactNode;

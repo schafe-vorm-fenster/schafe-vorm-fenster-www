@@ -172,8 +172,10 @@ Proposed EN segments (de → en):
 
 - Header: logo → `/`, the four job labels (Was ist los → `/dein-ort`,
   Termine veröffentlichen → `/mitmachen`, Dein Kalender →
-  `/dein-kalender`, Über uns → `/ueber-uns`), persistent "Kalender"
-  button → `/dein-ort`. The fourth label named the job ("Warum wir")
+  `/dein-kalender`, Über uns → `/ueber-uns`), ~~persistent "Kalender"
+  button → `/dein-ort`~~ (removed by the owner, 2026-11-12, DEC-0191; the
+  header has two variants, the inline row from `xl` and the track below it,
+  and no calendar button). The fourth label named the job ("Warum wir")
   until DEC-0120; the review rejected it in the band and on the page
   (R-home-33, R-ueber-1), and the sender surface is the one label that
   names the page rather than a job — the FUN-WEB-0002 carve-out the review
