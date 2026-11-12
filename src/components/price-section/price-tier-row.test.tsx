@@ -4,10 +4,10 @@ import { describe, expect, it } from "vitest";
 import { PRICE_TIER_CTA_VARIANT, PRICE_TIERS, PriceTierRow, type PriceTierId } from "./price-tier-row";
 import { PriceSection } from "./price-section";
 
-import { offeringPrice } from "@/src/lib/pricing/offerings";
+import { offeringPrice, tierPrice } from "@/src/lib/pricing/offerings";
 
-const CTA_TARGET: Record<PriceTierId, "takePart" | "order" | "region"> = {
-  "community-calendar": "takePart",
+const CTA_TARGET: Record<PriceTierId, "register" | "order" | "region"> = {
+  "community-calendar": "register",
   "portalize-calendar": "order",
   "portalize-enterprise": "region",
 };
@@ -21,7 +21,7 @@ function row(offeringId: PriceTierId, locale: "de" | "en" = "de") {
       key={offeringId}
       locale={locale}
       offeringId={offeringId}
-      price={offeringPrice(offeringId, locale)}
+      price={tierPrice(offeringId, locale)}
       title={`title ${offeringId}`}
     />
   );
@@ -32,14 +32,13 @@ describe("TS-WEB-0024 D6 / DEC-0082: the CTA weight is derived from the tier, ne
     expect(PRICE_TIERS).toEqual(["community-calendar", "portalize-calendar", "portalize-enterprise"]);
   });
 
-  it("is quiet · primary-light · quiet — and never pulse (D3, DEC-0082 B)", () => {
-    expect(PRICE_TIER_CTA_VARIANT["community-calendar"]).toBe("quiet");
+  it("is secondary · primary-light · secondary — and never pulse (D3, DEC-0082 B)", () => {
+    expect(PRICE_TIER_CTA_VARIANT["community-calendar"]).toBe("secondary");
     expect(PRICE_TIER_CTA_VARIANT["portalize-calendar"]).toBe("primary-light");
-    expect(PRICE_TIER_CTA_VARIANT["portalize-enterprise"]).toBe("quiet");
+    expect(PRICE_TIER_CTA_VARIANT["portalize-enterprise"]).toBe("secondary");
     for (const variant of Object.values(PRICE_TIER_CTA_VARIANT)) {
       expect(variant).not.toBe("pulse");
-      expect(variant).not.toBe("secondary");
-    }
+          }
   });
 });
 
@@ -56,8 +55,8 @@ describe("TS-WEB-0024-A8 / TS-WEB-0006-A18: exactly one CTA per tier, on the sec
     });
   }
 
-  it("resolves tier 1 to /mitmachen, tier 2 to /dein-kalender/bestellen, tier 3 to /deine-region", () => {
-    expect(renderToStaticMarkup(row("community-calendar"))).toContain('href="/mitmachen"');
+  it("resolves tier 1 to /mitmachen/registrieren, tier 2 to /dein-kalender/bestellen, tier 3 to /deine-region", () => {
+    expect(renderToStaticMarkup(row("community-calendar"))).toContain('href="/mitmachen/registrieren"');
     expect(renderToStaticMarkup(row("portalize-calendar"))).toContain('href="/dein-kalender/bestellen"');
     expect(renderToStaticMarkup(row("portalize-enterprise"))).toContain('href="/deine-region"');
   });
@@ -79,31 +78,52 @@ describe("TS-WEB-0024-A8 / TS-WEB-0006-A18: exactly one CTA per tier, on the sec
   });
 });
 
-describe("TS-WEB-0006 D10 / TS-WEB-0024-A11: the price line", () => {
-  it("renders the 480 figure with its qualifier as one paragraph, from the offering import", () => {
+describe("DEC-0205 / TS-WEB-0024-A11: the price line — three figures of one size, each explained", () => {
+  const text = (html: string) => html.replace(/<[^>]+>/g, "|").replace(/\u00a0/g, " ");
+  const figureOf = (html: string) => /<span class="[^"]*figure[^"]*">(.*?)<\/span>/.exec(html)?.[1];
+
+  it("renders 480 € from the offering import, explained as 'pro Jahr, zzgl. USt.'", () => {
     const html = renderToStaticMarkup(row("portalize-calendar"));
-    const paragraph = /<p class="[^"]*price[^"]*">(.*?)<\/p>/.exec(html)?.[1] ?? "";
-    expect(paragraph.replace(/<[^>]+>/g, "").replace(/ /g, " ")).toBe("480 € / Jahr, zzgl. USt.");
+    expect(figureOf(html)?.replace(/\u00a0/g, " ")).toBe("480 €");
+    expect(text(html)).toContain("pro Jahr, zzgl. USt.");
   });
 
   it("qualifies in the page's language", () => {
     const html = renderToStaticMarkup(row("portalize-calendar", "en"));
-    expect(html).toContain("excl. VAT");
+    expect(html).toContain("per year, excl. VAT");
     expect(html).not.toContain("zzgl.");
   });
 
-  it("renders the free tier as a permanence statement — no figure, no 0 €", () => {
+  it("renders the free tier as 0 € with 'dauerhaft kostenfrei' beneath", () => {
     const html = renderToStaticMarkup(row("community-calendar"));
-    expect(html).toContain("Dauerhaft kostenfrei");
-    expect(html).not.toMatch(/\d\s*€/);
+    expect(figureOf(html)?.replace(/\u00a0/g, " ")).toBe("0 €");
+    expect(text(html)).toContain("dauerhaft kostenfrei");
   });
 
-  it("renders the enterprise tier on request — no figure, no range, no 'ab'", () => {
+  it("renders the regional tier as 'Auf Anfrage' at the same size — no figure, no range, no 'ab'", () => {
     const html = renderToStaticMarkup(row("portalize-enterprise"));
-    const text = html.replace(/<[^>]+>/g, " ");
-    expect(text).toContain("Auf Anfrage");
-    expect(text).not.toMatch(/\d/);
-    expect(text).not.toMatch(/\bab\b/);
+    expect(figureOf(html)).toBe("Auf Anfrage");
+    const copy = html.replace(/<[^>]+>/g, " ");
+    expect(copy).toContain("je nach Gebiet und Umfang");
+    expect(copy).not.toMatch(/\d/);
+    expect(copy).not.toMatch(/\bab\b/);
+  });
+});
+
+describe("DEC-0205: the title breaks where the copy puts ' / '", () => {
+  it("renders two block lines in one h3", () => {
+    const html = renderToStaticMarkup(
+      <PriceTierRow
+        checks={[]}
+        cta={{ label: "x", to: "order" }}
+        kicker="k"
+        offeringId="portalize-calendar"
+        price={offeringPrice("portalize-calendar")}
+        title="Euer eigener / Kalender"
+      />,
+    );
+    expect(html.match(/<h3\b[^>]*>(.*?)<\/h3>/)?.[1].match(/<span\b/g)).toHaveLength(2);
+    expect(html).not.toContain(" / ");
   });
 });
 
