@@ -116,6 +116,12 @@ describe("one CTA, secondary by construction", () => {
     expect(html).not.toContain('data-cta="primary"');
   });
 
+  it("renders no CTA at all where the scene carries it (DEC-0192 §4)", () => {
+    const html = render({ cta: undefined });
+    expect(count(html, "data-cta=")).toBe(0);
+    expect(html).not.toContain("data-explain-cta");
+  });
+
   it("goes through the route facade for a route id and renders a plain link for a handover", () => {
     expect(render({ cta: { label: "Onward", to: "register", locale: "en" } })).toMatch(/href="\/en\/[^"]+"/);
     expect(render({ cta: { href: "https://wa.me/491234567890", label: "Chat" } })).toContain(

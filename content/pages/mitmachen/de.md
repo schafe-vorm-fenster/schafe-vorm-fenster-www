@@ -239,10 +239,10 @@ rein · Drei Wege. Alle nutzt ihr eh schon.", CG-014).
 **Schritte:**
 
 1. Flyer fotografieren — Den ihr sowieso gedruckt habt.
-2. Per WhatsApp an uns schicken — Über „Teilen" direkt in unseren Chat.
-3. Termin steht im Kalender — In eurem Ort und drumherum.
+2. Per WhatsApp an uns schicken — An {whatsapp}. Im Chat prüft und bestätigt ihr den Termin.
+3. Termin wird automatisch online gestellt — In eurem Ort und drumherum.
 
-**Chat-Antwort (Zustand 2):** Danke! Der Termin steht im Kalender.
+**Chat-Antwort (Zustand 2):** Danke! Bitte prüft den Termin und bestätigt ihn hier.
 
 **Chat-Uhrzeit (Zustand 2):** 14:06
 
@@ -251,6 +251,8 @@ rein · Drei Wege. Alle nutzt ihr eh schon.", CG-014).
 - Feuerwehrfest | Sa · 15:00 · Gerätehaus | social | Vereinsleben
 - Laternenumzug | Fr · 17:30 · Kirche | culture | Kultur
 - Dorfflohmarkt | So · 11:00 · Dorfplatz | social | Vereinsleben
+
+Schritt 2 und 3 und die Chat-Antwort sind Wortlaut des Owners (DEC-0192, 2026-11-12, Issue #141): Schritt 2 trägt die WhatsApp-Nummer des Hubs als Token `{whatsapp}`, das zur Renderzeit aus `contactChannel("whatsapp")` ersetzt wird, nie als getippte Nummer; Schritt 3 sagt „automatisch online gestellt". Der Slot bleibt `demo: true`, solange Schritt 1 und die Beispielzeilen Platzhalter sind. Keine Frist, keine Bearbeitungsdauer (CG-031, CG-033).
 
 Die drei Zeilen stehen so im Entwurf „3-Schritte-erklären" vom 2026-09-23
 (11.20.03) und sind bis zur Freigabe Platzhalter: `provenance: generated`,

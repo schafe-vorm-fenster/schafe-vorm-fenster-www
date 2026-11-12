@@ -553,19 +553,38 @@ test.describe("TS-WEB-0019 — home", () => {
     }
     await expect(explainModule.locator('[data-explain-step][aria-current="step"]')).toHaveCount(1);
 
-    // DOM order inside the scene: opener · module · the block's one concrete
-    // instance, a live event row (DEC-0110 §1's render order).
+    // DEC-0192: step 2 carries the hub's WhatsApp number (substituted from the
+    // record, not typed), and the module's one CTA is a teaser plus the
+    // "Termine veröffentlichen" button on `takePart`; the flyer row is gone.
+    await expect(steps.nth(1)).toContainText(/\+49[\d\s]{8,}/);
+    await expect(steps.nth(1)).not.toContainText("{whatsapp}");
+    // The teaser and the button stand below the module (it keeps its 360 px
+    // budget), and the module itself carries no CTA.
+    await expect(explainModule.locator("[data-cta]")).toHaveCount(0);
+    await expect(whatsapp.locator('[data-cta="secondary"]')).toHaveText(/Mehr zum Veröffentlichen von Terminen/);
+    await expect(whatsapp.locator("p", { hasText: "Google Kalender" })).toHaveCount(1);
+    await expect(whatsapp.getByText("Aus dem Flyer geworden")).toHaveCount(0);
+
+    // DOM order inside the scene: opener · module. The flyer row that stood
+    // below the module as the scene's instance is gone (owner, DEC-0192 §5),
+    // so nothing but the module's own stage calendar renders event rows.
     const order = await whatsapp.evaluate((node) =>
-      [...node.querySelectorAll("h2, [data-explain-module], article")].map((element) =>
-        element.tagName === "H2"
-          ? "opener"
-          : element.hasAttribute("data-explain-module")
-            ? "module"
-            : "instance",
-      ),
+      [...node.querySelectorAll("h2, [data-explain-module], article")]
+        .filter(
+          (element) =>
+            element.hasAttribute("data-explain-module") ||
+            element.closest("[data-explain-module]") === null,
+        )
+        .map((element) =>
+          element.tagName === "H2"
+            ? "opener"
+            : element.hasAttribute("data-explain-module")
+              ? "module"
+              : "instance",
+        ),
     );
     expect(order[0]).toBe("opener");
-    expect(order.indexOf("module")).toBeLessThan(order.lastIndexOf("instance"));
+    expect(order).toEqual(["opener", "module"]); // DEC-0192 §5: the flyer row is gone
 
     // The other two scenes carry neither.
     await expect(
@@ -747,7 +766,7 @@ test.describe("TS-WEB-0019 — home", () => {
 
     // The same opener · module · instance triple with the same three step
     // lines — the module is not forked for a position (DEC-0110 §2).
-    expect(professional.triple).toEqual(["opener", "module", "instance"]);
+    expect(professional.triple).toEqual(["opener", "module"]); // DEC-0192: no instance row
     expect(professional.triple).toEqual(direct.triple);
     expect(professional.steps).toHaveLength(3);
     expect(professional.steps).toEqual(direct.steps);

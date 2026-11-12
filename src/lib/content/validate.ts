@@ -716,19 +716,19 @@ export const RENDERED_BLOCKS: readonly {
     slot: "home-8-proof-stream",
     kind: "list",
     index: 0,
-    renderedBy: "app/[lang]/page.tsx:156",
+    renderedBy: "app/[lang]/page.tsx:154",
   },
   {
     slot: "home-4a-scene-whatsapp-steps-demo",
     kind: "list",
     index: 0,
-    renderedBy: "app/[lang]/page.tsx:423 (listAt, the three step lines)",
+    renderedBy: "app/[lang]/page.tsx:430 (listAt, the three step lines)",
   },
   {
     slot: "home-4a-scene-whatsapp-steps-demo",
     kind: "list",
     index: 1,
-    renderedBy: "app/[lang]/page.tsx:416 (listAt, the sample event rows)",
+    renderedBy: "app/[lang]/page.tsx:423 (listAt, the sample event rows)",
   },
   {
     slot: "mitmachen-2-objections",

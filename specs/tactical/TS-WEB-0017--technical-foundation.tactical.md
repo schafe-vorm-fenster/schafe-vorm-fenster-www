@@ -231,7 +231,7 @@ Three rules make the boundary testable:
   and nowhere else, and the retired `app.schafe-vorm-fenster.de` appears in
   the code of no module at all (DEC-0177) — no hard-coded app URL, and no
   rendered page links that host.
-- **The persistent entry point.** A calendar entry sits in the header on
+- **The persistent entry point — withdrawn 2026-11-12 (owner, DEC-0191): the header carries no calendar entry.** Formerly: A calendar entry sat in the header on
   every page; its label and target are fixed by TS-WEB-0004 D4. CON-WEB-0052, FUN-WEB-0131
   names a different label — see Open points; this spec does not resolve
   it and does not contradict TS-WEB-0004.
@@ -404,7 +404,7 @@ for the spec side, and needs the content frontmatter schema
 | TS-WEB-0017-A10 | static | Every website `/api/*` route handler exports `GET` only — no write handler anywhere in the route tree. |
 | TS-WEB-0017-A11 | static | No app link is assembled outside the handover module: `APP_URL`'s literal occurs in `src/lib/live/app-handover.ts` and in no other authored module, and the retired app hostname `app.schafe-vorm-fenster.de` occurs in the code (comments aside) of no authored module (DEC-0177; amended 2026-10-28 from "the app hostname occurs in exactly one module"). `pnpm check:api-routes`. |
 | TS-WEB-0017-A33 | e2e | On every route of the TS-WEB-0004 D1 inventory in both languages, and on `/dein-ort` with a chosen place, after the live modules answered: no `a[href]`, `area[href]`, `link[href]`, `form[action]` or `iframe[src]` names `app.schafe-vorm-fenster.de` (DEC-0177). `e2e/app-links.spec.ts`. |
-| TS-WEB-0017-A12 | integration | The persistent calendar entry is present in the header on every page and resolves to the target TS-WEB-0004 D4 fixes. |
+| TS-WEB-0017-A12 | integration | WITHDRAWN 2026-11-12 (DEC-0191, the calendar button left the header). Formerly: The persistent calendar entry is present in the header on every page and resolves to the target TS-WEB-0004 D4 fixes. |
 | TS-WEB-0017-A13 | tool | `pnpm check` (frontmatter + `check:specs`) exits 0 — pre-commit hook and CI; zero E-class errors. |
 | TS-WEB-0017-A14 | static | Every file under `content/` names the tactical spec it realises, and that spec exists; a content file naming no spec, or an unknown one, fails. |
 | TS-WEB-0017-A15 | manual | Imagery review: every image shipped is checked against the imagery rules in the brand identity profile — per release, by the brand owner. |

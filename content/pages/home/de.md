@@ -172,11 +172,21 @@ Lücke im eigenen Ort an, nicht die Lücke im System.
 
 **Kicker:** So kommen die Termine rein
 
-**Überleitung:** Die Termine oben tippt niemand bei uns ein. Sie kommen von den Vereinen, den Feuerwehren und allen, die hier im Ehrenamt etwas auf die Beine stellen — meistens so:
+**Überleitung:** Die Termine tippt niemand bei uns ein. Sie kommen von den Vereinen und den Veranstaltern, die hier im Ehrenamt etwas auf die Beine stellen. Meistens so:
 
 **Titel des Erklärmoduls:** Flyer per WhatsApp
 
-**CTA-Label (sekundär):** Jetzt kostenlos anmelden
+**Hinweis über dem Button:** Du kannst deine Termine auch in einem eigenen Kalender pflegen, zum Beispiel in einem Google Kalender, und wir importieren sie. Oder du hast eine Webseite, auf der schon alles steht? Dann holen wir die Termine von dort.
+
+**CTA-Label (sekundär):** Mehr zum Veröffentlichen von Terminen
+
+Hinweis und Button-Label sind Wortlaut des Owners (DEC-0192, 2026-11-12,
+Issue #141, zweite Fassung): der Hinweis beschreibt die zwei anderen Wege,
+Weg 02 und Weg 03 auf `/mitmachen` (eigener Kalender, Webseite als Quelle),
+das Label führt auf `takePart`. Die Szene trägt weiter genau ein CTA (D3a,
+DEC-0110 §1). Überleitung und Anrede ebenfalls Owner (dritte Fassung,
+2026-11-12): die ganze Szene spricht `du`, den Default der Seite (CG-001,
+CG-002), nicht mehr `ihr`.
 
 Quelle: `relievers[0]` der Value Proposition „actors--community-calendar" —
 „send a photo of the printed flyer by WhatsApp and the date is created
@@ -196,11 +206,11 @@ und das Ziel dieser Szene ist die Seite, die den Job besitzt.
 
 **Schritte:**
 
-1. Flyer fotografieren — Den ihr sowieso gedruckt habt.
-2. Per WhatsApp an uns schicken — Über „Teilen" direkt in unseren Chat.
-3. Termin steht im Kalender — In eurem Ort und drumherum.
+1. Flyer fotografieren — Den du sowieso gedruckt hast.
+2. Per WhatsApp an uns schicken — An {whatsapp}. Im Chat prüfst und bestätigst du den Termin.
+3. Termin wird automatisch online gestellt — In deinem Ort und drumherum.
 
-**Chat-Antwort (Zustand 2):** Danke! Der Termin steht im Kalender.
+**Chat-Antwort (Zustand 2):** Danke! Bitte prüf den Termin und bestätige ihn hier.
 
 **Chat-Uhrzeit (Zustand 2):** 14:06
 
@@ -209,6 +219,8 @@ und das Ziel dieser Szene ist die Seite, die den Job besitzt.
 - Feuerwehrfest | Sa · 15:00 · Gerätehaus | social | Vereinsleben
 - Laternenumzug | Fr · 17:30 · Kirche | culture | Kultur
 - Dorfflohmarkt | So · 11:00 · Dorfplatz | social | Vereinsleben
+
+Schritt 2 und 3 und die Chat-Antwort sind Wortlaut des Owners (DEC-0192, 2026-11-12, Issue #141): Schritt 2 trägt die WhatsApp-Nummer des Hubs als Token `{whatsapp}`, das zur Renderzeit aus `contactChannel("whatsapp")` ersetzt wird, nie als getippte Nummer; Schritt 3 sagt „automatisch online gestellt". Der Slot bleibt `demo: true`, solange Schritt 1 und die Beispielzeilen Platzhalter sind. Keine Frist, keine Bearbeitungsdauer (CG-031, CG-033).
 
 Dasselbe Erklärmodul wie Weg 01 auf `/mitmachen`, deshalb derselbe
 Platzhaltersatz: die drei Schrittzeilen stehen so im Entwurf
@@ -356,8 +368,6 @@ Text, gleiche Ziel-ID (TS-WEB-0006 D6).
 
 <!-- source_note: Tonfall aus gtm-Quellen: Prinzip 1a „Szenen statt Etiketten" und Prinzip 5 „Live-Daten tragen das Argument" in gtm:concept/website-communication-principles.concept.md, Register „du" aus Prinzip 1b. Ersetzt die generierten Strings in app/[lang]/page.tsx `DEMO_LABELS` (state/open.md Zeile 92). Entscheidung Jan, 2026-09-18: keine Kennzeichnung im sichtbaren Text — Provenienz steht im Frontmatter, in `data-*` und in state/open.md. -->
 <!-- id: home-12-ui-strings; content_type: section; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/brand-identity@0.1.4#schafe-vorm-fenster"]; status: draft -->
-
-**Bildunterschrift am Modul der WhatsApp-Szene:** Aus dem Flyer geworden
 
 **Geo-Label auf den Belegkarten:** Beleg aus der Region
 

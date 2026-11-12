@@ -64,7 +64,11 @@ export interface ExplainModuleProps {
   readonly steps: ThreeOf<ExplainStep>;
   /** Exactly three — the graphic of each state, in order (T-03's `explain-stage`). */
   readonly stage: ThreeOf<ReactNode>;
-  readonly cta: ExplainModuleCta;
+  /**
+   * Omitted only where the scene around the module carries the one CTA itself —
+   * `/` since DEC-0192 §4, whose teaser plus button stand below the module.
+   */
+  readonly cta?: ExplainModuleCta;
   /** `h3` under a scene opener or a section heading; `h2` where the module is the block. */
   readonly headingLevel?: 2 | 3;
   /** The language of the two stage arrows' accessible names. */
@@ -385,21 +389,23 @@ export function ExplainModule({
         })}
       </ol>
 
-      <div className={styles.cta} data-explain-cta="">
-        <Button
-          dataCta="secondary"
-          hash={cta.hash}
-          href={cta.href}
-          icon={cta.icon}
-          locale={cta.locale}
-          onward={cta.onward}
-          query={cta.query}
-          to={cta.to}
-          variant="secondary"
-        >
-          {cta.label}
-        </Button>
-      </div>
+      {cta ? (
+        <div className={styles.cta} data-explain-cta="">
+          <Button
+            dataCta="secondary"
+            hash={cta.hash}
+            href={cta.href}
+            icon={cta.icon}
+            locale={cta.locale}
+            onward={cta.onward}
+            query={cta.query}
+            to={cta.to}
+            variant="secondary"
+          >
+            {cta.label}
+          </Button>
+        </div>
+      ) : null}
     </div>
   );
 }

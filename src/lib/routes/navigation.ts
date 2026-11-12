@@ -38,12 +38,6 @@ export const HEADER_JOBS: readonly NavEntry[] = [
   { route: "about", label: "whyUs" },
 ];
 
-/** The persistent calendar entry beside the job labels (TS-WEB-0004 D4). */
-export const HEADER_CALENDAR_ENTRY: NavEntry = {
-  route: "place",
-  label: "calendarButton",
-};
-
 export interface FooterLegalEntry {
   readonly route: RouteId;
   readonly section: LegalSectionId;

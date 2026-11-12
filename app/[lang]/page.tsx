@@ -19,6 +19,7 @@ import { partnerLogo } from "@/src/lib/content/partner-logos";
 import { HERO_IMAGE_ID } from "@/src/lib/pages/hero-images";
 import { slot } from "@/src/lib/content/loader";
 import { isDemoSlot } from "@/src/lib/content/provenance";
+import { withChannelTokens } from "@/src/lib/contact/contact-channels";
 import { ctaLabelOnly } from "@/src/lib/content/text";
 import { SHOWCASE_COMMUNITY } from "@/src/lib/live/showcase";
 import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
@@ -35,8 +36,9 @@ import { listAt, threeSampleRows, threeSteps } from "./mitmachen/paths";
 import { LiveStageCalendar } from "./mitmachen/stage-islands";
 
 
+import styles from "./_pages.module.css";
 import { buildDay } from "./_build-day";
-import { FlyerExample, HomeHeroContent, HomeNearby, type HomeFocusCopy } from "./_home-focus";
+import { HomeHeroContent, HomeNearby, type HomeFocusCopy } from "./_home-focus";
 import { PlacePhotoLayer } from "./_place-photo";
 import { selectProof } from "./_proof";
 import { PageJsonLd } from "./_structured-data";
@@ -120,27 +122,23 @@ export async function generateMetadata({
 const UI_STRING_FALLBACKS: Record<
   Locale,
   {
-    flyerExample: string;
     geo: string;
   }
 > = {
   de: {
-    flyerExample: "Aus dem Flyer geworden",
     geo: "Beleg aus der Region",
   },
   en: {
-    flyerExample: "Made from the flyer",
     geo: "Proof from the region",
   },
 };
 
-/** The two short UI strings, read off `home-12-ui-strings` where the slot
+/** The one short UI string (the flyer caption went with DEC-0192), read off `home-12-ui-strings` where the slot
  * has them, falling back to the stand-ins otherwise. */
 function uiStringsFrom(uiStrings: ContentSlot, locale: Locale) {
   const fallback = UI_STRING_FALLBACKS[locale];
   return {
-    flyerExample: fieldAt(uiStrings.blocks, 0) ?? fallback.flyerExample,
-    geo: fieldAt(uiStrings.blocks, 1) ?? fallback.geo,
+    geo: fieldAt(uiStrings.blocks, 0) ?? fallback.geo,
   };
 }
 
@@ -333,8 +331,9 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
 
           Each block carries exactly one CTA at secondary treatment, pointing
           at the page that owns its job (D3a, DEC-0082 §4). In the `whatsapp`
-          block that CTA is the **module's own** and the scene adds none —
-          "wrapping does not double the CTA" (DEC-0110 §1). */}
+          block the module renders none since DEC-0192 §4 and the scene's own
+          `cta` (teaser + button) is the one — "wrapping does not double the
+          CTA" (DEC-0110 §1) still holds, the count is one. */}
       <HomeScenes
         scenes={{
           whatsapp: (
@@ -364,11 +363,25 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
                       this substitution). It is also what brings the section back
                       inside the 1270 px budget of polish brief G-4. */}
                   <SceneBlock
-                    instance={
-                      /* The outcome, not a list (polish brief, page 1, fix 3):
-                         one real date, under the line that says what it is,
-                         loaded in the browser (DEC-0163, `_home-focus.tsx`). */
-                      <FlyerExample heading={demo.flyerExample} locale={locale} />
+                    /* DEC-0192 §4 (owner): the scene's one CTA is a teaser (other
+                       ways exist) and one button on the topic "Termine
+                       veröffentlichen". It stands below the module, not in it, so
+                       the module's own height stays inside the one-viewport budget
+                       at 360 px (TS-WEB-0022 D4, TS-WEB-0019-A6); the block still
+                       carries exactly one `data-cta`. */
+                    cta={
+                      <>
+                        <p className={styles.sceneHint}>{fieldAt(sceneWhatsapp.blocks, 4)}</p>
+                        <Button
+                          dataCta="secondary"
+                          locale={locale}
+                          onward
+                          to="takePart"
+                          variant="secondary"
+                        >
+                          {ctaLabelOnly(sceneWhatsapp.cta ?? "") ?? ""}
+                        </Button>
+                      </>
                     }
                     locale={locale}
                     mechanism="whatsapp"
@@ -381,12 +394,6 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
                     module={
                       <div data-demo={isDemoSlot(whatsappSteps) ? "true" : undefined} data-scene-module="">
                         <ExplainModule
-                          cta={{
-                            label: ctaLabelOnly(sceneWhatsapp.cta ?? "") ?? "",
-                            locale,
-                            onward: true,
-                            to: "takePart",
-                          }}
                           locale={locale}
                           mechanism="whatsapp"
                           ordinal={1}
@@ -399,7 +406,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
                             <StageChat
                               key="2"
                               locale={locale}
-                              reply={fieldAt(whatsappSteps.blocks, 1) ?? ""}
+                              reply={withChannelTokens(fieldAt(whatsappSteps.blocks, 1) ?? "")}
                               time={fieldAt(whatsappSteps.blocks, 2) ?? ""}
                             />,
                             // State 3 — "the date is in the calendar", and the
@@ -420,7 +427,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
                             />,
                           ]}
                           steps={threeSteps(
-                            listAt(whatsappSteps.blocks, 0),
+                            listAt(whatsappSteps.blocks, 0).map(withChannelTokens),
                             "home-4a-scene-whatsapp-steps-demo",
                           )}
                           title={fieldAt(sceneWhatsapp.blocks, 3) ?? ""}
