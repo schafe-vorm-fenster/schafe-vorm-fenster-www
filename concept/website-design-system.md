@@ -1475,7 +1475,7 @@ Reference files are in `plan/reviews/2026-10-12/`.
 The hand-off for readers who came for something else. It is quieter than the
 page's main content, and it must not look like a plain list.
 
-- Heading *"Heute mit einem anderen Anliegen hier?"*, a mono kicker *"Auch
+- Heading *"Erfahre mehr über unsere Kalenderplattform"*, a mono kicker *"Auch
   interessant"* to its right on desktop and below it on the phone.
 - Three **cards**, one per other job. Each card: a 40 px `lime-100` icon well
   with a `lime-800` Lucide glyph on the left, a bold title and one line
