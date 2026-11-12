@@ -246,6 +246,37 @@
   --category-bare: var(--category-neighbouring-bare-dark);
 }
 
+/* The pill's colour pair per category — read by the pill in either place. */
+.category[data-tone="fest"] {
+  --category-fill: var(--category-fest-fill);
+  --category-text: var(--category-fest-text);
+}
+
+.category[data-tone="merchants"] {
+  --category-fill: var(--category-merchants-fill);
+  --category-text: var(--category-merchants-text);
+}
+
+.category[data-tone="culture"] {
+  --category-fill: var(--category-culture-fill);
+  --category-text: var(--category-culture-text);
+}
+
+.category[data-tone="official"] {
+  --category-fill: var(--category-official-fill);
+  --category-text: var(--category-official-text);
+}
+
+.category[data-tone="social"] {
+  --category-fill: var(--category-social-fill);
+  --category-text: var(--category-social-text);
+}
+
+.category[data-tone="neighbouring"] {
+  --category-fill: var(--category-neighbouring-fill);
+  --category-text: var(--category-neighbouring-text);
+}
+
 /*
  * A row at least 30 rem wide is wide enough for the badge SRC-0014 §Event row
  * specifies **and** a complete meta line, so the same element becomes it.
@@ -287,34 +318,87 @@
     position: static;
     width: auto;
   }
+}
 
-  .category[data-tone="fest"] {
-    --category-fill: var(--category-fest-fill);
-    --category-text: var(--category-fest-text);
+/*
+ * `categoryPlacement="below"` (issue 152, the nearby list on a narrow row):
+ * the category stands as its pill on a line of its own under the meta, left
+ * with the title (date column 44 px + 14 px gap = 58 px). Beside the title the
+ * pill took the room long titles need. From 48 rem the row has room for the
+ * pill on the meta's line again and is the row it always was.
+ */
+.below {
+  column-gap: 14px;
+  grid-template-areas:
+    "date title status"
+    "date meta  meta"
+    "date badge badge";
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  row-gap: 6px;
+}
+
+.below .title {
+  /* Title block takes the whole remaining width, status or not. */
+  grid-column: title-start / status-end;
+}
+
+.below[data-status] .title {
+  grid-column: title;
+}
+
+.below .category {
+  background: var(--category-fill);
+  border-radius: var(--radius-pill);
+  color: var(--category-text);
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  font-weight: 700;
+  justify-self: start;
+  letter-spacing: var(--type-label-tracking);
+  line-height: 1;
+  min-height: var(--height-badge);
+  padding: 7px 15px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.below .categoryIcon {
+  display: none;
+}
+
+.below .categoryLabel {
+  clip-path: none;
+  height: auto;
+  overflow: visible;
+  position: static;
+  width: auto;
+}
+
+/*
+ * A container query cannot restyle its own container, so the row's grid goes
+ * back to the one every list shares by viewport: from 48 rem (the nearby
+ * section's own switch) the nearby list is at least 672 px wide and keeps the
+ * pill on the meta's line.
+ */
+@media (min-width: 48rem) {
+  .below {
+    column-gap: var(--space-4);
+    grid-template-areas:
+      "date title status"
+      "date meta  badge";
+    grid-template-columns: 52px minmax(0, 1fr) auto;
+    row-gap: 0;
   }
 
-  .category[data-tone="merchants"] {
-    --category-fill: var(--category-merchants-fill);
-    --category-text: var(--category-merchants-text);
+  .below .title {
+    grid-column: title-start / status-end;
   }
 
-  .category[data-tone="culture"] {
-    --category-fill: var(--category-culture-fill);
-    --category-text: var(--category-culture-text);
+  .below[data-status] .title {
+    grid-column: title;
   }
 
-  .category[data-tone="official"] {
-    --category-fill: var(--category-official-fill);
-    --category-text: var(--category-official-text);
-  }
-
-  .category[data-tone="social"] {
-    --category-fill: var(--category-social-fill);
-    --category-text: var(--category-social-text);
-  }
-
-  .category[data-tone="neighbouring"] {
-    --category-fill: var(--category-neighbouring-fill);
-    --category-text: var(--category-neighbouring-text);
+  .below .category {
+    justify-self: end;
   }
 }

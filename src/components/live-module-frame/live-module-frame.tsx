@@ -19,6 +19,8 @@ export interface LiveModuleFrameProps extends DataStateProps {
    */
   readonly titleHidden?: boolean;
   readonly subline?: string;
+  /** One sentence under the title, at reading size — the section's own lead, not a meta line (issue 152). */
+  readonly lead?: string;
   /** An onward action beside the module — never the primary CTA of the page. */
   readonly cta?: ReactNode;
   /** `true` where arriving content changes the page's meaning (the `/dein-ort` focus-job shift). */
@@ -83,6 +85,7 @@ export function LiveModuleFrame({
   title,
   titleHidden = false,
   subline,
+  lead,
   cta,
   announced = false,
   updatedAt,
@@ -112,6 +115,7 @@ export function LiveModuleFrame({
       <header className={styles.header}>
         <div className={styles.heading}>
           <Heading className={titleHidden ? styles.titleHidden : styles.title}>{title}</Heading>
+          {lead ? <p className={styles.lead} data-lead="">{lead}</p> : null}
           {subline ? <p className={styles.subline}>{subline}</p> : null}
         </div>
         <div className={styles.marks}>

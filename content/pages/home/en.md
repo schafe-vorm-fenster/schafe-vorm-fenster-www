@@ -308,7 +308,7 @@ exactly three per category.
 
 **Aha statement:** Shaping our own villages ourselves.
 
-**Text:** Jan-Henrik Hempel was a volunteer mayor, sits on the municipal council and co-founded the culture club. He knows the village from the inside — as someone who joins in. The name Schafe vorm Fenster comes from the sheep pasture outside his own kitchen window.
+**Text:** Jan-Henrik Hempel was a volunteer mayor, sits on the municipal council and co-founded the culture club. He knows the village from the inside, as someone who joins in. The name Schafe vorm Fenster comes from the sheep pasture outside his own kitchen window.
 
 **Transition:** The village calendar exists because somebody had the problem himself.
 
@@ -392,14 +392,3 @@ of the four is cleared; three are waiting for clearance and run with
 - **Publish dates:** By WhatsApp or from your calendar → `/mitmachen`
 - **Run your own calendar:** Under your own name, on your own website → `/dein-kalender`
 - **Who's behind it:** Who makes the village calendar → `/ueber-uns`
-
-## Slot 12 — UI strings no other slot carries
-
-<!-- source_note: register from the gtm sources: principle 1a "scenes, not labels" and principle 5 "live data carries the argument" in gtm:concept/website-communication-principles.concept.md, the informal register from principle 1b. Replaces the generated strings in app/[lang]/page.tsx `DEMO_LABELS` (state/open.md row 92). Jan's decision, 2026-09-18: no marking in visible copy — provenance lives in frontmatter, in `data-*` and in state/open.md. -->
-<!-- id: home-12-ui-strings; content_type: section; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/brand-identity@0.1.4#schafe-vorm-fenster"]; status: draft -->
-
-**Geo label on the proof cards:** Proof from the region
-
-Two short strings the page currently keeps in code. They name what the
-surface is showing without labelling the surface as unfinished. The counter
-badge's unit word went with the counter (DEC-0154, issue #24).

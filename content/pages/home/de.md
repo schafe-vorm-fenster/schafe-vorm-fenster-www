@@ -267,7 +267,7 @@ Ansprache ist **offen**: die Überschrift sagt „deine Gemeinde", der Text „i
 
 **Label Filterleiste (Screenreader):** Nach Kategorie filtern
 
-**Label Grafik (Screenreader):** Beispiel: Kalender auf der Website einer Gemeinde
+**Label Grafik (Screenreader):** Kalender auf der Website einer Gemeinde
 
 **Label Gemeindeleben:** Gemeindeleben
 
@@ -314,13 +314,13 @@ Termine sind vom Owner ausgedachte, neutrale Beispiele und bleiben
 
 **Aha-Satz:** Unsere Orte selbst gestalten.
 
-**Text:** Jan-Henrik Hempel war ehrenamtlicher Bürgermeister, ist Gemeindevertreter und hat den Kulturverein mitbegründet. Er kennt das Dorf von innen — als einer, der selbst mitmacht. Der Name Schafe vorm Fenster kommt von der Schafweide vor dem eigenen Küchenfenster.
+**Text:** Jan-Henrik Hempel war ehrenamtlicher Bürgermeister, ist Gemeindevertreter und hat den Kulturverein mitgegründet. Er kennt das Dorf von innen, als einer, der selbst mitmacht. Der Name Schafe vorm Fenster kommt von der Schafweide vor dem eigenen Küchenfenster.
 
 **Überleitung:** Den Dorfkalender gibt es, weil jemand das Problem selbst hatte.
 
 Quelle: `founder-former-volunteer-mayor` (`usage_rights: cleared`) — belegt
 über Nordkurier 2019/2022 und das Zukunftswege-Ost-Porträt 2026. Die Breite
-der Rollen (Gemeindevertreter, Mitbegründer des Kulturvereins) und der
+der Rollen (Gemeindevertreter, Mitgründer des Kulturvereins) und der
 Vorrang des Ehrenamts vor der Verwaltung sind Wortlaut des Reviews vom
 2026-09-22; „Unsere Orte selbst gestalten" und „Der Name Schafe vorm
 Fenster" ebenfalls. Dieser Slot trägt **keinen** Kicker: „Wo das herkommt"
@@ -399,15 +399,3 @@ drei warten auf ihre Freigabe und laufen mit `clearance: pending`.
 - **Termine veröffentlichen:** Per WhatsApp oder über deinen Kalender → `/mitmachen`
 - **Eigenen Kalender betreiben:** Unter eigenem Namen, auf eurer Website → `/dein-kalender`
 - **Wer dahintersteckt:** Wer den Dorfkalender macht → `/ueber-uns`
-
-## Slot 12 — UI-Strings, die kein anderer Slot trägt
-
-<!-- source_note: Tonfall aus gtm-Quellen: Prinzip 1a „Szenen statt Etiketten" und Prinzip 5 „Live-Daten tragen das Argument" in gtm:concept/website-communication-principles.concept.md, Register „du" aus Prinzip 1b. Ersetzt die generierten Strings in app/[lang]/page.tsx `DEMO_LABELS` (state/open.md Zeile 92). Entscheidung Jan, 2026-09-18: keine Kennzeichnung im sichtbaren Text — Provenienz steht im Frontmatter, in `data-*` und in state/open.md. -->
-<!-- id: home-12-ui-strings; content_type: section; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/brand-identity@0.1.4#schafe-vorm-fenster"]; status: draft -->
-
-**Geo-Label auf den Belegkarten:** Beleg aus der Region
-
-Zwei kurze Strings, die die Seite heute im Code führt. Sie benennen, was
-die Fläche zeigt, ohne die Fläche als unfertig zu beschriften. Das
-Einheitenwort des Zähler-Badges ist mit dem Zähler entfallen (DEC-0154,
-Issue #24).

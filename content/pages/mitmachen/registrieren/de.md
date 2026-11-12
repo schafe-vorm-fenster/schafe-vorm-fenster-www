@@ -120,7 +120,7 @@ dieser Website — das übernimmt vollständig die App.
 <!-- source_note: Angebotsformulierung statt Menü aus gtm:concept/website-communication-principles.concept.md Prinzip 2; die drei Jobs und ihre Formulierung aus der Job-Tabelle in Prinzip 1. Das Band rendert nur auf Schritt 1 (TS-WEB-0023 D7, state/open.md #24). Beantwortet state/open.md Zeile 95 für diese Seite. -->
 <!-- id: registrieren-6-context-band; content_type: context-band; provenance: sourced; derived_from: [ia]; status: draft -->
 
-**Kicker:** Heute mit einem anderen Anliegen hier?
+**Kicker:** Erfahre mehr über unsere Kalenderplattform
 
 - **Sehen, was los ist:** Was in deinem Ort als Nächstes ansteht → `/dein-ort`
 - **Eigenen Kalender betreiben:** Unter eigenem Namen, auf eurer Website → `/dein-kalender`
