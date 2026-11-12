@@ -255,8 +255,8 @@ the positional rule did.
 
 | Slot | Blocks a page reads | Read at |
 | --- | --- | --- |
-| `home-8-proof-stream` | the candidate list | `app/[lang]/page.tsx:186` |
-| `home-4a-scene-whatsapp-steps-demo` | lists 0 and 1 — step lines, sample rows | `app/[lang]/page.tsx:772`, `:765` |
+| `home-8-proof-stream` | the candidate list | `app/[lang]/page.tsx:153` |
+| `home-4a-scene-whatsapp-steps-demo` | lists 0 and 1 — step lines, sample rows | `app/[lang]/page.tsx:413`, `:406` |
 | `mitmachen-2-objections` | lists 0 and 1 — the two objection columns | `app/[lang]/mitmachen/page.tsx:229` |
 | `mitmachen-3a/4a/5a-path-*-steps-demo` | lists 0 and 1 each | `app/[lang]/mitmachen/page.tsx:392`/`:385`, `:433`/`:427`, `:482`/`:476` |
 | `mitmachen-7-proof-demo` | **every** list (`listItems`) | `app/[lang]/mitmachen/page.tsx:189` |
@@ -297,7 +297,7 @@ that quote an avoid-list term in order to forbid it — every one of them stands
 **below** the blocks its page reads, so they still pass (`pnpm check:content`:
 *Content pipeline is valid*). Moving one of them up now fails: the marker above
 `home-8-proof-stream`'s candidate list reports *[note-marker] … covers list 0 …
-`app/[lang]/page.tsx:186` renders it*.
+`app/[lang]/page.tsx:153` renders it*.
 
 A note that stands **above** rendered copy in the same slot and before its next
 field cannot be marked, and is read as copy: `home-8-proof-stream`'s pool
