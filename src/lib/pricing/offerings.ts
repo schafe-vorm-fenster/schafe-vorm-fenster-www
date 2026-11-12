@@ -90,6 +90,22 @@ export function offeringPrice(offering: OfferingId, locale: Locale = "de"): Offe
 }
 
 /**
+ * The price as the three tier rows of `/dein-kalender` show it (DEC-0205):
+ * like `offeringPrice`, but the permanent-free offering also carries its
+ * package figure (`price.amount: 0`, `interval: forever`), so the row can set
+ * "0 €" beside the others. Running text keeps using `offeringPrice`, which
+ * carries no figure for it — a sentence still cannot print "0 €"
+ * (TS-WEB-0006-A12).
+ */
+export function tierPrice(offering: OfferingId, locale: Locale = "de"): OfferingPrice {
+  const price = offeringPrice(offering, locale);
+  if (offering === "community-calendar") {
+    return { ...price, figure: { amount: 0, currency: "EUR" } };
+  }
+  return price;
+}
+
+/**
  * TS-WEB-0026 D6 / TS-WEB-0018 D2/D3 — true only for a `price_status: fixed`
  * offering. Two of the six are fixed in the package: `portalize-calendar`
  * (480, priced) and `community-calendar` (0, forever — rendered as the

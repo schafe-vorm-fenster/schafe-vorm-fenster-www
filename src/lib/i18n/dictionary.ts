@@ -299,6 +299,12 @@ export interface Dictionary {
     permanent: string;
     /** No figure, no range, no "from". */
     onRequest: string;
+    /** The line under the free tier's "0 €" (DEC-0205). */
+    permanentNote: string;
+    /** The line under the on-request tier's statement (DEC-0205). */
+    onRequestNote: string;
+    /** The interval phrase under a priced tier's figure, before the net qualifier. */
+    perYear: string;
   };
   /**
    * The flow progress row's sentence — the accessible name of the dot row
@@ -650,6 +656,9 @@ const de: Dictionary = {
   price: {
     permanent: "Dauerhaft kostenfrei",
     onRequest: "Auf Anfrage",
+    permanentNote: "dauerhaft kostenfrei",
+    onRequestNote: "je nach Gebiet und Umfang",
+    perYear: "pro Jahr",
   },
   steps: {
     of: (step, total) => `Schritt ${step} von ${total}`,
@@ -881,6 +890,9 @@ const en: Dictionary = {
   price: {
     permanent: "Free, permanently",
     onRequest: "On request",
+    permanentNote: "free, permanently",
+    onRequestNote: "depending on area and scope",
+    perYear: "per year",
   },
   steps: {
     of: (step, total) => `Step ${step} of ${total}`,

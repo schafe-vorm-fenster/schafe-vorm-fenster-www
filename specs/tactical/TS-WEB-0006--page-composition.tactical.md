@@ -366,8 +366,10 @@ visible instead of quietly passing.
 The price string is read from the offering package rather than typed into
 copy, so one place changes it [PROPOSED]. A price appearing in any other
 page's copy is a defect, not a variant. The free community calendar tier
-is not a price and not subject to this rule; its permanence promise is
-content, backed by the 2022 public commitment (SRC-0003).
+is not subject to this rule; its permanence promise is content, backed by the
+2022 public commitment (SRC-0003). On `/dein-kalender` its tier row shows the
+package's own `price.amount` as "0 €" beside the other tiers (DEC-0205); a
+price token in running text still never resolves it (TS-WEB-0006-A12).
 
 ### D11 — Promises are only displayed where a process backs them [FIXED: SRC-0003 `/deine-region`, BUS-WEB-0016, FUN-WEB-0203; enforcement PROPOSED]
 

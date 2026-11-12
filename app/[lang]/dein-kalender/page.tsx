@@ -27,9 +27,8 @@ import { isDemoSlot } from "@/src/lib/content/provenance";
 import { CONFIG_REPO_URL } from "@/src/lib/embed/config-repo";
 import { DEFAULT_WEEKS_AHEAD, SHOWCASE_CALENDAR } from "@/src/lib/embed/portalize";
 import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
-import { offeringPrice } from "@/src/lib/pricing/offerings";
+import { tierPrice } from "@/src/lib/pricing/offerings";
 import { dictionary } from "@/src/lib/i18n/dictionary";
-import { pageTitle } from "@/src/lib/routes/metadata";
 
 import { PageJsonLd } from "../_structured-data";
 import { pageContent } from "../_content";
@@ -40,7 +39,6 @@ import { PageFrame } from "../_page-frame";
 import { comparisonLabels, settingRows, tierChecks } from "./content";
 import { pageMeta } from "./page.meta";
 
-import { Fragment } from "react";
 
 import pageStyles from "../_pages.module.css";
 
@@ -237,13 +235,13 @@ export default async function Page({
     readonly offeringId: PriceTierId;
     readonly kicker: string;
     readonly title: string;
-    readonly cta: { readonly label: string; readonly to: "takePart" | "order" | "region" };
+    readonly cta: { readonly label: string; readonly to: "register" | "order" | "region" };
   }[] = [
     {
       offeringId: "community-calendar",
       kicker: fieldAt(tiers.blocks, 2) ?? "",
       title: fieldAt(tiers.blocks, 3) ?? "",
-      cta: { label: withoutArrow(fieldAt(tiers.blocks, 4)), to: "takePart" },
+      cta: { label: withoutArrow(fieldAt(tiers.blocks, 4)), to: "register" },
     },
     {
       offeringId: "portalize-calendar",
@@ -253,15 +251,9 @@ export default async function Page({
     },
     {
       offeringId: "portalize-enterprise",
-      kicker: fieldAt(tiers.blocks, 9) ?? "",
-      title: fieldAt(tiers.blocks, 10) ?? "",
-      /**
-       * The link names where it goes, and nothing else. "Weiter zu Kalender
-       * für euer ganzes Gebiet" wrapped to two centred lines in a column of
-       * otherwise left-aligned controls (brief, page 6, item 3), and the
-       * tier's own title already says which territory this is.
-       */
-      cta: { label: pageTitle("region", locale), to: "region" },
+      kicker: fieldAt(tiers.blocks, 8) ?? "",
+      title: fieldAt(tiers.blocks, 9) ?? "",
+      cta: { label: withoutArrow(fieldAt(tiers.blocks, 10)), to: "region" },
     },
   ];
 
@@ -534,8 +526,8 @@ export default async function Page({
         kicker={dictionary(locale).kickers.price}
       >
         {tierRows.map((tier) => (
-          <Fragment key={tier.offeringId}>
             <PriceTierRow
+              key={tier.offeringId}
               checks={checks[tier.offeringId] ?? []}
               // The nine check lines are the drafts', not the owner's, so the
               // list they stand in says so in the markup — the marking the
@@ -546,17 +538,9 @@ export default async function Page({
               kicker={tier.kicker}
               locale={locale}
               offeringId={tier.offeringId}
-              price={offeringPrice(tier.offeringId, locale)}
+              price={tierPrice(tier.offeringId, locale)}
               title={tier.title}
             />
-            {/* D7 — the one sentence that names the product, at the tier
-                where the price is read. `price-tier-row` has no body-copy
-                slot (T-06), so it stands directly under the row it belongs
-                to, inside the tiers block (DEC-0131 §3). */}
-            {tier.offeringId === "portalize-calendar" ? (
-              <p className={pageStyles.tierNote}>{fieldAt(tiers.blocks, 8)}</p>
-            ) : null}
-          </Fragment>
         ))}
       </PriceSection>
 
