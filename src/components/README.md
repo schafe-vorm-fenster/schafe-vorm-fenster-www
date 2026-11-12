@@ -116,7 +116,7 @@ import { SiteFooter } from "@/src/components/site-footer/site-footer";
 </body>
 ```
 
-`SiteHeader` reads `HEADER_JOBS` and `HEADER_CALENDAR_ENTRY`, `SiteFooter`
+`SiteHeader` reads `HEADER_JOBS`, `SiteFooter`
 reads `FOOTER_LEGAL_LINKS` and `legalAnchor()` — the layout passes only the
 locale, the current route id and the two footer slots (`contact` for
 `envoy-form-mount`, `newsletter` for the labelled newsletter mock). The
