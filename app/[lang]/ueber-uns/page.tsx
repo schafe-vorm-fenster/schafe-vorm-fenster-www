@@ -421,7 +421,7 @@ export default async function Page({
                       portraitCredit={imageCredit(portrait, locale)}
                       portraitNotDepicting={portrait?.notDepicting}
                       portraitRatio="feature"
-                      portraitSizes="(min-width: 64rem) 50vw, 100vw"
+                      portraitSizes="(min-width: 48rem) 50vw, 100vw"
                       portraitSrc={portrait?.src}
                       role={founder.role}
                     />
