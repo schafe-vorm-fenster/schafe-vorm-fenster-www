@@ -70,6 +70,8 @@
   max-width: 480px;
   min-height: var(--height-search);
   padding: 0 6px;
+  /* The anchor of the suggestion overlay, which hangs from the pill and takes no space. */
+  position: relative;
   width: 100%;
 }
 

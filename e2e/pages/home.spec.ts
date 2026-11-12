@@ -444,6 +444,38 @@ test.describe("TS-WEB-0019 — home", () => {
     await expect(graphic).toContainText("Quilow");
   });
 
+  test("TS-WEB-0008-A15: the Dorfkalender search suggests places, and a pick loads one into the phone in place", async ({
+    page,
+  }) => {
+    await page.setViewportSize(DESKTOP);
+    await page.goto("/");
+    await blockOneSettled(page);
+
+    const field = page.locator('#dorfkalender input[type="search"]');
+    const graphic = page.locator("#dorfkalender [data-dorfkalender-graphic]");
+    // The suggestion overlay is the stage's, moved with the search (issue 143).
+    await expect(field).toHaveAttribute("role", "combobox", { timeout: 15_000 });
+    await field.fill("Quil");
+
+    const options = page.locator("#dorfkalender").getByRole("option");
+    await expect(options.first()).toBeVisible({ timeout: 10_000 });
+    expect(await options.count()).toBeLessThanOrEqual(4);
+
+    // The row reads "Ort (Gemeinde)"; the place is the part before the bracket.
+    const picked = ((await options.first().textContent()) ?? "").replace(/\s*\(.*\)\s*$/u, "").trim();
+    expect(picked).not.toBe("");
+
+    // Keyboard first: ArrowDown marks a row, Enter picks it.
+    await field.press("ArrowDown");
+    await expect(field).toHaveAttribute("aria-activedescendant", /option-0$/u);
+    await field.press("Enter");
+
+    await expect(graphic).toContainText(picked);
+    await expect(field).toHaveValue(picked);
+    await expect(page.locator("#dorfkalender").getByRole("listbox")).toHaveCount(0);
+    await expect(page).toHaveURL(/\/$/u);
+  });
+
   test("TS-WEB-0019-A5: an uncovered place typed into the closing search navigates to /dein-ort/starten?ort=", async ({
     page,
   }) => {

@@ -4,6 +4,7 @@ import { useCallback, useId, useMemo, useRef, useState } from "react";
 
 import { ConversionTracker } from "../conversion-tracker/conversion-tracker";
 import { LocateControl } from "../place-search/locate-control";
+import { PlaceTypeahead } from "../place-search/typeahead";
 import { OutboundLink } from "../outbound-link/outbound-link";
 import { PhotoCredit } from "../photo-surface/photo-credit";
 import { SearchSubmit } from "../search-field/search-field";
@@ -166,6 +167,9 @@ export function DorfkalenderIntro({ locale }: DorfkalenderIntroProps) {
                   spellCheck={false}
                   type="search"
                 />
+                {/* The stage's suggestion overlay, moved here with the search
+                    (TS-WEB-0008 D7a): a pick loads the place into the phone. */}
+                <PlaceTypeahead inputId={fieldId} locale={locale} onPick={load} to="place" />
                 {/* TS-WEB-0006 D3 allows one `data-cta="primary"` per page: in S1
                     it is a search submit, as it was on the stage; once a place is
                     chosen the hero's own CTA carries it (TS-WEB-0019 D2). */}
