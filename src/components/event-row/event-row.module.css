@@ -324,7 +324,7 @@
  * `categoryPlacement="below"` (issue 152, the nearby list on a narrow row):
  * the category stands as its pill on a line of its own under the meta, left
  * with the title (date column 44 px + 14 px gap = 58 px). Beside the title the
- * pill took the room long titles need. From 30 rem the row has room for the
+ * pill took the room long titles need. From 48 rem the row has room for the
  * pill on the meta's line again and is the row it always was.
  */
 .below {
@@ -374,7 +374,13 @@
   width: auto;
 }
 
-@container event-row (min-width: 30rem) {
+/*
+ * A container query cannot restyle its own container, so the row's grid goes
+ * back to the one every list shares by viewport: from 48 rem (the nearby
+ * section's own switch) the nearby list is at least 672 px wide and keeps the
+ * pill on the meta's line.
+ */
+@media (min-width: 48rem) {
   .below {
     column-gap: var(--space-4);
     grid-template-areas:
@@ -382,6 +388,14 @@
       "date meta  badge";
     grid-template-columns: 52px minmax(0, 1fr) auto;
     row-gap: 0;
+  }
+
+  .below .title {
+    grid-column: title-start / status-end;
+  }
+
+  .below[data-status] .title {
+    grid-column: title;
   }
 
   .below .category {

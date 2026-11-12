@@ -207,7 +207,6 @@ export interface Dictionary {
   kickers: {
     /** The live answer — this week's dates. */
     liveAnswer: string;
-    /** The widened radius — one place over. */
     /** Benefit (CG-019): control over what the embedded calendar shows. */
     yourSettings: string;
     /** Benefit (CG-019): the `/dein-ort` bread-van story — supply, not an event. */

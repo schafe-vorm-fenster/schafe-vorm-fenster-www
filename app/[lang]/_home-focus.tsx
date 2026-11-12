@@ -20,24 +20,18 @@
 
 import { Button } from "@/src/components/button/button";
 import { ConversionTracker } from "@/src/components/conversion-tracker/conversion-tracker";
-import { EventList } from "@/src/components/event-list/event-list";
 import { HeroContent, type HeroContentProps } from "@/src/components/hero-block/hero-block";
 import { OutboundLink } from "@/src/components/outbound-link/outbound-link";
 import { calendarUrl } from "@/src/lib/live/app-handover";
-import { liveRoutes, useLive } from "@/src/lib/live/browser";
-import { SHOWCASE_COMMUNITY } from "@/src/lib/live/showcase";
 import { useActivePlace } from "@/src/lib/pages/active-place";
 import { fillTemplate } from "@/src/lib/pages/demo-content";
-import { pickStoryExamples } from "@/src/lib/pages/story-examples";
 
 import { NearbyIsland } from "./_islands";
 import { NearbySection, nearbyHead } from "./_nearby-section";
-import { toListItems } from "./_live-items";
 
-import styles from "./_pages.module.css";
 
 import type { Locale } from "@/src/lib/i18n/locales";
-import type { NearbyEvents, Place, PlaceEvents } from "@/src/lib/live/types";
+import type { Place } from "@/src/lib/live/types";
 
 /**
  * TS-WEB-0012 D4 — `save-calendar-to-homescreen`, `stage: handover`: the click

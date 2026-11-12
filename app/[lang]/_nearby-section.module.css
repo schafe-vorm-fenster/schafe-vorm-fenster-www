@@ -24,8 +24,15 @@
   max-width: 43.125rem;
 }
 
+/* The frame reserves a "Stand" line under the title below 48 rem; this head
+   is title and sentence only, so an empty marks block takes no line. */
+.frame header > div:last-child:empty {
+  display: none;
+}
+
 .frame [data-lead] {
   font-size: 1.125rem;
+  line-height: 1.4;
   margin-top: 0.75rem;
 }
 
