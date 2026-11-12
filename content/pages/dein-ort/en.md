@@ -370,7 +370,7 @@ statement, no reach figure).
 
 **Heading:** How the calendar lands on your home screen
 
-**iOS:** Open the {place} calendar in Safari. Tap "Share", then "Add to Home Screen". Done — from now on it opens like an app.
+**iOS:** Open the {place} calendar in Safari. Tap "Share", then "Add to Home Screen". Done - from now on it opens like an app.
 
 **Android:** Open the {place} calendar in Chrome. Tap the menu (three dots), then "Add to Home screen". Done.
 
@@ -391,7 +391,7 @@ publishing offer, not a home-screen instruction.
 
 <!-- id: dein-ort-8-permanence; content_type: closing-cta; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: draft -->
 
-**Reassurance text:** Free, no sign-up, permanent: no introductory tier that quietly disappears later.
+**Reassurance text:** Permanently free, with no sign-up.
 
 **Different place:** Different place?
 
