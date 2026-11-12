@@ -74,7 +74,7 @@ zurückgezogene Festlegung.
 
 **Headline (ohne Ort, Fallback):** Dieser Ort steht noch nicht im Dorfkalender.
 
-**Unterzeile:** Das lässt sich ändern — mit einem WhatsApp-Foto vom nächsten Flyer.
+**Unterzeile:** Das lässt sich ändern.
 
 Der Ortsname ist reiner Text, escaped, nie Teil eines Links, einer
 Kalender-Zeile oder einer Zahl (TS-WEB-0021 D6).
@@ -84,11 +84,9 @@ Kalender-Zeile oder einer Zahl (TS-WEB-0021 D6).
 <!-- clearance: pending für den Presse-Beleg — der Nordkurier-Eintrag von 2022 trägt kein `usage_rights` (Q-0045, state/open.md #1). Der Angebots-Datensatz selbst ist frei verwendbar. -->
 <!-- id: dein-ort-starten-2-was-es-braucht; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar", "@schafe-vorm-fenster/media-echo@0.3.3#2022-nordkurier-plattform-doerfer"]; status: draft -->
 
-**Überschrift:** Damit {ort} im Kalender steht, reicht eine Person
+**Überschrift:** Für {ort} im Kalender reicht eine Person
 
-**Text:** Eine Person. Ein Flyer, den es sowieso schon gibt. Ein Foto per WhatsApp. Mehr nicht: kostenlos, ohne Anmeldegebühr, dauerhaft.
-
-**Kicker:** Was es braucht
+**Text:** Ein Flyer, den es sowieso schon gibt, und ein Foto per WhatsApp. Mehr nicht: kostenlos, ohne Anmeldegebühr, dauerhaft.
 
 Quelle: `price.note` von `community-calendar` — „Free for readers without
 any account … Permanent, not an introductory tier." Das Angebot war
@@ -105,8 +103,6 @@ zurücknehmen lässt (dieselbe Zusicherung wie `/dein-ort` Slot 8).
 
 **Modul-Überschrift:** So läuft das in {beispielort}
 
-**Kicker:** So sieht das aus
-
 Der gezeigte Ortsname kommt aus einem tatsächlich abgedeckten, aktiven
 Ort (TS-WEB-0021 D7) — nie aus dem gesuchten, nicht gefundenen Ort.
 
@@ -115,11 +111,10 @@ Ort (TS-WEB-0021 D7) — nie aus dem gesuchten, nicht gefundenen Ort.
 <!-- clearance: pending für `lehre-lelender` (`usage_rights: unverified`, schriftliche Freigabe der Stiftung steht aus). Der Audience-Datensatz ist frei verwendbar. -->
 <!-- id: dein-ort-starten-4-wer; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/audiences@0.3.3#actors", "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"]; status: draft -->
 
-**Überschrift:** Meistens ein Verein oder die Feuerwehr
+**Überschrift:** Meistens stößt ein Verein oder die Feuerwehr es an
 
 **Text:** Manchmal die Kirchengemeinde, eine Initiative, ein Kulturbetrieb oder ein mobiler Dienst wie ein Bäcker- oder Arztwagen. Oft eine einzelne Person, die das nebenbei macht.
 
-**Kicker:** Wer das meistens anstößt
 
 Quelle: `@schafe-vorm-fenster/audiences#actors`, Feld „Context" — die
 eigene Aufzählung des Audience-Records, keine neue Erfindung.

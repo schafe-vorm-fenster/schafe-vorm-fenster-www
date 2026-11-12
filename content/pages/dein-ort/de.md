@@ -210,8 +210,6 @@ Kalender für diesen Ort existiert bereits und wartet.
 <!-- id: dein-ort-2b-story-stage; content_type: value-story; provenance: sourced; derived_from: [ia]; status: draft -->
 <!-- note: Texte aus dem Board concept/v2.0/Geschichten Modul.dc.html, Variante 1a (DEC-0153). -->
 
-**Kicker:** Ein Tag im Dorf
-
 **Überschrift:** Ein Dienstag im Dorf passt auf kein Plakat.
 
 **Einleitung:** Drei Menschen erzählen, warum das in einen Kalender gehört.
