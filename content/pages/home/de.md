@@ -267,7 +267,7 @@ Ansprache ist **offen**: die Überschrift sagt „deine Gemeinde", der Text „i
 
 **Label Filterleiste (Screenreader):** Nach Kategorie filtern
 
-**Label Grafik (Screenreader):** Beispiel: Kalender auf der Website einer Gemeinde
+**Label Grafik (Screenreader):** Kalender auf der Website einer Gemeinde
 
 **Label Gemeindeleben:** Gemeindeleben
 

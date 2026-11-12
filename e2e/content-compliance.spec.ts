@@ -246,9 +246,12 @@ test("F-2-33: the English register page's own words around the form are English"
  *    `aria-label`, `aria-description`, `title` and input `placeholder` on
  *    the page, which no sweep of `innerText` can see (the lesson of F-3-5).
  */
+const BEISPIEL = /(?<!\bzum )\bbeispiel/i;
+
 const FORBIDDEN_MARKINGS = [
-  // German
-  /\bbeispiel/i,
+  // German. "zum Beispiel" is ordinary prose (home block 2a's calendar hint),
+  // not a stand-in marking: only a "Beispiel" that is not that phrase counts.
+  BEISPIEL,
   /\bdemo-daten\b/i,
   /\bdemodaten\b/i,
   /\bdummy/i,
@@ -310,7 +313,7 @@ for (const path of VOCABULARY_PATHS) {
     const isLegal = LEGAL_PATHS.has(path);
 
     for (const pattern of FORBIDDEN_MARKINGS) {
-      if (isLegal && pattern.source === "\\bbeispiel") continue;
+      if (isLegal && pattern === BEISPIEL) continue;
 
       const inText = pattern.exec(text);
       expect(
