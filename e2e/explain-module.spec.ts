@@ -232,7 +232,7 @@ test("TS-WEB-0022-A19: below lg the stage box keeps one height across all three 
  */
 async function truncatedStepText(page: Page): Promise<string[]> {
   return page.evaluate(() =>
-    [...document.querySelectorAll<HTMLElement>("[data-explain-step]")]
+    [...document.querySelectorAll<HTMLElement>("[data-explain-row]")]
       .flatMap((line) => [...line.querySelectorAll<HTMLElement>("span:not([aria-hidden])")])
       .filter((span) => {
         const style = getComputedStyle(span);
@@ -360,7 +360,7 @@ test("TS-WEB-0022 D4 from lg: three steps side by side, no stage box, and nothin
   expect(stageBox).toEqual({ display: "contents", height: 0, width: 0 });
 
   const boxes = await Promise.all(
-    [1, 2, 3].map((step) => explainModule.locator(`[data-explain-step="${step}"]`).boundingBox()),
+    [1, 2, 3].map((step) => explainModule.locator(`[data-explain-row="${step}"]`).boundingBox()),
   );
   const panes = await Promise.all(
     [1, 2, 3].map((step) => explainModule.locator(`[data-explain-pane="${step}"]`).boundingBox()),

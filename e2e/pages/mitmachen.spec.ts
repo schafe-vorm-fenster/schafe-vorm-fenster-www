@@ -151,8 +151,8 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16/A17/A18/A19: /mitmachen
         await expect(line).toHaveCount(1);
         // A bold core and a normal detail, both carrying words.
         const [core, detail] = await line.evaluate((element) =>
-          [...element.querySelectorAll("span")]
-            .slice(1)
+          [...(element.closest("[data-explain-row]")?.querySelectorAll("span") ?? [])]
+            .filter((span) => !span.hasAttribute("aria-hidden"))
             .map((span) => ({
               text: span.textContent?.trim() ?? "",
               weight: getComputedStyle(span).fontWeight,

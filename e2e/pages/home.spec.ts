@@ -188,7 +188,7 @@ async function sceneFacts(page: Page) {
               : "instance",
         ),
       opener: carrier?.querySelector("h2")?.textContent?.trim() ?? "",
-      steps: [...(carrier?.querySelectorAll("[data-explain-step]") ?? [])].map((step) =>
+      steps: [...(carrier?.querySelectorAll("[data-explain-row]") ?? [])].map((step) =>
         (step.textContent ?? "").replace(/\s+/gu, " ").trim(),
       ),
       /** One secondary CTA per mechanism, so the set is comparable across loads. */
@@ -486,8 +486,16 @@ test.describe("TS-WEB-0019 — home", () => {
     // DEC-0192: step 2 carries the hub's WhatsApp number (substituted from the
     // record, not typed), and the module's one CTA is a teaser plus the
     // "Termine veröffentlichen" button on `takePart`; the flyer row is gone.
-    await expect(steps.nth(1)).toContainText(/\+49[\d\s]{8,}/);
-    await expect(steps.nth(1)).not.toContainText("{whatsapp}");
+    // Since the 2026-11-12 amendment the number is a real link to the
+    // click-to-chat URL, outside the step's button (no nested interactive).
+    const stepTwo = explainModule.locator('[data-explain-row="2"]');
+    await expect(stepTwo).toContainText(/\+49[\d\s]{8,}/);
+    await expect(stepTwo).not.toContainText("{whatsapp}");
+    const numberLink = stepTwo.locator("a");
+    await expect(numberLink).toHaveCount(1);
+    await expect(numberLink).toHaveAttribute("href", /^https:\/\/wa\.me\/\d{8,}$/);
+    await expect(numberLink).toHaveText(/\+49[\d\s]{8,}/);
+    await expect(steps.nth(1).locator("a")).toHaveCount(0);
     // The teaser and the button stand below the module (it keeps its 360 px
     // budget), and the module itself carries no CTA.
     await expect(explainModule.locator("[data-cta]")).toHaveCount(0);

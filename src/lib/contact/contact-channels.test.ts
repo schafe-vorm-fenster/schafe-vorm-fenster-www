@@ -2,6 +2,8 @@ import { readdirSync, readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 
+import { createElement, Fragment } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
 import generated from "@/src/generated/contact-channels.json";
@@ -15,6 +17,7 @@ import {
   contactHref,
   contactResponder,
   digitsOf,
+  withChannelLinks,
   withChannelTokens,
 } from "./contact-channels";
 import { parseContactChannels } from "./hub-record";
@@ -162,5 +165,15 @@ describe("DEC-0192: copy carries a token, the number comes from the hub record",
     const number = contactChannel("whatsapp").address;
     expect(withChannelTokens("An {whatsapp}.")).toBe(`An ${number}.`);
     expect(withChannelTokens("{place}")).toBe("{place}");
+  });
+
+  it("turns {whatsapp} into a link to the click-to-chat URL showing the number", () => {
+    const number = contactChannel("whatsapp").address;
+    const node = withChannelLinks("An {whatsapp}. Im Chat.");
+    const html = renderToStaticMarkup(createElement(Fragment, null, node));
+    expect(html).toBe(
+      `An <a href="${contactHref("whatsapp")}" data-channel="whatsapp">${number}</a>. Im Chat.`,
+    );
+    expect(withChannelLinks("kein Token")).toBe("kein Token");
   });
 });

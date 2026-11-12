@@ -1,5 +1,6 @@
 import type { Availability } from "./status-badge/status-badge";
 import type { RouteId } from "@/src/lib/routes/routes";
+import type { ReactNode } from "react";
 
 /**
  * The B.2 fragments (`concept/website-content-production.concept.md` §B.2)
@@ -46,7 +47,8 @@ export interface Step {
  */
 export interface ExplainStep {
   readonly core: string;
-  readonly detail: string;
+  /** Text, or text with a link in it (the WhatsApp number, DEC-0192 amendment). */
+  readonly detail: ReactNode;
 }
 
 /**

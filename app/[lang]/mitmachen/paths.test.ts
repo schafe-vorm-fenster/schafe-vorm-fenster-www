@@ -153,7 +153,7 @@ describe("the shipped artifacts", () => {
         const steps = threeSteps(listAt(parseBlocks(body ?? ""), 0), id);
         for (const step of steps) {
           expect(step.core.length).toBeGreaterThan(0);
-          expect(step.detail.length).toBeGreaterThan(0);
+          expect(String(step.detail).length).toBeGreaterThan(0);
         }
       });
     }

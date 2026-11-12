@@ -17,12 +17,15 @@
  * hold trivially while that is so.
  */
 
+import { createElement, Fragment } from "react";
+
 import generated from "@/src/generated/contact-channels.json";
 import { BRIEFING_URL } from "@/src/lib/live/briefing";
 
 import { CONTACT_CHANNEL_IDS } from "./hub-record";
 
 import type { ContactChannelId, ContactChannelRecord, ContactChannelsFile } from "./hub-record";
+import type { ReactNode } from "react";
 
 /** The click-to-chat host, TS-WEB-0016 D13 row 2 — `https://wa.me/<number>`. */
 const WHATSAPP_HOST = "https://wa.me/";
@@ -102,4 +105,31 @@ export type { ContactChannelId, ContactChannelRecord } from "./hub-record";
  */
 export function withChannelTokens(value: string): string {
   return value.replace(/\{whatsapp\}/g, () => contactDisplayValue("whatsapp"));
+}
+
+/**
+ * Like `withChannelTokens`, but `{whatsapp}` becomes a link to the
+ * click-to-chat URL showing the number (DEC-0192 amendment 2026-11-12). A
+ * value without the token comes back as the plain string. The number and the
+ * URL both come from the hub record.
+ */
+export function withChannelLinks(value: string): ReactNode {
+  if (!value.includes("{whatsapp}")) return value;
+  const parts = value.split("{whatsapp}");
+  return createElement(
+    Fragment,
+    null,
+    ...parts.flatMap((part, index) =>
+      index === 0
+        ? [part]
+        : [
+            createElement(
+              "a",
+              { href: contactHref("whatsapp"), key: `whatsapp-${index}`, "data-channel": "whatsapp" },
+              contactDisplayValue("whatsapp"),
+            ),
+            part,
+          ],
+    ),
+  );
 }

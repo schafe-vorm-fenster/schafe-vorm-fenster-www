@@ -31,7 +31,7 @@ import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
  * cannot drift apart and the step-line contract ("exactly three", D4) is
  * enforced by one tested function. Nothing here is edited by this page.
  */
-import { listAt, threeSampleRows, threeSteps } from "./mitmachen/paths";
+import { listAt, threeSampleRows, threeSteps, withStepLinks } from "./mitmachen/paths";
 import { LiveStageCalendar } from "./mitmachen/stage-islands";
 
 
@@ -427,9 +427,8 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
                               slug={SHOWCASE_COMMUNITY.slug}
                             />,
                           ]}
-                          steps={threeSteps(
-                            listAt(whatsappSteps.blocks, 0).map(withChannelTokens),
-                            "home-4a-scene-whatsapp-steps-demo",
+                          steps={withStepLinks(
+                            threeSteps(listAt(whatsappSteps.blocks, 0), "home-4a-scene-whatsapp-steps-demo"),
                           )}
                           title={fieldAt(sceneWhatsapp.blocks, 3) ?? ""}
                         />

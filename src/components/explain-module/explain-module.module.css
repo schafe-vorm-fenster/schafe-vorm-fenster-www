@@ -167,34 +167,64 @@
   padding: 0;
 }
 
+/* The li is the row: the disc spans both lines, the core (the button) and the
+   detail stack beside it. The button's `::after` is stretched over the whole
+   row, so the whole row is the target; a link in the detail sits above that
+   overlay and is its own target (stretched-target pattern, so no link ever
+   nests in a button). */
 .step {
-  margin: 0;
-  min-width: 0;
-}
-
-/* A real button, styled as a row: the disc spans both lines, the core and
-   the detail stack beside it. The whole row is the target. */
-.stepLine {
   align-items: center;
-  appearance: none;
-  background: transparent;
-  border: 0;
-  border-radius: 0;
   border-top: 1px solid var(--color-neutral-line);
   color: var(--color-neutral-text2);
   column-gap: var(--space-3);
   cursor: pointer;
   display: grid;
-  font: inherit;
   grid-template-columns: var(--explain-disc-size) minmax(0, 1fr);
+  margin: 0;
   min-height: var(--target-min);
+  min-width: 0;
   padding: var(--space-2) 0;
+  position: relative;
+}
+
+.step[data-active="true"] {
+  color: var(--color-neutral-ink);
+}
+
+/* A real button holding the core; the row's focus ring is drawn on the li. */
+.stepLine {
+  align-content: center;
+  align-self: stretch;
+  appearance: none;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  color: inherit;
+  cursor: pointer;
+  display: grid;
+  font: inherit;
+  grid-column: 2;
+  grid-row: 1;
+  margin: 0;
+  min-width: 0;
+  padding: 0;
   text-align: left;
   width: 100%;
 }
 
-.stepLine[aria-current] {
-  color: var(--color-neutral-ink);
+.stepLine::after {
+  content: "";
+  inset: 0;
+  position: absolute;
+}
+
+.stepLine:focus-visible {
+  outline: none;
+}
+
+.step:has(.stepLine:focus-visible) {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
 }
 
 .disc {
@@ -205,6 +235,7 @@
   display: flex;
   font-size: var(--type-meta-size);
   font-weight: 700;
+  grid-column: 1;
   grid-row: 1 / span 2;
   height: var(--explain-disc-size);
   justify-content: center;
@@ -214,7 +245,7 @@
 
 /* Active: `lime-500` with `ink` — a fill on a light ground means active,
    never decoration (design-system contract, `active-step`). */
-.stepLine[aria-current] .disc {
+.step[data-active="true"] .disc {
   background: var(--color-lime-500);
   color: var(--color-neutral-ink);
 }
@@ -238,9 +269,28 @@
 
 .detail {
   color: var(--color-neutral-text2);
+  grid-column: 2;
+  grid-row: 2;
   font-size: var(--type-meta-size);
   font-weight: 400;
   line-height: var(--leading-normal);
+}
+
+/* A link in the detail (the WhatsApp number): the route-link treatment, above
+   the row's stretched overlay. */
+.detail a {
+  color: var(--ground-link);
+  font-weight: 700;
+  position: relative;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+  z-index: 1;
+}
+
+.detail a:hover {
+  color: var(--ground-link-hover);
+  text-decoration-thickness: 2px;
 }
 
 /* ── The one CTA ───────────────────────────────────────────────────────── */
