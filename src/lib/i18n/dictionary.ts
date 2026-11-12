@@ -188,14 +188,16 @@ export interface Dictionary {
     lead: string;
   };
   /**
-   * The section kickers — polish brief G-3's fixed vocabulary.
+   * The section kickers — the site's vocabulary from polish brief G-3.
    *
-   * "No section may begin with only a heading on a new colour." Each section
-   * after the hero opens with a kicker naming its **role**, and the roles are
-   * a closed set for the whole site: a page picks one, it does not write one.
-   * That is why they live here and not in `content/pages/**` — they are not
-   * the page's argument, they are the site's own signposting, and a page that
-   * invented its own would put two names on the same joint.
+   * A kicker is **optional** (DEC-0206, TS-WEB-0006 D12): a section sets one
+   * only where it says what the heading does not — a question, a problem
+   * framing, a role — and never with a word stem the heading or the intro
+   * repeats. Where a section does set one, it picks it here rather than
+   * writing its own. That is why they live here and not in
+   * `content/pages/**` — they are not the page's argument, they are the
+   * site's own signposting, and a page that invented its own would put two
+   * names on the same joint.
    *
    * A role is not always one phrase, though (DEC-0148). "Benefit" (CG-019)
    * used to be a single shared string, `whyItMatters`, on every section that

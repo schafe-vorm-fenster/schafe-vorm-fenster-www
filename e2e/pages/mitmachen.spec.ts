@@ -399,31 +399,34 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A12/A13/A16/A17/A18/A19: /mitmachen", 
   });
 
   /**
-   * G-3 — no section begins with only a heading on a new colour. The paths
-   * slot's kicker, heading and sub-line are the review's own three lines
+   * DEC-0206 (TS-WEB-0006 D12) — a section's kicker is optional, so this test
+   * no longer asks every section for one (polish brief G-3's withdrawn duty).
+   * What it keeps: the paths slot's head is the review's own three lines
    * ("SO GEHT'S EINFACHER · So kommen eure Termine rein · Drei Wege. Alle
-   * nutzt ihr eh schon."), and they stand once, on the first of the slot's
-   * three sections (DEC-0124).
+   * nutzt ihr eh schon."), exactly the three levels DEC-0206 allows, and they
+   * stand once, on the first of the slot's three sections (DEC-0124). The
+   * level count and the repeated stems of every section are
+   * `e2e/section-heads.spec.ts`'s (TS-WEB-0006-A21).
    */
-  test("G-3: every section after the hero carries a kicker, and the paths slot carries its three lines", async ({
+  test("DEC-0206: the paths slot's head is its three lines, and a proof kicker that stays is marked", async ({
     page,
   }) => {
     await page.goto("/mitmachen");
     // "Was gerade ansteht" was the live example's kicker; the block left the
     // page with DEC-0196.
-    for (const kicker of ["Warum es heute hakt", "So geht's einfacher"]) {
-      await expect(page.getByText(kicker, { exact: true })).toBeVisible();
-    }
+    await expect(page.getByText("So geht's einfacher", { exact: true })).toBeVisible();
     await expect(page.locator("#wege-heading")).toHaveText("So kommen eure Termine rein");
     await expect(page.locator("[data-wege-subline]")).toHaveText(
       "Drei Wege. Alle nutzt ihr eh schon.",
     );
-    // The proof section's kicker is the customer-proof placeholder, marked
-    // on its element (DEC-0120 §5, state/open.md row 234); the h2 keeps its
-    // own words, so the two are not the same three words stacked.
-    const proofKicker = page.locator("[data-block='beleg'] p[class*='kicker']");
-    await expect(proofKicker).toHaveText("Wer den Kalender nutzt");
-    await expect(proofKicker).toHaveAttribute("data-demo", "true");
+    // The proof section's kicker, where the page still sets it, is the
+    // customer-proof placeholder and carries its mark (DEC-0120 §5,
+    // state/open.md row 234). Whether it stays at all is the /mitmachen page
+    // PR's to decide under DEC-0206 §3.
+    const proofKicker = page.locator("[data-block='beleg'] [data-kicker]");
+    for (const kicker of await proofKicker.all()) {
+      await expect(kicker).toHaveAttribute("data-demo", "true");
+    }
     /* The h2 was "Was andere sagen" over a pool of three customers who
        publish for themselves. The copy guide reserves that heading for press
        proof only (`website-copy-guide.md:516`, CG-017) and the review splits

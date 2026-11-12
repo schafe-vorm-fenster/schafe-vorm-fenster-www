@@ -20,20 +20,23 @@ export type SectionSurface = (typeof SECTION_SURFACES)[number];
 export interface SectionShellProps {
   readonly surface?: SectionSurface;
   /**
-   * The section's role, in the site's own fixed vocabulary — `WAS GERADE
-   * ANSTEHT`, `WARUM DAS ZÄHLT`, `SO FUNKTIONIERT ES` … (polish brief G-3).
-   * Mono, uppercase, no fill: a label, not a second badge. Every section
-   * after the hero carries one, so no section begins with only a heading on
-   * a new colour.
+   * Optional (DEC-0206, TS-WEB-0006 D12). Set it only where it says what the
+   * section's heading does not — a question, a problem framing, a role — and
+   * never with a word stem the heading or the intro repeats. Drawn from the
+   * site's own vocabulary (`dictionary.ts` → `kickers`). Mono, uppercase, no
+   * fill: a label, not a second badge. Kicker, heading and intro are the
+   * three text levels a section may stand before its content.
    */
   readonly kicker?: string;
   /** `true` marks the kicker `data-demo="true"`: a stand-in word nobody wrote (DEC-0068, DEC-0120 §5). */
   readonly kickerDemo?: boolean;
   /**
-   * One line tying this section to the one before it, where the argument
-   * moves (G-3). It adds no claim; it names the joint. Rendered between the
-   * kicker and the section's own heading, so the reader learns why she is
-   * here before she is told what this is.
+   * A line between the kicker and the section's own heading, from polish
+   * brief G-3. Under DEC-0206 a transition is **no text level of its own**:
+   * it becomes the section's intro (below the heading) or goes, so a section
+   * that sets one stands over the three-level cap `e2e/section-heads.spec.ts`
+   * reports (TS-WEB-0006-A21). The prop stays until the page PRs of issue
+   * issue 163 have moved its last callers.
    */
   readonly transition?: string;
   /** 26–30 px standard, 20–24 px tight. One value per section. */
@@ -74,8 +77,9 @@ const SURFACE_CLASS: Record<SectionSurface, string> = {
  * 13 `section-shell` [PROPOSED] — SRC-0014 §Shape and Space, §Page Rhythm.
  *
  * Structure: the one wrapper every block stands in. It takes a surface, a
- * density and — since polish brief G-3 — its role as a `kicker` and its
- * hand-off from the section before as a `transition` line. Sections butt
+ * density and, where one earns its place, a `kicker` (optional since
+ * DEC-0206; at most three text levels before the content) and a `transition`
+ * line (G-3, retiring under DEC-0206). Sections butt
  * directly against each other; spacing never doubles, because only the shell
  * has padding, and the shell also flattens the trailing margin of its last
  * child so a paragraph's own `margin-bottom` cannot add a second padding to

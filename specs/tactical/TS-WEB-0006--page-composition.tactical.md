@@ -5,8 +5,8 @@ kind: rule
 status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0001, FUN-WEB-0133, FUN-WEB-0134, FUN-WEB-0135, FUN-WEB-0136, FUN-WEB-0004, FUN-WEB-0005, FUN-WEB-0006, FUN-WEB-0007, FUN-WEB-0138, CON-WEB-0059, FUN-WEB-0009, FUN-WEB-0139, CON-WEB-0060, BUS-WEB-0015, FUN-WEB-0202, BUS-WEB-0016, FUN-WEB-0203]
-sources: [SRC-0001, SRC-0003, SRC-0017, SRC-0018]
-decisions: [DEC-0036, DEC-0039, DEC-0080, DEC-0081, DEC-0082, DEC-0083, DEC-0084, DEC-0110, DEC-0170, DEC-0174, DEC-0196]
+sources: [SRC-0001, SRC-0003, SRC-0014, SRC-0017, SRC-0018]
+decisions: [DEC-0036, DEC-0039, DEC-0080, DEC-0081, DEC-0082, DEC-0083, DEC-0084, DEC-0110, DEC-0170, DEC-0174, DEC-0196, DEC-0206]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -399,6 +399,27 @@ is bound to the lead handling behind the envoy widget (FUN-WEB-0183, CON-WEB-008
 flagged to envoy/ops as part of Q-0022; if that process cannot keep it,
 the promise is removed rather than softened.
 
+### D12 — At most three text levels before a section's content [FIXED: DEC-0206]
+
+The owner's rule of 2026-11-12 (issue #163), for every section after the hero:
+
+1. **At most three text levels** stand before the section's content — its
+   module, list, cards, form or quote — in this order: **kicker**,
+   **heading**, **intro**. A transition sentence or an in-between line is no
+   level of its own: it becomes the intro or goes. A label doing the kicker's
+   job (a chapter ordinal, an award seal) counts as the kicker.
+2. **The heading is required, the kicker optional.** A kicker stands only
+   where it says what the heading does not: a question (SRC-0017 CG-018), a
+   problem framing (CG-005) or a role the heading leaves unsaid. No section
+   needs a kicker to begin on a new ground; polish brief G-3's duty is
+   withdrawn.
+3. **The levels repeat nothing** — neither a word stem nor a statement.
+
+The context band (D5) and the contact section are chrome and keep their own
+form. Which kicker, transition and intro each section keeps is decided page by
+page in the follow-up PRs of issue #163; A21 lists the breaches until then as
+warnings (DEC-0206 §5).
+
 ## Free for the generator
 
 - [FREE] Visual design and internal layout of every block, within TS-WEB-0002
@@ -437,6 +458,7 @@ the promise is removed rather than softened.
 | TS-WEB-0006-A18 | e2e | Every explanatory module (scene block, publishing path, price tier) contains exactly one CTA, and it carries `data-cta="secondary"` or `="equal-weight"`; the count of `data-cta="primary"` on the page is unchanged by their presence. |
 | TS-WEB-0006-A19 | e2e | On every route in both languages, and on `/dein-ort` in state A: no module repeats another's job — the homescreen instructions render at most once; no visible proof quote follows the last live row of its section; no section whose last visible text is a quote is followed by a section carrying a visible quote (SRC-0014 §Module rules, DEC-0170, `e2e/module-rules.spec.ts`). |
 | TS-WEB-0006-A20 | e2e | On every page, no top-level block of `main` other than the context band and the closing block lacks a heading of its own while every link in it points at a job the band offers: a one-sentence hand-off to another job duplicates the band (SRC-0017 CG-045, DEC-0174 §3). |
+| TS-WEB-0006-A21 | e2e | On every route but `/rechtliches`, `/ueber-uns/archiv` and the two flow routes, in both languages, at 390 × 844: every top-level section of `main` after the hero, other than the context band and the contact section, stands at most three text levels (kicker, heading, intro; a line before the heading counts) before its first content element, and no two of those levels share a word stem (D12, DEC-0206). Until the follow-up PRs of issue #163 land, `e2e/section-heads.spec.ts` reports a breach as a `warning` annotation, not a failure (DEC-0206 §5). |
 
 ## Coverage
 
@@ -463,6 +485,11 @@ the promise is removed rather than softened.
 
 ## Open points
 
+- **D12 has no requirement above it yet.** It rests on DEC-0206 and the
+  owner's decision alone; no `FUN-WEB` or `CON-WEB` states the section-head
+  cap, so no Coverage row names D12 or A21. A requirement read off the owner's
+  decision is owed, and A21 asserts instead of warning once the page PRs of
+  issue #163 have landed.
 - **Fold definition is UNKNOWN in the sources.** D3 measures the fold at
   360 × 640 and 1280 × 800; no source states at which viewport "above the
   fold" is measured. Question: are those the right two extremes, and does

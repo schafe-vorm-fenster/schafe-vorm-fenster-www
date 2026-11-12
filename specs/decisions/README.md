@@ -30,11 +30,12 @@ and keeps both. The decisive field is `dp`: it is required and its pattern is
 closed at `DP-01…DP-14`, and most decisions recorded here — a stack choice, a
 compound split, a copy rule — are none of the fourteen.
 
-**There are no SDRs yet.** No decision point has been executed under
-`POL-GRADED-BY-IMPACT` since it was bound, because every artefact has a
-dependant and none reaches the low impact level (DEC-0089). `check:specs` E15
-anchors a status off `DRAFT` on an SDR, so the register's first row will be
-the first status move; E23 validates any record that appears.
+**One SDR so far, and it moves no status.** `SDR-2026-1112-0001` records the
+owner's DP-04 conflict resolution behind DEC-0206 (the section-head rule),
+status `PROPOSED`. No status has moved off `DRAFT`, because every artefact has
+a dependant and none reaches the low impact level (DEC-0089). `check:specs`
+E15 anchors a status off `DRAFT` on an SDR, so the first status move will be
+its own record; E23 validates every record that appears.
 
 ## Amending a record
 
@@ -234,4 +235,5 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0197 — The nearby section is one heading and one sentence over the list, composed once for / and /dein-ort](DEC-0197--the-nearby-section-is-one-heading-and-one-sentence-over-the-list.md)
 - [DEC-0204 — The settings section explains the embedding in its head, drops the source-to-target band and labels its examples "Beispiel:"](DEC-0204--the-settings-section-explains-the-embedding-in-its-head-and-labels-its-examples.md)
 - [DEC-0205 — The price section on /dein-kalender is three columns with three equal figures and three equal buttons](DEC-0205--the-price-section-is-three-columns-with-three-figures-and-three-buttons.md)
+- [DEC-0206 — At most three text levels before a section's content, the kicker is optional, and the levels repeat nothing](DEC-0206--at-most-three-text-levels-before-a-sections-content-and-the-kicker-is-optional.md)
 - [DEC-0208 — The context band is headed "Erfahre mehr über unsere Kalenderplattform" on every page](DEC-0208--the-context-band-is-headed-learn-more-on-every-page.md)
