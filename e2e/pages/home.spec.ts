@@ -491,8 +491,8 @@ test.describe("TS-WEB-0019 — home", () => {
     // The teaser and the button stand below the module (it keeps its 360 px
     // budget), and the module itself carries no CTA.
     await expect(explainModule.locator("[data-cta]")).toHaveCount(0);
-    await expect(whatsapp.locator('[data-cta="secondary"]')).toHaveText(/Termine veröffentlichen/);
-    await expect(whatsapp.locator("p", { hasText: "Weitere Wege" })).toHaveCount(1);
+    await expect(whatsapp.locator('[data-cta="secondary"]')).toHaveText(/Mehr zum Veröffentlichen von Terminen/);
+    await expect(whatsapp.locator("p", { hasText: "Google Kalender" })).toHaveCount(1);
     await expect(whatsapp.getByText("Aus dem Flyer geworden")).toHaveCount(0);
 
     // DOM order inside the scene: opener · module. The flyer row that stood

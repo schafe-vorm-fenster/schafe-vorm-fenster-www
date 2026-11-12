@@ -34,12 +34,13 @@ veröffentlichen"; "Aus dem Flyer geworden" is crossed out.
    and EN. Both slots stay `provenance: generated; demo: true`; the wording of
    steps 2/3 and the reply is the owner's, recorded in the slots' notes.
 4. **The CTA on `/` is a teaser plus one button.** The module's "Jetzt
-   kostenlos anmelden" is replaced by the sentence "Weitere Wege, eure Termine
-   online zu stellen: euren Kalender verbinden oder eure Webseite als Quelle
-   nutzen." (EN: "More ways to get your dates online: connect your calendar or
-   use your website as the source.") and one secondary button "Termine
-   veröffentlichen" / "Publish dates" to `takePart`. The two named ways use
-   the titles of paths 02 and 03 on `/mitmachen`. **They stand below the
+   kostenlos anmelden" is replaced by a teaser in the owner's wording
+   (second version, 2026-11-12): "Ihr könnt eure Termine auch in einem
+   eigenen Kalender pflegen, zum Beispiel in einem Google Kalender, und wir
+   importieren sie. Oder ihr habt eine Webseite, auf der schon alles steht?
+   Dann holen wir die Termine von dort." and one secondary button "Mehr zum
+   Veröffentlichen von Terminen" / "More on publishing dates" to `takePart`.
+   The two ways are paths 02 and 03 on `/mitmachen`. **They stand below the
    module as the scene's `cta`, not inside it**: a teaser of two to three
    lines inside the module pushed it from 775 px to 873 px at 360 px, over
    the 800 px budget of TS-WEB-0022 D4 / TS-WEB-0019-A6, which is binding. So

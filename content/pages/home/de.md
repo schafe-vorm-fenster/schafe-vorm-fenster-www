@@ -176,16 +176,15 @@ Lücke im eigenen Ort an, nicht die Lücke im System.
 
 **Titel des Erklärmoduls:** Flyer per WhatsApp
 
-**Hinweis über dem Button:** Weitere Wege, eure Termine online zu stellen: euren Kalender verbinden oder eure Webseite als Quelle nutzen.
+**Hinweis über dem Button:** Ihr könnt eure Termine auch in einem eigenen Kalender pflegen, zum Beispiel in einem Google Kalender, und wir importieren sie. Oder ihr habt eine Webseite, auf der schon alles steht? Dann holen wir die Termine von dort.
 
-**CTA-Label (sekundär):** Termine veröffentlichen
+**CTA-Label (sekundär):** Mehr zum Veröffentlichen von Terminen
 
 Hinweis und Button-Label sind Wortlaut des Owners (DEC-0191, 2026-11-12,
-Issue #141): der Hinweis nennt die zwei anderen Wege mit den Titeln von
-Weg 02 und Weg 03 auf `/mitmachen` („Euren Kalender verbinden", „Eure
-Webseite als Quelle"), das Label ist der Themenname „Termine
-veröffentlichen" und führt auf `takePart`. Die Szene trägt weiter genau ein
-CTA (D3a, DEC-0110 §1).
+Issue #141, zweite Fassung): der Hinweis beschreibt die zwei anderen Wege,
+Weg 02 und Weg 03 auf `/mitmachen` (eigener Kalender, Webseite als Quelle),
+das Label führt auf `takePart`. Die Szene trägt weiter genau ein CTA (D3a,
+DEC-0110 §1).
 
 Quelle: `relievers[0]` der Value Proposition „actors--community-calendar" —
 „send a photo of the printed flyer by WhatsApp and the date is created

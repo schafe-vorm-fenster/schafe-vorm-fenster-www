@@ -175,15 +175,15 @@ gap in the visitor's own place, not a gap in the system.
 
 **Explain-module title:** Send a flyer by WhatsApp
 
-**Hint above the button:** More ways to get your dates online: connect your calendar or use your website as the source.
+**Hint above the button:** You can also keep your dates in a calendar of your own, a Google Calendar for example, and we import them. Or you already have a website that lists everything? Then we fetch the dates from there.
 
-**CTA label (secondary):** Publish dates
+**CTA label (secondary):** More on publishing dates
 
 The hint and the button label are the owner's wording (DEC-0191, 2026-11-12,
-issue #141): the hint names the two other ways by the titles of path 02 and
-path 03 on `/mitmachen` ("Connect your calendar", "Your website as the
-source"), the label is the topic name "Publish dates" and leads to
-`takePart`. The scene still carries exactly one CTA (D3a, DEC-0110 §1).
+issue #141, second version): the hint describes the two other ways, path 02
+and path 03 on `/mitmachen` (your own calendar, your website as the source),
+and the label leads to `takePart`. The scene still carries exactly one CTA
+(D3a, DEC-0110 §1).
 
 Source: `relievers[0]` of the "actors--community-calendar" value
 proposition — "send a photo of the printed flyer by WhatsApp and the
