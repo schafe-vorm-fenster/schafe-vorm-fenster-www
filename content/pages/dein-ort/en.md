@@ -209,8 +209,6 @@ place already exists and is waiting.
 <!-- id: dein-ort-2b-story-stage; content_type: value-story; provenance: sourced; derived_from: [ia]; status: draft -->
 <!-- note: Texte aus dem Board concept/v2.0/Geschichten Modul.dc.html, Variante 1a (DEC-0153). -->
 
-**Kicker:** A day in the village
-
 **Heading:** A Tuesday in the village does not fit on a poster.
 
 **Lead:** Three people tell why it belongs in one calendar.

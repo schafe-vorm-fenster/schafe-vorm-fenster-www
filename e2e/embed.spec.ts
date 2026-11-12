@@ -379,12 +379,11 @@ test.describe("DEC-0173: the embedded calendar", () => {
    * (schafe-vorm-fenster/portalize PR 144); this case runs once it is deployed.
    */
   test("TS-WEB-0024-A22: the widget shows no test organizer's date", async ({ page }) => {
-    test.fixme(true, "waits for schafe-vorm-fenster/portalize PR 144 to be deployed (DEC-0173 §3)");
     test.skip(!(await widgetHostReachable()), "the Portalize host does not answer");
     await mountWidget(page);
     const text = await page.evaluate(
       () => document.querySelector("[data-block='embed-demo'] portalize-widget")?.shadowRoot?.textContent ?? "",
     );
-    expect(text).not.toMatch(/\bTEST\b/u);
+    expect(text).not.toMatch(/\bTest\b/i);
   });
 });
