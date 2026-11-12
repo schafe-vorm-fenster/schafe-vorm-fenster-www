@@ -632,7 +632,7 @@ TS-WEB-0007 D12).
 | Warum es hakt · Warum es heute hakt *(as a title)* | | CG-005 — allowed as a kicker |
 | gebaut · betrieben *(about this product)* | | CG-033 |
 | einfach · digital · für alle · modern · innovativ | | generic claims are not copy (TS-WEB-0006 D7, CON-WEB-0059) |
-| Presse- und Auftrittshistorie | | CG-035 |
+| Presse- und Auftrittshistorie · Beleg aus der Region · Geo-Label · TODO *(as a whole value)* · Platzhalter *(as a whole value)* | | CG-035 — an instruction to the author, or a field name, printed as page text (issue #37) |
 | Beides gibt es · Dieselben Termine · Der Name der Firma | write the thing out | CG-004 |
 | Genau so. | | CG-016 |
 
@@ -651,6 +651,7 @@ TS-WEB-0007 D12).
 | Why this matters | What does this do for you? |
 | simple · digital · for everyone · modern · innovative | |
 | built in a village · operated from a village | |
+| Proof from the region · TODO *(as a whole value)* · placeholder *(as a whole value)* | |
 
 ### CG-041 — EN mirrors DE, and is not a translation of the page
 

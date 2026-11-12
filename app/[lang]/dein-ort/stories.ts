@@ -94,16 +94,3 @@ export const STORIES: readonly StorySection[] = [
     },
   },
 ];
-
-/**
- * Story 4 — the radius, which carries position 2 as its own example.
- *
- * No quote slot: its example is a live list of dates, and no proof quote
- * stands under a live list (DEC-0170, issue #84). The Zschiesche quote that
- * stood there read as a caption of the dates, right before the story stage
- * opened on a quote of its own.
- */
-export const RADIUS_STORY = {
-  slotId: "dein-ort-6-story-radius",
-} as const;
-

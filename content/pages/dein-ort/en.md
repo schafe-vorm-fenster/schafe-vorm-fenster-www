@@ -348,12 +348,6 @@ calendar, on the record.
 
 <!-- id: dein-ort-6-story-radius; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#regional-footprint"]; status: draft -->
 
-**Title:** What's happening fifteen minutes away
-
-**Why it matters:** What's going on two villages over belongs in your calendar just as much as what's happening right outside your door.
-
-**Transition:** And it doesn't stop at the municipal boundary.
-
 **Example:** dates from around {place}, live from the calendar (position 2, "this week nearby").
 
 The village calendar runs today in four German states, and each region
@@ -370,7 +364,7 @@ statement, no reach figure).
 
 **Heading:** How the calendar lands on your home screen
 
-**iOS:** Open the {place} calendar in Safari. Tap "Share", then "Add to Home Screen". Done — from now on it opens like an app.
+**iOS:** Open the {place} calendar in Safari. Tap "Share", then "Add to Home Screen". Done - from now on it opens like an app.
 
 **Android:** Open the {place} calendar in Chrome. Tap the menu (three dots), then "Add to Home screen". Done.
 
@@ -391,7 +385,7 @@ publishing offer, not a home-screen instruction.
 
 <!-- id: dein-ort-8-permanence; content_type: closing-cta; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: draft -->
 
-**Reassurance text:** Free, no sign-up, permanent: no introductory tier that quietly disappears later.
+**Reassurance text:** Permanently free, with no sign-up.
 
 **Different place:** Different place?
 
