@@ -416,6 +416,11 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **Space:** rows are content-sized; no late content.
 - **A11y:** if rendered as a table, real `th` scope; if as a list, each
   row is one item with both cells labelled.
+- **Superseded by DEC-0203 (issue #159):** the component is the comparison
+  module "Heute → Mit eurem Kalender" on `/dein-kalender` (four pairs) and
+  `/mitmachen` (three pairs). One block per pair, a topic glyph per pair in
+  an `ink` circle, an arrow circle on the edge; SRC-0014 §Comparison holds
+  the measures.
 
 #### 27 `offer-tier` [PROPOSED] — content type 7, TS-WEB-0024 D6/D6a
 - **Structure:** one question heading above three tiers; each tier =

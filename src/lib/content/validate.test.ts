@@ -1004,7 +1004,7 @@ describe("the render-site registry is complete against `app/**` (DEC-0142 §10)"
     "listsOf",
     "listItems",
     "settingRows",
-    "comparisonLabels",
+    "comparisonPairs",
     "tierChecks",
     "titlesFromRegistryTable",
     "firstTable",

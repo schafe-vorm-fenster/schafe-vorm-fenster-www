@@ -153,8 +153,6 @@ solchen Zeile ein Gedankenstrich im Satz selbst.
 
 **Aussage 2 (Lead):** Und der Termin steht im Kalender.
 
-**Übergang in den Einwandblock:** Du hast den Flyer sowieso schon gedruckt. Fotografier ihn, schick das Bild per WhatsApp, fertig: Der Termin ist in deinem Ort sichtbar, und in den Orten drumherum gleich mit.
-
 **CTA-Label (primär):** Jetzt kostenlos anmelden
 
 Quelle: `headline` und `relievers[0]` von
@@ -167,23 +165,22 @@ die Überschrift trägt die erste, der Lead die zweite (CG-005, CG-020,
 CG-021; TS-WEB-0022-A4). Das CTA-Label ist die konkretere Fassung, die das
 Review nennt.
 
-## Slot 2 — Einwandblock: wer euren Termin heute nicht mitbekommt
+Der Übergangssatz in den Einwandblock („Du hast den Flyer sowieso schon
+gedruckt …“) ist mit Issue #159 entfallen: Der Kopf des Vergleichsmoduls ist
+nur Dachzeile und Überschrift, die Lösung steht in jedem Paar direkt neben
+dem Problem (DEC-0203).
 
-<!-- id: mitmachen-2-objections; content_type: objection-list; provenance: sourced; derived_from: ["@schafe-vorm-fenster/audiences@0.3.3#actors", "@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"]; status: draft -->
+## Slot 2 — Vergleich: wer euren Termin heute nicht mitbekommt
+
+<!-- id: mitmachen-2-objections; content_type: comparison; provenance: sourced; derived_from: ["@schafe-vorm-fenster/audiences@0.3.3#actors", "@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"]; status: draft -->
 
 **Überschrift:** Wer euren Termin heute nicht mitbekommt
 
-- Die Nachbarn — Im selben Dorf, aber nicht im Verein und nicht in der Gruppe.
-- Das Nachbardorf — Fünf Kilometer weiter. Die kämen, wenn sie es wüssten.
-- Die Neuen — Gerade hergezogen, noch in keiner Liste und keinem Kanal.
-
-**Kicker der unteren Hälfte:** Die üblichen Wege
-
-- Flyer und Aushänge enden an der Ortsgrenze. — Und oft hängen sie gar nicht erst, wenn niemand Zeit zum Verteilen hat.
-- Zeitung und Amtsblatt haben Redaktionsschluss, und eine Redaktion. — Ein verschobener Termin kommt zu spät. Und manches wird gar nicht erst gedruckt.
-- Eigene Website, Instagram, WhatsApp-Gruppe erreichen die, die euch schon kennen. — Das ist gut so, macht weiter. Nur wer euch noch nicht kennt, bekommt davon nichts mit.
-
-**Abschlusssatz:** Im Ehrenamt bleibt keine Zeit, jeden Termin mehrfach einzutragen. Am liebsten schickt man ihn einmal per WhatsApp raus, und gut.
+| Heute | Mit eurem Kalender |
+| --- | --- |
+| Flyer und Aushänge enden an der Ortsgrenze. | Ein Foto vom Flyer per WhatsApp, und der Termin steht auch in den Orten drumherum. |
+| Zeitung und Amtsblatt haben Redaktionsschluss, und eine Redaktion. | Neu, verschoben, abgesagt: Im Kalender steht es sofort, ohne Redaktionsschluss. |
+| Website, Instagram und WhatsApp-Gruppe erreichen die, die euch schon kennen. | Im Dorfkalender sehen es auch die Nachbarn, das Nachbardorf und die Neuen. |
 
 <!-- note: ab hier Autorennotiz, keine Copy — der Abschnitt zitiert verbotene Begriffe, um sie zu verbieten (DEC-0142 §1) -->
 
@@ -192,6 +189,17 @@ werden „by hand" in mehrere Kanäle getippt) und `pains[]` aus
 `actors--community-calendar` (5 Einträge). Keine Kanalzahl wird genannt —
 „sechs" ist im Audience-Record eine Redewendung, keine Aufzählung
 (TS-WEB-0022 D3).
+
+**Fassung von Issue #159 (2026-11-12, DEC-0203).** Der Abschnitt ist das
+Vergleichsmodul „Heute → Mit eurem Kalender“, dieselbe Komponente wie auf
+`/dein-kalender`: drei Paare, je ein Problem neben seiner Lösung. Alle Sätze
+der Tabelle sind der Wortlaut des Owners aus dem Issue. Entfallen sind der
+Block „Die Nachbarn / Das Nachbardorf / Die Neuen“ (die drei stehen jetzt in
+der Lösung von Paar 3), die Ergänzungszeilen der üblichen Wege und der
+Abschlusssatz „Im Ehrenamt bleibt keine Zeit …“. Die Icons je Paar
+(megaphone, clock, users) setzt die Seite, nicht diese Datei.
+
+Was folgt, ist die Geschichte der Vorfassung.
 
 Zwei Hälften, wie im Entwurf „Design – wo es hakt" vom 2026-09-23
 (Variante 2b „Angestaubt · Sepia"): oben die drei konkreten Personen, die

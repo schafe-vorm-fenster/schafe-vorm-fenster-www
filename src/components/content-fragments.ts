@@ -61,14 +61,6 @@ export interface ComparisonRow {
   readonly withProduct: string;
 }
 
-/** Exactly four rows, machine-countable at the type level (TS-WEB-0024 D4). */
-export type FourComparisonRows = readonly [
-  ComparisonRow,
-  ComparisonRow,
-  ComparisonRow,
-  ComparisonRow,
-];
-
 /** `GeoBadge` — the display label over the geo levels of B.5. */
 export interface GeoBadgeFragment {
   readonly level: "place" | "surrounding" | "county" | "region" | "snapshot";

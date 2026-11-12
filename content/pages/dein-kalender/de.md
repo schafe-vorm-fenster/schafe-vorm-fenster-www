@@ -139,16 +139,22 @@ niemand bekommt) und CG-036 („im Amt" als einzige Adressierung).
 
 <!-- id: dein-kalender-2-contrast; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar", "@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"]; status: draft -->
 
-**Überschrift:** Wer euren Termin heute nicht mitbekommt
+**Überschrift:** Warum ein eigenes Terminmodul selten trägt
 
 | Heute | Mit eurem Kalender |
 | --- | --- |
-| Ein Terminmodul im CMS ist ein Website-Projekt, das in einer leeren Datenbank endet. | Die Ansicht wird auf einen bereits gefüllten, geteilten Datenpool konfiguriert. |
-| Aktuell halten braucht eine Person, die es in der Verwaltung nicht gibt. | Akteure vor Ort pflegen ihre eigenen Termine — eure gefilterte Ansicht ist nebenbei aktuell. |
-| Ein zweites Login und ein zweites Formular nimmt kaum ein Akteur an. | Akteure veröffentlichen so, wie sie es schon tun — Flyer, eigener Kalender, eigene Website. |
-| Euer Kalender endet an der eigenen Zuständigkeit, das Interesse der Menschen nicht. | Die Ortsauswahl läuft über Orte oder einen Landkreis — die Grenze zieht ihr selbst. |
+| Ein Terminmodul im CMS ist ein Website-Projekt, das in einer leeren Datenbank endet. | Eure Ansicht zeigt Termine, die schon da sind und mit anderen geteilt werden. |
+| Aktuell halten braucht eine Person, die es in der Verwaltung nicht gibt. | Die Akteure vor Ort pflegen ihre Termine selbst. Eure Ansicht ist nebenbei aktuell. |
+| Ein zweites Login und ein zweites Formular nimmt kaum ein Akteur an. | Akteure veröffentlichen so, wie sie es schon tun: Flyer, eigener Kalender, eigene Website. |
+| Euer Kalender endet an der eigenen Zuständigkeit, das Interesse der Menschen nicht. | Ihr wählt Orte oder einen ganzen Landkreis. Die Grenze zieht ihr selbst. |
 
 <!-- note: ab hier Autorennotiz, keine Copy — der Abschnitt zitiert verbotene Begriffe, um sie zu verbieten (DEC-0142 §1) -->
+
+**Fassung von Issue #159 (2026-11-12, DEC-0203).** Überschrift und die
+vier Sätze der rechten Spalte sind der Wortlaut des Owners aus dem Issue. Die
+Überschrift steht dort als „Vorschlag, noch offen“ und ist im PR als
+Owner-Frage geführt. Die Zeilen werden im Vergleichsmodul gerendert (ein
+Block je Paar, Icon je Paar aus der Seite, nicht aus dieser Datei).
 
 Vier Zeilen, abgeleitet aus `portalize-calendar` (`summary`, Kategorie)
 und den Feldern `pains[]`/`gains[]`/`relievers[]` von
@@ -157,9 +163,9 @@ fünfte Zeile für ein zusätzliches Feature (TS-WEB-0024 D4).
 
 Spaltenbeschriftung „Heute" / „Mit eurem Kalender" nach
 `plan/reviews/2026-09-23/decisions.md` Zeile 18 (DEC-0106 §2): die
-Vergleichsspalte nennt kein Produkt. Die Überschrift ist die des Reviews
-(Abschnitt „Warum es heute hakt"), damit Kicker und Titel den Split von
-CG-005/CG-018 bilden. In Zeile 4 stehen keine „Postleitzahlen" mehr —
+Vergleichsspalte nennt kein Produkt. Die frühere Überschrift „Wer euren
+Termin heute nicht mitbekommt" kündigte Menschen an, wo der Abschnitt einen
+Vergleich zeigt (Issue #51); sie gehört zu `/mitmachen`. In Zeile 4 stehen keine „Postleitzahlen" mehr —
 Vermeidungsliste des Copy-Guides (DEC-0079: ein Ortsname ist, wo man
 herkommt, eine Postleitzahl ist eine Abstraktion).
 

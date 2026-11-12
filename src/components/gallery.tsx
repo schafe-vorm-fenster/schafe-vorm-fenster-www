@@ -77,7 +77,6 @@ import { offeringPrice, publishedFigure } from "@/src/lib/pricing/offerings";
 import { standardSources } from "@/src/lib/pricing/standard-sources";
 
 import type { DataState } from "./data-state";
-import type { FourComparisonRows } from "./content-fragments";
 import type { StaticImageData } from "next/image";
 import type { ReactNode } from "react";
 
@@ -529,14 +528,24 @@ export const GALLERY: readonly GalleryEntry[] = [
     section: "2.3",
     demo: (
       <ComparisonTable
-        rows={
-          [
-            { today: "Sechs Kanäle, halbes Dorf hört nichts", withProduct: "Ein Kalender, alle sehen es" },
-            { today: "Termine per Zuruf", withProduct: "Termine per Klick" },
-            { today: "Kein Überblick", withProduct: "Voller Überblick" },
-            { today: "Zettel am Brett", withProduct: "Digital und dauerhaft" },
-          ] as FourComparisonRows
-        }
+        headline="Wer euren Termin heute nicht mitbekommt"
+        rows={[
+          {
+            icon: "megaphone",
+            today: "Flyer und Aushänge enden an der Ortsgrenze.",
+            withProduct: "Ein Foto vom Flyer per WhatsApp, und der Termin steht auch in den Orten drumherum.",
+          },
+          {
+            icon: "clock",
+            today: "Zeitung und Amtsblatt haben Redaktionsschluss, und eine Redaktion.",
+            withProduct: "Neu, verschoben, abgesagt: Im Kalender steht es sofort, ohne Redaktionsschluss.",
+          },
+          {
+            icon: "users",
+            today: "Website, Instagram und WhatsApp-Gruppe erreichen die, die euch schon kennen.",
+            withProduct: "Im Dorfkalender sehen es auch die Nachbarn, das Nachbardorf und die Neuen.",
+          },
+        ]}
         todayLabel="Heute"
         withProductLabel="Mit eurem Kalender"
       />

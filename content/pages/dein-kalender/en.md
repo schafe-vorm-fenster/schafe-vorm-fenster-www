@@ -136,16 +136,21 @@ office" as the only addressee).
 
 <!-- id: dein-kalender-2-contrast; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar", "@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"]; status: draft -->
 
-**Heading:** Who misses your event today
+**Heading:** Why a dates module of your own rarely works
 
 | Today | With your calendar |
 | --- | --- |
-| A dates module in the CMS is a website project that ends up in an empty database. | The view is configured against a pool of data that's already filled and shared. |
-| Keeping it current needs someone the administration doesn't have. | Local groups maintain their own dates — your filtered view stays current as a side effect. |
-| Hardly any group takes on a second login and a second form. | Local groups publish the way they already do — flyer, own calendar, own website. |
-| Your calendar ends at your own jurisdiction; people's interest doesn't. | Place selection runs by place or by a whole county — you draw the boundary yourself. |
+| A dates module in the CMS is a website project that ends up in an empty database. | Your view shows dates that are already there and shared with others. |
+| Keeping it current needs someone the administration doesn't have. | Local groups maintain their own dates. Your view stays current along the way. |
+| Hardly any group takes on a second login and a second form. | Local groups publish the way they already do: flyer, own calendar, own website. |
+| Your calendar ends at your own jurisdiction; people's interest doesn't. | You choose places or a whole county. You draw the boundary yourself. |
 
 <!-- note: authoring note from here on, not copy — the passage quotes forbidden terms in order to forbid them (DEC-0142 §1) -->
+
+**Version of issue #159 (2026-11-12, DEC-0203), a draft translation.** The
+heading and the four right-hand sentences translate the owner's German
+wording from the issue and wait for the owner's review (`state/open.md`
+row 294). The German heading is itself marked "suggestion, still open" there.
 
 Four rows, derived from `portalize-calendar` (`summary`, category) and
 the `pains[]`/`gains[]`/`relievers[]` fields of
@@ -154,8 +159,9 @@ row for an extra feature (TS-WEB-0024 D4).
 
 Column labels "Today" / "With your calendar" per
 `plan/reviews/2026-09-23/decisions.md` line 18 (DEC-0106 §2): the
-comparison column names no product. The heading is the review's own, so
-that kicker and title form the CG-005 / CG-018 split. Row 4 no longer
+comparison column names no product. The earlier heading "Who misses
+your event today" announced people where the section shows a comparison
+(issue #51); it belongs to `/mitmachen`. Row 4 no longer
 names a postcode — the copy guide's avoid list (DEC-0079).
 
 ## Slot 3 — Embedding demo

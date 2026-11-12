@@ -1,6 +1,9 @@
 import { imageCredit } from "@/src/components/photo-surface/image-credit";
-import { ArchiveBlock } from "@/src/components/archive-block/archive-block";
 import { Button } from "@/src/components/button/button";
+import {
+  COMPARISON_SECTION_CLASS,
+  ComparisonTable,
+} from "@/src/components/comparison-table/comparison-table";
 import { ExplainModule } from "@/src/components/explain-module/explain-module";
 import {
   StageCalendarEntry,
@@ -11,7 +14,6 @@ import {
 } from "@/src/components/explain-stage/explain-stage";
 import { HeroBlock } from "@/src/components/hero-block/hero-block";
 import { HintBanner } from "@/src/components/hint-banner/hint-banner";
-import { ObjectionList } from "@/src/components/objection-list/objection-list";
 import { ProofCard } from "@/src/components/proof-card/proof-card";
 import { ProofStream } from "@/src/components/proof-stream/proof-stream";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
@@ -30,6 +32,7 @@ import { SHOWCASE_COMMUNITY } from "@/src/lib/live/showcase";
 import { standardSources } from "@/src/lib/pricing/standard-sources";
 
 import { buildDay } from "../_build-day";
+import { comparisonPairs } from "../_comparison";
 import { PlaceDatesIsland } from "../_islands";
 import { proofHeading, selectProof, selectedProofKind } from "../_proof";
 import { PageJsonLd } from "../_structured-data";
@@ -39,10 +42,11 @@ import { PageFrame } from "../_page-frame";
 
 import { REFERENCE_PLACE, selectExamplePlace } from "./example-place";
 import { pageMeta } from "./page.meta";
-import { listAt, splitCoreDetail, threeSampleRows, threeSteps, withStepLinks } from "./paths";
+import { listAt, threeSampleRows, threeSteps, withStepLinks } from "./paths";
 import { LiveStageCalendar, SampleStageCalendar } from "./stage-islands";
 
 import type { ExplainModuleProps } from "@/src/components/explain-module/explain-module";
+import type { IconName } from "@/src/components/icon/icon";
 import type { ContentBlock } from "@/src/lib/content/types";
 import type { Locale } from "@/src/lib/i18n/locales";
 import type { Metadata } from "next";
@@ -50,8 +54,8 @@ import type { Metadata } from "next";
 /**
  * TS-WEB-0022 — `/mitmachen`, the publishing entry.
  *
- * Own blocks, in D2 order: hero (the page's one scene) → objections → the
- * `wege` slot, which is the three **bare** explain modules plus the price
+ * Own blocks, in D2 order: hero (the page's one scene) → objections (the
+ * comparison module of issue 159, DEC-0203) → the `wege` slot, which is the three **bare** explain modules plus the price
  * boundary → live example (ink, the
  * page's single dark section, D10) → proof. The context band and the closing
  * CTA are block 3/4 of TS-WEB-0006 D2 and are rendered by `PageFrame` from
@@ -77,6 +81,14 @@ import type { Metadata } from "next";
  */
 
 const ROUTE = "takePart" as const;
+
+/**
+ * The three pairs' topic glyphs, in the artifact's row order (issue 159):
+ * flyers, the paper's deadline, the own channels. The archive block's neutral
+ * glyphs of the channel itself (SRC-0014 §Archive block), carried over.
+ * Decorative, so the order is the only thing that binds a glyph to its pair.
+ */
+const OBJECTION_ICONS: readonly IconName[] = ["megaphone", "clock", "users"];
 
 export async function generateMetadata({
   params,
@@ -212,7 +224,7 @@ export default async function Page({
     }),
   });
 
-  const heroCtaLabel = fieldAt(hero.blocks, 3) ?? "";
+  const heroCtaLabel = fieldAt(hero.blocks, 2) ?? "";
 
   // TS-WEB-0003 D2 declares this page's LCP element to be the WhatsApp scene
   // image, which is the hero itself (`data-block="scene"` below). The entry
@@ -227,7 +239,10 @@ export default async function Page({
   // the stage shows `media-frame`'s "Foto gesucht" hatch instead of a bus
   // shelter (DEC-0068 rule 2, state/open.md).
 
-  const objectionLists = [listAt(objections.blocks, 0), listAt(objections.blocks, 1)];
+  // Three pairs, each with its topic glyph (issue 159): a table that is not
+  // three rows fails the build rather than rendering a pair without a
+  // sentence or a glyph (DEC-0203 §3).
+  const comparison = comparisonPairs(objections.blocks, OBJECTION_ICONS, "mitmachen-2-objections");
 
   return (
     <>
@@ -291,43 +306,27 @@ export default async function Page({
         />
       </div>
 
+      {/* The comparison module of issue 159 (DEC-0203), the same component
+          as `/dein-kalender`'s, with the organisers' three pairs. It replaces
+          the two halves that stood here, the people who do not hear about the
+          date and the usual channels on the archive ground, and the
+          hand-off sentence above them: the head is the kicker and the heading
+          and nothing else, and each problem stands beside its solution. The
+          proof position beside the block (D3) still renders nothing until a
+          proof clears (DEC-0175 §3). */}
       <SectionShell
+        className={COMPARISON_SECTION_CLASS}
         dataBlock="objections"
         kicker={dictionary(locale).kickers.objection}
-        label={fieldAt(objections.blocks, 0)}
+        labelledBy="objections-heading"
         surface="paper"
-        transition={fieldAt(hero.blocks, 2)}
       >
-        {/* The upper half of the 2026-09-23 draft: the three people who do not
-            hear about the date today, and the proof slot. The slot is back —
-            D3 requires one beside the block, "visibly empty if nothing
-            clears", and the specification carries the truth over the polish
-            brief's G-9 (DEC-0104, DEC-0124). */}
-        <ObjectionList
+        <ComparisonTable
+          headingId="objections-heading"
           headline={fieldAt(objections.blocks, 0) ?? ""}
-          items={[]}
-          reach={objectionLists[0].map((line) => {
-            const { core, detail } = splitCoreDetail(line);
-            return { title: core, detail };
-          })}
-        />
-      </SectionShell>
-
-      {/* The lower half, on the archive ground: *what does not work today*,
-          and nothing else (SRC-0014 §Archive block, DEC-0117). Its own
-          section, because the two halves together measure 1627 px at 390 px
-          and G-4 caps a section at 1270 — `e2e/section-budget.spec.ts` is
-          what measures it. One objection block, two sections; the rhythm test
-          counts both (DEC-0124). */}
-      <SectionShell dataBlock="archiv" label={fieldAt(objections.blocks, 1)} surface="archive">
-        <ArchiveBlock
-          closing={fieldAt(objections.blocks, 2)}
-          ground="own"
-          items={objectionLists[1].map((line) => {
-            const { core, detail } = splitCoreDetail(line);
-            return { core, detail };
-          })}
-          kicker={fieldAt(objections.blocks, 1)}
+          rows={comparison.rows}
+          todayLabel={comparison.labels.today}
+          withProductLabel={comparison.labels.withCalendar}
         />
       </SectionShell>
 

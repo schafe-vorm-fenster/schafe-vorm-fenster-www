@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0014, BUS-WEB-0015, FUN-WEB-0202]
 sources: [SRC-0001, SRC-0003, SRC-0014]
-decisions: [DEC-0011, DEC-0030, DEC-0036, DEC-0048, DEC-0052, DEC-0056, DEC-0081, DEC-0082, DEC-0083, DEC-0131, DEC-0154, DEC-0172, DEC-0173, DEC-0174]
+decisions: [DEC-0011, DEC-0030, DEC-0036, DEC-0048, DEC-0052, DEC-0056, DEC-0081, DEC-0082, DEC-0083, DEC-0131, DEC-0154, DEC-0172, DEC-0173, DEC-0174, DEC-0203]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -102,7 +102,7 @@ longer leaves the site from here: it hands the visitor to the contact
 section, where appointment, WhatsApp, phone and mail stand together and
 where the conversion is measured (TS-WEB-0016 D12).
 
-### D4 — Today versus with your calendar: four rows [FIXED: SRC-0003, DEC-0106 §2; shape DEC-0172 §2]
+### D4 — Today versus with your calendar: four rows [FIXED: SRC-0003, DEC-0106 §2; shape DEC-0203, which replaced DEC-0172 §2]
 
 Exactly four rows, two columns — **today** and **with your calendar** —
 derived from `portalize-calendar`'s problem and benefit sections; never copied,
@@ -135,6 +135,19 @@ review of 2026-10-27 read it as ugly (#94). The review of 2026-09-22 had
 already pointed at the sepia design of `/mitmachen` for this section; the
 archive ground carries that design's old world into the pair, and the
 solution keeps a fresh ground, because the archive ground never carries it.
+
+**Shape and title, amended by DEC-0203 (issue #159, 2026-11-12).** The
+section is the comparison module "Heute → Mit eurem Kalender", one component
+with `/mitmachen`'s objection block: per row one block, *today* on `surface`
+with an `ink` circle carrying the topic glyph (`monitor`, `users`,
+`smartphone`, `map-pin`, in row order), *with your calendar* on `lime-500`,
+an `ink` arrow circle on the edge between them, the radius on the outside
+only; stacked below `lg`, 50/50 from it (SRC-0014 §Comparison). The head is
+the kicker *"Warum es heute hakt"* and the title, nothing else. The title is
+the owner's suggestion *"Warum ein eigenes Terminmodul selten trägt"*, which
+names the comparison it stands over (CG-004, issue #51) and is still open in
+the issue; the four sentences of the right-hand column are the owner's
+wording from the issue.
 
 ### D5 — Embed demo [FIXED: DEC-0030, TS-WEB-0008 D6]
 
@@ -319,7 +332,7 @@ TS-WEB-0018 D8's budget constant is 0 for this route.
 | TS-WEB-0024-A16 | e2e | Clicking the primary CTA lands on `/dein-kalender/bestellen` and emits no conversion event from this page. |
 | TS-WEB-0024-A17 | e2e | The closing CTA carries the same conversion goal id, target and label as the primary CTA and does not use the Pulse fill; the context band names exactly the three non-focus jobs. |
 | TS-WEB-0024-A18 | static | No content file bound to this route references `local-advertising`, none carries a `withheld_mention` field, and the rendered page contains no advertising CTA or `request-ad-placement` call site. |
-| TS-WEB-0024-A23 | e2e | At 390 and 1280 px, `data-block="contrast"` holds four `[data-half="today"]` on `archive ground` and four `[data-half="with"]` on `lime-100`, none with a radius or a shadow; each label is a block above its sentence; the two halves of a pair butt — stacked below `xl`, side by side from it (D4, DEC-0172 §2). `e2e/module-designs.spec.ts`. |
+| TS-WEB-0024-A23 | e2e | At 390 and 1280 px, `data-block="contrast"` holds four `[data-half="today"]` on `surface` and four `[data-half="with"]` on `lime-500`, none with a shadow; each pair is rounded on its outside only and straight on the edge between its halves; each label is a block above its sentence; each pair carries one `aria-hidden` topic circle and one `aria-hidden` arrow circle; the two halves of a pair butt — stacked below `lg`, side by side from it (D4, DEC-0203). The same holds for `/mitmachen`'s `data-block="objections"` with three pairs (TS-WEB-0022-A6). `e2e/module-designs.spec.ts`. |
 | TS-WEB-0024-A24 | e2e | At 390 and 1280 px, the `lime-500` band of `data-block="embed-config"` holds one `figure[data-flow]` with a `figcaption`, three `li[data-flow-source]` in a list with no fill and no radius, one `[data-flow-target]` on `paper` with radius 0, a decorative arrow, and no link or button; no source text addresses the reader ("eure", "your"); the target follows the sources below `xl` and stands to their right from it (D12, DEC-0172 §3). `e2e/module-designs.spec.ts`. |
 | TS-WEB-0024-A25 | e2e | At 390 and 1280 px, each of the three items of `data-block="proof"` has no fill and a `hairlineOnLime` top border, carries an `aria-hidden` 40 × 40 initials well under its claim — or the voice's logo in its place, 40 px high (DEC-0183) — and from `xl` the two compact items share one row (D9, DEC-0172 §1). `e2e/module-designs.spec.ts`. |
 | TS-WEB-0024-A26 | e2e | At 390 and 1280 px, `data-block="trust"` stands on `violet-500`, not on the ground of `data-block="proof"`, and its two subjects stand side by side from `xl` (D10, DEC-0172 §4). `e2e/module-designs.spec.ts`. |

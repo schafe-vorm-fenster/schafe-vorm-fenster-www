@@ -62,7 +62,11 @@ const KNOWN_OVER: Record<string, Record<string, number>> = {
   //    and its chips, under one benefit band. The review and both drafts
   //    give it as one section with one kicker, and G-3's kicker vocabulary
   //    is closed, so the second half has no role name to open with.
-  "/dein-kalender": { "embed-config": 1786, tiers: 1632 },
+  //  - `contrast` — the comparison module (DEC-0203): four pairs, each a
+  //    today/with-the-calendar block, stacked at 390 px. 1489 px measured.
+  //    PROVISIONAL: the owner decides whether this stays an exception or the
+  //    pairs get cut (PR section "Owner-Frage").
+  "/dein-kalender": { "embed-config": 1786, tiers: 1632, contrast: 1489 },
   // `/ueber-uns` chapter 03 (DEC-0162 §2): the proof stream as expandable
   // stories, one module in the owner's design of 2026-10-12. Each title is the
   // verbatim `claim:` of its record, which CG-027 §6 forbids shortening, and
@@ -71,7 +75,7 @@ const KNOWN_OVER: Record<string, Record<string, number>> = {
   // Measured 2026-10-13. A fifth story or a longer claim fails here.
   "/ueber-uns": { "kapitel-3": 1670 },
   "/en/about": { "kapitel-3": 1537 },
-  "/en/your-calendar": { "embed-config": 1713, tiers: 1632 },
+  "/en/your-calendar": { "embed-config": 1713, tiers: 1632, contrast: 1489 },
   // `/mitmachen/registrieren` for the launch (DEC-0176, TS-WEB-0023 D10): the
   // embedded Google Form is one third-party document in one frame of a
   // reserved 2300 px — sized so that no page of the form scrolls inside the

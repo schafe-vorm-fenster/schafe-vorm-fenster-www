@@ -22,13 +22,12 @@ describe("TS-WEB-0022-A16: /mitmachen section rhythm", () => {
   it("has no rhythm violations, own blocks plus the frame's band and closing", () => {
     const sections = [
       "photo", // hero (scene)
-      // One objection block, two sections (DEC-0124): together the two
-      // halves measure 1627 px at 390 px, and G-4 caps a section at 1270
-      // (`e2e/section-budget.spec.ts`). The archive ground is its own colour
-      // family, so `paper → archive → paper` is three families and not a run
-      // (DEC-0117).
-      "paper", // objections — headline, the three people, the proof slot
-      "archive", // archiv — the usual channels, problem content only
+      // One objection block, one section since DEC-0203 (issue #159): the
+      // comparison module, its pairs on `surface` and `lime-500` on the
+      // section's `paper` ground. The `archiv` section is gone, so this and
+      // path 1 below are two `paper` sections in a row, which is the most the
+      // rule allows.
+      "paper", // objections — the comparison module, the proof slot
       // The `wege` slot is one slot on three grounds (DEC-0124). Three
       // sections, because one would be 2.4 phone screens and
       // `e2e/section-budget.spec.ts` caps a section at 1.5; `paper` and

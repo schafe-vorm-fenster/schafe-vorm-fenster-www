@@ -4,6 +4,8 @@ import { describe, expect, it } from "vitest";
 
 import { fieldAt, parseBlocks } from "@/src/lib/content/blocks";
 
+import { comparisonPairs } from "../_comparison";
+
 import {
   listAt,
   listsOf,
@@ -165,14 +167,17 @@ describe("the shipped artifacts", () => {
       });
     }
 
-    it(`${locale}: the objection slot carries a reach list and a channel list`, () => {
+    it(`${locale}: the objection slot carries the comparison's three pairs and no list (DEC-0203)`, () => {
       const blocks = parseBlocks(slots.get("mitmachen-2-objections") ?? "");
-      const lists = listsOf(blocks);
-      expect(lists).toHaveLength(2);
-      for (const list of lists) {
-        expect(list).toHaveLength(3);
-        for (const line of list) expect(splitCoreDetail(line).detail.length).toBeGreaterThan(0);
-      }
+      expect(listsOf(blocks)).toHaveLength(0);
+      const { labels, rows } = comparisonPairs(
+        blocks,
+        ["megaphone", "clock", "users"],
+        "mitmachen-2-objections",
+      );
+      expect(labels.today.length).toBeGreaterThan(0);
+      expect(labels.withCalendar.length).toBeGreaterThan(0);
+      expect(rows).toHaveLength(3);
     });
 
     it(`${locale}: the banner slot states the price boundary, with no figure`, () => {
@@ -191,7 +196,11 @@ describe("the shipped artifacts", () => {
       // reply), which a list-only walk cannot see (DEC-0124 §4).
       const pathSlots = [...STEP_SLOTS, BANNER_SLOT, "mitmachen-5-path-website"];
       const lines = [
-        ...listsOf(parseBlocks(slots.get("mitmachen-2-objections") ?? "")).flat(),
+        ...comparisonPairs(
+          parseBlocks(slots.get("mitmachen-2-objections") ?? ""),
+          ["megaphone", "clock", "users"],
+          "mitmachen-2-objections",
+        ).rows.flatMap((row) => [row.today, row.withProduct]),
         ...pathSlots.flatMap((id) => {
           const blocks = parseBlocks(slots.get(id) ?? "");
           return [
