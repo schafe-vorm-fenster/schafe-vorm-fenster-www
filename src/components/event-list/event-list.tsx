@@ -75,6 +75,8 @@ export interface EventListProps extends DataStateProps {
    * link (review 2026-10-27, issue #83; `TS-WEB-0008-A18`).
    */
   readonly reserve?: boolean | "loading";
+  /** Forwarded to every row — see `EventRow`. */
+  readonly categoryPlacement?: "side" | "below";
 }
 
 /**
@@ -109,6 +111,7 @@ export function EventList({
   state = "ready",
   className,
   reserve = false,
+  categoryPlacement,
 }: EventListProps) {
   const limit = role ? Math.min(rowCount, EVENT_LIST_CAPS[role]) : rowCount;
   const classes = [styles.list, className]
@@ -148,6 +151,7 @@ export function EventList({
       {shown.map((item, index) => (
         <EventRow
           {...item}
+          categoryPlacement={categoryPlacement}
           key={item.id ?? `${item.title}-${index}`}
           locale={locale}
           state={state}

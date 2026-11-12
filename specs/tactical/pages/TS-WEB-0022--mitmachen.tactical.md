@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0012, BUS-WEB-0017, FUN-WEB-0204]
 sources: [SRC-0001, SRC-0003, SRC-0008, SRC-0014]
-decisions: [DEC-0029, DEC-0036, DEC-0048, DEC-0052, DEC-0056, DEC-0080, DEC-0082, DEC-0083, DEC-0105, DEC-0107, DEC-0109, DEC-0110, DEC-0154, DEC-0161, DEC-0172, DEC-0174, DEC-0175]
+decisions: [DEC-0029, DEC-0036, DEC-0048, DEC-0052, DEC-0056, DEC-0080, DEC-0082, DEC-0083, DEC-0105, DEC-0107, DEC-0109, DEC-0110, DEC-0154, DEC-0161, DEC-0172, DEC-0174, DEC-0175, DEC-0196]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -39,7 +39,7 @@ events TS-WEB-0012 · content types TS-WEB-0007. What follows is this page only.
 | `primaryConversion` | `register-as-publisher` |
 | `equalWeightConversion` | none |
 | `audiences` | `actors` (primary) · `municipalities` (as publisher) |
-| `liveModules` | the example-place module of D5 |
+| `liveModules` | path 1's third stage state, three live rows of the stage-0 anchor (TS-WEB-0008 position 1); the example-place module of D5 left with DEC-0196 |
 | `proofSlots` | beside the objection block (D3) · the proof block (D6) · the CTA reassurance (D7) |
 
 The offering is `community-calendar`, free. Price display is TS-WEB-0006 D10 —
@@ -56,11 +56,22 @@ Block 2 of TS-WEB-0006 D2, in this order; types per TS-WEB-0007 B.3, fragments B
 | 1 | `hero` | `hero` | the WhatsApp scene, the primary `Cta` (D7) |
 | 2 | `warum-heute-nichts-ankommt` | `objection-list` | why the current channels fail (D3) |
 | 3 | `wege` | 3 × `publishing-path` | the three mechanisms (D4) |
-| 4 | `beispiel` | `live-module-frame` | a real covered place, live (D5) |
+| 4 | ~~`beispiel`~~ **removed (DEC-0196)** | ~~`live-module-frame`~~ | ~~a real covered place, live (D5)~~ |
 | 5 | `beleg` | 3 × `proof-card` | proof, publish-weighted (D6) |
 
 Context band and closing CTA come from the layout, not from here. No
 other block type is permitted — no feature list, no tier table.
+
+**Amended by DEC-0196** (owner, issue #154, 2026-11-12). The live example
+(slot 4) is removed without replacement, and the layout's **closing CTA stands
+between slot 3 and slot 5**: directly after the third path and its hint banner,
+on `ink`, then the proof block, then the context band. The page's order is
+therefore hero · objections · three paths · closing CTA · proof · context band.
+The layout still renders the closing CTA; the page hands the proof block to it
+as the blocks that follow the closing block (`PageFrame`'s `closing.followedBy`).
+Heading, label, target and reassurance of the closing CTA are unchanged (D7).
+This deviates from TS-WEB-0006 D2/D6, where the closing block directly precedes
+the band; TS-WEB-0006 D6 names the exception.
 
 **Order inside the problem block, amended by DEC-0154** (owner's review of
 2026-10-12; CG-042). The solution sentence ("Fotografier den Flyer, schick das
@@ -158,7 +169,13 @@ SRC-0014 means by "per screen", and **360 × 640** is A2's fold viewport. The
 single-line target is 390 px, the one-viewport rule is the phone breakpoint;
 A20 asserts at 390 and 1280 px that no line is cut, A19 the viewport.
 
-### D5 — The live example: a real place, never the visitor's own [PROPOSED — TS-WEB-0008 D1 carries no row for this route]
+### D5 — The live example: a real place, never the visitor's own [RETIRED: DEC-0196]
+
+**Retired 2026-11-12 (owner, issue #154, DEC-0196).** The page carries no live
+example any more: after three paths that each end in the calendar, the reader
+is to act. The determination below is kept for the record and binds nothing.
+What stays live on the page is path 1's third stage state (D4, DEC-0115), which
+reads the stage-0 anchor's three rows.
 
 TS-WEB-0008 position 1 (`GET /api/places/{slug}/events`) inside a
 `live-module-frame`, labelled with its radius ("in `<place>`").
@@ -200,7 +217,7 @@ old state in the owner's review of 2026-10-27 (#91).
 
 | What | Determination |
 | --- | --- |
-| Stage variance | only which place the example shows (D5) and which proof elements are selected (D6). Block count, block order, `focusJob` and the primary conversion never vary |
+| Stage variance | only which proof elements are selected (D6); the place the example showed (D5) went with DEC-0196. Block count, block order, `focusJob` and the primary conversion never vary |
 | No classification | no place search on this route, no role switcher, no audience control of any kind |
 | Markup | `WebPage` only — the objection block is no `FAQPage`, the free offering emits no `Offer`, no `Service`, no price value; skeleton, `aside` rule, titles, descriptions and share image per TS-WEB-0011 D3/D5/D6 |
 
@@ -233,8 +250,11 @@ ends in the context band — so the change deviates from no source.
 The rhythm *rules* bind even though the home-page sequence does not:
 never two photo sections in a row, at most two consecutive sections of
 one colour family, one `himbeere` element per screen, and the dark `ink`
-section — here the live example — exactly once, as the anchor. Media
-boxes declare their ratio before paint; paths use `ratio-feature`.
+section — here the closing CTA, since DEC-0196 (it was the live example) —
+exactly once, as the anchor. From the third path on the grounds read `paper`
+(path 3) → `ink` (closing CTA) → `lime-100` (proof) → `surface` (context
+band). Media boxes declare their ratio before paint; paths use
+`ratio-feature`.
 
 ### D11 — The hint banner carries the price boundary [FIXED: BUS-WEB-0017, FUN-WEB-0204, DEC-0107 §3]
 
@@ -272,7 +292,7 @@ One banner, at the end of slot 3, after the three path blocks.
 | --- | --- | --- |
 | TS-WEB-0022-A1 | static | `page.meta.ts` for `/mitmachen` declares `focusJob` "publish our dates", `primaryConversion` `register-as-publisher`, no `equalWeightConversion`, `audiences` `[actors, municipalities]`, one live module with its empty state, and the three proof slots of D1. |
 | TS-WEB-0022-A2 | e2e | At 360 × 640 and 1280 × 800 exactly one element carries `data-cta="primary"`, it is fully visible without scrolling, and its href resolves to `/mitmachen/registrieren`. |
-| TS-WEB-0022-A3 | e2e | DOM order of the page's own blocks is hero · objections · three paths · live example · proof, followed by the layout's context band and closing CTA. |
+| TS-WEB-0022-A3 | e2e | DOM order is hero · objections · three paths · the layout's closing CTA on `ink` · proof · the layout's context band, in German and in English; no live example renders (D2 as amended by DEC-0196). |
 | TS-WEB-0022-A4 | e2e | Exactly one block declares `data-block="scene"`; its mechanism is `whatsapp` and its opening line is a **statement** — no question mark unless the block answers it in the next sentence (TS-WEB-0006 D7, SRC-0017 CG-005/CG-006). No other block declares the same mechanism as a scene. |
 | TS-WEB-0022-A5 | e2e | Exactly three publishing-path blocks exist, mechanisms distinct and ordered `whatsapp`, `calendar-connection`, `website-import`; **each renders an ordinal, a title and exactly three step lines**, each step line carrying a bold core and a normal detail, and exactly one CTA carrying `data-cta="secondary"` resolving to that path's next step; the `website-import` block shows a visible status badge while its hub record is not `generally-available`. The count of `data-cta="primary"` on the page stays 1 (A2). |
 | TS-WEB-0022-A18 | e2e | **Superseded by TS-WEB-0022-A20 (DEC-0161).** Written text: every step line renders on exactly one line at 390 px. It was superseded first in substance by DEC-0154 (no step line is truncated; readability goes before a fixed height); its instrument measured "one line" as "as tall as one line-height", which an ellipsis clamp satisfies by construction, so it passed on the defect the owner's review found (issue #47). A20 carries the rule and the instrument that fails truncation. |
@@ -281,10 +301,10 @@ One banner, at the end of slot 3, after the three path blocks.
 | TS-WEB-0022-A22 | e2e | On every route that renders an explain module (`/`, `/mitmachen` and their English siblings), at 390 and 1280 px, every stage graphic is a photograph or a drawing: no graphic carries `data-placeholder` other than the marked sample rows of the calendar state (`sample-events`, DEC-0115), none is a `media-frame` without an image, none is a hatch, and none is empty; the chat graphic carries no header (DEC-0174 §1–2). |
 | TS-WEB-0022-A19 | e2e | Below `lg` (`48rem`): each module — ordinal, title, graphic stage and its three step lines — fits within **one viewport height** at the phone breakpoint, and the stage's box keeps the same height across all three states. **The advance is keyed to visibility, runs once and ends**: with the page loaded and the module still below the viewport, the stage is at state 1 and stays there however long the page sits; scrolled down until **three quarters of the module's own height** are inside the viewport — and no further, asserted at 360 × 640 as well as 360 × 800, where "the whole module" would not have fired — it holds state 1 for the full dwell, reaches state 3 no earlier than 9.1 s later and then changes no more — no fourth transition, no return to state 1, and no restart after scrolling it out of view and back. Activating a step line, or focusing the module, stops the advance from that moment and it never resumes (DEC-0105 §6 as amended, TS-WEB-0002-A13). From `lg` the three steps render side by side in one row, no stage element exists, and no element's position changes over 5 s without interaction. |
 | TS-WEB-0022-A6 | e2e | The objection block renders a headline and *n* items; no item contains a product name, a term from the generic-claims lint list, or a numeral asserting how many channels exist. A cleared proof sits beside it, or nothing does — no `data-empty-proof` element and no placeholder panel (DEC-0175 §3). |
-| TS-WEB-0022-A7 | unit | Example-place selection: with no anchor it returns the configured reference place; with an anchor the nearest active covered place with dates; a candidate with zero dates is skipped, never rendered. |
-| TS-WEB-0022-A8 | integration | Events upstream answering zero dates for the first candidate → the next candidate renders; upstream failing → TS-WEB-0008 D5 tier 2/3 with its freshness label. Neither case produces error markup, a retry control, or a changed focus job. |
-| TS-WEB-0022-A9 | e2e | The live example states its radius as "in `<place>`" for a covered place; its outbound calendar link points at `{APP_HOST}/{slug}`; no website URL on this page carries a place slug as a path segment. |
-| TS-WEB-0022-A10 | e2e | Stage-0 request (no geo, no referrer, no UTM, no query) and a stage-3 request yield identical block structure, identical block count and identical `focusJob`; only the example place and the proof order differ. |
+| TS-WEB-0022-A7 | unit | **Retired with D5 (DEC-0196).** Example-place selection: with no anchor it returns the configured reference place; with an anchor the nearest active covered place with dates; a candidate with zero dates is skipped, never rendered. |
+| TS-WEB-0022-A8 | integration | **Retired with D5 (DEC-0196).** Events upstream answering zero dates for the first candidate → the next candidate renders; upstream failing → TS-WEB-0008 D5 tier 2/3 with its freshness label. Neither case produces error markup, a retry control, or a changed focus job. |
+| TS-WEB-0022-A9 | e2e | **Retired with D5 (DEC-0196).** The live example states its radius as "in `<place>`" for a covered place; its outbound calendar link points at `{APP_HOST}/{slug}`; no website URL on this page carries a place slug as a path segment. |
+| TS-WEB-0022-A10 | e2e | Stage-0 request (no geo, no referrer, no UTM, no query) and a stage-3 request yield identical block structure, identical block count and identical `focusJob`; only the proof order differs (the example place went with DEC-0196). |
 | TS-WEB-0022-A11 | e2e | The closing CTA carries the same conversion goal ID, target and label as the primary CTA, and its reassurance contains the permanence promise. With the backing element unavailable at build time the promise is absent rather than reworded. |
 | TS-WEB-0022-A12 | static | The rendered HTML of `/mitmachen` contains no numeric price, no currency symbol, no "ab", no "480", no "Portalize" and no `local-advertising` mention; it emits exactly one JSON-LD graph, containing `WebPage` and no `FAQPage`, `Offer` or `Service` node. |
 | TS-WEB-0022-A13 | e2e | No link to `/dein-kalender` exists in `main` outside the context band, and no `aside` but the context band exists in `main` (D9 as amended by DEC-0174 §3). |
@@ -292,7 +312,7 @@ One banner, at the end of slot 3, after the three path blocks.
 | TS-WEB-0022-A15 | integration | Navigating from the primary CTA fires no analytics event on `/mitmachen`; `register-as-publisher` with stage `handover` is emitted on `/mitmachen/registrieren` (TS-WEB-0012 D4). |
 | TS-WEB-0022-A17 | e2e | Exactly one hint banner exists, inside the publishing-path slot and after the third path block. It carries no `data-cta` attribute and declares no conversion goal. It contains no numeric amount, no currency symbol and no "ab"; the page-wide price assertion of A12 is unchanged by its presence. Every standard source it names is one `@schafe-vorm-fenster/offerings#community-calendar` lists, and neither the banner nor any of the three path blocks names `kirche-mv.de`, VEVG Karlsburg or a Volkshochschule — the proof slot is out of scope here, because a publisher testimonial is not a statement about price. |
 | TS-WEB-0022-A23 | e2e | At 390 and 1280 px, each of the three items of `data-block="beleg"` has no fill and a `hairlineOnLime` top border, carries an `aria-hidden` 40 × 40 initials well under its claim — or the voice's logo in its place, 40 px high (DEC-0183) — exactly one is `data-emphasis="feature"`, and from `xl` the other two share one row (D6, DEC-0172 §1). `e2e/module-designs.spec.ts`. |
-| TS-WEB-0022-A16 | e2e | Rhythm: no two adjacent sections are photo sections, exactly one is the dark live-data section, and every asynchronous box has a declared ratio or height before its content arrives (no layout shift on the live module). |
+| TS-WEB-0022-A16 | e2e | Rhythm: no two adjacent sections are photo sections, exactly one is dark and it is the closing CTA, the grounds from the third path on read `paper` · `ink` · `lime-100` · `surface`, and every asynchronous box has a declared ratio or height before its content arrives (no layout shift on the live stage state) (D10 as amended by DEC-0196). |
 
 ## Coverage
 
@@ -324,5 +344,5 @@ FUN-WEB-0024, FUN-WEB-0030–0035, FUN-WEB-0149–0151 (TS-WEB-0005) · FUN-WEB-
 | ~~**The one-viewport rule and the advance's trigger do not meet at every phone height.**~~ **Answered 2026-09-25 by the owner, amended into `DEC-0105 §6`** — the advance starts when **three quarters of the module** are in the viewport, measured against the module's own height (`threshold: 0.75` on the module element). The premise held and was measured: at 360 px the module is 630 px with a one-line title and 687 px with a two-line one, so *"the whole module"* could not fit 360 × 640 and three quarters fit at both heights. None of `Q-0083`'s three options was taken — the fraction was lowered rather than a short-viewport fallback granted, so the `[PROPOSED]` "graphic stage plus the first step line" clause is **withdrawn** and the one-viewport rule of `D4` is untouched. `Q-0083` is closed. What the fraction does not fix is which three quarters: read upward the missing quarter crops the stage, and that is **Q-0084**. | — |
 | **Read upward, three quarters need not be the top three quarters.** A reader who re-enters the module from above — the case `DEC-0105 §6` edge 1 keeps alive, because "once" is spent only by a pass that started — reaches `0.75` with the graphic stage 73–86 % visible and its top cropped. The trigger still fires and the reader still sees most of state 1, so nothing is blocked; whether the stage in full should be added to the fraction is the owner's, as **Q-0084**. | jan-henrik |
 | **No component exists for `objection-list`, `publishing-path` or the live-module frame** (Q-0044): three of five slots need shells the design system does not specify, and no component declares which content type it renders. | design |
-| **The stage-0 reference place is unnamed.** D5 needs one covered place with dates and a cleared, place-bound proof element, held as configuration rather than in copy. | content/editorial |
+| ~~**The stage-0 reference place is unnamed.** D5 needs one covered place with dates and a cleared, place-bound proof element, held as configuration rather than in copy.~~ **Obsolete with D5 (DEC-0196).** | — |
 | **Registration prefill stops at our own route.** DEC-0029 leaves the app-side contract open, so `?ort=` travels no further than `/mitmachen/registrieren`; if the app later accepts a place, D7 and A14 need a second row. | app team |

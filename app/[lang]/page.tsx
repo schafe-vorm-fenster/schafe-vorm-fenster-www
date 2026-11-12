@@ -108,40 +108,6 @@ export async function generateMetadata({
 }
 
 /**
- * Fallback only — `home-12-ui-strings` carries these two short strings
- * (state/open.md row 92, row 161), read below through `uiStringsFrom`. This
- * record stands in only where a locale's slot is unreadable (`slot()`'s own
- * typed-empty-with-`reason` contract, `src/lib/content/README.md`), never as
- * the primary source.
- *
- * None of them says anything about the surface being a stand-in: Jan's
- * decision of 2026-09-18 keeps that in the frontmatter, in `data-*` and in
- * `state/open.md`.
- */
-const UI_STRING_FALLBACKS: Record<
-  Locale,
-  {
-    geo: string;
-  }
-> = {
-  de: {
-    geo: "Beleg aus der Region",
-  },
-  en: {
-    geo: "Proof from the region",
-  },
-};
-
-/** The one short UI string (the flyer caption went with DEC-0192), read off `home-12-ui-strings` where the slot
- * has them, falling back to the stand-ins otherwise. */
-function uiStringsFrom(uiStrings: ContentSlot, locale: Locale) {
-  const fallback = UI_STRING_FALLBACKS[locale];
-  return {
-    geo: fieldAt(uiStrings.blocks, 0) ?? fallback.geo,
-  };
-}
-
-/**
  * The artifact's proof lines as relevance candidates (TS-WEB-0005).
  *
  * The attribution names the place ("… — Bürgermeister in Rubkow"), and that
@@ -149,18 +115,17 @@ function uiStringsFrom(uiStrings: ContentSlot, locale: Locale) {
  * scores. Without it every candidate would tie at country level and the
  * spread rule would have nothing to spread.
  */
-function proofCandidates(proof: ContentSlot, geoLabel: string): ProofCandidate[] {
+function proofCandidates(proof: ContentSlot): ProofCandidate[] {
   const list = proof.blocks.find((block) => block.kind === "list");
   const items = list?.kind === "list" ? list.items : [];
   return items.map((item, index) => {
-    const card = parseDemoProofElement(item, geoLabel);
+    const card = parseDemoProofElement(item, "");
     const place = card.attribution.split(", ").slice(1).join(", ").trim();
     return {
       id: `home-8-proof-stream-${index + 1}`,
       contextLine: card.contextLine,
       claim: card.claim,
       attribution: card.attribution,
-      geo: { level: "snapshot" as const, label: geoLabel },
       geoCommunity: place === "" ? null : place,
       demo: isDemoSlot(proof),
     };
@@ -191,8 +156,6 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
   const stamps = slot(page, "home-7-provenance-stamps");
   const proof = slot(page, "home-8-proof-stream");
   const band = slot(page, "home-10-context-band");
-  const uiStrings = slot(page, "home-12-ui-strings");
-  const demo = uiStringsFrom(uiStrings, locale);
 
   // Field labels are translated, so the n-th block is the contract, not the
   // label (TS-WEB-0007, `src/lib/content/README.md`). `Headline` is one of the few
@@ -220,7 +183,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
     locale,
     focusJob: "know-what-is-on",
     surface: "home",
-    candidates: proofCandidates(proof, demo.geo),
+    candidates: proofCandidates(proof),
   });
 
   const heroImage = pageImage(page, HERO_IMAGE_ID.home);

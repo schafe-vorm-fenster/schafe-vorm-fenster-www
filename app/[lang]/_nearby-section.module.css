@@ -1,0 +1,56 @@
+/*
+ * The nearby section's head and ground (issue 152): one heading and one
+ * sentence over the list, 690 px wide, on the `surface` ground. Mobile-first;
+ * the desktop values come in at 48 rem. The class is doubled where it has to
+ * out-rank a single-class rule of the section shell or the frame.
+ */
+.section.section {
+  padding-block: 2rem 2.5rem;
+}
+
+.frame.frame {
+  gap: 1.25rem;
+}
+
+.frame header h2 {
+  color: var(--color-neutral-ink);
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+}
+
+.frame header > div:first-child {
+  max-width: 43.125rem;
+}
+
+/* The frame reserves a "Stand" line under the title below 48 rem; this head
+   is title and sentence only, so an empty marks block takes no line. */
+.frame header > div:last-child:empty {
+  display: none;
+}
+
+.frame [data-lead] {
+  font-size: 1.125rem;
+  line-height: 1.4;
+  margin-top: 0.75rem;
+}
+
+@media (min-width: 48rem) {
+  .section.section {
+    padding-block: 4rem 4.5rem;
+  }
+
+  .frame.frame {
+    gap: 1.75rem;
+  }
+
+  .frame header h2 {
+    font-size: 2.75rem;
+  }
+
+  .frame [data-lead] {
+    font-size: 1.25rem;
+    margin-top: 0.875rem;
+  }
+}

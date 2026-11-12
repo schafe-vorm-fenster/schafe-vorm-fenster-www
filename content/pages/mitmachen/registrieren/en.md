@@ -118,7 +118,7 @@ this website — the app takes over completely.
 <!-- source_note: the offer phrasing instead of a menu comes from gtm:concept/website-communication-principles.concept.md principle 2; the three jobs and their wording from the job table in principle 1. The band renders on step 1 only (TS-WEB-0023 D7, state/open.md #24). Answers state/open.md row 95 for this page. -->
 <!-- id: registrieren-6-context-band; content_type: context-band; provenance: sourced; derived_from: [ia]; status: draft -->
 
-**Kicker:** Here for something else today?
+**Kicker:** Learn more about our calendar platform
 
 - **See what's on:** What's coming up next where you live → `/dein-ort`
 - **Run your own calendar:** Under your own name, on your own website → `/dein-kalender`
