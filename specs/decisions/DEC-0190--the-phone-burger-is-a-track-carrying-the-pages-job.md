@@ -38,6 +38,15 @@ overlay of DEC-0189.
 first step) in the track. The desktop row still marks no job on `/`. Item 3
 now covers the region pages, `/rechtliches` and 404 only.
 
+**Amendment 2026-11-12 (#139, owner):** the other three jobs are hinted as
+semi-transparent, fully rounded layers stacked behind the paper pill: jobs
+before the current one peek out on its left, one `space-2` step each, jobs
+after it on its right. Drawn as zero-blur `box-shadow`s on the pill (count
+left = index, right = 3 - index), so overlaps darken. The pill's side margins
+sum to three steps, so the left layers start at the track start and the label
+width is the same at every index. The layer colour is ink at 24 %, an assumed
+value, not a design-system token; a token is for the owner to set.
+
 ## Consequences
 
 `e2e/site-header.spec.ts` asserts the four states, the stepping, that the pill

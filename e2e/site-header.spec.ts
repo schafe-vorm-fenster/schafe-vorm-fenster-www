@@ -129,6 +129,12 @@ test.describe("TS-WEB-0004-A8: the header inventory at both widths", () => {
       // Not cut off: the longest label fits the track at 360 px.
       const fit = await pill.evaluate((node) => `${node.scrollWidth}/${node.clientWidth}`);
       expect(Number(fit.split("/")[0]), `${path}: ${fit}`).toBeLessThanOrEqual(Number(fit.split("/")[1]));
+      // The other three jobs are hinted as layers: index on the left, the rest on the right.
+      const shadow = await pill.evaluate((node) => getComputedStyle(node).boxShadow);
+      const offsets = [...shadow.matchAll(/(-?[\d.]+)px 0px 0px 0px/g)].map((m) => Number(m[1]));
+      expect(offsets.length, `${path}: ${shadow}`).toBe(3);
+      expect(offsets.filter((x) => x < 0).length, `${path} left`).toBe(index);
+      expect(offsets.filter((x) => x > 0).length, `${path} right`).toBe(3 - index);
       starts.push((await pill.boundingBox())!.x);
     }
     // The pill wanders along the track, one step per menu position.

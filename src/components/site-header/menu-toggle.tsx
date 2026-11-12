@@ -66,6 +66,7 @@ export function MenuToggle({
         <span
           aria-hidden="true"
           className={styles.trackLabel}
+          data-ghosts={track.index}
           style={{ "--track-index": track.index } as CSSProperties}
         >
           {track.label}

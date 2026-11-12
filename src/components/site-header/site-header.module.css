@@ -420,18 +420,65 @@
   font-weight: 700;
   height: 100%;
   letter-spacing: 0.04em;
+  margin-inline-end: calc((3 - var(--track-index, 0)) * var(--space-2));
   margin-inline-start: calc(var(--track-index, 0) * var(--space-2));
   min-width: 0;
   overflow: hidden;
-  padding-inline: var(--space-3);
+  /* 10 px, not space-3: the three steps of ghost room cost the longest label 3 px. */
+  padding-inline: calc(var(--space-3) - 2px);
   text-overflow: ellipsis;
   text-transform: uppercase;
   white-space: nowrap;
 }
 
+/*
+ * The other three jobs, hinted (issue 139): translucent, fully rounded layers
+ * stacked behind the paper pill. Jobs before the current one peek out on its
+ * left, one step each; jobs after it on its right, one step each. A layer is a
+ * zero-blur `box-shadow` offset by n steps, so it follows the pill's radius and
+ * overlapping layers darken each other, the nearer one most. The pill's side
+ * margins add up to three steps, so the left layers start at the track start.
+ * `--track-ghost` is ink at 24 %: not a design-system token, an assumed value
+ * (recorded in DEC-0190); it must read over the header's `scrim-38` well and
+ * over bare paper.
+ */
+.trackLabel {
+  --track-ghost: color-mix(in srgb, var(--color-neutral-ink) 24%, transparent);
+  --step: var(--space-2);
+}
+
+.trackLabel[data-ghosts="0"] {
+  box-shadow:
+    calc(var(--step) * 1) 0 0 0 var(--track-ghost),
+    calc(var(--step) * 2) 0 0 0 var(--track-ghost),
+    calc(var(--step) * 3) 0 0 0 var(--track-ghost);
+}
+
+.trackLabel[data-ghosts="1"] {
+  box-shadow:
+    calc(var(--step) * -1) 0 0 0 var(--track-ghost),
+    calc(var(--step) * 1) 0 0 0 var(--track-ghost),
+    calc(var(--step) * 2) 0 0 0 var(--track-ghost);
+}
+
+.trackLabel[data-ghosts="2"] {
+  box-shadow:
+    calc(var(--step) * -2) 0 0 0 var(--track-ghost),
+    calc(var(--step) * -1) 0 0 0 var(--track-ghost),
+    calc(var(--step) * 1) 0 0 0 var(--track-ghost);
+}
+
+.trackLabel[data-ghosts="3"] {
+  box-shadow:
+    calc(var(--step) * -3) 0 0 0 var(--track-ghost),
+    calc(var(--step) * -2) 0 0 0 var(--track-ghost),
+    calc(var(--step) * -1) 0 0 0 var(--track-ghost);
+}
+
 .toggle[data-track="true"] .stripes {
   flex: none;
-  margin-inline-start: var(--space-2);
+  /* The pill's right margin (the ghost layers' room) is the gap. */
+  margin-inline-start: 0;
 }
 
 /* The mark matches the track's height on the phone. */
