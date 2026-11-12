@@ -85,7 +85,7 @@
     "ai": "7.0.170",
     "babel-plugin-react-compiler": "1.0.0",
     "dotenv": "18.0.10",
-    "eslint": "9.39.5",
+    "eslint": "10.14.0",
     "eslint-config-next": "16.4.6",
     "googleapis": "189.0.0",
     "husky": "9.1.7",
@@ -94,5 +94,14 @@
     "typescript": "5.9.3",
     "vercel": "65.15.0",
     "vitest": "5.1.0"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "eslint-plugin-import>eslint": "10",
+        "eslint-plugin-jsx-a11y>eslint": "10",
+        "eslint-plugin-react>eslint": "10"
+      }
+    }
   }
 }
