@@ -70,25 +70,30 @@ DEC-0143 §2; DEC-0143 §1, §3 and the rest stand.
 - `src/lib/content/validate.ts`'s avoid-list row for "Wer das schon macht"
   names the new replacement.
 
-### 4. `/ueber-uns` does not take the head
+### 4. `/ueber-uns` takes the head too
 
-Chapter 03 on `/ueber-uns` ("Dann wurde es mehr als Brötchen.") holds four
-records whose `source:` is the company's own eu:react final report to the
-funder (`impftermine-landkreis`, `ukraine-integration-dorfleben`,
-`google-baecker-schlatkow`, `homeoffice-mobile-anbieter`). That is not "what
-others say about us", so the chapter keeps its own heading and does not take
-the shared head. The slot's unrendered heading field "Was andere sagen" is
-struck, and the page passes no fallback context derived from it.
+Chapter 03 on `/ueber-uns` holds four records whose `source:` is the
+company's own eu:react final report to the funder (`impftermine-landkreis`,
+`ukraine-integration-dorfleben`, `google-baecker-schlatkow`,
+`homeoffice-mobile-anbieter`). The first draft of this decision kept the
+chapter's own heading ("Dann wurde es mehr als Brötchen.") because the report
+is not "what others say about us".
+
+The owner decided otherwise on 2026-11-12: the section carries **the same
+head as every other proof section**, kicker "Was andere über uns sagen" over
+"Stimmen aus der Praxis", read through `proofIntro(locale)`, even though the
+entries come from the company's own report. That is expressly fine. The
+attribution of each entry stays correct: it names the eu:react report. The
+slot's chapter heading field ("Kapitel 03 — Überschrift") and the unrendered
+"Was andere sagen" field are struck. The chapter keeps its ordinal and place
+line.
 
 The first line was attributed to "Landkreis Vorpommern-Greifswald"; its record
 names the own report as source and the county only as the partner of the
 work. The line now names the report, as the other three do.
 
-Whether `/ueber-uns` should get a proof section of its own under the shared
-head, carrying third-party voices, is open and goes to the owner on the PR.
-The candidate today is the reserved `testimonial` place
-(`kulturlandbuero-broellin`), which does not render while it is
-`usage_rights: unverified` (TS-WEB-0027-A5).
+Decided, no longer open: a separate proof section on `/ueber-uns` with
+third-party voices is not required by this decision.
 
 ### 5. The proof lines, and the retired claim budget
 
@@ -107,8 +112,11 @@ record stands on more than one page:
 | `impftermine-landkreis` | the attribution names the eu:react report (§4) | `/ueber-uns` |
 
 Where a line was authored differently on two pages, the pages now share it.
-This replaces DEC-0143 §6's rule ("the page with the weaker claim drops the
-element") for the authored lines: the owner asked for one line per record.
+This amends DEC-0143 §6 (owner, 2026-11-12): **a proof has the same wording
+everywhere.** The same line on several pages, `lehre-lelender` on `/`,
+`/mitmachen` and `/deine-region` among them, is intended; DEC-0143 §6's rule
+("the page with the weaker claim drops the element") no longer applies to the
+authored lines.
 
 Three choices inside the table, each from the record:
 

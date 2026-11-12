@@ -83,23 +83,6 @@ function withoutArrow(text: string | undefined): string {
 }
 
 /**
- * The three joints of this page, as the brief writes them. Each ties the
- * section it opens to the one before it and adds no claim of its own: the
- * page was four arguments standing next to each other with nothing between
- * them.
- */
-const TRANSITIONS: Record<Locale, { embed: string; trust: string }> = {
-  de: {
-    embed: "So sieht das aus, wenn es bei euch steht:",
-    trust: "Bleibt die Frage, wem ihr da eigentlich eure Daten gebt.",
-  },
-  en: {
-    embed: "This is what it looks like once it sits on your site:",
-    trust: "Which leaves the question of who you are actually giving your data to.",
-  },
-};
-
-/**
  * The placeholder badge beside a setting the product holds but has not
  * confirmed — `setting-row`'s `marker` slot (DEC-0118). The review asks for
  * exactly this on the `Zeitraum` row ("Müssen wir bei Portalize nachsehen,
@@ -192,9 +175,9 @@ export default async function Page({
   const focus = slot(page, "dein-kalender-1-focus");
   const contrast = slot(page, "dein-kalender-2-contrast");
   const embedDemo = slot(page, "dein-kalender-3-embed-demo");
-  // The embed slot is two sentences and a heading now (review R-kalender-9):
-  // "Das ist der Kalender von [Ort]. Er zeigt genau das, was dort in den
-  // nächsten Wochen ansteht." Everything the settings decide moved into its
+  // The embed slot is a heading and one sentence now (review R-kalender-9,
+  // DEC-0213): the intro names the places and what is coming up, and shares
+  // no word stem with the heading. Everything the settings decide moved into its
   // own slot with its own block, which is what `embed-config` is
   // (TS-WEB-0024 D2 as amended, DEC-0131 §1).
   const embedParagraphs = embedDemo.blocks.flatMap((block) =>
@@ -405,7 +388,6 @@ export default async function Page({
         dataBlock="embed-demo"
         kicker={dictionary(locale).kickers.howItWorks}
         surface="violet-500"
-        transition={TRANSITIONS[locale].embed}
       >
         <EmbedFrame
           copy={embedParagraphs[0]}
@@ -585,7 +567,6 @@ export default async function Page({
         dataBlock="trust"
         kicker={dictionary(locale).kickers.trust}
         surface="violet-500"
-        transition={TRANSITIONS[locale].trust}
       >
         <TrustBlock
           dataProcessingLabel={TRUST_PRIVACY_LABEL[locale].dataProcessing}

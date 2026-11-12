@@ -74,7 +74,7 @@ determination.
 
 **Headline (without place, fallback):** This place isn't in the village calendar yet.
 
-**Subline:** That can change — with one WhatsApp photo of the next flyer.
+**Subline:** That can change.
 
 The place name is plain text, escaped, never part of a link, a
 calendar row, or a number (TS-WEB-0021 D6).
@@ -86,9 +86,7 @@ calendar row, or a number (TS-WEB-0021 D6).
 
 **Heading:** One person is enough to get {place} into the calendar
 
-**Text:** One person. A flyer that already exists anyway. One photo by WhatsApp. That's it: free, no sign-up fee, permanent.
-
-**Kicker:** What it takes
+**Text:** A flyer that already exists anyway and a photo by WhatsApp. That's it: free, no sign-up fee, permanent.
 
 Source: `price.note` from `community-calendar` — "Free for readers without
 any account … Permanent, not an introductory tier." The offer was free
@@ -105,8 +103,6 @@ commitment rather than a pricing decision that can be quietly reversed
 
 **Module heading:** Here's how it runs in {example_place}
 
-**Kicker:** This is what it looks like
-
 The place name shown comes from an actually covered, active
 place (TS-WEB-0021 D7) — never from the searched-for, not-found place.
 
@@ -115,11 +111,10 @@ place (TS-WEB-0021 D7) — never from the searched-for, not-found place.
 <!-- clearance: pending for `lehre-lelender` (`usage_rights: unverified`, the foundation's written clearance is outstanding). The audience record is free to use. -->
 <!-- id: dein-ort-starten-4-wer; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/audiences@0.3.3#actors", "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"]; status: draft -->
 
-**Heading:** Usually a club or the fire brigade
+**Heading:** Usually a club or the fire brigade gets it started
 
 **Text:** Sometimes the parish, an initiative, a cultural venue, or a mobile service like a bakery or doctor's van. Often a single person doing it alongside everything else.
 
-**Kicker:** Who usually gets this started
 
 Source: `@schafe-vorm-fenster/audiences#actors`, "Context" field — the
 audience record's own enumeration, no new invention.

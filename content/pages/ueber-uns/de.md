@@ -185,8 +185,6 @@ ihrem Zeitraum im Text von Kapitel 02 (Review 2026-10-27, #104, DEC-0175 §2).
 
 **Kapitel 02 — Ort:** Gemeinde Schmatzin
 
-**Kapitel 03 — Überschrift:** Dann wurde es mehr als Brötchen.
-
 **Kapitel 03 — Ort:** Vorpommern-Greifswald
 
 **Geschichte — öffnen:** Die Geschichte
@@ -272,10 +270,11 @@ Umbau nach dem Entwurf vom 2026-10-12 ist der Strom das Kapitel 03, „Dann
 wurde es mehr als Brötchen." (DEC-0162 §2): vier Geschichten, alle
 `usage_rights: cleared`, jede Zeile der wörtliche `claim:` ihres Datensatzes.
 Alle vier stammen aus dem eigenen eu:react-Abschlussbericht an den
-Fördergeber (`source:` der vier Datensätze). Deshalb steht das Kapitel nicht
-unter dem gemeinsamen Kopf der Beleg-Section „Was andere über uns sagen"
-(DEC-0209 §4), und die frühere Überschrift „Was andere sagen" ist hier
-gestrichen; die Seite hat sie nie gerendert.
+Fördergeber (`source:` der vier Datensätze). Das Kapitel trägt trotzdem
+denselben Kopf wie jede Beleg-Section: Kicker „Was andere über uns sagen",
+Überschrift „Stimmen aus der Praxis" (`proofIntro`, DEC-0209 §4, Owner
+2026-11-12). Die Quellenangabe jeder Zeile bleibt der eigene Bericht; eine
+Kapitelüberschrift im Slot gibt es nicht mehr.
 Die NØRD-Auszeichnung steht im eigenen Auszeichnungsblock (Slot 4), der
 Bürgermeister in Kapitel 02 (Slot 2), deshalb stehen beide hier nicht
 mehr:

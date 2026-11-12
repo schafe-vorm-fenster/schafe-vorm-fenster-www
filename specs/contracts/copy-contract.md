@@ -125,6 +125,7 @@ five and every rule appears exactly once.)
 | CG-037 no promise without a process | `lint` | `pnpm check:terms` already is this row for the two-working-day wording (TS-WEB-0026-A8, TS-WEB-0006 D11); a further promise extends the same list. |
 | CG-046 a claim appears once per page | `review` | No lint can tell a fact from its paraphrase. The editorial gate reads each page for a fact said twice — in a text and again as a proof line, a pull quote or a teaser (DEC-0175 §6, owner's review 2026-10-27). `/ueber-uns` chapter 02 carries the one structural assertion: no inline proof element beside its text (TS-WEB-0027-A3). |
 | CG-047 a source names outlet, date and link, or is omitted | `review` | Review for source lines in general; for quotes the link half is CG-028's. A source line made of an outlet and years ("Nordkurier, 2019 und 2022") is removed, not completed by guessing the article (DEC-0175 §6). |
+| CG-048 the solution first, then the problem, in every pair | `review` | Whether a problem is named before the solution is a reading, not a measurement. The editorial gate reads each comparison section for a problem named before the solution or apart from its pair (DEC-0203 §3, DEC-0213). |
 
 ### Naming
 
@@ -146,8 +147,8 @@ five and every rule appears exactly once.)
 43 rules, counted from the tables above rather than estimated: **17** carry a
 `lint` row, **17** a `schema` obligation, **5** an `e2e` assertion, and **20**
 name `review` as an owning or co-owning mechanism. Most rules carry two.
-CG-046 and CG-047 (DEC-0175, 2026-10-27) come on top, both review-only, and
-are not in the counts of this paragraph.
+CG-046 and CG-047 (DEC-0175, 2026-10-27) and CG-048 (DEC-0213, 2026-11-12)
+come on top, all review-only, and are not in the counts of this paragraph.
 
 **Eight are review-only** — no machine sees them at all: CG-006, CG-008,
 CG-010, CG-012, CG-013, CG-016, CG-019, CG-033. Three more are half-manual,

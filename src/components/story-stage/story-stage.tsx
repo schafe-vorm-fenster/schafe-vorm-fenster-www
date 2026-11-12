@@ -36,7 +36,8 @@ export interface StageStory {
 
 export interface StoryStageProps {
   readonly id: string;
-  readonly kicker: string;
+  /** Optional since DEC-0206: only when it has a statement of its own. */
+  readonly kicker?: string;
   readonly headline: string;
   readonly lead?: string;
   readonly stories: readonly StageStory[];
@@ -120,9 +121,11 @@ export function StoryStage({
       id={id}
     >
       <div className={`container ${styles.inner}`}>
-        <Badge icon="clock" tone="accent">
-          {kicker}
-        </Badge>
+        {kicker ? (
+          <Badge icon="clock" tone="accent">
+            {kicker}
+          </Badge>
+        ) : null}
         <h2 className={styles.headline} id={`${id}-heading`}>
           {headline}
         </h2>

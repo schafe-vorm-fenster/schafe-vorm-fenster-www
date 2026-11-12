@@ -187,8 +187,6 @@ article. The fact now stands with its period in chapter 02's text (review of
 
 **Chapter 02 — place:** Municipality of Schmatzin
 
-**Chapter 03 — heading:** Then it became more than bread rolls.
-
 **Chapter 03 — place:** Vorpommern-Greifswald
 
 **Story — open:** The story
@@ -264,10 +262,11 @@ slots 3 and 3b).
 Pool: the full `proof` set plus `media-echo` (31 entries). Since the rebuild on
 the design of 2026-10-12 the stream is chapter 03 (DEC-0162 §2): four stories,
 all `usage_rights: cleared`. All four come from Schafe vorm Fenster's own eu:react
-final report to the funder (the four records' `source:`), so the chapter does
-not stand under the shared proof head "What others say about us" (DEC-0209
-§4), and the former heading "What others say" is struck here; the page never
-rendered it. The NØRD award stands in its own award block
+final report to the funder (the four records' `source:`); the chapter still
+carries the same head as every proof section, kicker "What others say about us"
+over "Voices from the field" (`proofIntro`, DEC-0209 §4, owner 2026-11-12), and
+the lines keep the report as their source. The slot has no chapter heading
+field any more. The NØRD award stands in its own award block
 (slot 4) and the mayor in chapter 02 (slot 2):
 
 1. During the pandemic, every vaccination slot and every testing-centre opening time in the county was published through the village calendars, day-current and place-precise. — eu:react final report, July 2022

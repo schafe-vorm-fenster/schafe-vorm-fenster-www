@@ -62,6 +62,20 @@ describe("position 1 — a place's own dates", () => {
     expect([...starts].sort()).toEqual(starts);
   });
 
+  it("picks by the shared preference but never outside the window (DEC-0210)", async () => {
+    servePage();
+    const everything = await publicPlaceEvents(PLACE, { window: "upcoming", rowCount: 100, now: NOW });
+    const week = await publicPlaceEvents(PLACE, { window: "week", rowCount: 100, now: NOW });
+    const picked = await publicPlaceEvents(PLACE, { window: "week", rowCount: 2, now: NOW });
+
+    const ids = new Set(week.map((event) => event.id));
+    for (const event of picked) {
+      expect(ids.has(event.id)).toBe(true);
+      expect(new Date(event.startsAt).getTime()).toBeGreaterThanOrEqual(NOW.getTime());
+    }
+    expect(week.length).toBeLessThanOrEqual(everything.length);
+  });
+
   it("honours the row count the module asked for", async () => {
     servePage();
     const events = await publicPlaceEvents(PLACE, { window: "upcoming", rowCount: 1, now: NOW });

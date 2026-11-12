@@ -379,9 +379,7 @@ test.describe("/ueber-uns", () => {
   test("F-2-33: the English page renders its own language", async ({ page }) => {
     await page.goto("/en/about");
     await expect(page.locator("[data-block='team'] h2")).toHaveText("Jan-Henrik Hempel");
-    await expect(page.locator("[data-block='kapitel-3'] h2")).toHaveText(
-      "Then it became more than bread rolls.",
-    );
+    await expect(page.locator("[data-block='kapitel-3'] h2")).toHaveText("Voices from the field");
     await expect(page.locator('[data-cta="primary"]')).toHaveAttribute(
       "href",
       "/en/about#kontakt",

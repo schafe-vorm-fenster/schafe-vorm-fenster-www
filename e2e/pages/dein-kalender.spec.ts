@@ -324,19 +324,24 @@ test.describe("TS-WEB-0024: /dein-kalender", () => {
   });
 
   /**
-   * G-3 / brief page 6, item 7 — the page was four arguments standing next to
-   * each other with nothing between them. Each of the three joints now
-   * carries the sentence that names it, and every section after the hero
-   * opens with its role.
+   * G-3 as DEC-0206 rewrote it — the page's two transition lines are gone (a
+   * transition is no text level of its own, DEC-0213), the embed section's
+   * intro names the places without repeating its heading, and the section
+   * kickers that say something of their own stay.
    */
-  test("G-3: the three transitions and the section kickers are on the page", async ({ page }) => {
+  test("DEC-0206: no transition lines, the embed intro and the section kickers", async ({ page }) => {
     await page.goto(ROUTE);
     for (const line of [
       "So sieht das aus, wenn es bei euch steht:",
       "Bleibt die Frage, wem ihr da eigentlich eure Daten gebt.",
     ]) {
-      await expect(page.getByText(line)).toBeVisible();
+      await expect(page.getByText(line)).toHaveCount(0);
     }
+    await expect(
+      page
+        .locator('[data-block="embed-demo"]')
+        .getByText("Hier seht ihr, was in Schlatkow, Schmatzin und Wolfradshof in den nächsten Wochen ansteht."),
+    ).toBeVisible();
     // The price section's framing line is the band's, not a transition above
     // it — one sentence, in one place (DEC-0118, DEC-0131 §2).
     await expect(
