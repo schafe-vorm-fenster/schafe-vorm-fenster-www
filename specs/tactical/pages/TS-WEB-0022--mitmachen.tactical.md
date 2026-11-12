@@ -139,6 +139,19 @@ not mechanisms.
 | One CTA | as the row above, at secondary treatment. `explain-module` may not take `primary` even as a prop value |
 | Line length | each step line is **written** to a single line at 390 px viewport width — core ≤ 30, detail ≤ 40 characters (SRC-0017 CG-025). That is a target the copy is written to, **not a clamp: a step line is never truncated**. A longer line wraps; readability goes before a fixed height — shorter or equally long copy first, then a two-line height for all three steps (DEC-0155 §2, DEC-0161). Until 2026-10-13 the lines were clamped with an ellipsis |
 
+**Amendment 2026-11-12 (owner, third review of #142 — "macht die WhatsApp-Nummer
+gerne direkt zu einem Link"; refs #141).** A step line is a **row**, not a
+button: the `li` carries the grid, the border and the active state; the disc
+(`aria-hidden`) and the detail stand in it; one `<button>` holds the core and is
+stretched over the whole row (`::after`), so the row stays one 44 px target and
+`aria-current="step"` stays on the button. The detail may carry a link — today
+the WhatsApp number in step 2, a plain `<a>` to the click-to-chat URL that sits
+above the overlay and is its own target. A link inside the button is invalid and
+fails axe `nested-interactive`; this is why the structure changed. Look,
+height (A6/A19 budget) and the side-by-side layout are unchanged. The link
+emits no analytics event: `make-contact` is registered for the contact-section
+rows (TS-WEB-0016 D12), and widening it is a registry decision, not made here.
+
 Three phone numbers are in play and they are not interchangeable: **390 px** is
 the authoring width the copy budget is derived from, **360 × 800** is what
 SRC-0014 means by "per screen", and **360 × 640** is A2's fold viewport. The

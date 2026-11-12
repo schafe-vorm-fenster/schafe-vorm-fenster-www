@@ -17,12 +17,17 @@
  * hold trivially while that is so.
  */
 
+import { createElement, Fragment } from "react";
+
+import { Anchor, type AnchorProps } from "@/src/components/anchor/anchor";
 import generated from "@/src/generated/contact-channels.json";
 import { BRIEFING_URL } from "@/src/lib/live/briefing";
 
 import { CONTACT_CHANNEL_IDS } from "./hub-record";
 
 import type { ContactChannelId, ContactChannelRecord, ContactChannelsFile } from "./hub-record";
+import type { Locale } from "@/src/lib/i18n/locales";
+import type { Attributes, ReactNode } from "react";
 
 /** The click-to-chat host, TS-WEB-0016 D13 row 2 — `https://wa.me/<number>`. */
 const WHATSAPP_HOST = "https://wa.me/";
@@ -102,4 +107,40 @@ export type { ContactChannelId, ContactChannelRecord } from "./hub-record";
  */
 export function withChannelTokens(value: string): string {
   return value.replace(/\{whatsapp\}/g, () => contactDisplayValue("whatsapp"));
+}
+
+/**
+ * Like `withChannelTokens`, but `{whatsapp}` becomes a link to the
+ * click-to-chat URL showing the number (DEC-0192 amendment 2026-11-12). A
+ * value without the token comes back as the plain string. The number and the
+ * URL both come from the hub record. The link leaves the site, so it goes
+ * through `anchor`: new tab, `rel="noopener noreferrer"`, and the hidden
+ * "öffnet neuen Tab" note in the page's language (DEC-0169, TS-WEB-0016-A24).
+ */
+export function withChannelLinks(value: string, locale: Locale = "de"): ReactNode {
+  if (!value.includes("{whatsapp}")) return value;
+  const parts = value.split("{whatsapp}");
+  return createElement(
+    Fragment,
+    null,
+    ...parts.flatMap((part, index) =>
+      index === 0
+        ? [part]
+        : [
+            createElement(
+              Anchor,
+              // `children` is the third argument; the cast only tells the
+              // props type so (AnchorProps marks children as required).
+              {
+                href: contactHref("whatsapp"),
+                key: `whatsapp-${index}`,
+                "data-channel": "whatsapp",
+                locale,
+              } as Omit<AnchorProps, "children"> & Attributes as AnchorProps & Attributes,
+              contactDisplayValue("whatsapp"),
+            ),
+            part,
+          ],
+    ),
+  );
 }

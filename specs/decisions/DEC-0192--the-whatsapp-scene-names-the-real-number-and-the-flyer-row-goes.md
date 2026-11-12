@@ -80,3 +80,14 @@ veröffentlichen"; "Aus dem Flyer geworden" is crossed out.
   earlier version. `/mitmachen` path 01 keeps `ihr`, which is the address
   CG-002 gives its publishing paths, so the two slots now differ in address
   only.
+
+**Amendment 2026-11-12 (owner, follow-up to #142, refs #141):**
+
+- **The number is a link.** Step 2's WhatsApp number is no longer plain text: it
+  is an `<a>` to the click-to-chat URL (`contactHref("whatsapp")`), on `/` and on
+  `/mitmachen` path 01. The chat reply stays plain text. The token `{whatsapp}`
+  is unchanged in the copy; the page turns it into the link at render time.
+- **Structure.** To keep the link out of a button, the step row became an `li`
+  with a stretched button for the core (TS-WEB-0022 D4 amendment of the same
+  day). No analytics event is added for the link (`make-contact` is registered
+  for the contact-section rows only).
