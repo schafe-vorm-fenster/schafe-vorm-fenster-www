@@ -130,9 +130,17 @@
   --coin-fill: var(--color-category-culture-tourism);
 }
 
-/* Phone: icon-only buttons; the name of the chosen category stands below. */
+/* Phone: icon-only buttons; the name of the chosen category stands below.
+   Read, not drawn — the labels stay in the tree at every width (the way
+   `event-row`'s category label does), so the page's visible text order is the
+   same at 360 and 1280 (TS-WEB-0017 D2(d), `e2e/smoke.spec.ts`). */
 .filterText {
-  display: none;
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
 }
 
 .chosen {
@@ -227,10 +235,21 @@
   }
 
   .filterText {
-    display: inline;
+    clip-path: none;
+    height: auto;
+    overflow: visible;
+    position: static;
+    width: auto;
   }
 
+  /* The pressed button names the category here; the caption is read, not drawn. */
   .chosen {
-    display: none;
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
   }
 }

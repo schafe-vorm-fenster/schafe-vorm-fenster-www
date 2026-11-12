@@ -121,7 +121,7 @@ test.describe("TS-WEB-0019-A24: the calendar graphic's behaviour", () => {
   test("it advances every 3.5 s and a click stops it", async ({ page }) => {
     test.setTimeout(60_000);
     await page.goto("/");
-    await page.locator("#scene-2").scrollIntoViewIfNeeded();
+    await page.locator("#scene-2 [data-web-calendar-overlay]").scrollIntoViewIfNeeded();
     // Hydrated, the next category shows within a few seconds.
     await expect(page.locator(FILTERS).nth(1)).toHaveAttribute("aria-pressed", "true", { timeout: 15_000 });
     await expect(page.locator("#scene-2 [data-web-calendar-overlay] ul")).toContainText("Erste-Hilfe-Kurs");
@@ -140,7 +140,7 @@ test.describe("TS-WEB-0019-A24: the calendar graphic's behaviour", () => {
     test("nothing advances by itself", async ({ page }) => {
       test.setTimeout(60_000);
       await page.goto("/");
-      await page.locator("#scene-2").scrollIntoViewIfNeeded();
+      await page.locator("#scene-2 [data-web-calendar-overlay]").scrollIntoViewIfNeeded();
       await page.waitForTimeout(5_000);
       expect(await pressed(page)).toEqual(["true", "false", "false", "false"]);
       // A click still works.
