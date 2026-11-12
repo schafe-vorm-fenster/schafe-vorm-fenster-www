@@ -798,8 +798,9 @@ test.describe("TS-WEB-0019 — home", () => {
     }
 
     // TS-WEB-0019-A8 — "in every one of the loads of A7".
-    expect(professional.proofElements).toBe(5);
-    expect(direct.proofElements).toBe(5);
+    // 4 candidates of 5 positions since DEC-0183, see A8 below.
+    expect(professional.proofElements).toBe(4);
+    expect(direct.proofElements).toBe(4);
   });
 
   test("TS-WEB-0010-A4: the two entry stages differ in nothing but the order inside block 2a", async ({

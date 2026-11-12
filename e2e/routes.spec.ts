@@ -201,10 +201,19 @@ const NOT_FOUND_CASES = [
   { path: "/robots.txt.map", heading: "Seite nicht gefunden", lang: "de" },
 ] as const;
 
+/**
+ * The 404 *status* is set at build time (`svf-csp-hashes`, "404 status set on
+ * /variants/not-found/…"), so `next dev` answers these rewrites with 200. That
+ * is a dev-server artefact, not a defect: the status is asserted wherever a
+ * production build is served (`CI`, which runs `next start`, or an
+ * `E2E_BASE_URL` pointing at one); the rendered document is asserted everywhere.
+ */
+const SERVES_BUILD_TIME_STATUS = Boolean(process.env.CI || process.env.E2E_BASE_URL);
+
 for (const { path, heading, lang } of NOT_FOUND_CASES) {
   test(`TS-WEB-0004-A4: ${path} answers a rendered 404 in ${lang}`, async ({ page }) => {
     const response = await page.goto(path);
-    expect(response?.status()).toBe(404);
+    if (SERVES_BUILD_TIME_STATUS) expect(response?.status()).toBe(404);
     await expect(page.getByRole("heading", { level: 1 })).toContainText(heading);
     await expect(page.locator("html")).toHaveAttribute("lang", lang);
     // Next.js emits its own `noindex` for a 404 response; the page adds the
@@ -226,7 +235,7 @@ for (const { path, heading, lang } of NOT_FOUND_CASES) {
     const page = await context.newPage();
     const response = await page.goto(path);
 
-    expect(response?.status()).toBe(404);
+    if (SERVES_BUILD_TIME_STATUS) expect(response?.status()).toBe(404);
     const text = await page.locator("body").innerText();
     expect(text.length).toBeGreaterThan(100);
     expect(text).toContain(heading);
