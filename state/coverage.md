@@ -6,17 +6,17 @@ What verifies each acceptance criterion, at the level the criterion itself
 declares. `pnpm check:coverage` writes this file; `scripts/check-coverage.ts`
 says what the five verdicts mean and what gates.
 
-**511 criteria · 335 closed · 176 open (66 % closed)**
+**511 criteria · 334 closed · 177 open (65 % closed)**
 
 | Verdict | Count | What it means |
 | --- | --- | --- |
-| VERIFIED | 330 | a test title in a file a runner runs carries the id |
+| VERIFIED | 329 | a test title in a file a runner runs carries the id |
 | METERED | 5 | a `check:` meter in the chain, or a CI job, names it (`static` and `tool`) |
 | ATTESTED | 0 | a current row in `specs/verification/manual-checks.md` (`manual` only) |
 | NAMED ONLY | 30 | the id is in a runner file but in no test title — **not coverage** |
-| MISSING | 146 | nothing names it |
+| MISSING | 147 | nothing names it |
 
-Rule 1 (a new criterion arrives with its instrument): 1 criterion(a) new in this commit, 0 without an instrument.
+Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this commit, 0 without an instrument.
 
 ## By level
 
@@ -24,7 +24,7 @@ Rule 1 (a new criterion arrives with its instrument): 1 criterion(a) new in this
 | --- | --- | --- | --- | --- |
 | static | 92 | 62 | 30 | 67 % |
 | unit | 33 | 29 | 4 | 88 % |
-| integration | 78 | 54 | 24 | 69 % |
+| integration | 78 | 53 | 25 | 68 % |
 | e2e | 238 | 188 | 50 | 79 % |
 | tool | 39 | 2 | 37 | 5 % |
 | manual | 31 | 0 | 31 | 0 % |
@@ -49,7 +49,7 @@ Rule 1 (a new criterion arrives with its instrument): 1 criterion(a) new in this
 | TS-WEB-0014 | 14 | 3 | A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 A13 |
 | TS-WEB-0015 | 13 | 2 | A2 A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 |
 | TS-WEB-0016 | 25 | 13 | A1 A3 A4 A6 A7 A8 A9 A11 A18 A20 A13 A14 |
-| TS-WEB-0017 | 39 | 35 | A3 A13 A15 A16 |
+| TS-WEB-0017 | 39 | 34 | A3 A12 A13 A15 A16 |
 | TS-WEB-0018 | 16 | 3 | A1 A3 A4 A5 A6 A8 A9 A10 A11 A13 A14 A15 A16 |
 | TS-WEB-0019 | 24 | 22 | A14 A15 |
 | TS-WEB-0020 | 28 | 27 | A13 |
@@ -177,6 +177,7 @@ Rule 1 (a new criterion arrives with its instrument): 1 criterion(a) new in this
 | TS-WEB-0016-A13 | manual | MISSING | — | The two-working-day promise copy on `/deine-region` is present only when the lead-handling process behind it is named and signed off (C11); absent otherwise. |
 | TS-WEB-0016-A14 | e2e | MISSING | — | With the widget script blocked, S2 and S4 still render the static fallback (contact link plus the booking row of the page's contact section) and no empty or per … |
 | TS-WEB-0017-A3 | static | MISSING | — | Root `tsconfig.json` exists with `strict: true`; `pnpm typecheck` is a script, is part of `pnpm check`, and exits 0. |
+| TS-WEB-0017-A12 | integration | MISSING | — | WITHDRAWN 2026-11-12 (DEC-0191, the calendar button left the header). Formerly: The persistent calendar entry is present in the header on every page and resolve … |
 | TS-WEB-0017-A13 | tool | MISSING | — | `pnpm check` (frontmatter + `check:specs`) exits 0 — pre-commit hook and CI; zero E-class errors. |
 | TS-WEB-0017-A15 | manual | MISSING | — | Imagery review: every image shipped is checked against the imagery rules in the brand identity profile — per release, by the brand owner. |
 | TS-WEB-0017-A16 | manual | MISSING | — | Dependency review: any dependency adopted from a sibling repository is confirmed as framework-neutral intent, not a ported implementation — per PR that changes  … |

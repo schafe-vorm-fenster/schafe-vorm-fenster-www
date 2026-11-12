@@ -1,5 +1,5 @@
 ---
-id: DEC-0191
+id: DEC-0193
 title: The embed scene is redesigned around an interactive calendar graphic
 status: accepted
 date: 2026-11-12

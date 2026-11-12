@@ -1,9 +1,9 @@
 {
   "note": "The ratchet of `pnpm check:coverage` (DEC-0141). `max` is the worst tally this repository is allowed to have. A run worse than a number here fails; a run better than one fails too, asking for the number to be lowered in the same commit, so that a gain is recorded instead of left as budget to spend again. Raising a number is a governance change: it needs a decision record, and the record says which criteria were let go and why.",
-  "measured_at": "2026-10-29",
-  "measured_on": "DEC-0186. The register route drops its notice and new-tab link, so TS-WEB-0023-A19 and A20 lose their only instrument: MISSING 144 -> 146, both criteria let go with the elements they asserted. /ueber-uns drops its accordion and closing CTA; TS-WEB-0027-A1/A10 and A17 are re-asserted on the new shape and stay covered. NAMED ONLY unmoved at 30.",
+  "measured_at": "2026-11-12",
+  "measured_on": "DEC-0191. The calendar button leaves the header, so TS-WEB-0017-A12 loses its only instrument and is withdrawn: MISSING 146 -> 147, the criterion let go with the element it asserted. Before that, DEC-0186. The register route drops its notice and new-tab link, so TS-WEB-0023-A19 and A20 lose their only instrument: MISSING 144 -> 146, both criteria let go with the elements they asserted. /ueber-uns drops its accordion and closing CTA; TS-WEB-0027-A1/A10 and A17 are re-asserted on the new shape and stay covered. NAMED ONLY unmoved at 30.",
   "max": {
     "NAMED ONLY": 30,
-    "MISSING": 146
+    "MISSING": 147
   }
 }

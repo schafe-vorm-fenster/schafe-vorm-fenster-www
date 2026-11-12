@@ -4,7 +4,7 @@ import type { ContentBlock } from "@/src/lib/content/types";
 
 /**
  * The words and the twelve example dates of the embed scene's calendar graphic
- * (issue 145, DEC-0191), read from slot `home-5a-scene-embed-calendar-demo`.
+ * (issue 145, DEC-0193), read from slot `home-5a-scene-embed-calendar-demo`.
  *
  * The slot is a run of `**Label:** value` fields — a field is what the page
  * reads by position without a drift-test row (`RENDERED_BLOCKS`) — in this

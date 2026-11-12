@@ -10,7 +10,7 @@ import { WebCalendarOverlay } from "./web-calendar-overlay";
 
 /**
  * The markup contract of the embed scene's calendar graphic (issue #145,
- * DEC-0191) and of the slot it reads. What it does over time — the 3.5 s
+ * DEC-0193) and of the slot it reads. What it does over time — the 3.5 s
  * advance, the click that stops it, `prefers-reduced-motion` — needs a browser
  * and is measured in `e2e/pages/home-scene-media.spec.ts`. The words below are
  * fixtures, not copy.

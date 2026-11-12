@@ -171,11 +171,19 @@ gap in the visitor's own place, not a gap in the system.
 
 **Kicker:** How the dates get in
 
-**Transition:** Nobody here types those dates in. They come from the clubs, the fire brigades and everyone who puts something on around here — usually like this:
+**Transition:** Nobody types these dates in. They come from the clubs and the organisers who put something on around here as volunteers. Usually like this:
 
 **Explain-module title:** Send a flyer by WhatsApp
 
-**CTA label (secondary):** Sign up for free now
+**Hint above the button:** You can also keep your dates in a calendar of your own, a Google Calendar for example, and we import them. Or you already have a website that lists everything? Then we fetch the dates from there.
+
+**CTA label (secondary):** More on publishing dates
+
+The hint and the button label are the owner's wording (DEC-0192, 2026-11-12,
+issue #141, second version): the hint describes the two other ways, path 02
+and path 03 on `/mitmachen` (your own calendar, your website as the source),
+and the label leads to `takePart`. The scene still carries exactly one CTA
+(D3a, DEC-0110 §1).
 
 Source: `relievers[0]` of the "actors--community-calendar" value
 proposition — "send a photo of the printed flyer by WhatsApp and the
@@ -196,10 +204,10 @@ same one, and this scene's target is the page that owns the job.
 **Steps:**
 
 1. Photograph the flyer — The one you printed anyway.
-2. Send it to us on WhatsApp — Straight into our chat via "share".
-3. The date is in the calendar — In your place and around it.
+2. Send it to us on WhatsApp — To {whatsapp}. In the chat you check and approve the date.
+3. The date goes online automatically — In your place and around it.
 
-**Chat reply (state 2):** Thanks! The date is in the calendar.
+**Chat reply (state 2):** Thanks! Please check the date and approve it here.
 
 **Chat time (state 2):** 14:06
 
@@ -208,6 +216,8 @@ same one, and this scene's target is the page that owns the job.
 - Fire brigade fair | Sat · 15:00 · fire station | social | Community life
 - Lantern parade | Fri · 17:30 · church | culture | Culture
 - Village flea market | Sun · 11:00 · village square | social | Community life
+
+Steps 2 and 3 and the chat reply are the owner's wording (DEC-0192, 2026-11-12, issue #141): step 2 carries the hub's WhatsApp number as the token `{whatsapp}`, substituted at render time from `contactChannel("whatsapp")` and never typed as a number; step 3 says "online automatically". The slot stays `demo: true` while step 1 and the sample rows are placeholders. No deadline, no turnaround (CG-031, CG-033).
 
 The same explain module as path 01 on `/mitmachen`, so the same
 placeholder set: the three step lines are the 2026-09-23 draft
@@ -239,7 +249,7 @@ Source: the owner's German wording from issue #145 (2026-11-12), value propositi
 "municipalities--portalize-calendar", `gains`/`relievers` fields. **English draft**,
 a faithful translation of the German, not yet reviewed by the owner. The German
 address (headline "deine Gemeinde", text "ihr/eure") is an open point (issue #145,
-"Offen"; DEC-0191); the English draft follows it with "your" and "you". The CTA
+"Offen"; DEC-0193); the English draft follows it with "your" and "you". The CTA
 label is the target page's own primary label (`content/pages/dein-kalender/en.md`,
 slot 1).
 
@@ -289,7 +299,7 @@ slot 1).
 
 English draft of the German graphic: the same twelve invented, neutral
 example dates, `provenance: generated`, `demo: true`, `data-demo="true"` in the
-markup (DEC-0068, DEC-0191). Event format: `day | weekday | title | place · time`,
+markup (DEC-0068, DEC-0193). Event format: `day | weekday | title | place · time`,
 exactly three per category.
 
 ## Scene 3 — Provenance (mechanism: provenance)
@@ -405,8 +415,6 @@ S2 open calendar, S3 publish first date) — no new text, same target id
 
 <!-- source_note: register from the gtm sources: principle 1a "scenes, not labels" and principle 5 "live data carries the argument" in gtm:concept/website-communication-principles.concept.md, the informal register from principle 1b. Replaces the generated strings in app/[lang]/page.tsx `DEMO_LABELS` (state/open.md row 92). Jan's decision, 2026-09-18: no marking in visible copy — provenance lives in frontmatter, in `data-*` and in state/open.md. -->
 <!-- id: home-12-ui-strings; content_type: section; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/brand-identity@0.1.4#schafe-vorm-fenster"]; status: draft -->
-
-**Caption on the module of the WhatsApp scene:** Made from the flyer
 
 **Geo label on the proof cards:** Proof from the region
 

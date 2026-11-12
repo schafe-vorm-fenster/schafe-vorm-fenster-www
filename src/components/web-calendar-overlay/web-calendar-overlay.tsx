@@ -28,7 +28,7 @@ export interface WebCalendarOverlayProps {
 
 /**
  * `web-calendar-overlay` [PROPOSED] — the drawing of the website calendar that
- * sits on the embed scene's photograph (issue 145, DEC-0191; first drawn for
+ * sits on the embed scene's photograph (issue 145, DEC-0193; first drawn for
  * #32, DEC-0162 §5).
  *
  * Structure: a browser strip (globe, address), the calendar's head, a filter row

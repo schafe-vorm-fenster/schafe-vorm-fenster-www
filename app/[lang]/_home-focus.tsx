@@ -241,37 +241,3 @@ export function HomeFocusModules({
     </>
   );
 }
-
-/**
- * The one live row the WhatsApp scene shows as its outcome (polish brief,
- * page 1, fix 3): one real date, picked out of what position 1 has **not**
- * already shown and out of the categories a printed flyer is actually about.
- * It reads the same two BFF answers position 1 and the radius do; while they
- * load, the heading and one row's skeleton hold the space.
- */
-export function FlyerExample({ heading, locale }: { readonly heading: string; readonly locale: Locale }) {
-  const dates = useLive<PlaceEvents>(liveRoutes.placeEvents(SHOWCASE_COMMUNITY.slug, 12));
-  const near = useLive<NearbyEvents>(liveRoutes.nearby(SHOWCASE_COMMUNITY.lat, SHOWCASE_COMMUNITY.lng));
-
-  if (dates.status === "loading" || near.status === "loading") {
-    return (
-      <>
-        <h3 className={styles.instanceHeading}>{heading}</h3>
-        <EventList items={[]} locale={locale} reserve rowCount={1} state="loading" />
-      </>
-    );
-  }
-
-  const placeRows = dates.status === "ready" ? toListItems(dates.envelope.data.events, locale) : [];
-  const nearbyRows = near.status === "ready" ? toListItems(near.envelope.data.events, locale) : [];
-  const [row] = pickStoryExamples([...placeRows.slice(3), ...nearbyRows], [["social", "culture", "fest"]]);
-  if (row === undefined) return null;
-  const demo = (dates.status === "ready" && dates.envelope.demo) || (near.status === "ready" && near.envelope.demo);
-
-  return (
-    <>
-      <h3 className={styles.instanceHeading}>{heading}</h3>
-      <EventList items={[row]} locale={locale} reserve rowCount={1} state={demo ? "mocked" : "ready"} />
-    </>
-  );
-}

@@ -1,8 +1,7 @@
 import { dictionary } from "@/src/lib/i18n/dictionary";
-import { HEADER_CALENDAR_ENTRY, HEADER_JOBS } from "@/src/lib/routes/navigation";
+import { HEADER_JOBS } from "@/src/lib/routes/navigation";
 import { trail } from "@/src/lib/routes/routes";
 
-import { Button } from "../button/button";
 import { Logo } from "../logo/logo";
 import { RouteLink } from "../route-link/route-link";
 
@@ -34,8 +33,8 @@ export interface SiteHeaderProps {
 /**
  * 8 `site-header` [PROPOSED] — TS-WEB-0004 D4.
  *
- * Structure: the `logo` home, the four job labels, and the persistent
- * calendar entry as a `button`. Both lists come from
+ * Structure: the `logo` home and the four job labels (the persistent
+ * calendar button is gone since DEC-0191). The list comes from
  * `src/lib/routes/navigation.ts` and every label from the dictionary — the
  * header holds no path and no string of its own (TS-WEB-0004 D4, TS-WEB-0001 D5/D7).
  * Its height is published as `--site-header-height` so `legal-section` can use
@@ -133,16 +132,6 @@ export function SiteHeader({
           ))}
         </ul>
       </nav>
-      <Button
-        className={styles.cta}
-        icon="calendar-days"
-        locale={locale}
-        size="compact"
-        to={HEADER_CALENDAR_ENTRY.route}
-        variant="primary-light"
-      >
-        {d.nav[HEADER_CALENDAR_ENTRY.label]}
-      </Button>
     </HeaderShell>
   );
 }

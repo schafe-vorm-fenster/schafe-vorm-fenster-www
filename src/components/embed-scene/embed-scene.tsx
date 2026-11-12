@@ -21,7 +21,7 @@ export interface EmbedSceneProps {
 
 /**
  * `embed-scene` [PROPOSED] — the `embed` scene of `/` in the shape of
- * issue 145 (DEC-0191): heading, lead sentence and three ticked points in the
+ * issue 145 (DEC-0193): heading, lead sentence and three ticked points in the
  * container, then the town-hall photograph full-bleed with the calendar
  * graphic on its lower edge, then the button.
  *

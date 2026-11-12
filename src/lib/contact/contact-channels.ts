@@ -93,3 +93,13 @@ export function contactDisplayValue(id: Exclude<ContactChannelId, "appointment">
 
 export { CONTACT_CHANNEL_IDS } from "./hub-record";
 export type { ContactChannelId, ContactChannelRecord } from "./hub-record";
+
+/**
+ * Substitutes the contact-channel tokens a content slot leaves in its copy —
+ * today `{whatsapp}`, the hub's WhatsApp number — at render time (DEC-0192).
+ * The number lives only in the hub record; copy carries the token, never a
+ * second typed copy (TS-WEB-0016-A16). Unknown tokens stay as they are.
+ */
+export function withChannelTokens(value: string): string {
+  return value.replace(/\{whatsapp\}/g, () => contactDisplayValue("whatsapp"));
+}

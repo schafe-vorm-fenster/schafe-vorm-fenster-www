@@ -7,7 +7,7 @@ import type { Page } from "@playwright/test";
  * review of 2026-10-12 (issues #32 and #35, DEC-0162 §5 and §6).
  *
  * A20: the town-hall photograph of the embed scene carries the calendar graphic
- * (issue 145, DEC-0191). The graphic is fully visible on the phone and on the
+ * (issue 145, DEC-0193). The graphic is fully visible on the phone and on the
  * desktop, overlaps the photograph's lower edge, covers neither the
  * photograph's declared focal point nor runs past the viewport; the photograph
  * is a fixed band (240 px phone, 500 px desktop) and its `alt` names the

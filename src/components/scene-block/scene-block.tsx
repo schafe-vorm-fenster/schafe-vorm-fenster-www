@@ -29,7 +29,7 @@ export interface SceneBlockProps {
    */
   readonly module?: ReactNode;
   /** The concrete instance — a live module, an event row, or a proof card. */
-  readonly instance: ReactNode;
+  readonly instance?: ReactNode;
   /** The instance's own freshness, if it comes from a live or cached source. */
   readonly freshnessTier?: FreshnessTier;
   readonly freshnessUpdatedAt?: string | Date;
@@ -100,7 +100,9 @@ export function SceneBlock({
         {body ? <p className={styles.body}>{body}</p> : null}
       </div>
       {module ? <div className={group(styles.module, inner)}>{module}</div> : null}
-      <div className={group(styles.instance, bleed ? styles.bleed : undefined)}>{instance}</div>
+      {instance ? (
+        <div className={group(styles.instance, bleed ? styles.bleed : undefined)}>{instance}</div>
+      ) : null}
       {freshnessTier ? (
         <div className={inner}>
           <FreshnessLabel locale={locale} tier={freshnessTier} updatedAt={freshnessUpdatedAt} />
