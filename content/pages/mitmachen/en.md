@@ -238,10 +238,10 @@ with the German ones.
 **Steps:**
 
 1. Photograph the flyer — The one you printed anyway.
-2. Send it to us by WhatsApp — Straight into our chat via "share".
-3. The date is in the calendar — In your place and around it.
+2. Send it to us on WhatsApp — To {whatsapp}. In the chat you check and approve the date.
+3. The date goes online automatically — In your place and around it.
 
-**Chat reply (state 2):** Thanks! The date is in the calendar.
+**Chat reply (state 2):** Thanks! Please check the date and approve it here.
 
 **Chat time (state 2):** 14:06
 
@@ -250,6 +250,8 @@ with the German ones.
 - Fire brigade fête | Sat · 15:00 · Fire station | social | Community
 - Lantern parade | Fri · 17:30 · Church | culture | Culture
 - Village flea market | Sun · 11:00 · Village square | social | Community
+
+Steps 2 and 3 and the chat reply are the owner's wording (DEC-0191, 2026-11-12, issue #141): step 2 carries the hub's WhatsApp number as the token `{whatsapp}`, substituted at render time from `contactChannel("whatsapp")` and never typed as a number; step 3 says "online automatically". The slot stays `demo: true` while step 1 and the sample rows are placeholders. No deadline, no turnaround (CG-031, CG-033).
 
 The three lines are the 2026-09-23 "3-Schritte-erklären" draft (11.20.03)
 and are placeholders until they are signed off: `provenance: generated`,

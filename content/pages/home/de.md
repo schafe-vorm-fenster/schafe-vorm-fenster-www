@@ -176,7 +176,16 @@ Lücke im eigenen Ort an, nicht die Lücke im System.
 
 **Titel des Erklärmoduls:** Flyer per WhatsApp
 
-**CTA-Label (sekundär):** Jetzt kostenlos anmelden
+**Hinweis über dem Button:** Weitere Wege, eure Termine online zu stellen: euren Kalender verbinden oder eure Webseite als Quelle nutzen.
+
+**CTA-Label (sekundär):** Termine veröffentlichen
+
+Hinweis und Button-Label sind Wortlaut des Owners (DEC-0191, 2026-11-12,
+Issue #141): der Hinweis nennt die zwei anderen Wege mit den Titeln von
+Weg 02 und Weg 03 auf `/mitmachen` („Euren Kalender verbinden", „Eure
+Webseite als Quelle"), das Label ist der Themenname „Termine
+veröffentlichen" und führt auf `takePart`. Die Szene trägt weiter genau ein
+CTA (D3a, DEC-0110 §1).
 
 Quelle: `relievers[0]` der Value Proposition „actors--community-calendar" —
 „send a photo of the printed flyer by WhatsApp and the date is created
@@ -197,10 +206,10 @@ und das Ziel dieser Szene ist die Seite, die den Job besitzt.
 **Schritte:**
 
 1. Flyer fotografieren — Den ihr sowieso gedruckt habt.
-2. Per WhatsApp an uns schicken — Über „Teilen" direkt in unseren Chat.
-3. Termin steht im Kalender — In eurem Ort und drumherum.
+2. Per WhatsApp an uns schicken — An {whatsapp}. Im Chat prüft und bestätigt ihr den Termin.
+3. Termin wird automatisch online gestellt — In eurem Ort und drumherum.
 
-**Chat-Antwort (Zustand 2):** Danke! Der Termin steht im Kalender.
+**Chat-Antwort (Zustand 2):** Danke! Bitte prüft den Termin und bestätigt ihn hier.
 
 **Chat-Uhrzeit (Zustand 2):** 14:06
 
@@ -209,6 +218,8 @@ und das Ziel dieser Szene ist die Seite, die den Job besitzt.
 - Feuerwehrfest | Sa · 15:00 · Gerätehaus | social | Vereinsleben
 - Laternenumzug | Fr · 17:30 · Kirche | culture | Kultur
 - Dorfflohmarkt | So · 11:00 · Dorfplatz | social | Vereinsleben
+
+Schritt 2 und 3 und die Chat-Antwort sind Wortlaut des Owners (DEC-0191, 2026-11-12, Issue #141): Schritt 2 trägt die WhatsApp-Nummer des Hubs als Token `{whatsapp}`, das zur Renderzeit aus `contactChannel("whatsapp")` ersetzt wird, nie als getippte Nummer; Schritt 3 sagt „automatisch online gestellt". Der Slot bleibt `demo: true`, solange Schritt 1 und die Beispielzeilen Platzhalter sind. Keine Frist, keine Bearbeitungsdauer (CG-031, CG-033).
 
 Dasselbe Erklärmodul wie Weg 01 auf `/mitmachen`, deshalb derselbe
 Platzhaltersatz: die drei Schrittzeilen stehen so im Entwurf
@@ -356,8 +367,6 @@ Text, gleiche Ziel-ID (TS-WEB-0006 D6).
 
 <!-- source_note: Tonfall aus gtm-Quellen: Prinzip 1a „Szenen statt Etiketten" und Prinzip 5 „Live-Daten tragen das Argument" in gtm:concept/website-communication-principles.concept.md, Register „du" aus Prinzip 1b. Ersetzt die generierten Strings in app/[lang]/page.tsx `DEMO_LABELS` (state/open.md Zeile 92). Entscheidung Jan, 2026-09-18: keine Kennzeichnung im sichtbaren Text — Provenienz steht im Frontmatter, in `data-*` und in state/open.md. -->
 <!-- id: home-12-ui-strings; content_type: section; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/brand-identity@0.1.4#schafe-vorm-fenster"]; status: draft -->
-
-**Bildunterschrift am Modul der WhatsApp-Szene:** Aus dem Flyer geworden
 
 **Geo-Label auf den Belegkarten:** Beleg aus der Region
 
