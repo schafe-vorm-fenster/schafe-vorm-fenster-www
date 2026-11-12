@@ -8,7 +8,9 @@ seo:
     description: "Who makes the village calendar and why it stays free for the villages: a village in Vorpommern, volunteering and 25 years of IT in one place."
     provenance: generated
 content_type: section
-status: draft
+status: approved
+reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
+reviewed_at: "2026-11-12"
 locale: en
 sources:
   - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
@@ -144,7 +146,7 @@ in slot 1. No operating counter, no year figure as a module, no place count
 
 ## Slot 1 — Origin (h1 and the village argument)
 
-<!-- id: ueber-uns-1-origin; content_type: hero; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/brand-identity@0.1.4#schafe-vorm-fenster", "@schafe-vorm-fenster/offerings@0.3.5#community-calendar", "@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar", "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor", "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel"]; status: draft -->
+<!-- id: ueber-uns-1-origin; content_type: hero; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/brand-identity@0.1.4#schafe-vorm-fenster", "@schafe-vorm-fenster/offerings@0.3.5#community-calendar", "@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar", "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor", "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel"]; status: approved -->
 
 **h1:** From the village, for the village
 
@@ -177,7 +179,7 @@ article. The fact now stands with its period in chapter 02's text (review of
 
 ## Slot 1a — Chapters (stage, chapter lines, principles, award)
 
-<!-- id: ueber-uns-1a-chapters; content_type: section; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel", "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor", "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community"]; status: draft -->
+<!-- id: ueber-uns-1a-chapters; content_type: section; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel", "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor", "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community"]; status: approved -->
 
 **Stage — kicker:** About us · Schlatkow, Western Pomerania
 
@@ -214,7 +216,7 @@ the list.
 
 ## Slot 2 — The story
 
-<!-- id: ueber-uns-2-story; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/brand-identity@0.1.4#schafe-vorm-fenster", "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel", "@schafe-vorm-fenster/media-echo@0.3.3#2026-01-zukunftswege-ost-vollblutdigitalisierer"]; status: draft -->
+<!-- id: ueber-uns-2-story; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/brand-identity@0.1.4#schafe-vorm-fenster", "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel", "@schafe-vorm-fenster/media-echo@0.3.3#2026-01-zukunftswege-ost-vollblutdigitalisierer"]; status: approved -->
 
 **Heading:** It started with bread rolls.
 
@@ -257,7 +259,7 @@ slots 3 and 3b).
 
 ## Slot 3 — Proof stream (7 places, 1 type-reserved)
 
-<!-- id: ueber-uns-3-proof-stream; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5", "@schafe-vorm-fenster/proof@0.3.5#homeoffice-mobile-anbieter", "@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis", "@schafe-vorm-fenster/proof@0.3.5#ukraine-integration-dorfleben", "@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow"]; status: draft -->
+<!-- id: ueber-uns-3-proof-stream; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5", "@schafe-vorm-fenster/proof@0.3.5#homeoffice-mobile-anbieter", "@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis", "@schafe-vorm-fenster/proof@0.3.5#ukraine-integration-dorfleben", "@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow"]; status: approved -->
 
 Pool: the full `proof` set plus `media-echo` (31 entries). Since the rebuild on
 the design of 2026-10-12 the stream is chapter 03 (DEC-0162 §2): four stories,
@@ -291,7 +293,7 @@ forbids it on this page in so many words — "no year figure rendered as a
 module, no place count, no badge, no 'seit …' claim anywhere on the page".
 Gaps shorten the stream; an empty place is never shown (D5, DEC-0175 §3).
 
-<!-- id: ueber-uns-3b-stories; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis", "@schafe-vorm-fenster/proof@0.3.5#ukraine-integration-dorfleben", "@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow", "@schafe-vorm-fenster/proof@0.3.5#homeoffice-mobile-anbieter"]; status: draft -->
+<!-- id: ueber-uns-3b-stories; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis", "@schafe-vorm-fenster/proof@0.3.5#ukraine-integration-dorfleben", "@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow", "@schafe-vorm-fenster/proof@0.3.5#homeoffice-mobile-anbieter"]; status: approved -->
 
 **Story 1 (vaccination dates):** When it mattered, the village calendar carried part of the public service: every vaccination and testing offer in the county stood in it, day-current and place-precise. The county could not hand the data over in a structured form, so it was copied in by hand.
 
@@ -305,7 +307,7 @@ One story per line of slot 3, in the same order (the page joins them by
 position). Each retells the body of its `proof` record and adds no fact: no
 figure, no person, no turnover claim (DEC-0162 §2).
 
-<!-- id: ueber-uns-3-testimonial-slot-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin"]; status: draft -->
+<!-- id: ueber-uns-3-testimonial-slot-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin"]; status: approved -->
 
 **Reserved place (type `testimonial`, clearance pending):** "The project can make a valuable contribution to economic recovery and to visibility in rural areas." — Kulturlandbüro Uecker-Randow, Schloss Bröllin
 
@@ -322,7 +324,7 @@ missing proof renders nothing, and a placeholder never reaches the website
 
 ## Slot 4 — Award and archive link
 
-<!-- id: ueber-uns-4-archive; content_type: section; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community"]; status: draft -->
+<!-- id: ueber-uns-4-archive; content_type: section; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community"]; status: approved -->
 
 **Heading:** A village project, awarded in Rostock.
 
@@ -342,7 +344,7 @@ to the archive, no preview, no list, no count (TS-WEB-0027 D6).
 
 ## Slot 5 — Team
 
-<!-- id: ueber-uns-5-team; content_type: profile; provenance: sourced; derived_from: ["@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel", "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor"]; status: draft -->
+<!-- id: ueber-uns-5-team; content_type: profile; provenance: sourced; derived_from: ["@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel", "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor"]; status: approved -->
 
 **Person 1:** Jan-Henrik Hempel — Founder, technical lead, and software architecture. I moved to Schlatkow in 2011, co-founded the cultural association here, and still sit on the municipal council. Professionally I have done IT for 25 years. Schafe vorm Fenster is where the two meet: I know how volunteering in a village really works — and I know what a platform like this needs.
 
@@ -357,7 +359,7 @@ too.
 
 ## Slot 6 — Newsletter
 
-<!-- id: ueber-uns-6-newsletter; content_type: section; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: ueber-uns-6-newsletter; content_type: section; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Heading:** Stay in the loop
 

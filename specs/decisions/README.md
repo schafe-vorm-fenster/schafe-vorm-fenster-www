@@ -30,9 +30,12 @@ and keeps both. The decisive field is `dp`: it is required and its pattern is
 closed at `DP-01…DP-14`, and most decisions recorded here — a stack choice, a
 compound split, a copy rule — are none of the fourteen.
 
-**One SDR so far, and it moves no status.** `SDR-2026-1112-0001` records the
-owner's DP-04 conflict resolution behind DEC-0206 (the section-head rule),
-status `PROPOSED`. No status has moved off `DRAFT`, because every artefact has
+**Two SDRs so far, and neither moves a status.** `SDR-2026-1112-0001` records
+the owner's DP-04 conflict resolution behind DEC-0206 (the section-head rule),
+and `SDR-2026-1112-0002` the one behind DEC-0222 (production renders what
+preview renders; the owner's approval of the content tree), both status
+`PROPOSED`. DEC-0222 approves *content* under `content/pages/**`, not a
+specification artefact. No status has moved off `DRAFT`, because every artefact has
 a dependant and none reaches the low impact level (DEC-0089). `check:specs`
 E15 anchors a status off `DRAFT` on an SDR, so the first status move will be
 its own record; E23 validates every record that appears.
@@ -243,3 +246,4 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0210 — Every date selection prefers one-off dates, mixes the themes and takes culture on a tie](DEC-0210--every-date-selection-prefers-one-offs-mixes-themes-and-takes-culture-on-a-tie.md)
 - [DEC-0213 — The section heads of /dein-kalender follow the three-level rule, and the copy guide gets CG-048](DEC-0213--dein-kalender-section-heads-follow-the-three-level-rule.md)
 - [DEC-0202 — The image budget is 200 KB per delivered size, and a photograph is delivered responsively](DEC-0202--the-image-budget-is-200-kb-per-delivered-size.md)
+- [DEC-0222 — Production renders what preview renders, and the owner approved every page and slot the preview shows](DEC-0222--production-renders-what-preview-renders-and-the-owner-approved-the-content-tree.md)

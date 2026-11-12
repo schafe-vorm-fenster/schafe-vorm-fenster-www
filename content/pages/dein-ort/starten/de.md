@@ -8,7 +8,9 @@ seo:
     description: "Dein Ort steht noch nicht im Dorfkalender? Eine Person, ein Flyer, ein Foto per WhatsApp — mehr braucht es nicht, damit er dazukommt."
     provenance: generated
 content_type: section
-status: draft
+status: approved
+reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
+reviewed_at: "2026-11-12"
 locale: de
 sources:
   - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
@@ -68,7 +70,7 @@ zurückgezogene Festlegung.
 
 ## Slot 1 — Bestätigung mit Ortsname
 
-<!-- id: dein-ort-starten-1-ack; content_type: hero; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: dein-ort-starten-1-ack; content_type: hero; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Headline (mit Ort):** {ort} steht noch nicht im Dorfkalender.
 
@@ -82,7 +84,7 @@ Kalender-Zeile oder einer Zahl (TS-WEB-0021 D6).
 ## Slot 2 — Was es braucht
 
 <!-- clearance: pending für den Presse-Beleg — der Nordkurier-Eintrag von 2022 trägt kein `usage_rights` (Q-0045, state/open.md #1). Der Angebots-Datensatz selbst ist frei verwendbar. -->
-<!-- id: dein-ort-starten-2-was-es-braucht; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar", "@schafe-vorm-fenster/media-echo@0.3.3#2022-nordkurier-plattform-doerfer"]; status: draft -->
+<!-- id: dein-ort-starten-2-was-es-braucht; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar", "@schafe-vorm-fenster/media-echo@0.3.3#2022-nordkurier-plattform-doerfer"]; status: approved -->
 
 **Überschrift:** Für {ort} im Kalender reicht eine Person
 
@@ -99,7 +101,7 @@ zurücknehmen lässt (dieselbe Zusicherung wie `/dein-ort` Slot 8).
 
 ## Slot 3 — Live-Modul, nächster aktiver Ort
 
-<!-- id: dein-ort-starten-3-beispiel; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: dein-ort-starten-3-beispiel; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Modul-Überschrift:** So läuft das in {beispielort}
 
@@ -109,7 +111,7 @@ Ort (TS-WEB-0021 D7) — nie aus dem gesuchten, nicht gefundenen Ort.
 ## Slot 4 — Wer das meistens anstößt
 
 <!-- clearance: pending für `lehre-lelender` (`usage_rights: unverified`, schriftliche Freigabe der Stiftung steht aus). Der Audience-Datensatz ist frei verwendbar. -->
-<!-- id: dein-ort-starten-4-wer; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/audiences@0.3.3#actors", "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"]; status: draft -->
+<!-- id: dein-ort-starten-4-wer; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/audiences@0.3.3#actors", "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"]; status: approved -->
 
 **Überschrift:** Meistens stößt ein Verein oder die Feuerwehr es an
 
@@ -132,7 +134,7 @@ aus).
 
 ## Slot 5 — Ortssuche (erneut)
 
-<!-- id: dein-ort-starten-5-search; content_type: section; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: dein-ort-starten-5-search; content_type: section; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Frage:** Falsch getippt? Nochmal suchen
 
@@ -152,7 +154,7 @@ Fix 3).
 
 ## Weiterleitung zur Registrierung
 
-<!-- id: dein-ort-starten-6-cta; content_type: closing-cta; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: dein-ort-starten-6-cta; content_type: closing-cta; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **CTA-Label (primär):** {ort} eintragen → `/mitmachen/registrieren?ort={ort}`
 
@@ -171,7 +173,7 @@ verspricht dadurch auch keinen (state/open.md Zeile 94).
 ## Kontextband (3 Nicht-Fokus-Jobs)
 
 <!-- source_note: Angebotsformulierung statt Menü aus gtm:concept/website-communication-principles.concept.md Prinzip 2; die drei Jobs und ihre Formulierung aus der Job-Tabelle in Prinzip 1. Beantwortet state/open.md Zeile 95 für diese Seite. -->
-<!-- id: dein-ort-starten-7-context-band; content_type: context-band; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: dein-ort-starten-7-context-band; content_type: context-band; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Kicker:** Erfahre mehr über unsere Kalenderplattform
 

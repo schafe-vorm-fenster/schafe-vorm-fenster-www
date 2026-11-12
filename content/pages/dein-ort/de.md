@@ -8,7 +8,9 @@ seo:
     description: "Alle Termine aus deinem Ort an einer Stelle — Vereine, Gemeinde, Feuerwehr, Kirche. Ort suchen und den Kalender auf den Homescreen legen."
     provenance: generated
 content_type: section
-status: draft
+status: approved
+reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
+reviewed_at: "2026-11-12"
 locale: de
 sources:
   - "@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow"
@@ -157,7 +159,7 @@ nur der Angebotstext in Block 1 wechselt.
 ## Slot 0 — Fokusblock, Zustand S0 (kein Ort bekannt)
 
 <!-- source_note: Stufe-0-Regel aus gtm:concept/website-communication-principles.concept.md Prinzip 6 („Stufe 0 muss für sich allein vollständig und überzeugend sein") und Prinzip 1 („know what is on wird an Ort und Stelle erfüllt, nicht verlinkt"); Register „du" aus Prinzip 1b. Ersetzt den generischen Fülltext `deinem Ort` in app/[lang]/dein-ort/page.tsx `PAGE_COPY` (state/open.md Zeile 93) — die Code-Bindung steht noch aus. -->
-<!-- id: dein-ort-0-state-s0; content_type: hero; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: dein-ort-0-state-s0; content_type: hero; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Headline:** Such deinen Ort, dann steht hier, was dort los ist.
 
@@ -176,7 +178,7 @@ und 2) setzen erst ein, wenn ein Ort feststeht.
 
 ## Slot 1 — Fokusblock, Zustand A (Termine vorhanden)
 
-<!-- id: dein-ort-1-state-a; content_type: hero; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: dein-ort-1-state-a; content_type: hero; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Headline:** Das ist los in {place}
 
@@ -193,7 +195,7 @@ Hinweistext unter dem Feld entfällt (Issue #20, DEC-0159).
 
 ## Slot 2 — Fokusblock, Zustand B (Ort erfasst, keine Termine)
 
-<!-- id: dein-ort-2-state-b; content_type: hero; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: dein-ort-2-state-b; content_type: hero; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Headline:** In {place} ist noch nichts eingetragen — du könntest die Erste sein.
 
@@ -207,7 +209,7 @@ Kalender für diesen Ort existiert bereits und wartet.
 
 ## Slot 2b — Geschichten-Bühne: ein Tag im Dorf
 
-<!-- id: dein-ort-2b-story-stage; content_type: value-story; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: dein-ort-2b-story-stage; content_type: value-story; provenance: sourced; derived_from: [ia]; status: approved -->
 <!-- note: Texte aus dem Board concept/v2.0/Geschichten Modul.dc.html, Variante 1a (DEC-0153). -->
 
 **Überschrift:** Ein Dienstag im Dorf passt auf kein Plakat.
@@ -226,7 +228,7 @@ Kalender für diesen Ort existiert bereits und wartet.
 
 ## Slot 3 — Value Story 1: der Bäckerwagen
 
-<!-- id: dein-ort-3-story-baeckerwagen; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow", "@schafe-vorm-fenster/proof@0.3.5#homeoffice-mobile-anbieter"]; status: draft -->
+<!-- id: dein-ort-3-story-baeckerwagen; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow", "@schafe-vorm-fenster/proof@0.3.5#homeoffice-mobile-anbieter"]; status: approved -->
 
 **Titel:** Der Bäckerwagen, mit Route
 
@@ -261,13 +263,13 @@ Umsatzzahlen messen lässt — die Anekdote steht, die Zahl nicht.
 
 <!-- clearance: pending — `kurzweg-baeckerei` steht auf `usage_rights: unverified` (Q-0014). Das Zitat stammt aus der Testimonial-Sektion der alten Website; eine schriftliche Freigabe liegt im Hub nicht vor. Die geschützte Vorschau zeigt es, der Härtungslauf vor dem Go-live klärt es. -->
 <!-- source_note: Das Zitat liegt im Paket in ASCII-Umschrift („Digitale Terminliste fuer die Doerfer"); hier mit Umlauten gesetzt, Wortlaut unverändert. -->
-<!-- id: dein-ort-3-story-baeckerwagen-demo-testimonial; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei"]; status: draft -->
+<!-- id: dein-ort-3-story-baeckerwagen-demo-testimonial; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei"]; status: approved -->
 
 **Testimonial:** „Mit der Digitalen Terminliste für die Dörfer in Vorpommern-Greifswald werden die Fahrtrouten anderer Unternehmen transparenter." — Elisabeth Kurzweg, Bäckerei Kurzweg (2022)
 
 ## Slot 4 — Value Story 2: die Ratssitzung
 
-<!-- id: dein-ort-4-story-ratssitzung; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis"]; status: draft -->
+<!-- id: dein-ort-4-story-ratssitzung; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis"]; status: approved -->
 
 **Titel:** Die Ratssitzung, bevor sie stattfindet
 
@@ -298,13 +300,13 @@ tagesaktuell und ortsgenau über die Dorfkalender (`impftermine-landkreis`,
 
 <!-- clearance: pending — `zschiesche-gross-kiesow` steht auf `usage_rights: unverified` (Q-0014), gleiche Herkunft wie die übrigen vier Testimonials der alten Website. -->
 <!-- source_note: Das Zitat liegt im Paket in ASCII-Umschrift („Fuer dieses Projekt", „Landbevoelkerung", „Haendler"); hier mit Umlauten gesetzt, Wortlaut unverändert. -->
-<!-- id: dein-ort-4-story-ratssitzung-demo-testimonial; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow"]; status: draft -->
+<!-- id: dein-ort-4-story-ratssitzung-demo-testimonial; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow"]; status: approved -->
 
 **Testimonial:** „Die selbstverwaltete und automatisierte Bereitstellung der Termindaten reduziert den Arbeitsaufwand unserer Gemeinde." — Holger Wendt, Bürgermeister in Rubkow (2022)
 
 ## Slot 5 — Value Story 3: Kultur, die niemand gesucht hätte
 
-<!-- id: dein-ort-5-story-kultur; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow"]; status: draft -->
+<!-- id: dein-ort-5-story-kultur; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow"]; status: approved -->
 
 **Titel:** Kultur, die du nicht gesucht hättest
 
@@ -337,7 +339,7 @@ Kalender.
 
 <!-- clearance: pending — `eichler-wasserschloss-quilow` und `volkshochschule-uecker-randow` stehen beide auf `usage_rights: unverified` (Q-0014). -->
 <!-- source_note: Das Zitat liegt im Paket in ASCII-Umschrift („Flaechenland"); hier mit Umlauten gesetzt, Wortlaut unverändert. -->
-<!-- id: dein-ort-5-story-kultur-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow", "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow"]; status: draft -->
+<!-- id: dein-ort-5-story-kultur-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow", "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow"]; status: approved -->
 
 **Beispiel:** Die Volkshochschule Uecker-Randow veröffentlicht ihr Kursprogramm über den Dorfkalender, Standort Pasewalk. — Kulturlandbüro Uecker-Randow, September 2024
 
@@ -345,7 +347,7 @@ Kalender.
 
 ## Slot 6 — Value Story 4: der Fünfzehn-Minuten-Radius
 
-<!-- id: dein-ort-6-story-radius; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#regional-footprint"]; status: draft -->
+<!-- id: dein-ort-6-story-radius; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#regional-footprint"]; status: approved -->
 
 **Beispiel:** Termine aus der Umgebung von {place}, live aus dem Kalender (Position 2, „diese Woche in der Nähe").
 
@@ -359,7 +361,7 @@ keine Reichweitenzahl).
 
 ## Slot 7 — Homescreen-Block
 
-<!-- id: dein-ort-7-homescreen; content_type: howto-block; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: dein-ort-7-homescreen; content_type: howto-block; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Überschrift:** So landet der Kalender auf deinem Homescreen
 
@@ -383,7 +385,7 @@ steht hier das Angebot zum Veröffentlichen, keine Homescreen-Anleitung.
 
 ## Slot 8 — CTA-Zusicherung (Permanenz-Versprechen)
 
-<!-- id: dein-ort-8-permanence; content_type: closing-cta; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: draft -->
+<!-- id: dein-ort-8-permanence; content_type: closing-cta; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: approved -->
 
 **Zusicherungstext:** Dauerhaft kostenlos und ohne Anmeldung.
 
@@ -397,7 +399,7 @@ seit 2022, kein Preismodell, das sich leise ändern lässt.
 ## Kontextband (3 Nicht-Fokus-Jobs)
 
 <!-- source_note: Angebotsformulierung statt Menü aus gtm:concept/website-communication-principles.concept.md Prinzip 2 („ordnen, nicht ausschließen"); die drei Jobs und ihre Formulierung aus der Job-Tabelle in Prinzip 1. Beantwortet state/open.md Zeile 95 für diese Seite: eigener Bandtext statt des geteilten Home-Satzes. -->
-<!-- id: dein-ort-9-context-band; content_type: context-band; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: dein-ort-9-context-band; content_type: context-band; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Kicker:** Erfahre mehr über unsere Kalenderplattform
 

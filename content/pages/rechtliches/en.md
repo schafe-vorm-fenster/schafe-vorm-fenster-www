@@ -8,7 +8,9 @@ seo:
     description: "Imprint, privacy policy, terms of use, community guidelines, data processing agreement and accessibility statement — all on one page."
     provenance: generated
 content_type: section
-status: draft
+status: approved
+reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
+reviewed_at: "2026-11-12"
 locale: en
 sources:
   - "ia"
@@ -39,7 +41,7 @@ translation.
 
 ## Page header
 
-<!-- id: rechtliches-1-header; content_type: section; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: rechtliches-1-header; content_type: section; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **h1:** Legal
 
@@ -47,7 +49,7 @@ translation.
 
 ## Section registry (order = TS-WEB-0004 D8)
 
-<!-- id: rechtliches-2-registry; content_type: legal-section; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: rechtliches-2-registry; content_type: legal-section; provenance: sourced; derived_from: [ia]; status: approved -->
 
 | Anchor | Section name | Source |
 | --- | --- | --- |
@@ -61,7 +63,7 @@ translation.
 
 ## Footer link text
 
-<!-- id: rechtliches-3-footer-labels; content_type: section; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: rechtliches-3-footer-labels; content_type: section; provenance: sourced; derived_from: [ia]; status: approved -->
 
 - Imprint → `#imprint`
 - Privacy → `#privacy`
@@ -69,7 +71,7 @@ translation.
 
 ## Accessibility statement — origin
 
-<!-- id: rechtliches-4-accessibility-note; content_type: section; provenance: generated; derived_from: []; status: draft -->
+<!-- id: rechtliches-4-accessibility-note; content_type: section; provenance: generated; derived_from: []; status: approved -->
 
 No Google Doc and no source exists for `#accessibility` yet (TS-WEB-0029
 D8, TS-WEB-0004 D8: "to be written"). Searched again on 2026-09-12: neither
@@ -87,7 +89,7 @@ German only today, like the other five; it is not translated here.
 
 ## English siblings of the legal documents
 
-<!-- id: rechtliches-5-en-gap; content_type: section; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: rechtliches-5-en-gap; content_type: section; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **The legal texts on this page are provided in German only.** All six
 sections above — the five imported documents and the accessibility

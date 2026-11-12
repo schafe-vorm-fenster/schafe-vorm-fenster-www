@@ -12,7 +12,9 @@ seo:
     description: "Tell us which territory the calendar should cover and who is responsible on your side — we come back to you with a fitting quote."
     provenance: generated
 content_type: section
-status: draft
+status: approved
+reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
+reviewed_at: "2026-11-12"
 locale: en
 sources:
   - "@schafe-vorm-fenster/messaging@0.1.0#counties--portalize-enterprise"
@@ -123,7 +125,7 @@ question (TS-WEB-0026 D3).
 
 ## Slot 1 — Focus block (mechanism: embed)
 
-<!-- id: deine-region-1-focus; content_type: hero; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/messaging@0.1.0#counties--portalize-enterprise"]; status: draft -->
+<!-- id: deine-region-1-focus; content_type: hero; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/messaging@0.1.0#counties--portalize-enterprise"]; status: approved -->
 
 **Aha question:** Your whole county in one calendar, with no portal project of your own?
 
@@ -159,7 +161,7 @@ confirmation exists.
 
 ## Slot 2 — The territory question
 
-<!-- id: deine-region-2-territory; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#counties--portalize-enterprise"]; status: draft -->
+<!-- id: deine-region-2-territory; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#counties--portalize-enterprise"]; status: approved -->
 
 **Heading:** At county scale, that's not a question for a list
 
@@ -178,7 +180,7 @@ referent: without the question above it, "that's" had none.
 
 ## Slot 3 — Interim module: examples, counter, search
 
-<!-- id: deine-region-3-interim; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: deine-region-3-interim; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Heading:** Here's what that already looks like today: places in {county}
 
@@ -201,7 +203,7 @@ otherwise it stays off, no estimate.
 
 ## Slot 4 — Embedding demo
 
-<!-- id: deine-region-4-embed-demo; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: deine-region-4-embed-demo; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Heading:** Here's what the embedding looks like
 
@@ -209,7 +211,7 @@ The same component as on `/dein-kalender` slot 3 (TS-WEB-0008 position 1′).
 
 ## Slot 5 — What it adds
 
-<!-- id: deine-region-5-was-dazukommt; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise", "@schafe-vorm-fenster/offerings@0.3.5#custom-data-integration"]; status: draft -->
+<!-- id: deine-region-5-was-dazukommt; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise", "@schafe-vorm-fenster/offerings@0.3.5#custom-data-integration"]; status: approved -->
 
 **Heading:** What the county tier adds on top
 
@@ -230,7 +232,7 @@ never priced, with no CTA of its own (`promotion: on-request-only`).
 
 ## Slot 6 — Proof (3 elements)
 
-<!-- id: deine-region-6-proof; content_type: proof-card; provenance: sourced-empty-by-design; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise"]; status: draft -->
+<!-- id: deine-region-6-proof; content_type: proof-card; provenance: sourced-empty-by-design; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise"]; status: approved -->
 
 Pool: `eichler-wasserschloss-quilow`, `partner-network` — both
 `unverified` today (Q-0014). No reference case for an already delivered
@@ -238,7 +240,7 @@ Pool: `eichler-wasserschloss-quilow`, `partner-network` — both
 below instead shows three real, named proof elements from the full set,
 and says what they do and do not prove.
 
-<!-- id: deine-region-6-proof-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#leader-foerderung-2022", "@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei", "@schafe-vorm-fenster/partners@0.2.7#stiftung-lebendiges-lehre"]; status: draft -->
+<!-- id: deine-region-6-proof-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#leader-foerderung-2022", "@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei", "@schafe-vorm-fenster/partners@0.2.7#stiftung-lebendiges-lehre"]; status: approved -->
 
 **Proof cards (real, clearance pending):** Three elements
 from the proof set — cards 2 and 3 in the wording of their records
@@ -279,7 +281,7 @@ among them: that record names no partner and has no cleared logo rights.
 
 ## Slot 7 — Response promise
 
-<!-- id: deine-region-7-response-promise; content_type: closing-cta; provenance: withheld; derived_from: []; status: draft -->
+<!-- id: deine-region-7-response-promise; content_type: closing-cta; provenance: withheld; derived_from: []; status: approved -->
 
 *No text — the constant stays `null` as long as no named handling
 process with a named owner exists (Q-0022/C11, TS-WEB-0026 D5,
@@ -296,7 +298,7 @@ a promise (F-2-57). The area stays empty until C11 is answered.
 
 ## Slot 8 — Price display
 
-<!-- id: deine-region-8-price; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise"]; status: draft -->
+<!-- id: deine-region-8-price; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise"]; status: approved -->
 
 **Text:** Price on request.
 
@@ -310,7 +312,7 @@ carries no figure any more (TS-WEB-0026-A4, DEC-0143 §4).
 
 ## `/deine-region/angebot` — Quote request form
 
-<!-- id: deine-region-angebot-1-form; content_type: form; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: deine-region-angebot-1-form; content_type: form; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Heading:** Request a quote for {county-or-organization}
 

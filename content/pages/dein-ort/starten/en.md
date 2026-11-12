@@ -8,7 +8,9 @@ seo:
     description: "Your place is not in the village calendar yet? One person, one flyer, one photo by WhatsApp — that is all it takes to get it added."
     provenance: generated
 content_type: section
-status: draft
+status: approved
+reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
+reviewed_at: "2026-11-12"
 locale: en
 sources:
   - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
@@ -68,7 +70,7 @@ determination.
 
 ## Slot 1 — Acknowledgment with place name
 
-<!-- id: dein-ort-starten-1-ack; content_type: hero; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: dein-ort-starten-1-ack; content_type: hero; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Headline (with place):** {place} isn't in the village calendar yet.
 
@@ -82,7 +84,7 @@ calendar row, or a number (TS-WEB-0021 D6).
 ## Slot 2 — What it takes
 
 <!-- clearance: pending for the press record — the 2022 Nordkurier entry carries no `usage_rights` (Q-0045, state/open.md #1). The offering record itself is free to use. -->
-<!-- id: dein-ort-starten-2-was-es-braucht; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar", "@schafe-vorm-fenster/media-echo@0.3.3#2022-nordkurier-plattform-doerfer"]; status: draft -->
+<!-- id: dein-ort-starten-2-was-es-braucht; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar", "@schafe-vorm-fenster/media-echo@0.3.3#2022-nordkurier-plattform-doerfer"]; status: approved -->
 
 **Heading:** One person is enough to get {place} into the calendar
 
@@ -99,7 +101,7 @@ commitment rather than a pricing decision that can be quietly reversed
 
 ## Slot 3 — Live module, nearest active place
 
-<!-- id: dein-ort-starten-3-beispiel; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: dein-ort-starten-3-beispiel; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Module heading:** Here's how it runs in {example_place}
 
@@ -109,7 +111,7 @@ place (TS-WEB-0021 D7) — never from the searched-for, not-found place.
 ## Slot 4 — Who usually starts it
 
 <!-- clearance: pending for `lehre-lelender` (`usage_rights: unverified`, the foundation's written clearance is outstanding). The audience record is free to use. -->
-<!-- id: dein-ort-starten-4-wer; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/audiences@0.3.3#actors", "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"]; status: draft -->
+<!-- id: dein-ort-starten-4-wer; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/audiences@0.3.3#actors", "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"]; status: approved -->
 
 **Heading:** Usually a club or the fire brigade gets it started
 
@@ -131,7 +133,7 @@ outstanding).
 
 ## Slot 5 — Place search (again)
 
-<!-- id: dein-ort-starten-5-search; content_type: section; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: dein-ort-starten-5-search; content_type: section; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Question:** Mistyped? Search again
 
@@ -150,7 +152,7 @@ polish brief's own (plan/polish-brief.md, page 3, fix 3).
 
 ## Handover to registration
 
-<!-- id: dein-ort-starten-6-cta; content_type: closing-cta; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: dein-ort-starten-6-cta; content_type: closing-cta; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **CTA label (primary):** Add {place} → `/mitmachen/registrieren?ort={place}`
 
@@ -169,7 +171,7 @@ promises none either (state/open.md row 94).
 ## Context band (3 non-focus jobs)
 
 <!-- source_note: the offer phrasing instead of a menu comes from gtm:concept/website-communication-principles.concept.md principle 2; the three jobs and their wording from the job table in principle 1. Answers state/open.md row 95 for this page. -->
-<!-- id: dein-ort-starten-7-context-band; content_type: context-band; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: dein-ort-starten-7-context-band; content_type: context-band; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Kicker:** Learn more about our calendar platform
 

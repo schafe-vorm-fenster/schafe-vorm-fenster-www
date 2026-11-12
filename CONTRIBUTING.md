@@ -107,6 +107,14 @@ Four of its checks carry rules you meet while writing:
   written there in the same commit (DEC-0141).
 - **`check:reviews`** — every point of a review dated from 2026-10-12 on ends
   with `Issue: #n` or `Kein Task: <why>` (DEC-0155).
+- **`check:content:production`** — production renders what preview renders
+  (issue #206, DEC-0222). It is `check:content` judged for a production
+  build: a page or slot under `content/pages/**` whose `status` a production
+  build drops (`draft`, `in-review`; TS-WEB-0007 D11) is an error. New or
+  changed content is therefore committed as `status: approved` — page
+  frontmatter with `reviewed_by` and `reviewed_at`, and the slot comment —
+  once the owner has approved it in the PR. Until then the PR stays red; that
+  is the gate working, not a check to work around.
 - **`check:stack`** · **`check:brand`** — the stack register and the brand
   rules below.
 
@@ -241,10 +249,12 @@ then the same variable on `pnpm exec playwright test e2e/analytics-tracking.spec
 
 ## Continuous Integration
 
-- `.github/workflows/check.yml` — `pnpm check` · `pnpm build` ·
-  `pnpm e2e:technical` (smoke, CSP and hydration, routes, external links,
-  layout stability, axe, third-party requests, against the production build)
-  on every push to `next-2026` and every PR targeting it.
+- `.github/workflows/check.yml` — the parity gate *Production renders what
+  preview renders* (`pnpm check:content:production`, DEC-0222) as its own
+  step, then `pnpm check` · `pnpm build` · `pnpm e2e:technical` (smoke, CSP
+  and hydration, routes, external links, layout stability, axe, third-party
+  requests, against the production build) on every push to `next-2026` and
+  every PR targeting `next-2026` or `main`.
 - `.github/workflows/preview-e2e.yml` — `pnpm e2e:smoke` against the Vercel
   preview once GitHub's `deployment_status` reports it ready, past
   Deployment Protection via the `VERCEL_AUTOMATION_BYPASS_SECRET` repository
