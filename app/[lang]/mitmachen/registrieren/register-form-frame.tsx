@@ -37,7 +37,7 @@
 
 import { useRef, useSyncExternalStore } from "react";
 
-import { getAnalyticsTracker } from "@/src/lib/analytics";
+import { getAnalyticsTracker } from "@/src/lib/analytics/tracker";
 
 import type { ConversionBinding } from "@/src/components/conversion-tracker/conversion-tracker";
 import type { SyntheticEvent } from "react";

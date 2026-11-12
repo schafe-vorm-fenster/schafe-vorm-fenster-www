@@ -3,6 +3,7 @@ import sheepMark from "@schafe-vorm-fenster/brand-design/logo.svg";
 import { newsletterOffered } from "@/src/components/newsletter-block/constant";
 import { NewsletterBlock } from "@/src/components/newsletter-block/newsletter-block";
 import { SkipLink } from "@/src/components/skip-link/skip-link";
+import { EtrackerAnalytics } from "@/src/lib/analytics/etracker-analytics";
 import { dictionary } from "@/src/lib/i18n/dictionary";
 import {
   HTML_LANG,
@@ -170,6 +171,10 @@ export default async function RootLayout({
             nothing; the islands that depend on `?ort=` or a flow step read
             it from `query-store.tsx` after hydration. */}
         <QuerySync />
+        {/* DEC-0218: page views on every route, client navigation included,
+            the eTracker loader when NEXT_PUBLIC_ETRACKER_SECURE_CODE is set,
+            and the one CTA click listener. Renders nothing visible. */}
+        <EtrackerAnalytics locale={locale} />
         {/* The rest of the chrome — header, breadcrumb trail, the `main`
             landmark, footer — is **one per document**, and that is why it
             hangs here rather than off each page (state/open.md rows 97 and

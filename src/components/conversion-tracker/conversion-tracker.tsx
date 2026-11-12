@@ -33,7 +33,7 @@
 
 import { useEffect, useRef, useSyncExternalStore } from "react";
 
-import { getAnalyticsTracker } from "@/src/lib/analytics";
+import { getAnalyticsTracker } from "@/src/lib/analytics/tracker";
 
 import type { ConversionAttributes, EventStage } from "@/src/lib/analytics/types";
 import type { ReactNode } from "react";

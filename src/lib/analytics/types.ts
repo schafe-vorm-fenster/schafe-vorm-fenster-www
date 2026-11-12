@@ -1,13 +1,19 @@
 /**
- * The tracker interface — TS-WEB-0012 D2's exported surface.
+ * The tracker interface — TS-WEB-0012 D2's exported surface, widened by
+ * DEC-0218 (issue 194).
  *
  * D2: "No page, component, or content file calls the eTracker API directly.
  * Everything goes through one internal module … exposing exactly:
  * `trackPageView()` … and `trackConversion(goalId, stage, attributes)`."
- * This file is that contract; `index.ts` is the one factory that decides
- * which implementation answers it (mock today — see `mock-tracker.ts` and
- * `index.ts`).
+ * DEC-0218 adds `trackCtaClick(event)` beside them, for the click event every
+ * CTA reports (`cta-event.ts`). This file is that contract; `index.ts` is the
+ * one factory that decides which implementation answers it — the real
+ * eTracker adapter when `NEXT_PUBLIC_ETRACKER_SECURE_CODE` is set, the mock
+ * otherwise.
  */
+
+import type { CtaEvent } from "./cta-event";
+import type { PageView } from "./page-view";
 
 /** D4 rule: every event carries a fixed `stage` dimension. */
 export type EventStage = "handover" | "completed";
@@ -22,23 +28,24 @@ export type ConversionAttributes = Readonly<Record<string, string | number | boo
 /**
  * D9 — the emission contract: never block, never break. Every
  * implementation of this interface (mock and real alike) must honour it:
- * `trackConversion` never throws and never delays a navigation, a blocked
- * or not-yet-loaded tracker is a silent no-op, and a dropped event is not
- * retried or queued across page loads (D1 forbids the storage that would
- * take).
+ * no method throws or delays a navigation, a blocked or not-yet-loaded
+ * tracker is a silent no-op, and a dropped event is not retried or queued
+ * across page loads (D1 forbids the storage that would take).
  */
 export interface AnalyticsTracker {
   /**
-   * Only called if `data-page-changed-detection="url"` (D2) ever proves
-   * insufficient for App Router client navigation — [FREE] per TS-WEB-0012.
-   * Optional so the mock and the real adapter need not both implement it
-   * before that need is confirmed.
+   * One call per page view, the first one included (DEC-0218 §2). The real
+   * adapter names the page (`et_pagename`, `et_areas`) and, from the second
+   * view of a document on, sends a virtual page view — the first is counted
+   * by the loader itself when it arrives.
    */
-  trackPageView?(): void;
+  trackPageView(view: PageView): void;
   /** D4 — one call per completed trigger, `goalId` a hub conversion goal id. */
   trackConversion(
     goalId: string,
     stage: EventStage,
     attributes?: ConversionAttributes,
   ): void;
+  /** DEC-0218 §3 — one call per CTA click. */
+  trackCtaClick(event: CtaEvent): void;
 }
