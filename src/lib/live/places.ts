@@ -30,6 +30,7 @@ import { searchEvents } from "@/src/clients/events-api/client";
 
 import { toLiveEvents, toPlace } from "./adapters";
 import { cacheTags } from "./cache-profiles";
+import { pickPreferred } from "./event-preference";
 import { eventsConfig, geoConfig, hasRealBackend } from "./config";
 import { cachedCommunityBySlug } from "./geo-lookup";
 import { mockEventsForPlace } from "./mocks/events";
@@ -38,7 +39,7 @@ import { hasPlaceIndex, MAX_NAME_MATCHES, nearestPlace, placeBySlug, searchByNam
 import { publicPlaceEvents } from "./public-source";
 import { resilient, type ResilientOptions } from "./resilient";
 import { placeEventsFallback } from "./snapshots";
-import { byStart, EVENT_WINDOWS, type EventWindow, haversineKm } from "./widening";
+import { EVENT_WINDOWS, type EventWindow, haversineKm } from "./widening";
 
 import type { LiveEnvelope, NearestPlace, Place, PlaceEvents, PlaceSearchResult } from "./types";
 
@@ -210,6 +211,13 @@ export async function resolvePlace(slug: string): Promise<Place | undefined> {
   return mockCommunityBySlug(slug);
 }
 
+/**
+ * How many upcoming dates position 1 chooses from (DEC-0210). A pick needs a
+ * pool to choose in; 30 reaches past one week's courses of a single organiser
+ * and still stays the near future of a village.
+ */
+export const PLACE_POOL = 30;
+
 export interface PlaceEventsInput {
   readonly slug: string;
   readonly window?: EventWindow;
@@ -242,24 +250,27 @@ export async function placeEvents({
   const { after, before } = EVENT_WINDOWS[window];
 
   const fetcher = async (): Promise<PlaceEvents> => {
-    const events = viaApi
-      ? byStart(
-          toLiveEvents(
-            (
-              await searchEvents(eventsConfig(), {
-                communities: [place.communityId],
-                after,
-                before,
-                limit: rowCount,
-              })
-            ).events,
-          ),
+    // The module shows `rowCount` dates chosen by the shared preference of
+    // DEC-0210 (one-offs first, themes mixed, culture on a tie) out of the
+    // next `PLACE_POOL` dates of its window. The window is the upstream's own
+    // (`after`/`before`), so nothing past or beyond it can enter the pool.
+    const pool = viaApi
+      ? toLiveEvents(
+          (
+            await searchEvents(eventsConfig(), {
+              communities: [place.communityId],
+              after,
+              before,
+              limit: Math.max(rowCount, PLACE_POOL),
+            })
+          ).events,
         )
       : viaPublic
         ? await publicPlaceEvents(place, { window, rowCount, now: clock() })
-        : mockEventsForPlace(place, rowCount, clock());
+        : mockEventsForPlace(place, Math.max(rowCount, PLACE_POOL), clock());
+    const events = pickPreferred(pool, rowCount);
 
-    return { place, events: events.slice(0, rowCount), publishInvitation: events.length === 0 };
+    return { place, events, publishInvitation: pool.length === 0 };
   };
 
   return resilient(fetcher, {

@@ -27,6 +27,7 @@
 import { OG_LOCALE } from "@/src/lib/i18n/locales";
 
 import { categoryLabel } from "./categories";
+import { compareByPreference } from "./event-preference";
 
 import type { EventsApiCategoryId } from "./categories";
 import type { Locale } from "@/src/lib/i18n/locales";
@@ -124,17 +125,16 @@ export function rowOf(event: LiveEvent, locale: Locale, fallbackPlace: string): 
   };
 }
 
-function byStart(a: LiveEvent, b: LiveEvent): number {
-  return new Date(a.startsAt).getTime() - new Date(b.startsAt).getTime();
-}
-
 /**
  * The five rows, one per slot.
  *
  * `own` are the recognised place's dates, `nearby` the dates around it. Slots
- * 1–4 take the earliest of `own` carrying that slot's category; slot 5 the
- * earliest of `nearby` that is not the place's own. `now` is not read: both
- * lists are the BFF's "upcoming" window already.
+ * 1–4 take the preferred date of `own` carrying that slot's category; slot 5
+ * the preferred one of `nearby` that is not the place's own. "Preferred" is
+ * the shared rule of DEC-0210 (`event-preference.ts`): a one-off before a
+ * recurring date, on a tie culture, then the earliest. `now` is not read: both
+ * lists are the BFF's "upcoming" window already, and a slot only ever picks
+ * from the list it is handed.
  */
 export function pickRows(args: {
   readonly own: readonly LiveEvent[];
@@ -145,7 +145,6 @@ export function pickRows(args: {
   readonly locale: Locale;
 }): PhoneRow[] {
   const { own, nearby, communityId, placeName, defaults, locale } = args;
-  const ownSorted = [...own].sort(byStart);
   // Another place than the recognised one: by community where the date names
   // it, by the place's name where it does not.
   const foreign = [...nearby]
@@ -154,10 +153,13 @@ export function pickRows(args: {
         ? event.communityId !== communityId
         : event.placeName !== undefined && event.placeName !== placeName,
     )
-    .sort(byStart);
+    .sort(compareByPreference);
 
   return SLOTS.map((slot, index) => {
-    const pool = slot.kind === "category" ? ownSorted.filter((event) => event.categoryId === slot.category) : foreign;
+    const pool =
+      slot.kind === "category"
+        ? own.filter((event) => event.categoryId === slot.category).sort(compareByPreference)
+        : foreign;
     for (const event of pool) {
       const row = rowOf(event, locale, placeName);
       if (row !== undefined) return row;
