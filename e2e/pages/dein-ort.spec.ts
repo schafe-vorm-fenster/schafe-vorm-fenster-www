@@ -202,9 +202,12 @@ test.describe("TS-WEB-0020 — your place", () => {
     await expect(stage).toHaveCount(1);
     await expect(stage.locator('input[type="radio"]')).toHaveCount(3);
     await expect(stage.locator("[class*='text'][data-index] > h3")).toHaveCount(3);
-    const radius = page.locator('[data-block="value-story"]');
+    // Issue 152: the radius is the nearby section — one h2, one sentence, the list.
+    const radius = page.locator("#nearby");
     await expect(radius).toHaveCount(1);
-    await expect(radius.locator("[data-example-level]")).toHaveCount(1);
+    await expect(radius.locator("h2")).toHaveCount(1);
+    await expect(radius.locator("[data-lead]")).toHaveCount(1);
+    await expect(radius.locator("[data-kicker]")).toHaveCount(0);
 
     // Every stage story has its picture or its colour — never an empty frame.
     const media = await stage.evaluate((element) =>
@@ -378,9 +381,9 @@ test.describe("TS-WEB-0020 — your place", () => {
 
     // Three, on the stage. The radius story's example is a live list and
     // carries no quote (DEC-0170, issue #84; TS-WEB-0020-A23).
-    const quotes = page.locator('[data-block="story-stage"] blockquote, [data-block="value-story"] blockquote');
+    const quotes = page.locator('[data-block="story-stage"] blockquote, #nearby blockquote');
     await expect(quotes).toHaveCount(3);
-    await expect(page.locator('[data-block="value-story"] blockquote')).toHaveCount(0);
+    await expect(page.locator("#nearby blockquote")).toHaveCount(0);
 
     for (let index = 0; index < 3; index += 1) {
       const quote = quotes.nth(index);
@@ -600,8 +603,7 @@ test.describe("TS-WEB-0020 — your place", () => {
     // DEC-0153: the three single-category stories are one stage, the radius
     // story its own section carrying the live module.
     await expect(page.locator('[data-block="story-stage"]')).toHaveCount(1);
-    await expect(page.locator('[data-block="value-story"]')).toHaveCount(1);
-    await expect(page.locator("[data-example-level]")).toHaveCount(1);
+    await expect(page.locator("#nearby")).toHaveCount(1);
     await expect(page.locator("#context-band nav")).toHaveCount(1);
     await expect(page.locator("#closing-cta")).toHaveCount(1);
 

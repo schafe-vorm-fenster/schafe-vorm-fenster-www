@@ -349,12 +349,6 @@ Kalender.
 
 <!-- id: dein-ort-6-story-radius; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#regional-footprint"]; status: draft -->
 
-**Titel:** Was in fünfzehn Minuten Entfernung passiert
-
-**Warum es zählt:** Was zwei Dörfer weiter läuft, gehört genauso in deinen Kalender wie das, was direkt vor deiner Tür passiert.
-
-**Überleitung:** Und es hört an der Gemeindegrenze nicht auf.
-
 **Beispiel:** Termine aus der Umgebung von {place}, live aus dem Kalender (Position 2, „diese Woche in der Nähe").
 
 Der Dorfkalender läuft heute in vier Bundesländern, und jede Region belegt
