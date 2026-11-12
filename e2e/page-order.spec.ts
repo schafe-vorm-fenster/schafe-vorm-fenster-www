@@ -22,7 +22,14 @@ import type { RouteId } from "../src/lib/routes/routes";
  * The two flow routes compose their chrome step by step and carry no band on
  * the steps a direct load lands on past the first (F-2-10,
  * `e2e/routes.spec.ts`); they are not `PageFrame` pages and are left out.
+ *
+ * `/mitmachen` puts its proof block between the closing block and the band:
+ * the call to act follows the three publishing paths directly (issue 154,
+ * DEC-0196). The band is still last, and the closing block still precedes it.
  */
+
+/** Pages whose own blocks stand between the closing block and the band (DEC-0196). */
+const CLOSING_THEN_OWN_BLOCKS: ReadonlyMap<RouteId, number> = new Map<RouteId, number>([["takePart", 1]]);
 
 const FLOW_ROUTES: ReadonlySet<RouteId> = new Set<RouteId>(["register", "order"]);
 /** `/ueber-uns` (DEC-0186) and `/` (DEC-0195) have no closing CTA; the band is last in main. */
@@ -59,6 +66,15 @@ for (const { route, locale } of everyRoute()) {
 
     expect(tail, `main on ${path}`).not.toBeNull();
     const last = tail!.slice(-2);
+    const between = CLOSING_THEN_OWN_BLOCKS.get(route);
+    if (between !== undefined) {
+      expect(tail!.slice(-(between + 2)), `the end of main on ${path}`).toEqual([
+        "closing-cta",
+        ...Array.from({ length: between }, () => "own"),
+        "context-band",
+      ]);
+      return;
+    }
     const merged = tail!.at(-1) === "context-band" && (await page.locator("#context-band #closing-cta").count()) === 1;
     if (merged || NO_CLOSING_CTA.has(route)) {
       expect(tail!.at(-1)).toBe("context-band");

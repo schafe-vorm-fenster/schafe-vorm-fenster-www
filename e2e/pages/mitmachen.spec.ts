@@ -7,12 +7,12 @@ import type { Locator, Page } from "@playwright/test";
 /**
  * TS-WEB-0022 — `/mitmachen`, the publishing entry.
  *
- * ACs requiring real personalization/geo-ranking (stage 1–3, TS-WEB-0008 D1 has
- * no row for this route) are not-yet-M4: TS-WEB-0022-A7/A8 are covered at unit
- * level instead (`app/[lang]/mitmachen/example-place.test.ts`); TS-WEB-0022-A10's
- * stage-3 branch and TS-WEB-0022-A14's "resolved place" branch cannot be
- * exercised until personalization is built (no anchor ever reaches this
- * page today, per D8: "no place search on this route").
+ * ACs requiring real personalization (stage 1–3) are not-yet-M4:
+ * TS-WEB-0022-A10's stage-3 branch and TS-WEB-0022-A14's "resolved place"
+ * branch cannot be exercised until personalization is built (no anchor ever
+ * reaches this page today, per D8: "no place search on this route").
+ * The spec's criteria A7, A8 and A9 are retired with the live example and
+ * have no instrument any more (DEC-0196, issue 154).
  *
  * The component half of A19 is measured on the development fixture
  * (`e2e/explain-module.spec.ts`), where timing and geometry can be isolated;
@@ -44,7 +44,7 @@ async function showFraction(page: Page, pathModule: Locator, fraction: number): 
   }, fraction);
 }
 
-test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16/A17/A18/A19: /mitmachen", () => {
+test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A12/A13/A16/A17/A18/A19: /mitmachen", () => {
   for (const viewport of VIEWPORTS) {
     test(`TS-WEB-0022-A2: exactly one data-cta="primary", visible without scrolling, resolves to /mitmachen/registrieren at ${viewport.name}`, async ({
       page,
@@ -64,34 +64,48 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16/A17/A18/A19: /mitmachen
     });
   }
 
-  test("TS-WEB-0022-A3: DOM order is hero, objections, three paths, live example, proof", async ({
+  for (const path of ["/mitmachen", "/en/take-part"]) {
+  test(`TS-WEB-0022-A3: ${path} — DOM order is hero, objections, three paths, closing CTA on ink, proof, context band`, async ({
     page,
   }) => {
-    await page.goto("/mitmachen");
+    await page.goto(path);
     const blocks = await page
-      .locator("main [data-block]")
-      .evaluateAll((elements) => elements.map((element) => element.getAttribute("data-block")));
-    // hero (scene) → objections → the `wege` slot → beispiel (live example)
-    // → beleg (proof), which is D2's order.
+      .locator("main [data-block], main #closing-cta, main #context-band")
+      .evaluateAll((elements) =>
+        elements.map((element) =>
+          element.id === "closing-cta" || element.id === "context-band"
+            ? `#${element.id}`
+            : element.getAttribute("data-block"),
+        ),
+      );
+    // hero (scene) → objections → the `wege` slot → the frame's closing CTA
+    // → beleg (proof) → the band, which is D2's order as amended by DEC-0196
+    // (issue 154): the live example is gone, and the call to act follows the
+    // third path directly.
     //
-    // Two things in this list are not D2 slots and are explained by G-4
-    // (DEC-0124). The objection block is two sections — `objections` and
-    // `archiv` — because together they measure 1627 px at 390 px and
-    // `e2e/section-budget.spec.ts` caps a section at 1270. The `wege` slot is
-    // three sections for the same reason. The `verweis` aside that stood after
-    // slot 3 is gone: the context band is the page's one hand-off (D9 as
-    // amended by DEC-0174 §3, issue #92).
+    // The `wege` slot is three sections, because one would break G-4's
+    // 1270 px (DEC-0124). The objection block is one section again since
+    // DEC-0203: the comparison module replaced its two halves, so the
+    // `archiv` section is gone (issue #46's order question goes with it).
+    // The `verweis` aside that stood after slot 3 is gone: the context band
+    // is the page's one hand-off (D9 as amended by DEC-0174 §3, issue #92).
     expect(blocks).toEqual([
       "scene",
       "objections",
-      "archiv",
       "wege",
       "wege",
       "wege",
-      "beispiel",
+      "#closing-cta",
       "beleg",
+      "#context-band",
     ]);
+    // The live example is gone in both languages; the closing CTA stands on
+    // the page's one dark ground.
+    await expect(page.locator('[data-block="beispiel"]')).toHaveCount(0);
+    await expect(page.getByText(/So sieht das in .+ aus|what that looks like in/i)).toHaveCount(0);
+    await expect(page.locator("#closing-cta")).toHaveAttribute("data-surface", "ink");
   });
+  }
 
   test('TS-WEB-0022-A4: exactly one data-block="scene", mechanism whatsapp, opener is two statements', async ({
     page,
@@ -177,37 +191,53 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16/A17/A18/A19: /mitmachen
     await expect(page.locator('[data-cta="primary"]')).toHaveCount(1);
   });
 
-  test("TS-WEB-0022-A6: the objection block is a headline, n items, and a cleared proof or nothing", async ({
+  test("TS-WEB-0022-A6: the objection block is a headline, n pairs, and a cleared proof or nothing", async ({
     page,
   }) => {
     await page.goto("/mitmachen");
-    const upper = page.locator('[data-block="objections"]');
-    const archive = page.locator('[data-block="archiv"]');
-    await expect(page.getByText("Wer euren Termin heute nicht mitbekommt")).toBeVisible();
+    const block = page.locator('[data-block="objections"]');
+    await expect(page.locator('[data-block="archiv"]')).toHaveCount(0);
+
+    // One heading, named by the section (DEC-0203 §2). Its wording is copy,
+    // so the assertion is the structure.
+    await expect(block.locator("h2")).toHaveCount(1);
+    await expect(block).toHaveAttribute("aria-labelledby", "objections-heading");
 
     // CHANGED again (DEC-0175 §3): the proof position beside the block shows
     // a cleared proof or nothing. The flat "visibly empty" panel DEC-0124 had
     // brought back is a placeholder, and a placeholder never reaches the
     // website (owner's review of 2026-10-27, issue 105).
-    await expect(upper.locator("[data-empty-proof]")).toHaveCount(0);
+    await expect(block.locator("[data-empty-proof]")).toHaveCount(0);
 
-    // Two halves, as the 2026-09-23 draft has them: three people who do not
-    // hear about the date today, then the usual channels on the archive
-    // ground (the archive half's own facts are `e2e/objection-list.spec.ts`).
-    await expect(upper.locator("[data-objection-reach] li")).toHaveCount(3);
-    await expect(archive.locator('[data-archive-block="own"] li')).toHaveCount(3);
-    await expect(page.getByText("Das ist gut so, macht weiter.")).toBeVisible();
+    // Three pairs (DEC-0203): each usual channel beside what changes. The
+    // head is the kicker and the heading only, so the stack holds the kicker
+    // and the module and nothing else: no hand-off sentence above it, no
+    // closing line under it (issue 159).
+    await expect(block.locator("li[data-pair]")).toHaveCount(3);
+    await expect(block.locator('[data-half="today"]')).toHaveCount(3);
+    await expect(block.locator('[data-half="with"]')).toHaveCount(3);
+    const stack = await block
+      .locator("[data-stack] > *")
+      .evaluateAll((elements) =>
+        elements.map((element) => {
+          if (element.hasAttribute("data-kicker")) return "kicker";
+          if (element.hasAttribute("data-comparison")) return "module";
+          return element.tagName;
+        }),
+      );
+    expect(stack).toEqual(["kicker", "module"]);
 
-    const items = await page
-      .locator('[data-block="objections"] li, [data-block="archiv"] li')
+    const items = await block
+      .locator('[data-half="today"]')
       .evaluateAll((elements) => elements.map((element) => element.textContent ?? ""));
-    expect(items).toHaveLength(6);
+    expect(items).toHaveLength(3);
     for (const item of items) {
       const text = item.toLowerCase();
       // A6: no product name, no generic claim, no numeral asserting how many
-      // channels exist. The check is scoped to the block's items, which is
-      // what the criterion says — the paths slot's kicker is the review's own
-      // "So geht's einfacher" and is not an item (DEC-0124).
+      // channels exist. The check is scoped to the *today* halves, the
+      // problem items the criterion is about — the paths slot's kicker is the
+      // review's own "So geht's einfacher" and is not an item (DEC-0124). The
+      // product name is checked over the whole module below.
       for (const banned of ["einfach", "digital", "für alle", "modern", "innovativ", "portalize"]) {
         expect(text, `objection item names "${banned}"`).not.toContain(banned);
       }
@@ -215,14 +245,8 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16/A17/A18/A19: /mitmachen
         /\b(zwei|drei|vier|fünf|sechs|sieben)\s+(Kanäle|Wege)\b/i,
       );
     }
-  });
-
-  test('TS-WEB-0022-A9: the live example names its radius "in <place>" and no page URL carries a place slug as a path segment', async ({
-    page,
-  }) => {
-    await page.goto("/mitmachen");
-    await expect(page.getByText(/^So sieht das in .+ aus$/)).toBeVisible();
-    expect(page.url()).not.toMatch(/gross-kiesow|musterdorf/);
+    // Neither half names the product (D1: "Portalize" does not occur here).
+    expect((await block.innerText()).toLowerCase()).not.toContain("portalize");
   });
 
   test("TS-WEB-0022-A12: no numeric price, no currency symbol, no 'ab', no 'Portalize', no 'local-advertising'", async ({
@@ -391,33 +415,34 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16/A17/A18/A19: /mitmachen
   });
 
   /**
-   * G-3 — no section begins with only a heading on a new colour. The paths
-   * slot's kicker, heading and sub-line are the review's own three lines
+   * DEC-0206 (TS-WEB-0006 D12) — a section's kicker is optional, so this test
+   * no longer asks every section for one (polish brief G-3's withdrawn duty).
+   * What it keeps: the paths slot's head is the review's own three lines
    * ("SO GEHT'S EINFACHER · So kommen eure Termine rein · Drei Wege. Alle
-   * nutzt ihr eh schon."), and they stand once, on the first of the slot's
-   * three sections (DEC-0124).
+   * nutzt ihr eh schon."), exactly the three levels DEC-0206 allows, and they
+   * stand once, on the first of the slot's three sections (DEC-0124). The
+   * level count and the repeated stems of every section are
+   * `e2e/section-heads.spec.ts`'s (TS-WEB-0006-A21).
    */
-  test("G-3: every section after the hero carries a kicker, and the paths slot carries its three lines", async ({
+  test("DEC-0206: the paths slot's head is its three lines, and a proof kicker that stays is marked", async ({
     page,
   }) => {
     await page.goto("/mitmachen");
-    for (const kicker of [
-      "Warum es heute hakt",
-      "So geht's einfacher",
-      "Was gerade ansteht",
-    ]) {
-      await expect(page.getByText(kicker, { exact: true })).toBeVisible();
-    }
+    // "Was gerade ansteht" was the live example's kicker; the block left the
+    // page with DEC-0196.
+    await expect(page.getByText("So geht's einfacher", { exact: true })).toBeVisible();
     await expect(page.locator("#wege-heading")).toHaveText("So kommen eure Termine rein");
     await expect(page.locator("[data-wege-subline]")).toHaveText(
       "Drei Wege. Alle nutzt ihr eh schon.",
     );
-    // The proof section's kicker is the customer-proof placeholder, marked
-    // on its element (DEC-0120 §5, state/open.md row 234); the h2 keeps its
-    // own words, so the two are not the same three words stacked.
-    const proofKicker = page.locator("[data-block='beleg'] p[class*='kicker']");
-    await expect(proofKicker).toHaveText("Wer den Kalender nutzt");
-    await expect(proofKicker).toHaveAttribute("data-demo", "true");
+    // The proof section's kicker, where the page still sets it, is the
+    // customer-proof placeholder and carries its mark (DEC-0120 §5,
+    // state/open.md row 234). Whether it stays at all is the /mitmachen page
+    // PR's to decide under DEC-0206 §3.
+    const proofKicker = page.locator("[data-block='beleg'] [data-kicker]");
+    for (const kicker of await proofKicker.all()) {
+      await expect(kicker).toHaveAttribute("data-demo", "true");
+    }
     /* The h2 was "Was andere sagen" over a pool of three customers who
        publish for themselves. The copy guide reserves that heading for press
        proof only (`website-copy-guide.md:516`, CG-017) and the review splits
@@ -488,7 +513,7 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16/A17/A18/A19: /mitmachen
     }
   });
 
-  test("TS-WEB-0022-A16: no two adjacent photo sections, exactly one dark live-data section, and the live module's box does not move once its rows arrive", async ({
+  test("TS-WEB-0022-A16: no two adjacent photo sections, exactly one dark section (the closing CTA), and the live stage boxes do not move once their rows arrive", async ({
     page,
   }) => {
     // Read off the render, not off a hand-kept list: `section-shell` writes
@@ -509,23 +534,24 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16/A17/A18/A19: /mitmachen
       ).not.toEqual(["photo", "photo"]);
     }
 
-    // Exactly one dark section, and it is the live-data one (D10's anchor).
+    // Exactly one dark section, and since DEC-0196 it is the closing CTA
+    // (D10's anchor, issue 154): `paper` (path 3) → `ink` (closing) →
+    // `lime-100` (proof) → `surface` (band).
     expect(surfaces.filter((surface) => surface === "ink")).toHaveLength(1);
-    await expect(page.locator('main [data-surface="ink"]')).toHaveAttribute(
-      "data-block",
-      "beispiel",
-    );
+    await expect(page.locator('main [data-surface="ink"]')).toHaveAttribute("id", "closing-cta");
+    const tail = surfaces.slice(-4);
+    expect(tail, "the grounds from path 3 to the band").toEqual(["paper", "ink", "lime-100", "surface"]);
 
     // The asynchronous boxes keep their height from first paint to settle:
-    // the live module (D5) and the three stage panels this page added with
-    // DEC-0124. Measured at `domcontentloaded` and again after the network
+    // the three stage panels this page added with DEC-0124, path 1's reading
+    // live rows. Measured at `domcontentloaded` and again after the network
     // has gone quiet, which is the window `e2e/layout-stability.spec.ts`
     // measures site-wide and which this route is not in.
     const heightsOf = () =>
       page.evaluate(() =>
-        [
-          ...document.querySelectorAll('[data-block="beispiel"], [data-block="wege"]'),
-        ].map((element) => Math.round(element.getBoundingClientRect().height)),
+        [...document.querySelectorAll('[data-block="wege"]')].map((element) =>
+          Math.round(element.getBoundingClientRect().height),
+        ),
       );
 
     // Every stage box already has a height at `domcontentloaded` — nothing
@@ -539,7 +565,7 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16/A17/A18/A19: /mitmachen
     for (const height of stageHeights) expect(height).toBeGreaterThan(0);
 
     const early = await heightsOf();
-    expect(early.length).toBe(4); // three `wege` sections plus the live one
+    expect(early.length).toBe(3); // the three `wege` sections
     await page.waitForLoadState("networkidle");
     const late = await heightsOf();
     for (const [index, height] of late.entries()) {

@@ -5,8 +5,8 @@ kind: rule
 status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0001, FUN-WEB-0133, FUN-WEB-0134, FUN-WEB-0135, FUN-WEB-0136, FUN-WEB-0004, FUN-WEB-0005, FUN-WEB-0006, FUN-WEB-0007, FUN-WEB-0138, CON-WEB-0059, FUN-WEB-0009, FUN-WEB-0139, CON-WEB-0060, BUS-WEB-0015, FUN-WEB-0202, BUS-WEB-0016, FUN-WEB-0203]
-sources: [SRC-0001, SRC-0003, SRC-0017, SRC-0018]
-decisions: [DEC-0036, DEC-0039, DEC-0080, DEC-0081, DEC-0082, DEC-0083, DEC-0084, DEC-0110, DEC-0170, DEC-0174]
+sources: [SRC-0001, SRC-0003, SRC-0014, SRC-0017, SRC-0018]
+decisions: [DEC-0036, DEC-0039, DEC-0080, DEC-0081, DEC-0082, DEC-0083, DEC-0084, DEC-0110, DEC-0170, DEC-0174, DEC-0196, DEC-0206]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -73,6 +73,14 @@ closing **search** on `ink` (`/`, TS-WEB-0019), it stays the last section — a
 search is not a conversion, and the second `ink` section is legal only as the
 page's last (SRC-0014 §Page Rhythm, DEC-0117). FUN-WEB-0005 and FUN-WEB-0006
 record the deviation from SRC-0001; DEM-0073 asks the source to follow.
+
+**`/mitmachen`: own blocks between block 4 and block 3** [FIXED: DEC-0196,
+owner, issue #154]. There the closing CTA follows the three publishing paths
+directly, on `ink`, and the page's proof block stands between it and the band.
+The band is still the last block in `main`, and the closing block still comes
+before it; the layout still renders the closing block and takes the blocks that
+follow it from the page (`PageFrame`'s `closing.followedBy`). Every other page
+keeps the order above.
 
 Blocks 3 and 4 are rendered by the shared layout from `page.meta.ts`, not
 hand-placed per page — that is what makes "every page" enforceable rather
@@ -268,6 +276,12 @@ context band: the band's content and the closing block are the same
 three jobs, so they render once, as the last block, rather than twice in
 sequence [PROPOSED].
 
+**Exception: the closing block does not directly precede the band on
+`/mitmachen`** (DEC-0196). It stands after the page's three publishing paths,
+on `ink` — the page's one dark section — and the proof block follows it before
+the band. It is still identical to the primary conversion: same goal ID,
+target and label.
+
 ### D7 — Scenes, not labels [FIXED: SRC-0001 §1a as applied by SRC-0017; DEC-0080]
 
 Every job introduction on every page is a scene block with a fixed shape:
@@ -366,8 +380,10 @@ visible instead of quietly passing.
 The price string is read from the offering package rather than typed into
 copy, so one place changes it [PROPOSED]. A price appearing in any other
 page's copy is a defect, not a variant. The free community calendar tier
-is not a price and not subject to this rule; its permanence promise is
-content, backed by the 2022 public commitment (SRC-0003).
+is not subject to this rule; its permanence promise is content, backed by the
+2022 public commitment (SRC-0003). On `/dein-kalender` its tier row shows the
+package's own `price.amount` as "0 €" beside the other tiers (DEC-0205); a
+price token in running text still never resolves it (TS-WEB-0006-A12).
 
 ### D11 — Promises are only displayed where a process backs them [FIXED: SRC-0003 `/deine-region`, BUS-WEB-0016, FUN-WEB-0203; enforcement PROPOSED]
 
@@ -382,6 +398,27 @@ both from a single constant, so the two can never disagree. The promise
 is bound to the lead handling behind the envoy widget (FUN-WEB-0183, CON-WEB-0081, CON-WEB-0082) and is
 flagged to envoy/ops as part of Q-0022; if that process cannot keep it,
 the promise is removed rather than softened.
+
+### D12 — At most three text levels before a section's content [FIXED: DEC-0206]
+
+The owner's rule of 2026-11-12 (issue #163), for every section after the hero:
+
+1. **At most three text levels** stand before the section's content — its
+   module, list, cards, form or quote — in this order: **kicker**,
+   **heading**, **intro**. A transition sentence or an in-between line is no
+   level of its own: it becomes the intro or goes. A label doing the kicker's
+   job (a chapter ordinal, an award seal) counts as the kicker.
+2. **The heading is required, the kicker optional.** A kicker stands only
+   where it says what the heading does not: a question (SRC-0017 CG-018), a
+   problem framing (CG-005) or a role the heading leaves unsaid. No section
+   needs a kicker to begin on a new ground; polish brief G-3's duty is
+   withdrawn.
+3. **The levels repeat nothing** — neither a word stem nor a statement.
+
+The context band (D5) and the contact section are chrome and keep their own
+form. Which kicker, transition and intro each section keeps is decided page by
+page in the follow-up PRs of issue #163; A21 lists the breaches until then as
+warnings (DEC-0206 §5).
 
 ## Free for the generator
 
@@ -407,7 +444,7 @@ the promise is removed rather than softened.
 | TS-WEB-0006-A4 | e2e | On every page whose focus job is "know what is on", the first screen contains the place-search or live-dates module and its primary conversion is not a link to another page. |
 | TS-WEB-0006-A5 | e2e | From every page, each of the four jobs is reachable in ≤ 1 click (header and context band targets resolve inside the TS-WEB-0004 D1 inventory). |
 | TS-WEB-0006-A6 | e2e | Every page renders exactly one context band, naming exactly the three non-focus jobs, in DOM order after the closing block, as the **last block in `main`** — except `/`, whose closing search block on `ink` follows it (DEC-0174 §4). |
-| TS-WEB-0006-A7 | e2e | The closing block carries the same conversion goal ID and target as the primary conversion and directly precedes the context band — or, where `primaryConversion` is `null`, is the merged three-job block, the last block. |
+| TS-WEB-0006-A7 | e2e | The closing block carries the same conversion goal ID and target as the primary conversion and directly precedes the context band — on `/mitmachen` with exactly the page's proof block between them (DEC-0196) — or, where `primaryConversion` is `null`, is the merged three-job block, the last block. |
 | TS-WEB-0006-A8 | static | Content lint (SRC-0018): zero hits of the avoid list — SRC-0017 §9 plus the glossary's avoid column — in page copy; no section-title field contains a question mark (CG-005); every scene block declares exactly one `mechanism`. |
 | TS-WEB-0006-A9 | static | No role switcher, audience selector, or self-classification control exists in the component inventory or in any rendered page. |
 | TS-WEB-0006-A10 | e2e | Stage-0 render (no geo, no referrer, no UTM, no params) and stage-3 render of the same page have identical block structure and identical `focusJob`; only module selection and order differ. The `/dein-ort` empty state is the one registered exception. |
@@ -421,6 +458,7 @@ the promise is removed rather than softened.
 | TS-WEB-0006-A18 | e2e | Every explanatory module (scene block, publishing path, price tier) contains exactly one CTA, and it carries `data-cta="secondary"` or `="equal-weight"`; the count of `data-cta="primary"` on the page is unchanged by their presence. |
 | TS-WEB-0006-A19 | e2e | On every route in both languages, and on `/dein-ort` in state A: no module repeats another's job — the homescreen instructions render at most once; no visible proof quote follows the last live row of its section; no section whose last visible text is a quote is followed by a section carrying a visible quote (SRC-0014 §Module rules, DEC-0170, `e2e/module-rules.spec.ts`). |
 | TS-WEB-0006-A20 | e2e | On every page, no top-level block of `main` other than the context band and the closing block lacks a heading of its own while every link in it points at a job the band offers: a one-sentence hand-off to another job duplicates the band (SRC-0017 CG-045, DEC-0174 §3). |
+| TS-WEB-0006-A21 | e2e | On every route but `/rechtliches`, `/ueber-uns/archiv` and the two flow routes, in both languages, at 390 × 844: every top-level section of `main` after the hero, other than the context band and the contact section, stands at most three text levels (kicker, heading, intro; a line before the heading counts) before its first content element, and no two of those levels share a word stem (D12, DEC-0206). Until the follow-up PRs of issue #163 land, `e2e/section-heads.spec.ts` reports a breach as a `warning` annotation, not a failure (DEC-0206 §5). |
 
 ## Coverage
 
@@ -447,6 +485,11 @@ the promise is removed rather than softened.
 
 ## Open points
 
+- **D12 has no requirement above it yet.** It rests on DEC-0206 and the
+  owner's decision alone; no `FUN-WEB` or `CON-WEB` states the section-head
+  cap, so no Coverage row names D12 or A21. A requirement read off the owner's
+  decision is owed, and A21 asserts instead of warning once the page PRs of
+  issue #163 have landed.
 - **Fold definition is UNKNOWN in the sources.** D3 measures the fold at
   360 × 640 and 1280 × 800; no source states at which viewport "above the
   fold" is measured. Question: are those the right two extremes, and does

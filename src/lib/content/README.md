@@ -256,17 +256,17 @@ the positional rule did.
 | Slot | Blocks a page reads | Read at |
 | --- | --- | --- |
 | `home-8-proof-stream` | the candidate list | `app/[lang]/page.tsx:153` |
-| `home-4a-scene-whatsapp-steps-demo` | lists 0 and 1 — step lines, sample rows | `app/[lang]/page.tsx:413`, `:406` |
-| `mitmachen-2-objections` | lists 0 and 1 — the two objection columns | `app/[lang]/mitmachen/page.tsx:229` |
-| `mitmachen-3a/4a/5a-path-*-steps-demo` | lists 0 and 1 each | `app/[lang]/mitmachen/page.tsx:392`/`:385`, `:433`/`:427`, `:482`/`:476` |
-| `mitmachen-7-proof-demo` | **every** list (`listItems`) | `app/[lang]/mitmachen/page.tsx:189` |
+| `home-4a-scene-whatsapp-steps-demo` | lists 0 and 1 — step lines, sample rows | `app/[lang]/page.tsx:350`, `:343` |
+| `mitmachen-2-objections` | the three comparison pairs and the head (DEC-0203) | `app/[lang]/mitmachen/page.tsx:237` |
+| `mitmachen-3a/4a/5a-path-*-steps-demo` | lists 0 and 1 each | `app/[lang]/mitmachen/page.tsx:390`/`:383`, `:431`/`:425`, `:480`/`:474` |
+| `mitmachen-7-proof-demo` | **every** list (`listItems`) | `app/[lang]/mitmachen/page.tsx:194` |
 | `ueber-uns-3-proof-stream` | the five proof items under *Pool: …* | `app/[lang]/ueber-uns/page.tsx:156` |
 | `deine-region-6-proof-demo` | the three quote items | `app/[lang]/deine-region/page.tsx:196` |
-| `dein-kalender-5-proof-demo` | **every** list (`listItems`) | `app/[lang]/dein-kalender/page.tsx:286` |
+| `dein-kalender-5-proof-demo` | **every** list (`listItems`) | `app/[lang]/dein-kalender/page.tsx:276` |
 | `archiv-2-rows-demo` | the 192-cell archive table | `app/[lang]/ueber-uns/archiv/page.tsx:95` |
-| `dein-kalender-2-contrast` | the four comparison rows and the head | `app/[lang]/dein-kalender/page.tsx:218`, `:219` |
-| `dein-kalender-3-embed-demo` | paragraph 0 — the two embed sentences | `app/[lang]/dein-kalender/page.tsx:194` |
-| `dein-kalender-3b-embed-config` | paragraphs 0 and 1, and the settings table | `app/[lang]/dein-kalender/page.tsx:198`, `content.ts:58` |
+| `dein-kalender-2-contrast` | the four comparison pairs and the head (`comparisonPairs`, DEC-0203) | `app/[lang]/dein-kalender/page.tsx:224` |
+| `dein-kalender-3-embed-demo` | paragraph 0 — the two embed sentences | `app/[lang]/dein-kalender/page.tsx:201` |
+| `dein-kalender-3b-embed-config` | paragraph 0, and the settings table | `app/[lang]/dein-kalender/page.tsx:205`, `content.ts:58` |
 | `dein-kalender-4-tiers-checks-demo` | the tier-checks table | `app/[lang]/dein-kalender/content.ts:58` |
 | `rechtliches-2-registry` | the section-title table | `app/[lang]/rechtliches/page.tsx:91` |
 | `registrieren-2-wer`, `registrieren-3-weg` | **every** list — the option labels | `app/[lang]/mitmachen/registrieren/page.tsx:189`, `:193` |

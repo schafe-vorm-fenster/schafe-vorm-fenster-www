@@ -1,7 +1,7 @@
 ---
 title: "Website Design System — www.schafe-vorm-fenster.de"
 created_at: 2026-09-10
-updated_at: 2026-10-27
+updated_at: 2026-11-12
 status: draft
 source: workshop
 intent: inform
@@ -307,7 +307,9 @@ from the package, with no override behind either.
 
 - **Radius:** `999px` for controls and the logo, `0` everywhere else. A card
   that is wholly one link counts as a control (`DEC-0156`).
-  There is no third value.
+  There is no third value, with one named exception: the outer corners of a
+  pair in the *Comparison* module (24 px on the phone, 28 px from `lg`,
+  `DEC-0203`).
 - **Horizontal padding:** 16 px inside the viewport below `md` (640 px);
   from `md` up the outer margin steps with the grid — see *Layout Grid*.
 - **Vertical padding:** 26–30 px for standard sections, 20–24 px for tight
@@ -704,8 +706,17 @@ Two forms. Both are mono, uppercase, 700, tracked `0.08em`.
 | Kicker (bare) | no pill, no ground, 15 px, `lime-800` on light, `archive ink` in an archive block, `paper` on ink or photo | The standing eyebrow above a section head |
 | Kicker (badge) | the badge above, with an 18 px icon | Where the kicker carries a mark: a step counter, an award, a status |
 
-The bare kicker is the default. The badge kicker stays available and is the
-alternative, not a decoration to be added on top.
+The bare kicker is the default form. The badge kicker stays available and is
+the alternative, not a decoration to be added on top.
+
+**A section needs no kicker** (DEC-0206, owner 2026-11-12). Before a section's
+content stand at most three text levels — kicker, heading, intro — and the
+heading is the one that is required. A kicker stands only where it says what
+the heading does not: a question, a problem framing, a role. It shares no word
+stem with the heading or the intro beneath it. A transition line between the
+kicker and the heading is no fourth level: it becomes the intro or goes. Where
+a module head below names its own kicker, headline and lead (story stage,
+price section), those are the three levels, and none of them is added on top.
 
 ### Event row
 
@@ -1424,17 +1435,30 @@ grey-green, over rows set in a hierarchy of their own. The language is
 
 ### Comparison
 
-**Today against with your calendar, one pair per row** (#94, `DEC-0172` §2).
-The two halves are two flat fields that butt against each other; a gap of
-`space-2` separates the pairs on the section's ground.
+**Today, then with your calendar: one block per pair** (issue #159, version
+1a, `DEC-0203`; it replaces the archive-ground pairs of `DEC-0172` §2). One
+component for both places it stands — `/dein-kalender` (four pairs) and
+`/mitmachen` (three pairs); only the content changes. The head is the kicker
+and the heading, nothing else.
 
 | Part | Rule |
 | --- | --- |
-| Today | `archive ground`, the sentence in `text-2`, the label in `archive ink` — the old world (*Archive*); nothing positive on it |
-| With your calendar | `lime-100`, the sentence in `ink`, the label in `lime-800` — the fresh ground for solution content (*Section grounds*) |
-| Label | Mono 15 / 700, uppercase, **above** its sentence (the *Desktop Raster* board), with a colon for assistive technology only, so the pair reads aloud as one statement |
-| Layout | Below `xl` the halves of a pair stack, today on top; from `xl` 6 + 6 in one row (*Placement rules*) |
-| Not | A hairline text table, a checkmark or cross column, a radius, a product name in a label (`TS-WEB-0024` D4) |
+| Section | `paper`, full-bleed, content in the container; padding 32 / 40 px on the phone, 64 / 72 px from `lg` |
+| Heading | 32 px on the phone, 44 px from `lg`, 800, 1.02, −0.035em; 22 px to the first icon circle on the phone, 32 px to the first pair from `lg` |
+| Pair | One block of two halves with a straight edge between them and the radius on the **outside only**: 24 px on the phone (top of *today*, bottom of *with*), 28 px from `lg` (left of *today*, right of *with*). 44 px between pairs on the phone (room for the icon circle), 12 px from `lg` |
+| Today | `surface`, the sentence in `text-2` 400, the label in `muted`. Padding 40 / 20 / 32 px on the phone, 26 / 44 / 26 / 28 px from `lg` |
+| With your calendar | `lime-500`, the sentence in `ink` 700, the label in `lime-900`. Padding 32 / 20 / 22 px on the phone, 26 / 28 / 26 / 44 px from `lg` |
+| Text | 16 px on the phone, 17 px from `lg`, line height 1.45 |
+| Label | Mono 15 / 700, uppercase, `0.08em`, **above** its sentence, 6 px apart, with a colon for assistive technology only, so the pair reads aloud as one statement |
+| Topic circle | 52 px `ink` circle, a 24 px Lucide glyph in `paper`, with *today* only. On the phone centred, half over the block's top edge (26 px above it); from `lg` in front of the text, 16 px apart, vertically centred in the block |
+| Arrow circle | 44 px `ink` circle, `arrow-right` 24 px in `paper`, on the edge between the halves: centred on the seam pointing down on the phone, on the middle edge pointing right from `lg`, vertically centred |
+| Layout | Below `lg` the halves stack, today on top, the text left-aligned over the full width; from `lg` 50/50 in one row, both halves the same height and both texts starting at the same height (not vertically centred) |
+| A11y | Each pair is one list item. Both circles are decoration (`aria-hidden`); the labels carry the meaning. Text on `surface` and on `lime-500` clears 9:1 |
+| Not | A table, a checkmark or cross column, a product name in a label (`TS-WEB-0024` D4), an introduction or a closing sentence around the pairs |
+
+The design's values that the system does not have stand at the nearest legal
+one: `#171D0D` is `ink`; the 12 / 13 px labels are the 15 px floor; the 26 and
+22 px glyphs are 24 px; the 760 px switch is `lg` (768 px). `DEC-0203` §4.
 
 ### Source-to-target flow
 
@@ -1753,7 +1777,8 @@ One set only: **Lucide**, 24 × 24 grid, 2 px stroke, round caps and joins.
 Icons are monochrome and inherit a single token colour; they are never
 filled and never two-tone. An icon sits in a round ground only where that
 ground is one of the two wells defined above — a 40 px icon well or a 44 px
-control well.
+control well — or the 52 px topic circle of the *Comparison* module
+(`DEC-0203`).
 
 Sizes: **24 px** standard (buttons, rows, list items, wells), **18 px**
 inside a badge or kicker, **32 px** for a section-leading icon without a

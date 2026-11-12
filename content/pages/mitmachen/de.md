@@ -14,7 +14,6 @@ sources:
   - "@schafe-vorm-fenster/audiences@0.3.3#actors"
   - "@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"
   - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
-  - "@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"
   - "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"
   - "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow"
   - "@schafe-vorm-fenster/proof@0.3.5#zukunftswege-ost-newsletter"
@@ -24,7 +23,6 @@ derived_from:
   - "@schafe-vorm-fenster/audiences@0.3.3#actors"
   - "@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"
   - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
-  - "@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"
   - "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"
   - "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow"
   - "@schafe-vorm-fenster/proof@0.3.5#zukunftswege-ost-newsletter"
@@ -33,7 +31,7 @@ derived_from:
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "sourced — every slot except the three `*-steps-demo` siblings, which are `provenance: generated; demo: true`: the step lines of the three explain modules exist only in the 2026-09-23 design drafts (DEC-0124, state/open.md). Slot 6a names Groß Kiesow against the real record anchored there, slot 7 carries three real publish-weighted reference cases instead of demo quotes, and slot 8 cites the offering record together with the 2022 Nordkurier entry behind the permanence commitment; all of those are clearance: pending (Q-0014, Q-0045)"
+provenance: "sourced — every slot except the three `*-steps-demo` siblings, which are `provenance: generated; demo: true`: the step lines of the three explain modules exist only in the 2026-09-23 design drafts (DEC-0124, state/open.md). Slot 7 carries three real publish-weighted reference cases instead of demo quotes, and slot 8 cites the offering record together with the 2022 Nordkurier entry behind the permanence commitment; all of those are clearance: pending (Q-0014, Q-0045)"
 compliance_check: "state/content-map.md#compliance-checks — TS-WEB-0022"
 schema_note: "see content/pages/home/de.md — same TS-WEB-0007/schema gap, state/open.md #37"
 open_points:
@@ -137,8 +135,10 @@ images:
 
 Fokusjob „publish our dates" durchgängig, kein Preis, kein „Portalize",
 kein `local-advertising` auf dieser Seite (TS-WEB-0022 D1, D7, D11; DEC-0052
-§1/§3). Reihenfolge: Hero → Einwände → drei Publizierwege → Live-Beispiel
-→ Beleg (TS-WEB-0022 D2).
+§1/§3). Reihenfolge: Hero → Einwände → drei Publizierwege → Abschluss-CTA
+(Slot 8, auf `ink`) → Beleg (TS-WEB-0022 D2, geändert durch DEC-0196). Das
+Live-Beispiel (früher Slot 6 und 6a) steht seit DEC-0196 nicht mehr auf der
+Seite; die Slot-Nummern 7 bis 9 bleiben, weil Code und Register sie zitieren.
 
 Zwei Trennzeichen kommen in den Listen vor und sind Teil des Formats:
 ` — ` trennt Kern und Ergänzung einer Zeile (Einwandzeilen, Schrittzeilen),
@@ -153,8 +153,6 @@ solchen Zeile ein Gedankenstrich im Satz selbst.
 
 **Aussage 2 (Lead):** Und der Termin steht im Kalender.
 
-**Übergang in den Einwandblock:** Du hast den Flyer sowieso schon gedruckt. Fotografier ihn, schick das Bild per WhatsApp, fertig: Der Termin ist in deinem Ort sichtbar, und in den Orten drumherum gleich mit.
-
 **CTA-Label (primär):** Jetzt kostenlos anmelden
 
 Quelle: `headline` und `relievers[0]` von
@@ -167,23 +165,22 @@ die Überschrift trägt die erste, der Lead die zweite (CG-005, CG-020,
 CG-021; TS-WEB-0022-A4). Das CTA-Label ist die konkretere Fassung, die das
 Review nennt.
 
-## Slot 2 — Einwandblock: wer euren Termin heute nicht mitbekommt
+Der Übergangssatz in den Einwandblock („Du hast den Flyer sowieso schon
+gedruckt …“) ist mit Issue #159 entfallen: Der Kopf des Vergleichsmoduls ist
+nur Dachzeile und Überschrift, die Lösung steht in jedem Paar direkt neben
+dem Problem (DEC-0203).
 
-<!-- id: mitmachen-2-objections; content_type: objection-list; provenance: sourced; derived_from: ["@schafe-vorm-fenster/audiences@0.3.3#actors", "@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"]; status: draft -->
+## Slot 2 — Vergleich: wer euren Termin heute nicht mitbekommt
+
+<!-- id: mitmachen-2-objections; content_type: comparison; provenance: sourced; derived_from: ["@schafe-vorm-fenster/audiences@0.3.3#actors", "@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"]; status: draft -->
 
 **Überschrift:** Wer euren Termin heute nicht mitbekommt
 
-- Die Nachbarn — Im selben Dorf, aber nicht im Verein und nicht in der Gruppe.
-- Das Nachbardorf — Fünf Kilometer weiter. Die kämen, wenn sie es wüssten.
-- Die Neuen — Gerade hergezogen, noch in keiner Liste und keinem Kanal.
-
-**Kicker der unteren Hälfte:** Die üblichen Wege
-
-- Flyer und Aushänge enden an der Ortsgrenze. — Und oft hängen sie gar nicht erst, wenn niemand Zeit zum Verteilen hat.
-- Zeitung und Amtsblatt haben Redaktionsschluss, und eine Redaktion. — Ein verschobener Termin kommt zu spät. Und manches wird gar nicht erst gedruckt.
-- Eigene Website, Instagram, WhatsApp-Gruppe erreichen die, die euch schon kennen. — Das ist gut so, macht weiter. Nur wer euch noch nicht kennt, bekommt davon nichts mit.
-
-**Abschlusssatz:** Im Ehrenamt bleibt keine Zeit, jeden Termin mehrfach einzutragen. Am liebsten schickt man ihn einmal per WhatsApp raus, und gut.
+| Heute | Mit eurem Kalender |
+| --- | --- |
+| Flyer und Aushänge enden an der Ortsgrenze. | Ein Foto vom Flyer per WhatsApp, und der Termin steht auch in den Orten drumherum. |
+| Zeitung und Amtsblatt haben Redaktionsschluss, und eine Redaktion. | Neu, verschoben, abgesagt: Im Kalender steht es sofort, ohne Redaktionsschluss. |
+| Website, Instagram und WhatsApp-Gruppe erreichen die, die euch schon kennen. | Im Dorfkalender sehen es auch die Nachbarn, das Nachbardorf und die Neuen. |
 
 <!-- note: ab hier Autorennotiz, keine Copy — der Abschnitt zitiert verbotene Begriffe, um sie zu verbieten (DEC-0142 §1) -->
 
@@ -192,6 +189,17 @@ werden „by hand" in mehrere Kanäle getippt) und `pains[]` aus
 `actors--community-calendar` (5 Einträge). Keine Kanalzahl wird genannt —
 „sechs" ist im Audience-Record eine Redewendung, keine Aufzählung
 (TS-WEB-0022 D3).
+
+**Fassung von Issue #159 (2026-11-12, DEC-0203).** Der Abschnitt ist das
+Vergleichsmodul „Heute → Mit eurem Kalender“, dieselbe Komponente wie auf
+`/dein-kalender`: drei Paare, je ein Problem neben seiner Lösung. Alle Sätze
+der Tabelle sind der Wortlaut des Owners aus dem Issue. Entfallen sind der
+Block „Die Nachbarn / Das Nachbardorf / Die Neuen“ (die drei stehen jetzt in
+der Lösung von Paar 3), die Ergänzungszeilen der üblichen Wege und der
+Abschlusssatz „Im Ehrenamt bleibt keine Zeit …“. Die Icons je Paar
+(megaphone, clock, users) setzt die Seite, nicht diese Datei.
+
+Was folgt, ist die Geschichte der Vorfassung.
 
 Zwei Hälften, wie im Entwurf „Design – wo es hakt" vom 2026-09-23
 (Variante 2b „Angestaubt · Sepia"): oben die drei konkreten Personen, die
@@ -387,36 +395,6 @@ geschrieben, deshalb `provenance: generated`, `demo: true` und im Markup
 `data-demo="true"` (DEC-0068, DEC-0124, `state/open.md`). Kein Betrag, kein
 Währungszeichen, kein „ab": der Zusatz hat `price_status: on-request` und
 ist auf `/mitmachen` ohne Zahl zu nennen (TS-WEB-0022 D1/D11, A12, A17).
-
-## Slot 6 — Live-Beispiel
-
-<!-- id: mitmachen-6-beispiel; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: draft -->
-
-**Modul-Überschrift:** So sieht das in {ort} aus
-
-Bei bekanntem Ort: der nächste aktive Ort mit Terminen (TS-WEB-0008 Position
-3 → 1). Nie der gesuchte Ort der Besucherin selbst und nie ein nicht
-abgedeckter Ort als Daten (FUN-WEB-0024).
-
-### Slot 6a — Referenzort für Stufe 0 (kein Kontext bekannt)
-
-<!-- clearance: pending — `zschiesche-gross-kiesow` steht auf `usage_rights: unverified` (Q-0014). Der Ort selbst ist eine Konfiguration, kein Zitat; zitiert wird hier nichts. -->
-<!-- source_note: Ehrlichkeitsregel „das Live-Beispiel ist immer ein real abgedeckter Ort" aus gtm:concept/website-information-architecture.concept.md, Seitenbrief `/dein-ort/starten` („Empty-state rule"). -->
-<!-- id: mitmachen-6a-reference-place; content_type: configuration; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"]; status: draft -->
-
-**Referenzort (Stufe 0):** Groß Kiesow
-
-Solange kein Kontext bekannt ist, zeigt das Live-Beispiel Groß Kiesow —
-einen real abgedeckten Ort, für den ein eigener Beleg im Hub liegt
-(`zschiesche-gross-kiesow`, Zitat der Bürgermeisterin Dr. A. Zschiesche
-von 2022, Freigabe steht aus). Kein erfundener Ort, keine erfundenen
-Termine: Das Modul zeigt die echten Daten dieses Orts. Zu ersetzen,
-sobald Content/Editorial einen anderen oder zusätzlichen Referenzort
-benennt (`state/open.md` #44).
-
-Derselbe Anker trägt den dritten Zustand von Weg 1: Das Erklärmodul zeigt
-dort die echten Zeilen des Live-Beispiels, nicht erfundene (DEC-0068
-Regel 3, DEC-0115).
 
 ## Slot 7 — Belegblock (3 Elemente, publish-gewichtet)
 

@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { PRICE_TIERS } from "@/src/components/price-section/price-section";
 import { parseBlocks } from "@/src/lib/content/blocks";
 
-import { comparisonLabels, settingRows, settingTags, tierChecks } from "./content";
+import { settingRows, settingTags, tierChecks } from "./content";
 
 /**
  * The two tables `/dein-kalender` reads (DEC-0131 §1/§3). The fixtures are
@@ -101,35 +101,5 @@ describe("tierChecks", () => {
 | portalize-kalender | eins |
 `;
     expect(() => tierChecks(parseBlocks(typo), PRICE_TIERS)).toThrow(/portalize-kalender/u);
-  });
-});
-
-describe("comparisonLabels", () => {
-  const CONTRAST_TABLE = `
-| Heute | Mit eurem Kalender |
-| --- | --- |
-| eins heute | eins mit Kalender |
-`;
-
-  it("reads both column labels off the table head", () => {
-    expect(comparisonLabels(parseBlocks(CONTRAST_TABLE))).toEqual({
-      today: "Heute",
-      withCalendar: "Mit eurem Kalender",
-    });
-  });
-
-  it("throws where a label is missing rather than rendering a bare colon", () => {
-    const missing = `
-| Heute |  |
-| --- | --- |
-| eins heute | eins mit Kalender |
-`;
-    expect(() => comparisonLabels(parseBlocks(missing))).toThrow(/column labels/u);
-  });
-
-  it("throws where the slot carries no table at all", () => {
-    expect(() => comparisonLabels(parseBlocks("**Überschrift:** ohne Tabelle"))).toThrow(
-      /column labels/u,
-    );
   });
 });

@@ -94,7 +94,7 @@ content `describe()` names the rule rather than restating it.
 | --- | --- | --- |
 | CG-017 casual, never flat | `lint` · `review` | Lint: the four rejected headings are avoid-list rows. Flatness in a new heading is review. |
 | CG-018 no abstraction heading | `lint` · `review` | Same shape — the rejected headings are avoid-list rows, flatness is review. CG-018's *use* examples are **question forms and are legal only as kickers**; the CG-005 lint (a `?` in a section-title field fails) is unchanged by them and is what keeps the two apart. A generator that reads CG-018 as permission to title a section *"Was hilft euch das?"* fails that row, which is the intended outcome. |
-| CG-019 kicker vocabulary per section role | `review` | The role table has three deliberately empty rows (SRC-0017 §5); a lint over it would enforce a gap. |
+| CG-019 kicker vocabulary per section role | `review` · `e2e` | The role table has three deliberately empty rows (SRC-0017 §5); a lint over it would enforce a gap. The section-head cap DEC-0206 added — at most three text levels, kicker optional, no word stem shared between kicker, title and intro — is read off the rendered page by `TS-WEB-0006-A21` (`e2e/section-heads.spec.ts`), as a warning until the page PRs of issue #163 land; a repeated *statement* in other words stays `review`. |
 
 ### Block budgets
 

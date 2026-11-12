@@ -1,9 +1,11 @@
 import { imageCredit } from "@/src/components/photo-surface/image-credit";
 import { Button } from "@/src/components/button/button";
-import { ComparisonTable } from "@/src/components/comparison-table/comparison-table";
+import {
+  COMPARISON_SECTION_CLASS,
+  ComparisonTable,
+} from "@/src/components/comparison-table/comparison-table";
 import { EmbedFrame } from "@/src/components/embed-frame/embed-frame";
 import { HeroBlock } from "@/src/components/hero-block/hero-block";
-import { Icon } from "@/src/components/icon/icon";
 import { OutboundLink } from "@/src/components/outbound-link/outbound-link";
 import {
   PRICE_TIERS,
@@ -27,25 +29,23 @@ import { isDemoSlot } from "@/src/lib/content/provenance";
 import { CONFIG_REPO_URL } from "@/src/lib/embed/config-repo";
 import { DEFAULT_WEEKS_AHEAD, SHOWCASE_CALENDAR } from "@/src/lib/embed/portalize";
 import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
-import { offeringPrice } from "@/src/lib/pricing/offerings";
+import { tierPrice } from "@/src/lib/pricing/offerings";
 import { dictionary } from "@/src/lib/i18n/dictionary";
-import { pageTitle } from "@/src/lib/routes/metadata";
 
+import { comparisonPairs } from "../_comparison";
 import { PageJsonLd } from "../_structured-data";
 import { pageContent } from "../_content";
 import { parseProofLine, proofHeading, quoteAuthor, selectProof, selectedProofKind } from "../_proof";
 import { localeFrom, pageMetadataFor } from "../_locale";
 import { PageFrame } from "../_page-frame";
 
-import { comparisonLabels, settingRows, tierChecks } from "./content";
+import { settingRows, tierChecks } from "./content";
 import { pageMeta } from "./page.meta";
 
-import { Fragment } from "react";
 
 import pageStyles from "../_pages.module.css";
 
 import type { IconName } from "@/src/components/icon/icon";
-import type { FourComparisonRows } from "@/src/components/content-fragments";
 import type { ContentBlock } from "@/src/lib/content/types";
 import type { Locale } from "@/src/lib/i18n/locales";
 import type { Metadata } from "next";
@@ -112,6 +112,9 @@ const SETTING_CHECKED_MARKER: Record<Locale, string> = {
   en: "being checked",
 };
 
+/** The bold label before each example (issue 162, DEC-0204). */
+const EXAMPLE_LABEL: Record<Locale, string> = { de: "Beispiel:", en: "Example:" };
+
 /** The row index whose fact is still open upstream — `Zeitraum` / `Window`. */
 const SETTING_UNCONFIRMED_INDEX = 3;
 
@@ -131,8 +134,12 @@ const SETTING_ICONS: readonly IconName[] = [
   "circle-check",
 ];
 
-/** The flow's sources, in the drafts' order — decorative glyphs beside the artifact's words. */
-const SOURCE_ICONS: readonly IconName[] = ["smartphone", "calendar-days", "globe"];
+/**
+ * The four pairs' topic glyphs, in the artifact's row order (issue 159): the
+ * CMS module, who keeps it current, the second login, the boundary. Decorative,
+ * so the order is the only thing that binds a glyph to its pair.
+ */
+const CONTRAST_ICONS: readonly IconName[] = ["monitor", "users", "smartphone", "map-pin"];
 
 const TRUST_HEADLINE: Record<Locale, string> = {
   de: "Wie eure Daten hier behandelt werden",
@@ -197,10 +204,6 @@ export default async function Page({
   const configParagraphs = embedConfig.blocks.flatMap((block) =>
     block.kind === "paragraph" ? [block.text] : [],
   );
-  const configSources = (fieldAt(embedConfig.blocks, 1) ?? "")
-    .split("·")
-    .map((value) => value.trim())
-    .filter((value) => value !== "");
   const configSettings = settingRows(embedConfig.blocks);
   const tiers = slot(page, "dein-kalender-4-tiers");
   // The three check lines per tier are the drafts', not the owner's: their
@@ -215,17 +218,10 @@ export default async function Page({
   const closing = slot(page, "dein-kalender-7-closing");
   const contextBand = slot(home, "home-10-context-band");
 
-  const table = contrast.blocks.find((block) => block.kind === "table");
-  const labels = comparisonLabels(contrast.blocks);
-  const comparisonRows: FourComparisonRows =
-    table && table.kind === "table" && table.rows.length === 4
-      ? (table.rows.map((row) => ({ today: row[0] ?? "", withProduct: row[1] ?? "" })) as unknown as FourComparisonRows)
-      : [
-          { today: "", withProduct: "" },
-          { today: "", withProduct: "" },
-          { today: "", withProduct: "" },
-          { today: "", withProduct: "" },
-        ];
+  // Four pairs, each with its topic glyph (TS-WEB-0024 D4, issue 159): a
+  // table that is not four rows fails the build rather than rendering a pair
+  // without a sentence or a glyph (DEC-0203 §3).
+  const comparison = comparisonPairs(contrast.blocks, CONTRAST_ICONS, "dein-kalender-2-contrast");
 
   /**
    * The tiers, in the order `TS-WEB-0024 D6/D6a` fixes, each with the one CTA
@@ -237,13 +233,13 @@ export default async function Page({
     readonly offeringId: PriceTierId;
     readonly kicker: string;
     readonly title: string;
-    readonly cta: { readonly label: string; readonly to: "takePart" | "order" | "region" };
+    readonly cta: { readonly label: string; readonly to: "register" | "order" | "region" };
   }[] = [
     {
       offeringId: "community-calendar",
       kicker: fieldAt(tiers.blocks, 2) ?? "",
       title: fieldAt(tiers.blocks, 3) ?? "",
-      cta: { label: withoutArrow(fieldAt(tiers.blocks, 4)), to: "takePart" },
+      cta: { label: withoutArrow(fieldAt(tiers.blocks, 4)), to: "register" },
     },
     {
       offeringId: "portalize-calendar",
@@ -253,15 +249,9 @@ export default async function Page({
     },
     {
       offeringId: "portalize-enterprise",
-      kicker: fieldAt(tiers.blocks, 9) ?? "",
-      title: fieldAt(tiers.blocks, 10) ?? "",
-      /**
-       * The link names where it goes, and nothing else. "Weiter zu Kalender
-       * für euer ganzes Gebiet" wrapped to two centred lines in a column of
-       * otherwise left-aligned controls (brief, page 6, item 3), and the
-       * tier's own title already says which territory this is.
-       */
-      cta: { label: pageTitle("region", locale), to: "region" },
+      kicker: fieldAt(tiers.blocks, 8) ?? "",
+      title: fieldAt(tiers.blocks, 9) ?? "",
+      cta: { label: withoutArrow(fieldAt(tiers.blocks, 10)), to: "region" },
     },
   ];
 
@@ -380,18 +370,22 @@ export default async function Page({
         />
       </div>
 
+      {/* The comparison module of issue 159, the same component as
+          `/mitmachen`'s, with the municipalities' four pairs. The head is the
+          kicker and the heading and nothing else (DEC-0203 §2). */}
       <SectionShell
+        className={COMPARISON_SECTION_CLASS}
         dataBlock="contrast"
         kicker={dictionary(locale).kickers.objection}
+        labelledBy="contrast-heading"
         surface="paper"
       >
-        {/* Kicker "Warum es heute hakt" over a title that says what goes —
-            the CG-005 / CG-018 split, with the review's own headline. */}
         <ComparisonTable
-          headline={fieldAt(contrast.blocks, 0)}
-          rows={comparisonRows}
-          todayLabel={labels.today}
-          withProductLabel={labels.withCalendar}
+          headingId="contrast-heading"
+          headline={fieldAt(contrast.blocks, 0) ?? ""}
+          rows={comparison.rows}
+          todayLabel={comparison.labels.today}
+          withProductLabel={comparison.labels.withCalendar}
         />
       </SectionShell>
 
@@ -451,52 +445,14 @@ export default async function Page({
           <p className={pageStyles.configLead}>{configParagraphs[0]}</p>
         </div>
 
-        {/* The benefit band, drawn as the flow it describes (DEC-0172 §3,
-            SRC-0014 §Source-to-target flow). It was three white pills, an
-            arrow on a line of its own and one black pill: four things that
-            looked like buttons and were not, in two fills whose meaning
-            nothing said (review 2026-10-27, #96). Now the sources are a
-            plain list with their glyphs, the arrow points from them to the
-            target, and the target is a flat square field — a place, not a
-            control. `lime-500`, the fresh ground the review asked for. */}
-        <div className={pageStyles.benefitBand} data-surface="lime-500">
-          <div className="container">
-            <figure className={pageStyles.flow} data-flow>
-              <div className={pageStyles.flowSources}>
-                <p className={pageStyles.flowCaption} id="flow-sources-caption">
-                  {FLOW_CAPTION[locale].sources}
-                </p>
-                <ul aria-labelledby="flow-sources-caption" className={pageStyles.flowSourceList}>
-                  {configSources.map((source, index) => (
-                    <li className={pageStyles.flowSource} data-flow-source key={source}>
-                      {SOURCE_ICONS[index] ? <Icon name={SOURCE_ICONS[index]} size={24} /> : null}
-                      {source}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <span aria-hidden="true" className={pageStyles.flowArrow}>
-                <Icon name="arrow-right" size={32} />
-              </span>
-              <div className={pageStyles.flowTarget} data-flow-target>
-                <p className={pageStyles.flowCaption}>{FLOW_CAPTION[locale].target}</p>
-                <p className={pageStyles.flowTargetName}>
-                  <Icon name="monitor" size={32} />
-                  {fieldAt(embedConfig.blocks, 2)}
-                </p>
-              </div>
-              <figcaption className={pageStyles.benefitLine}>{configParagraphs[1]}</figcaption>
-            </figure>
-          </div>
-        </div>
-
         <div className="container">
-          <h3 className={pageStyles.settingsHeading}>{fieldAt(embedConfig.blocks, 3)}</h3>
+          <h3 className={pageStyles.settingsHeading}>{fieldAt(embedConfig.blocks, 1)}</h3>
           <SettingRows>
             {configSettings.map((row, index) => (
               <SettingRow
                 core={row.core}
                 example={row.example}
+                exampleLabel={EXAMPLE_LABEL[locale]}
                 icon={SETTING_ICONS[index] ?? "info"}
                 key={row.title}
                 marker={
@@ -514,7 +470,7 @@ export default async function Page({
           {CONFIG_REPO_URL ? (
             <p className={pageStyles.configLink}>
               <OutboundLink href={CONFIG_REPO_URL} locale={locale}>
-                {fieldAt(embedConfig.blocks, 4)}
+                {fieldAt(embedConfig.blocks, 2)}
               </OutboundLink>
             </p>
           ) : null}
@@ -534,8 +490,8 @@ export default async function Page({
         kicker={dictionary(locale).kickers.price}
       >
         {tierRows.map((tier) => (
-          <Fragment key={tier.offeringId}>
             <PriceTierRow
+              key={tier.offeringId}
               checks={checks[tier.offeringId] ?? []}
               // The nine check lines are the drafts', not the owner's, so the
               // list they stand in says so in the markup — the marking the
@@ -546,17 +502,9 @@ export default async function Page({
               kicker={tier.kicker}
               locale={locale}
               offeringId={tier.offeringId}
-              price={offeringPrice(tier.offeringId, locale)}
+              price={tierPrice(tier.offeringId, locale)}
               title={tier.title}
             />
-            {/* D7 — the one sentence that names the product, at the tier
-                where the price is read. `price-tier-row` has no body-copy
-                slot (T-06), so it stands directly under the row it belongs
-                to, inside the tiers block (DEC-0131 §3). */}
-            {tier.offeringId === "portalize-calendar" ? (
-              <p className={pageStyles.tierNote}>{fieldAt(tiers.blocks, 8)}</p>
-            ) : null}
-          </Fragment>
         ))}
       </PriceSection>
 
@@ -675,15 +623,3 @@ export default async function Page({
     </>
   );
 }
-
-/**
- * The two captions of the benefit band's flow (DEC-0172 §3): which side is
- * the way in and which the one place everything lands. Both are the lead
- * sentence's own two verbs ("Die Termine kommen, wie sie reinkommen — und
- * landen trotzdem alle auf eurer Website"), so the figure says what the
- * sentence above it says, in its two halves.
- */
-const FLOW_CAPTION: Record<Locale, { sources: string; target: string }> = {
-  de: { sources: "So kommen sie rein", target: "Hier landen sie" },
-  en: { sources: "How they arrive", target: "Where they land" },
-};
