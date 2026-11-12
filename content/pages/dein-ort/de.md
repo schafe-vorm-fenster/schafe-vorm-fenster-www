@@ -365,7 +365,7 @@ keine Reichweitenzahl).
 
 **Überschrift:** So landet der Kalender auf deinem Homescreen
 
-**iOS:** Öffne den Kalender von {place} in Safari. Tipp auf „Teilen", dann auf „Zum Home-Bildschirm". Fertig — er startet ab jetzt wie eine App.
+**iOS:** Öffne den Kalender von {place} in Safari. Tipp auf „Teilen", dann auf „Zum Home-Bildschirm". Fertig - er startet ab jetzt wie eine App.
 
 **Android:** Öffne den Kalender von {place} in Chrome. Tipp auf das Menü (drei Punkte), dann auf „Zum Startbildschirm hinzufügen". Fertig.
 
@@ -387,7 +387,7 @@ steht hier das Angebot zum Veröffentlichen, keine Homescreen-Anleitung.
 
 <!-- id: dein-ort-8-permanence; content_type: closing-cta; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: draft -->
 
-**Zusicherungstext:** Kostenlos, ohne Anmeldung, dauerhaft: keine Einführungsstufe, die später wieder verschwindet.
+**Zusicherungstext:** Dauerhaft kostenlos und ohne Anmeldung.
 
 **Anderer Ort:** Anderer Ort?
 
