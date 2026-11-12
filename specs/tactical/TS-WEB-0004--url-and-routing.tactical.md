@@ -3,7 +3,7 @@ artefact: tactical-spec
 id: TS-WEB-0004
 kind: system
 status: DRAFT
-version: 0.1.0
+version: 0.1.1
 implements: [FUN-WEB-0002, CON-WEB-0062, FUN-WEB-0142, FUN-WEB-0146, CON-WEB-0067, FUN-WEB-0010, FUN-WEB-0011, FUN-WEB-0012, FUN-WEB-0013, FUN-WEB-0014, FUN-WEB-0015, FUN-WEB-0016, FUN-WEB-0017, FUN-WEB-0018, FUN-WEB-0140, FUN-WEB-0141, FUN-WEB-0137, CON-WEB-0061, FUN-WEB-0145, FUN-WEB-0147, CON-WEB-0064, FUN-WEB-0027, FUN-WEB-0158, FUN-WEB-0159, FUN-WEB-0048, FUN-WEB-0067, FUN-WEB-0073, FUN-WEB-0169, FUN-WEB-0170, CON-WEB-0042, CON-WEB-0043, CON-WEB-0044, CON-WEB-0045]
 sources: [SRC-0003]
 decisions: [DEC-0002, DEC-0024, DEC-0025, DEC-0032, DEC-0035, DEC-0163, DEC-0164, DEC-0167]
@@ -58,6 +58,19 @@ and what `/start` resolves to is one decision in one place. It carries
 **Landing-only domains** (`.pl`, `.at`, `sheepoutside.com`, phase 1):
 serve `/`, the three legal routes, and the machine surfaces; every other
 path 404s. [PROPOSED]
+
+**`/llms.txt` body** (FUN-WEB-0170, issue #202, 2026-11-12). The llmstxt.org
+shape: `# Schafe vorm Fenster`, one `>` summary, the twelve core facts
+FUN-WEB-0170 lists as `Label: value` lines, then `## Seiten` (the primary
+language), `## Pages in English` (the second language, full-site domains only)
+and `## Optional` last (press archive, legal, community-site's help, sitemap,
+robots; the file does not list itself). A page line is
+`- [title](url): description`, title and description being the page's own
+`<title>` and meta description. Facts a page also shows are read from the
+module that page reads (prices, imprint identity, contact record, locales);
+the others are hub records, cited per line in `src/lib/routes/llms-facts.ts`.
+A landing-only domain keeps summary and facts, lists its served pages in one
+section and carries no help link.
 
 ### D1a — Route naming system [FIXED: DEC-0036, IA amended]
 
@@ -287,6 +300,7 @@ labels (D4).
 | TS-WEB-0004-A4 | integration | 404 renders place search + jobs band with status 404 and `noindex`; 500 renders without any data dependency. |
 | TS-WEB-0004-A5 | integration | `sitemap.xml`, `robots.txt`, `llms.txt` respond per domain; sitemap lists only that domain's URLs in its languages. |
 | TS-WEB-0004-A12 | integration | `/llms.txt` and the 404 are build-time files. There is one prerendered `llms.txt` per D1 domain and one 404 document per served language, each at its own path, and neither reads the request. The proxy rewrites `/llms.txt` onto the request domain's variant (unknown hosts mirror `.de`) and every unservable URL onto the 404 of the URL's language (path prefix first, then the TLD default). The 404 document carries status 404 from the build. |
+| TS-WEB-0004-A13 | unit | `llmsTxtFor(host)` opens with the H1, one `>` summary and the core facts before any H2; on `.de` German leads and English is its own section; `## Optional` is last and holds press, legal and help. Every page line is `- [title](url): description` with the page's own title and meta description. The three prices equal the offerings package (0 €, 480 € / Jahr zzgl. USt., auf Anfrage; the enterprise figure absent); provider, founder, award, region, age and contact match the imprint, the people, proof and goals records read at test time. A landing-only domain links only its own origin, no help, and has one page section plus `## Optional`. |
 | TS-WEB-0004-A6 | e2e | No external API host appears in any client-initiated request except envoy and Portalize (verified via CSP report / network trace). |
 | TS-WEB-0004-A7 | integration | BFF routes return 429 beyond the rate limit and reject foreign origins. |
 | TS-WEB-0004-A8 | e2e | Navigation labels match D4 exactly on every page; every internal link resolves within the D1 inventory. |
@@ -326,7 +340,7 @@ labels (D4).
 | FUN-WEB-0067 (other domains navigable) | D1 landing set · A3 |
 | FUN-WEB-0073 (sitemaps + canonicals) | D1, sitemap.ts · A5 |
 | FUN-WEB-0169 (explicitly allow AI crawlers) | D1 · A5 |
-| FUN-WEB-0170 (maintain a short description and its core facts) | D1 · A5, A12 |
+| FUN-WEB-0170 (maintain a short description and its core facts) | D1 · A5, A12, A13 |
 | CON-WEB-0042 (never expose an external API token to the client) | D5 · A6 |
 | CON-WEB-0043 (call ecosystem APIs server-side only) | D5 · A6 |
 | CON-WEB-0044 (protect its client-facing endpoints with rate limiting and an …) | D5 · A7 |

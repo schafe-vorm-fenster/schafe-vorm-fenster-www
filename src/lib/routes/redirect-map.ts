@@ -62,6 +62,13 @@ import { href } from "./routes";
 const COMMUNITY_SITE_ORIGIN =
   process.env.NEXT_PUBLIC_COMMUNITY_SITE_ORIGIN ?? "https://schafe-vorm-fenster.de";
 
+/**
+ * community-site's help index — the target of the legacy `/hilfe` row below,
+ * and the one value `/llms.txt` links as "Hilfe" (FUN-WEB-0170), so the two
+ * cannot point at different places.
+ */
+export const COMMUNITY_HELP_URL = `${COMMUNITY_SITE_ORIGIN}/hilfe`;
+
 export interface RedirectRow {
   /**
    * The legacy path, lowercase, without trailing slash and without query.
@@ -92,7 +99,7 @@ export interface RedirectRow {
 export const LEGACY_REDIRECTS: readonly RedirectRow[] = [
   {
     from: "/hilfe",
-    to: `${COMMUNITY_SITE_ORIGIN}/hilfe`,
+    to: COMMUNITY_HELP_URL,
     wildcard: true,
     preservePath: true,
     reason:

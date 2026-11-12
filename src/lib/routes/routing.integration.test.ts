@@ -390,10 +390,12 @@ describe("TS-WEB-0004-A5: the three machine surfaces answer, per domain", () => 
     expect(body).not.toContain("/dein-kalender");
   });
 
-  it("names every machine surface of D1 in llms.txt", async () => {
+  it("names every other machine surface of D1 in llms.txt", async () => {
+    // `/llms.txt` does not link itself (TS-WEB-0004-A13): a reader already has it.
     const body = await llmsFor("www.schafe-vorm-fenster.de");
     for (const row of D1_NON_REGISTRY_ROWS)
-      if (row.kind === "machine") expect(body).toContain(row.path);
+      if (row.kind === "machine" && row.path !== "/llms.txt")
+        expect(body).toContain(`https://www.schafe-vorm-fenster.de${row.path}`);
   });
 
   it("serves robots.txt per domain", async () => {
