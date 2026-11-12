@@ -273,13 +273,12 @@ test("F-3-13: every page links the brand icon, and it resolves", async ({ page, 
     const icon = page.locator('link[rel="icon"][type="image/svg+xml"]');
     await expect(icon, `icon link on ${path}`).toHaveCount(1);
     const href = await icon.getAttribute("href");
-    // `/_next/static/media/…` locally and `/_next/static/immutable/media/…`
-    // on Vercel — the same emitted asset, a different static segment. The
-    // assertion is that it is the framework's own output and an SVG, which is
-    // what distinguishes the real brand file from a committed one.
-    expect(href, `icon href on ${path}`).toMatch(/^\/_next\/static\/.*media\/.+\.svg$/);
+    // The round mark (Q-0095, FUN-WEB-0209) is drawn from the brand package's
+    // SVG at build time and served by `/api/icon/svg`.
+    expect(href, `icon href on ${path}`).toBe("/api/icon/svg");
     const asset = await request.get(href ?? "");
     expect(asset.status(), `the icon asset linked from ${path}`).toBe(200);
+    expect(await asset.text()).toContain("clipPath");
   }
 });
 

@@ -1,4 +1,3 @@
-import sheepMark from "@schafe-vorm-fenster/brand-design/logo.svg";
 
 import { newsletterOffered } from "@/src/components/newsletter-block/constant";
 import { NewsletterBlock } from "@/src/components/newsletter-block/newsletter-block";
@@ -96,43 +95,21 @@ export async function generateMetadata({
      * instead and never asks.
      *
      * Not `app/icon.svg`: TS-WEB-0017-A6 forbids committing a logo, mark or font
-     * file in this repository, and `pnpm check:brand` enforces it — every
-     * logo reference is a brand-package subpath import, which is exactly what
-     * `sheepMark` is (the same import `src/components/logo/logo.tsx` uses).
-     * Not `app/icon.tsx` either: the generated-icon convention is a Route
-     * Handler that has to hand over bytes, and reading them back out of the
-     * package defeats both bundlers — Turbopack rewrites a `require.resolve`
-     * of an `.svg` into an asset reference and the read fails at runtime
-     * (measured). The static import is the bundler-native form: Next emits
-     * the file under `/_next/static/` and stamps its hash into the URL.
+     * file in this repository, and `pnpm check:brand` enforces it. The mark is
+     * read from the brand package at build time and served by
+     * `app/api/icon/svg` (SVG) and `app/api/icon/<size>` (PNG), both clipped to
+     * a full circle.
      *
-     * It is the brand owner's own logo — neither mocked nor generated — so
-     * neither the mock rule nor the dummy-content rule applies and it carries
-     * no badge.
-     *
-     * **Shape, and why it is still a rounded square.** `logo.radius` in
-     * brand-design is `radius.pill` on every surface, favicon included, and
-     * the on-page mark obeys it (`logo.module.css` clips with
-     * `border-radius: var(--radius-pill)`). A browser tab applies no CSS, so
-     * the favicon is whatever the file is — a 915x915 plate with `rx="35"`.
-     * The fix belongs in the package, as a circular favicon variant this
-     * import then points at; `state/open.md` row 214 has the three
-     * alternatives and why the other two are closed by TS-WEB-0017-A6 and
-     * F-3-13.
+     * **Shape: a full circle** (Q-0095, FUN-WEB-0209). A browser tab applies no
+     * CSS, so the favicon file itself is round, transparent corners. Until the
+     * brand package ships its own round file (go-to-market-os PR 712,
+     * `./logo-round.svg`), the clip is done in `roundLogoSvg`; then it goes.
      */
     icons: {
       icon: [
-        {
-          // Next 16 resolves an `.svg` import to the emitted **URL string**,
-          // not to a `StaticImageData` (measured: the value is
-          // "/_next/static/media/Schafe-vorm-Fenster_Logo_V2.1.<hash>.svg").
-          // The ambient module declaration still types it as the object, and
-          // reading `.src` off it yields `undefined`, which throws inside
-          // Next's own metadata resolution and silently drops the entire
-          // `<head>` block.
-          url: sheepMark as unknown as string,
-          type: "image/svg+xml",
-        },
+        // The round mark (Q-0095): the package's SVG clipped to a circle,
+        // served by `app/api/icon/svg`.
+        { url: "/api/icon/svg", type: "image/svg+xml" },
         // Raster fallbacks for the agents that do not take an SVG icon.
         { url: appIconPath(32), sizes: "32x32", type: "image/png" },
       ],

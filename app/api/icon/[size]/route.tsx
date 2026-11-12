@@ -4,7 +4,7 @@ import { logoDataUri } from "@/src/lib/seo/brand-assets";
 import { APP_ICON_SIZES } from "@/src/lib/seo/app-icons";
 
 /**
- * `/api/icon/<size>` — the brand mark as a square PNG in the sizes browsers,
+ * `/api/icon/<size>` — the brand mark as a round (full-circle, transparent corners) PNG in the sizes browsers,
  * iOS and the web app manifest ask for (32, 180, 192, 512).
  *
  * The mark is the brand package's own logo, scaled and not redrawn. It is
@@ -28,7 +28,13 @@ export async function GET(
   return new ImageResponse(
     (
       // eslint-disable-next-line @next/next/no-img-element -- ImageResponse renders to a bitmap
-      <img src={logo} width={size} height={size} alt="" />
+      <img
+        src={logo}
+        width={size}
+        height={size}
+        alt=""
+        style={{ borderRadius: "50%" }}
+      />
     ),
     { width: size, height: size },
   );
