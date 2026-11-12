@@ -154,6 +154,8 @@ export interface Dictionary {
      * heading never claims a week its rows leave.
      */
     nearbyUpcoming: string;
+    /** The one sentence under the nearby module's heading (issue 152) — the same on every page that carries it. */
+    nearbyLead: string;
     dates: string;
     places: string;
     updatesToday: string;
@@ -205,8 +207,6 @@ export interface Dictionary {
   kickers: {
     /** The live answer — this week's dates. */
     liveAnswer: string;
-    /** The widened radius — one place over. */
-    widerRadius: string;
     /** Benefit (CG-019): control over what the embedded calendar shows. */
     yourSettings: string;
     /** Benefit (CG-019): the `/dein-ort` bread-van story — supply, not an event. */
@@ -599,6 +599,7 @@ const de: Dictionary = {
     stale: "Stand",
     genericCounty: "deiner Region",
     nearbyUpcoming: "Demnächst in der Nähe",
+    nearbyLead: "Was zwei Dörfer weiter läuft, gehört genauso in deinen Kalender.",
     dates: "Termine",
     places: "Orte",
     updatesToday: "Aktualisierungen heute",
@@ -615,7 +616,6 @@ const de: Dictionary = {
   },
   kickers: {
     liveAnswer: "Was gerade ansteht",
-    widerRadius: "Einen Ort weiter",
     yourSettings: "Eure Einstellungen",
     everydaySupply: "Versorgung",
     communityLife: "Gemeindeleben",
@@ -832,6 +832,7 @@ const en: Dictionary = {
     stale: "As of",
     genericCounty: "your region",
     nearbyUpcoming: "Coming up nearby",
+    nearbyLead: "What's on two villages over belongs in your calendar just as much.",
     dates: "dates",
     places: "places",
     updatesToday: "updates today",
@@ -848,7 +849,6 @@ const en: Dictionary = {
   },
   kickers: {
     liveAnswer: "What's on now",
-    widerRadius: "One place over",
     yourSettings: "Your settings",
     everydaySupply: "Everyday supply",
     communityLife: "Community life",

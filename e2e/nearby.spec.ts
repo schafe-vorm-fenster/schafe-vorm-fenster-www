@@ -75,7 +75,7 @@ async function nearbyGeometry(page: Page): Promise<Geometry> {
     const rows = [...section.querySelectorAll("article")].filter((article) => article.querySelector(":scope > time"));
     const last = rows.at(-1)!.getBoundingClientRect();
     const link = [...section.querySelectorAll("a")].find((anchor) => /Alle Termine/.test(anchor.textContent ?? ""));
-    const headings = [...section.querySelectorAll("h3")].map((heading) => heading.textContent?.trim() ?? "");
+    const headings = [...section.querySelectorAll("h2")].map((heading) => heading.textContent?.trim() ?? "");
     return {
       rows: rows.length,
       gap: (link?.getBoundingClientRect().top ?? Number.NaN) - last.bottom,

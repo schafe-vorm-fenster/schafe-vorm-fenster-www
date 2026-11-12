@@ -311,7 +311,7 @@ place (DEC-0068 rule 3, DEC-0115).
 
 **Title:** Your website as the source
 
-**Status badge:** In testing (Alpha)
+**Status badge:** In testing
 
 **CTA label (secondary):** Register my website
 
