@@ -8,7 +8,9 @@ seo:
     description: "Umfang wählen — einzelne Orte, eine Postleitzahl oder einen ganzen Landkreis —, Rechnungsanschrift angeben, Bestellung abschicken. Fertig."
     provenance: generated
 content_type: section
-status: draft
+status: approved
+reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
+reviewed_at: "2026-11-12"
 locale: de
 sources:
   - "ia"
@@ -31,7 +33,7 @@ geht an eine Behörde, nicht an eine Privatperson.
 
 ## Schritt 1/2 — Umfang wählen
 
-<!-- id: bestellen-1-scope; content_type: form; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: bestellen-1-scope; content_type: form; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Frage:** Für welchen Bereich soll der Kalender gelten?
 
@@ -49,7 +51,7 @@ wurde, keine Live-Zahlen zum Inhalt.
 
 ## Ausstieg zum Beratungstermin (auf jedem Schritt)
 
-<!-- id: bestellen-2-briefing-exit; content_type: section; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: bestellen-2-briefing-exit; content_type: section; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Link-Label:** Lieber erst sprechen? Beratungstermin buchen
 
@@ -58,7 +60,7 @@ primären CTA (TS-WEB-0025 D5).
 
 ## Schritt 3 — Rechnungsangaben
 
-<!-- id: bestellen-3-invoice; content_type: form; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: bestellen-3-invoice; content_type: form; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Frage:** Wohin geht die Rechnung?
 
@@ -82,7 +84,7 @@ UX-Writing-Arbeit dieses Playbooks.
 
 ## Schritt 4 — Einbindungscode
 
-<!-- id: bestellen-4-embed-code; content_type: section; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: bestellen-4-embed-code; content_type: section; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Überschrift:** Euer Einbindungscode
 

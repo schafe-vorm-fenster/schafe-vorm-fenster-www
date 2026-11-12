@@ -8,7 +8,9 @@ seo:
     description: "Choose the scope — single places, one postcode, or a whole county —, give us the invoice address, and send the order off. That is it."
     provenance: generated
 content_type: section
-status: draft
+status: approved
+reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
+reviewed_at: "2026-11-12"
 locale: en
 sources:
   - "ia"
@@ -31,7 +33,7 @@ goes to an authority, never to a private individual.
 
 ## Step 1/2 — Choose scope
 
-<!-- id: bestellen-1-scope; content_type: form; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: bestellen-1-scope; content_type: form; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Question:** Which area should the calendar cover?
 
@@ -49,7 +51,7 @@ figures about the content.
 
 ## Exit to briefing (on every step)
 
-<!-- id: bestellen-2-briefing-exit; content_type: section; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: bestellen-2-briefing-exit; content_type: section; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Link label:** Rather talk first? Book a briefing
 
@@ -58,7 +60,7 @@ the primary CTA (TS-WEB-0025 D5).
 
 ## Step 3 — Invoice details
 
-<!-- id: bestellen-3-invoice; content_type: form; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: bestellen-3-invoice; content_type: form; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Question:** Where should the invoice go?
 
@@ -82,7 +84,7 @@ playbook's UX-writing work.
 
 ## Step 4 — Embed code
 
-<!-- id: bestellen-4-embed-code; content_type: section; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: bestellen-4-embed-code; content_type: section; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Heading:** Your embed code
 

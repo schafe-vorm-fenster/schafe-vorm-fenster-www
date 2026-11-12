@@ -8,7 +8,9 @@ seo:
     description: "Flyer fotografieren, per WhatsApp schicken, fertig: Euer Termin steht im Kalender eures Orts und in den Nachbarorten. Kostenlos anmelden."
     provenance: generated
 content_type: section
-status: draft
+status: approved
+reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
+reviewed_at: "2026-11-12"
 locale: de
 sources:
   - "@schafe-vorm-fenster/audiences@0.3.3#actors"
@@ -147,7 +149,7 @@ solchen Zeile ein Gedankenstrich im Satz selbst.
 
 ## Slot 1 — Hero (Mechanismus: whatsapp)
 
-<!-- id: mitmachen-1-hero; content_type: hero; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"]; status: draft -->
+<!-- id: mitmachen-1-hero; content_type: hero; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"]; status: approved -->
 
 **Aussage 1 (Überschrift):** Ein Foto vom Flyer per WhatsApp.
 
@@ -172,7 +174,7 @@ dem Problem (DEC-0203).
 
 ## Slot 2 — Vergleich: wer euren Termin heute nicht mitbekommt
 
-<!-- id: mitmachen-2-objections; content_type: comparison; provenance: sourced; derived_from: ["@schafe-vorm-fenster/audiences@0.3.3#actors", "@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"]; status: draft -->
+<!-- id: mitmachen-2-objections; content_type: comparison; provenance: sourced; derived_from: ["@schafe-vorm-fenster/audiences@0.3.3#actors", "@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"]; status: approved -->
 
 **Überschrift:** Wer euren Termin heute nicht mitbekommt
 
@@ -218,7 +220,7 @@ eintragen, sondern einmal per WhatsApp rausschicken.
 
 ## Slot 3 — Publizierweg 1: Flyer per WhatsApp
 
-<!-- id: mitmachen-3-path-whatsapp; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: draft -->
+<!-- id: mitmachen-3-path-whatsapp; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: approved -->
 
 **Überschrift des Wege-Slots:** So kommen eure Termine rein
 
@@ -243,7 +245,7 @@ demselben Entwurf entfällt seit DEC-0206: Sie sagte dasselbe wie die
 
 ### Slot 3a — Schrittzeilen und Bühnentexte von Weg 1 (Platzhalter)
 
-<!-- id: mitmachen-3a-path-whatsapp-steps-demo; content_type: publishing-path; provenance: generated; derived_from: []; status: draft; demo: true -->
+<!-- id: mitmachen-3a-path-whatsapp-steps-demo; content_type: publishing-path; provenance: generated; derived_from: []; status: approved; demo: true -->
 
 **Schritte:**
 
@@ -281,7 +283,7 @@ Markierung wie bei Weg 2: `data-placeholder="sample-events"`, jede Zeile
 
 ## Slot 4 — Publizierweg 2: euren eigenen Kalender verbinden
 
-<!-- id: mitmachen-4-path-calendar; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: draft -->
+<!-- id: mitmachen-4-path-calendar; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: approved -->
 
 **Titel:** Euren Kalender verbinden
 
@@ -292,7 +294,7 @@ Der CTA zeigt über die Routen-Fassade auf `/mitmachen/registrieren`.
 
 ### Slot 4a — Schrittzeilen und Bühnentexte von Weg 2 (Platzhalter)
 
-<!-- id: mitmachen-4a-path-calendar-steps-demo; content_type: publishing-path; provenance: generated; derived_from: []; status: draft; demo: true -->
+<!-- id: mitmachen-4a-path-calendar-steps-demo; content_type: publishing-path; provenance: generated; derived_from: []; status: approved; demo: true -->
 
 **Schritte:**
 
@@ -318,7 +320,7 @@ nie aus einem erfundenen Ort (DEC-0068 Regel 3, DEC-0115).
 
 ## Slot 5 — Publizierweg 3: eure Webseite als Quelle
 
-<!-- id: mitmachen-5-path-website; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: draft -->
+<!-- id: mitmachen-5-path-website; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: approved -->
 
 **Titel:** Eure Webseite als Quelle
 
@@ -344,7 +346,7 @@ kein „ab".
 
 ### Slot 5a — Schrittzeilen und Bühnentexte von Weg 3 (Platzhalter)
 
-<!-- id: mitmachen-5a-path-website-steps-demo; content_type: publishing-path; provenance: generated; derived_from: []; status: draft; demo: true -->
+<!-- id: mitmachen-5a-path-website-steps-demo; content_type: publishing-path; provenance: generated; derived_from: []; status: approved; demo: true -->
 
 **Schritte:**
 
@@ -369,7 +371,7 @@ Angebots-Datensatz, nicht hier (`specs/README.md` Regel 1).
 
 ### Slot 5b — Die Preisgrenze im Hinweis-Banner
 
-<!-- id: mitmachen-5b-path-website-banner-demo; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: draft -->
+<!-- id: mitmachen-5b-path-website-banner-demo; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: approved -->
 
 **Preisgrenze:** Quellen, die wir schon lesen können, kosten euch nichts. Kostenpflichtig ist nur eine eigene Anbindung für ein System, das bei uns noch fehlt.
 
@@ -399,7 +401,7 @@ ist auf `/mitmachen` ohne Zahl zu nennen (TS-WEB-0022 D1/D11, A12, A17).
 
 ## Slot 7 — Belegblock (3 Elemente, publish-gewichtet)
 
-<!-- id: mitmachen-7-proof; content_type: proof-card; provenance: sourced-empty-by-design; derived_from: ["@schafe-vorm-fenster/proof@0.3.5"]; status: draft -->
+<!-- id: mitmachen-7-proof; content_type: proof-card; provenance: sourced-empty-by-design; derived_from: ["@schafe-vorm-fenster/proof@0.3.5"]; status: approved -->
 
 Auswahl und Reihenfolge sind Aufgabe der Relevanz-Engine mit dem
 Gewichtsprofil „publish-our-dates" (TS-WEB-0005 D5, DEC-0048). Ein leerer Slot
@@ -409,7 +411,7 @@ schwächt den Anspruch, wird aber nie durch erfundenen Text ersetzt.
 
 <!-- clearance: pending — alle drei Belege stehen auf `usage_rights: unverified` (Q-0014): `lehre-lelender` (schriftliche Freigabe der Stiftung steht aus), `volkshochschule-uecker-randow` (Freigabe der VHS steht aus), `zukunftswege-ost-newsletter` (Freigabe steht aus). Die geschützte Vorschau zeigt sie, der Härtungslauf vor dem Go-live klärt sie. -->
 <!-- source_note: Gewichtung „publish our dates" aus gtm:concept/website-relevance-model.concept.md (job_fit) und der Job-Tabelle in gtm:concept/website-communication-principles.concept.md Prinzip 1. -->
-<!-- id: mitmachen-7-proof-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow", "@schafe-vorm-fenster/proof@0.3.5#zukunftswege-ost-newsletter"]; status: draft -->
+<!-- id: mitmachen-7-proof-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow", "@schafe-vorm-fenster/proof@0.3.5#zukunftswege-ost-newsletter"]; status: approved -->
 
 **Kandidaten (drei, alle veröffentlichen selbst):**
 
@@ -454,7 +456,7 @@ echt.
 ## Slot 8 — Abschluss-CTA mit Permanenz-Zusicherung
 
 <!-- clearance: pending für den Presse-Beleg — der Nordkurier-Eintrag von 2022 trägt kein `usage_rights` (Q-0045, `state/open.md` #1). Der Angebots-Datensatz selbst ist frei verwendbar. -->
-<!-- id: mitmachen-8-closing; content_type: closing-cta; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar", "@schafe-vorm-fenster/media-echo@0.3.3#2022-nordkurier-plattform-doerfer"]; status: draft -->
+<!-- id: mitmachen-8-closing; content_type: closing-cta; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar", "@schafe-vorm-fenster/media-echo@0.3.3#2022-nordkurier-plattform-doerfer"]; status: approved -->
 
 **Abschluss-Überschrift:** Der nächste Flyer kann der erste Termin sein.
 
@@ -475,7 +477,7 @@ entsteht (`state/open.md` #17).
 ## Kontextband und Abschluss
 
 <!-- source_note: Angebotsformulierung statt Menü aus gtm:concept/website-communication-principles.concept.md Prinzip 2; die drei Jobs und ihre Formulierung aus der Job-Tabelle in Prinzip 1. Beantwortet state/open.md Zeile 95 für diese Seite: eigener Bandtext statt des geteilten Home-Satzes. -->
-<!-- id: mitmachen-9-context-band; content_type: context-band; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: mitmachen-9-context-band; content_type: context-band; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Kicker:** Erfahre mehr über unsere Kalenderplattform
 

@@ -11,9 +11,37 @@
  * checks run in the unit and integration tests. This file is the runner.
  */
 
+import { contentEnvironment } from "../src/lib/content/lifecycle";
 import { checkContentTree } from "../src/lib/content/validate";
 
 import type { Finding } from "../src/lib/content/validate";
+import type { Environment } from "../src/lib/security/csp";
+
+const ENVIRONMENTS: readonly Environment[] = ["production", "preview", "development"];
+
+/**
+ * `--target <environment>` — which build the tree is judged for (TS-WEB-0007
+ * D11). Without it, this process's own `VERCEL_ENV` decides, as before.
+ *
+ * `pnpm check:content:production` passes `--target production`, and that is
+ * the parity gate of issue 206 / DEC-0222: every slot the preview renders
+ * must render in production too, so a page or slot whose status a production
+ * build drops is an **error** on every `pnpm check` and in CI — not only on a
+ * Vercel production build, where it would be too late.
+ */
+function targetFrom(argv: readonly string[]): Environment {
+  const index = argv.findIndex((arg) => arg === "--target" || arg.startsWith("--target="));
+  if (index === -1) return contentEnvironment();
+  const arg = argv[index]!;
+  const value = arg.includes("=") ? arg.slice(arg.indexOf("=") + 1) : argv[index + 1];
+  if (!value || !(ENVIRONMENTS as readonly string[]).includes(value)) {
+    console.error(
+      `--target takes one of ${ENVIRONMENTS.join(", ")}; got ${JSON.stringify(value ?? null)}`,
+    );
+    process.exit(2);
+  }
+  return value as Environment;
+}
 
 /**
  * Which acceptance criterion a row of D12 discharges — printed with the
@@ -54,12 +82,14 @@ async function main(): Promise<void> {
     ? "warning"
     : "error";
 
-  const findings = await checkContentTree({ missingLocale });
+  const targetEnvironment = targetFrom(process.argv);
+
+  const findings = await checkContentTree({ missingLocale, targetEnvironment });
   const errors = findings.filter((finding) => finding.level === "error");
   const warnings = findings.filter((finding) => finding.level === "warning");
 
   console.log(
-    `\nChecked the content pipeline in ${Date.now() - started} ms — ${errors.length} error(s), ${warnings.length} warning(s).\n`,
+    `\nChecked the content pipeline for a ${targetEnvironment} build in ${Date.now() - started} ms — ${errors.length} error(s), ${warnings.length} warning(s).\n`,
   );
 
   if (warnings.length > 0) {
