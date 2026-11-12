@@ -78,14 +78,14 @@ images:
     wide_height: 420
   - id: ueber-uns-founder-portrait
     slot: ueber-uns-1-origin
-    ratio: portrait
+    ratio: square
     provenance: real
     source: >-
       @schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel/assets/2026-04-otcamp-neustrelitz-outdoor-session.jpeg
       — `license: free use, credit advised`, `credit: openTransfer.de`, Fotograf: openTransfer.de
       (Stiftung Bürgermut), openTransfer CAMP Zusammenhalt, Neustrelitz, April 2026, 1717×1717.
       `press_clearance: cleared` steht im Personenprofil für alle vierzehn Assets. Binärdatei liegt
-      im go-to-market-os-Repository, das npm-Paket liefert nur den .asset.md-Deskriptor.
+      im go-to-market-os-Repository, das npm-Paket liefert nur den .asset.md-Deskriptor. Rendition seit #164: die ganze Quelle als Quadrat, 1200×1200 (zuvor ein 4:5-Ausschnitt, hochskaliert).
     alt: >-
       Jan-Henrik Hempel sitzt im Freien in einem Stuhlkreis, Programmheft und Stift in den Händen,
       hinter ihm zwei Transporter.
@@ -98,11 +98,11 @@ images:
       "y": 45
     status: real
     file: /images/real/ueber-uns-founder-portrait.webp
-    width: 1152
-    height: 1440
+    width: 1200
+    height: 1200
   - id: ueber-uns-team-jan-henrik-hempel
     slot: ueber-uns-5-team
-    ratio: portrait
+    ratio: feature
     provenance: real
     source: >-
       @schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel/assets/2021-workshop-quilow-portrait.jpeg
@@ -116,8 +116,8 @@ images:
       "y": 38
     status: real
     file: /images/real/ueber-uns-team-jan-henrik-hempel.webp
-    width: 1152
-    height: 1440
+    width: 1018
+    height: 727
   - id: ueber-uns-team-christian-sauer
     slot: ueber-uns-5-team
     ratio: portrait
