@@ -26,7 +26,7 @@ export interface DorfkalenderPhoneProps {
 }
 
 /**
- * The drawn phone with its fixed legend — issue issue 143, DEC-0193.
+ * The drawn phone with its fixed legend — issue issue 143, DEC-0194.
  *
  * A picture of a device, not a component the visitor operates: the whole
  * drawing is one `role="img"`, so a screen reader reads its label and not

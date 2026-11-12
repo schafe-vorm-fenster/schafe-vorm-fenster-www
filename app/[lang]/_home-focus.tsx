@@ -13,7 +13,7 @@
  * `place-state.ts` has an answer. They render through the same functions in
  * every state, so the reserved space cannot drift between them.
  *
- * Since issue 143 (DEC-0193) the stage carries no place search of its own: the
+ * Since issue 143 (DEC-0194) the stage carries no place search of its own: the
  * search moved into "Dein digitaler Dorfkalender." (`DorfkalenderIntro`), and
  * what is left here is the hero's trio and S3's module.
  */

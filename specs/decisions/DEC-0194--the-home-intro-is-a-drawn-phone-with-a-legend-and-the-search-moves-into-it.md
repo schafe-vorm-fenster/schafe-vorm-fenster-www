@@ -1,5 +1,5 @@
 ---
-id: DEC-0193
+id: DEC-0194
 title: The home intro is a drawn phone with a legend, and the place search moves into it
 status: accepted
 date: 2026-11-12

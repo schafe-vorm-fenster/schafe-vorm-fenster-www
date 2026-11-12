@@ -67,7 +67,7 @@ interface SearchRoute {
 }
 
 const SEARCH_ROUTES: readonly SearchRoute[] = [
-  // The two the defect was measured on. Since DEC-0193 the stage of `/` has no
+  // The two the defect was measured on. Since DEC-0194 the stage of `/` has no
   // search; the field that navigates is the closing block's.
   { path: "/", inputId: "ort-suche-abschluss", submitsTo: `/dein-ort?ort=${TYPED}` },
   { path: "/en", inputId: "ort-suche-abschluss", submitsTo: `/en/your-place?ort=${TYPED}` },

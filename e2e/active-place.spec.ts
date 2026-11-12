@@ -165,7 +165,7 @@ test.describe("DEC-0168: one active place", () => {
     await expect(page.locator("#dorfkalender")).toContainText("Schlatkow");
     await page.waitForLoadState("networkidle");
     // The stage asks nothing. The phone of "Dein digitaler Dorfkalender."
-    // (DEC-0193) loads the example's photograph for its own header — once.
+    // (DEC-0194) loads the example's photograph for its own header — once.
     expect(asked).toEqual(["schlatkow"]);
     // (The page's own photograph's © panel is no swapped-in photograph or label.)
     await expect(

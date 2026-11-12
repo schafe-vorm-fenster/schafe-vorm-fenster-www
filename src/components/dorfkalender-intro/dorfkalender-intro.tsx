@@ -44,7 +44,7 @@ export interface DorfkalenderIntroProps {
 
 /**
  * "Dein digitaler Dorfkalender." — the black explanation section under the
- * home stage (issue issue 143, DEC-0193). It replaces the former "Das ist los in …"
+ * home stage (issue issue 143, DEC-0194). It replaces the former "Das ist los in …"
  * section and takes over the place search the stage used to carry.
  *
  * Which place the phone shows, in order: the place a visitor searched for or
