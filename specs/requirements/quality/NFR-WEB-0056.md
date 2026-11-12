@@ -29,7 +29,7 @@ Size of every image the website serves SHALL be <= 200 KB, measured by TS-WEB-00
 
 SRC-0007, DEC-0007, DEC-0202
 
-Deviation: `community-calendar/docs/performance-budget.md#L23` says "Images (per image) < 100KB". The owner raised the budget to 200 KB per delivered image size on 2026-11-12 so photographs stay sharp (DEC-0202). The specification carries the truth (DEC-0104 §1); DEM-0078 asks the product to follow.
+Deviation: `community-calendar/docs/performance-budget.md#L23` says "Images (per image) < 100KB". The owner raised the budget to 200 KB per delivered image size on 2026-11-12 so photographs stay sharp (DEC-0202). The specification carries the truth (DEC-0104 §1); DEM-0079 asks the product to follow.
 
 ## Notes
 
