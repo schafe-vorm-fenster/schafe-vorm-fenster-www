@@ -158,7 +158,7 @@ const GERMAN_UI_STRINGS = [
   "Double-Opt-in",
   "Datenschutzerklärung",
   "Suchen",
-  "Heute mit einem anderen Anliegen hier?",
+  "Erfahre mehr über unsere Kalenderplattform",
 ];
 
 for (const path of ENGLISH_ROUTES) {

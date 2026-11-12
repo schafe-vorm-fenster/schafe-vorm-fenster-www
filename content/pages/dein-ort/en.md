@@ -399,7 +399,7 @@ promise since 2022, not a pricing model that can quietly change.
 <!-- source_note: the offer phrasing instead of a menu comes from gtm:concept/website-communication-principles.concept.md principle 2 ("order, do not exclude"); the three jobs and their wording from the job table in principle 1. Answers state/open.md row 95 for this page: its own band text rather than the shared home sentence. -->
 <!-- id: dein-ort-9-context-band; content_type: context-band; provenance: sourced; derived_from: [ia]; status: draft -->
 
-**Kicker:** Here for something else today?
+**Kicker:** Learn more about our calendar platform
 
 - **Publish your dates:** How to publish dates the easy way, by WhatsApp or from a calendar → `/mitmachen`
 - **Run your own calendar:** Under your own name, on your own website → `/dein-kalender`

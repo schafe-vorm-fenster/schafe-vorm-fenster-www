@@ -401,7 +401,7 @@ seit 2022, kein Preismodell, das sich leise ändern lässt.
 <!-- source_note: Angebotsformulierung statt Menü aus gtm:concept/website-communication-principles.concept.md Prinzip 2 („ordnen, nicht ausschließen"); die drei Jobs und ihre Formulierung aus der Job-Tabelle in Prinzip 1. Beantwortet state/open.md Zeile 95 für diese Seite: eigener Bandtext statt des geteilten Home-Satzes. -->
 <!-- id: dein-ort-9-context-band; content_type: context-band; provenance: sourced; derived_from: [ia]; status: draft -->
 
-**Kicker:** Heute mit einem anderen Anliegen hier?
+**Kicker:** Erfahre mehr über unsere Kalenderplattform
 
 - **Termine veröffentlichen:** Per WhatsApp oder über deinen Kalender → `/mitmachen`
 - **Eigenen Kalender betreiben:** Unter eigenem Namen, auf eurer Website → `/dein-kalender`
