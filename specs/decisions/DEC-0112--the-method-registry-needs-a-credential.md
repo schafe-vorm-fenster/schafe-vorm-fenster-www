@@ -102,6 +102,13 @@ packages, and that is a decision with a cost, not an executor's repair.
 
 ## Consequences
 
+- **Amended by DEC-0221 §2 (2026-11-12, #203):** pnpm ≥ 10.34.2 no longer
+  expands `${VAR}` from a committed `.npmrc` (GHSA-3qhv-2rgh-x77r). The token
+  lines move to the user-level config, written as placeholders by
+  `scripts/registry-auth.sh`, which CI and `vercel.json` run before install
+  and which fails naming the unset variable. §1's variables and §2's
+  "fails loudly" stand; §2's objection to an install-time write does not
+  apply to a placeholder.
 - `.npmrc` carries the token line; `check.yml` and `preview-e2e.yml` carry the
   variable. No value is in the repository.
 - `DEC-0085`, `specs/README.md`, `AGENTS.md` and `TS-WEB-0017`'s method-registry
