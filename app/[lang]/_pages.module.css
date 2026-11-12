@@ -5,16 +5,11 @@
  */
 
 /*
- * The heading over a scene's single live row — the scene's own label for what
- * the row is, at card size, since the row beneath it is not a module with a
- * frame of its own.
+ * The sentence over the WhatsApp scene's one button on `/` — "other ways
+ * exist" (DEC-0192 §4). It owns only the gap to the button.
  */
-.instanceHeading {
-  font-size: var(--type-card-size);
-  font-weight: 700;
-  letter-spacing: var(--type-card-tracking);
-  line-height: var(--type-card-leading);
-  margin: 0 0 var(--space-2);
+.sceneHint {
+  margin: 0 0 var(--space-3);
 }
 
 /*

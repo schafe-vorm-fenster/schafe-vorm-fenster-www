@@ -226,3 +226,4 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0189 — The phone header drops the calendar pill, and the menu overlay is the blurred page](DEC-0189--the-phone-header-drops-the-calendar-pill-and-the-menu-overlay-is-glass.md)
 - [DEC-0190 — On the phone the burger is a track that carries the page's job](DEC-0190--the-phone-burger-is-a-track-carrying-the-pages-job.md)
 - [DEC-0191 — Two header variants, the track spreads its ghost layers, and the calendar button leaves the header](DEC-0191--two-header-variants-the-ghost-track-and-no-calendar-button.md)
+- [DEC-0192 — The WhatsApp scene names the real number and the check-and-approve flow, offers the other ways as its one CTA, and loses the flyer row](DEC-0192--the-whatsapp-scene-names-the-real-number-and-the-flyer-row-goes.md)
