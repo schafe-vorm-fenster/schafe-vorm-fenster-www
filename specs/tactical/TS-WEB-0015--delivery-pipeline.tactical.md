@@ -87,7 +87,7 @@ Anything else is non-production and emits, in all three places:
 | Surface | Non-production output |
 | --- | --- |
 | Response header (proxy, all routes incl. assets) | `X-Robots-Tag: noindex, nofollow` |
-| `robots.ts` (FUN-WEB-0169, FUN-WEB-0170) | `User-agent: * / Disallow: /`, no sitemap reference |
+| `robots.ts` (FUN-WEB-0169, FUN-WEB-0170) | `User-agent: * / Disallow: /`, no sitemap reference, no AI-crawler block |
 | Page metadata (root layout, FUN-WEB-0073) | `<meta name="robots" content="noindex, nofollow">`, no canonical to a live host |
 
 The host test is part of the predicate on purpose: a production-target
