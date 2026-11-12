@@ -170,9 +170,7 @@ Lücke im eigenen Ort an, nicht die Lücke im System.
 
 **Aha-Satz:** Ein Foto vom Flyer per WhatsApp, und der Termin steht im Kalender.
 
-**Kicker:** So kommen die Termine rein
-
-**Überleitung:** Die Termine tippt niemand bei uns ein. Sie kommen von den Vereinen und den Veranstaltern, die hier im Ehrenamt etwas auf die Beine stellen. Meistens so:
+**Einleitung:** Bei uns tippt niemand etwas ein. Die Einträge kommen von den Vereinen und den Veranstaltern, die hier im Ehrenamt etwas auf die Beine stellen.
 
 **Titel des Erklärmoduls:** Flyer per WhatsApp
 
@@ -184,9 +182,12 @@ Hinweis und Button-Label sind Wortlaut des Owners (DEC-0192, 2026-11-12,
 Issue #141, zweite Fassung): der Hinweis beschreibt die zwei anderen Wege,
 Weg 02 und Weg 03 auf `/mitmachen` (eigener Kalender, Webseite als Quelle),
 das Label führt auf `takePart`. Die Szene trägt weiter genau ein CTA (D3a,
-DEC-0110 §1). Überleitung und Anrede ebenfalls Owner (dritte Fassung,
-2026-11-12): die ganze Szene spricht `du`, den Default der Seite (CG-001,
-CG-002), nicht mehr `ihr`.
+DEC-0110 §1). Anrede Owner (dritte Fassung, 2026-11-12): die ganze Szene spricht `du`,
+den Default der Seite (CG-001, CG-002), nicht mehr `ihr`. Seit DEC-0206
+(Issue #163) stehen vor dem Modul zwei Ebenen, Überschrift und Einleitung:
+der frühere Kicker wiederholte Wortstamm und Aussage der Überschrift und
+entfällt, die frühere Überleitung über der Überschrift ist die Einleitung
+darunter, ohne den Lead-in „Meistens so:“ und ohne Wortstamm der Überschrift.
 
 Quelle: `relievers[0]` der Value Proposition „actors--community-calendar" —
 „send a photo of the printed flyer by WhatsApp and the date is created
@@ -239,7 +240,7 @@ Referenzortes.
 
 **Text:** Ihr bindet ihn mit zwei Zeilen auf eurer Website ein und müsst danach nichts mehr pflegen.
 
-**Kicker:** Onlinekalender ohne eigenes System
+**Kicker:** Ohne eigenes System
 
 **Haken 1:** Eure Website zeigt die Termine aus allen Orten der Gemeinde und aus der Umgebung.
 
@@ -314,9 +315,7 @@ Termine sind vom Owner ausgedachte, neutrale Beispiele und bleiben
 
 **Aha-Satz:** Unsere Orte selbst gestalten.
 
-**Text:** Jan-Henrik Hempel war ehrenamtlicher Bürgermeister, ist Gemeindevertreter und hat den Kulturverein mitgegründet. Er kennt das Dorf von innen, als einer, der selbst mitmacht. Der Name Schafe vorm Fenster kommt von der Schafweide vor dem eigenen Küchenfenster.
-
-**Überleitung:** Den Dorfkalender gibt es, weil jemand das Problem selbst hatte.
+**Text:** Jan-Henrik Hempel war ehrenamtlicher Bürgermeister, ist Gemeindevertreter und hat den Kulturverein mitgegründet. Er kennt das Dorf von innen, als einer, der mitmacht. Der Name Schafe vorm Fenster kommt von der Schafweide vor dem eigenen Küchenfenster.
 
 Quelle: `founder-former-volunteer-mayor` (`usage_rights: cleared`) — belegt
 über Nordkurier 2019/2022 und das Zukunftswege-Ost-Porträt 2026. Die Breite
@@ -325,8 +324,11 @@ Vorrang des Ehrenamts vor der Verwaltung sind Wortlaut des Reviews vom
 2026-09-22; „Unsere Orte selbst gestalten" und „Der Name Schafe vorm
 Fenster" ebenfalls. Dieser Slot trägt **keinen** Kicker: „Wo das herkommt"
 steht auf der Vermeidungsliste (CG-017, CG-040) und das Review nennt keinen
-Ersatz — die Überschrift trägt die Szene allein (Abweichung von
-Politur-Brief G-3, wie DEC-0120 §5 für `/ueber-uns`).
+Ersatz — die Überschrift trägt die Szene allein (seit DEC-0206 keine
+Abweichung mehr). Die frühere Überleitung über der Überschrift („Den
+Dorfkalender gibt es, weil jemand das Problem selbst hatte.“) entfällt: sie
+sagt, was die Einleitung mit „kennt das Dorf von innen“ schon sagt, und
+teilte den Wortstamm mit Überschrift und Einleitung (Issue #163).
 
 ## Block 2b — Herkunfts-Stempel
 
