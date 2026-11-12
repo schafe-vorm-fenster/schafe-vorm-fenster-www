@@ -118,7 +118,7 @@ und Zustände sind Layoutlogik, nicht Teil dieser Datei. Platzhalter in
 
 <!-- id: home-1-search-hero; content_type: hero; provenance: sourced; derived_from: [ia]; status: draft -->
 
-**Headline:** Was wann wo in deinem Ort los ist.
+**Headline:** Was ist los in deinem Dorf?
 
 **Sucheingabe (Placeholder):** Tipp den Ortsnamen ein
 
