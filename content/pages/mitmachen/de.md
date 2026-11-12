@@ -313,7 +313,7 @@ nie aus einem erfundenen Ort (DEC-0068 Regel 3, DEC-0115).
 
 **Titel:** Eure Webseite als Quelle
 
-**Status-Badge:** In Erprobung (Alpha)
+**Status-Badge:** In Erprobung
 
 **CTA-Label (sekundär):** Jetzt meine Webseite anmelden
 
