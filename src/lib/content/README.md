@@ -260,7 +260,7 @@ the positional rule did.
 | `mitmachen-2-objections` | the three comparison pairs and the head (DEC-0203) | `app/[lang]/mitmachen/page.tsx:237` |
 | `mitmachen-3a/4a/5a-path-*-steps-demo` | lists 0 and 1 each | `app/[lang]/mitmachen/page.tsx:389`/`:382`, `:430`/`:424`, `:479`/`:473` |
 | `mitmachen-7-proof-demo` | **every** list (`listItems`) | `app/[lang]/mitmachen/page.tsx:194` |
-| `ueber-uns-3-proof-stream` | the five proof items under *Pool: …* | `app/[lang]/ueber-uns/page.tsx:156` |
+| `ueber-uns-3-proof-stream` | the five proof items under *Pool: …* | `app/[lang]/ueber-uns/page.tsx:166` |
 | `deine-region-6-proof-demo` | the three quote items | `app/[lang]/deine-region/page.tsx:196` |
 | `dein-kalender-5-proof-demo` | **every** list (`listItems`) | `app/[lang]/dein-kalender/page.tsx:276` |
 | `archiv-2-rows-demo` | the 192-cell archive table | `app/[lang]/ueber-uns/archiv/page.tsx:95` |

@@ -19,7 +19,7 @@ import { pageImage } from "@/src/lib/content/images";
 import { HERO_IMAGE_ID } from "@/src/lib/pages/hero-images";
 import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
 
-import { selectProof } from "../_proof";
+import { proofIntro, selectProof } from "../_proof";
 import { PageJsonLd } from "../_structured-data";
 import { pageContent } from "../_content";
 import { localeFrom, pageMetadataFor } from "../_locale";
@@ -88,12 +88,11 @@ const CHAPTERS = {
   chapter1Place: 1,
   chapter2Heading: 2,
   chapter2Place: 3,
-  chapter3Heading: 4,
-  chapter3Place: 5,
-  storyOpen: 6,
-  storyClose: 7,
-  principlesHeading: 8,
-  principleTitles: [9, 10, 11],
+  chapter3Place: 4,
+  storyOpen: 5,
+  storyClose: 6,
+  principlesHeading: 7,
+  principleTitles: [8, 9, 10],
 } as const;
 
 /** `ueber-uns-2-story`'s fields. */
@@ -238,7 +237,10 @@ export default async function Page({
     locale,
     focusJob: "understand-who-is-behind-it",
     surface: "stream",
-    candidates: proofCandidates(proofStream, words.kickers.othersSay),
+    // Every line names its source after the dash, so no fallback context is
+    // needed. The lines come from the company's own report to the funder; the
+    // chapter still carries the shared proof head (DEC-0209 §4, owner 2026-11-12).
+    candidates: proofCandidates(proofStream, ""),
   });
   const storyTexts = stories.blocks.filter((block) => block.kind === "field");
   const storyItems: DisclosureStory[] = filledOnly(proofSelection.entries).map((entry) => {
@@ -381,7 +383,8 @@ export default async function Page({
             <div className={styles.chapter}>
               <ChapterHead ordinal="03" place={chapter(CHAPTERS.chapter3Place)} />
               <div className={styles.chapterBody}>
-                <h2 id="kapitel-3-h2">{chapter(CHAPTERS.chapter3Heading)}</h2>
+                <p className={styles.place}>{proofIntro(locale).kicker}</p>
+                <h2 id="kapitel-3-h2">{proofIntro(locale).heading}</h2>
               </div>
             </div>
             {/* The space above the stories is the reveal's stack gap

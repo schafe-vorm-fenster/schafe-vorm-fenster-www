@@ -57,7 +57,6 @@ export interface Finding {
     | "register"
     | "product-name"
     | "price-figure"
-    | "claim-budget"
     | "note-marker";
   readonly message: string;
 }
@@ -341,7 +340,7 @@ export const AVOID_TERMS: readonly AvoidTerm[] = [
   {
     rule: "CG-017",
     pattern: /\bWer das schon macht\b/i,
-    instead: "Was andere sagen (press proof only)",
+    instead: "Was andere über uns sagen (the proof kicker, DEC-0209)",
   },
   { rule: "CG-005", pattern: /\bWarum es (heute )?hakt\b/i, scope: "section-title" },
   { rule: "CG-035", pattern: /\bPresse- und Auftrittshistorie\b/i },
@@ -454,75 +453,6 @@ export const REGISTER_EXEMPT_ROUTES: readonly RouteId[] = ["legal"];
  */
 const CURRENCY_FIGURE = /(?:€\s?[\d.,]+|[\d.,]+\s?(?:€|EUR\b))/g;
 
-/**
- * `CG-027` — a proof card's claim is at most 70 characters
- * (`concept/website-copy-guide.md:366`). Nothing measured it until 2026-09-27,
- * and five of the six cards in the two rewritten pools stood over it, the
- * worst at 129 (state/open.md row 286).
- *
- * The claim is the part before the **last** ` — `, which is where
- * `parseDemoProofElement` ends it (`src/lib/pages/demo-content.ts`), with the
- * quotation marks of a quoted line stripped. One measurement, one rule, so a
- * card cannot pass the lint and fail the parser.
- */
-const CLAIM_BUDGET = 70;
-
-/**
- * The one claim allowed over the budget, because shortening it would
- * paraphrase a record and `CG-027` §6 forbids that: `/deine-region` card 2 is
- * the verbatim `claim:` of `leader-foerderung-2022`. The owner decided on
- * 2026-09-27 to keep it and to shorten the authored lines instead
- * (DEC-0145 §4). An entry is a slot id plus the claim's first forty
- * characters, so a **changed** line loses the exemption and has to be measured
- * again.
- */
-const CLAIM_BUDGET_EXCEPTIONS: readonly {
-  readonly slot: string;
-  readonly starts: string;
-  readonly reason: string;
-}[] = [
-  // The owner's decision of 2026-09-27 (DEC-0145 §4): this one stays, because
-  // it is the verbatim `claim:` of `leader-foerderung-2022` and CG-027 §6
-  // forbids paraphrasing a record.
-  { slot: "deine-region-6-proof-demo", starts: "Das Vorhaben ist von der EU-Regionalförde", reason: "verbatim `claim:` of `leader-foerderung-2022` — DEC-0145 §4" },
-  { slot: "deine-region-6-proof-demo", starts: "The undertaking is recognised by EU regio", reason: "verbatim `claim:` of `leader-foerderung-2022` — DEC-0145 §4" },
-  // Pre-existing on 2026-09-27, outside the two pools the owner decided. Many
-  // are verbatim record claims or real quotations, which CG-027 §6 forbids
-  // paraphrasing, so each needs its own reading before it is shortened — that
-  // reading has NOT been done here and this list does not claim it has
-  // (state/open.md row 286).
-  { slot: "dein-kalender-5-proof-demo", starts: "Die selbstverwaltete und automatisierte B", reason: "pre-existing, 117 characters, unread — state/open.md row 286" },
-  { slot: "dein-kalender-5-proof-demo", starts: "Für dieses Projekt sehe ich unsere Landbe", reason: "pre-existing, 90 characters, unread — state/open.md row 286" },
-  { slot: "dein-kalender-5-proof-demo", starts: "Der Dienst hilft dabei, Angebote in einem", reason: "pre-existing, 95 characters, unread — state/open.md row 286" },
-  { slot: "dein-kalender-5-proof-demo", starts: "Managing and automating the dates ourselv", reason: "pre-existing, 85 characters, unread — state/open.md row 286" },
-  { slot: "dein-kalender-5-proof-demo", starts: "For this project I see our rural populati", reason: "pre-existing, 84 characters, unread — state/open.md row 286" },
-  { slot: "dein-kalender-5-proof-demo", starts: "The service helps make what's on offer mo", reason: "pre-existing, 100 characters, unread — state/open.md row 286" },
-  { slot: "home-8-proof-stream", starts: "NØRD Award 2026 gewonnen, Kategorie Smart", reason: "pre-existing, 71 characters, unread — state/open.md row 286" },
-  { slot: "home-8-proof-stream", starts: "Das Projekt kann einen wertvollen Beitrag", reason: "pre-existing, 88 characters, unread — state/open.md row 286" },
-  { slot: "home-8-proof-stream", starts: "17 places in and around Lehre, one calend", reason: "pre-existing, 73 characters, unread — state/open.md row 286" },
-  { slot: "home-8-proof-stream", starts: "Won the NØRD Award 2026, Smart Community ", reason: "pre-existing, 74 characters, unread — state/open.md row 286" },
-  { slot: "home-8-proof-stream", starts: "The adult education centres bring their c", reason: "pre-existing, 77 characters, unread — state/open.md row 286" },
-  { slot: "home-8-proof-stream", starts: "The project can make a valuable contribut", reason: "pre-existing, 76 characters, unread — state/open.md row 286" },
-  { slot: "ueber-uns-3-proof-stream", starts: "In der Pandemie wurden sämtliche Impfange", reason: "pre-existing, 157 characters, unread — state/open.md row 286" },
-  { slot: "ueber-uns-3-proof-stream", starts: "Der Dorfkalender hat 2022 die Integration", reason: "pre-existing, 159 characters, unread — state/open.md row 286" },
-  { slot: "ueber-uns-3-proof-stream", starts: "Wer bei Google nach „Bäcker Schlatkow\" su", reason: "pre-existing, 117 characters, unread — state/open.md row 286" },
-  { slot: "ueber-uns-3-proof-stream", starts: "During the pandemic, every vaccination sl", reason: "pre-existing, 171 characters, unread — state/open.md row 286" },
-  { slot: "ueber-uns-3-proof-stream", starts: "In 2022 the village calendar helped Ukrai", reason: "pre-existing, 116 characters, unread — state/open.md row 286" },
-  { slot: "ueber-uns-3-proof-stream", starts: "Search Google for \"Bäcker Schlatkow\" and ", reason: "pre-existing, 109 characters, unread — state/open.md row 286" },
-  // DEC-0162 §2: the fourth story of chapter 03 is the verbatim `claim:` of
-  // `homeoffice-mobile-anbieter`; CG-027 §6 forbids paraphrasing a record.
-  { slot: "ueber-uns-3-proof-stream", starts: "In der Corona-Zeit wurden Home-Office-Nut", reason: "verbatim `claim:` of `homeoffice-mobile-anbieter` — DEC-0162 §2" },
-  { slot: "ueber-uns-3-proof-stream", starts: "During the pandemic, people working from ", reason: "translation of the verbatim `claim:` of `homeoffice-mobile-anbieter` — DEC-0162 §2" },
-];
-
-/** The claim part of a proof line, by the parser's own rule. */
-export function claimOf(line: string): string {
-  const body = line.replace(/^\s*\d+\.\s*/, "").trim();
-  const cut = body.lastIndexOf(" — ");
-  const claim = cut === -1 ? body : body.slice(0, cut);
-  return claim.trim().replace(/^[„"“]|["”]$/g, "");
-}
-
 export function checkCopy(page: PageContent): Finding[] {
   if (!page.ok) return [];
 
@@ -535,25 +465,9 @@ export function checkCopy(page: PageContent): Finding[] {
         ? `(${copy.kind})`
         : `\`${copy.label}\`${copy.kind === "field" ? "" : ` (${copy.kind})`}`;
 
-    // Row 16 — a proof card's claim fits CG-027's budget (DEC-0145 §4).
-    if (copy.kind === "list item" && page.slots.some((s) => s.id === copy.slot && s.contentType === "proof-card")) {
-      const claim = claimOf(copy.text);
-      const excepted = CLAIM_BUDGET_EXCEPTIONS.some(
-        (entry) => entry.slot === copy.slot && claim.startsWith(entry.starts),
-      );
-      if (claim.length > CLAIM_BUDGET && !excepted) {
-        findings.push({
-          level: "error",
-          file: page.file,
-          slot: copy.slot,
-          check: "claim-budget",
-          message:
-            `${where}: the claim is ${claim.length} characters, CG-027 allows ${CLAIM_BUDGET} — ` +
-            `\`${claim.slice(0, 48)}…\`. Shorten the card; a claim quoted verbatim from a record ` +
-            `goes in \`CLAIM_BUDGET_EXCEPTIONS\` with its reason instead (DEC-0145 §4)`,
-        });
-      }
-    }
+    // Row 16 (a proof claim of at most 70 characters, DEC-0145 §4) is retired:
+    // DEC-0154 withdrew CG-027's limit — a proof line is a whole sentence — and
+    // no new number exists (Q-0086). DEC-0209 §5.
 
     // Row 15 — a price is read, never typed (TS-WEB-0006-A12, DEC-0145).
     //
@@ -680,13 +594,13 @@ export const RENDERED_BLOCKS: readonly {
     slot: "ueber-uns-3-proof-stream",
     kind: "list",
     index: 0,
-    renderedBy: "app/[lang]/ueber-uns/page.tsx:167",
+    renderedBy: "app/[lang]/ueber-uns/page.tsx:166",
   },
   {
     slot: "deine-region-6-proof-demo",
     kind: "list",
     index: 0,
-    renderedBy: "app/[lang]/deine-region/page.tsx:245",
+    renderedBy: "app/[lang]/deine-region/page.tsx:242",
   },
   {
     slot: "dein-kalender-5-proof-demo",
@@ -721,19 +635,19 @@ export const RENDERED_BLOCKS: readonly {
     slot: "home-8-proof-stream",
     kind: "list",
     index: 0,
-    renderedBy: "app/[lang]/page.tsx:119",
+    renderedBy: "app/[lang]/page.tsx:118",
   },
   {
     slot: "home-4a-scene-whatsapp-steps-demo",
     kind: "list",
     index: 0,
-    renderedBy: "app/[lang]/page.tsx:348 (listAt, the three step lines)",
+    renderedBy: "app/[lang]/page.tsx:345 (listAt, the three step lines)",
   },
   {
     slot: "home-4a-scene-whatsapp-steps-demo",
     kind: "list",
     index: 1,
-    renderedBy: "app/[lang]/page.tsx:341 (listAt, the sample event rows)",
+    renderedBy: "app/[lang]/page.tsx:338 (listAt, the sample event rows)",
   },
   {
     slot: "mitmachen-2-objections",

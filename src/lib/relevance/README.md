@@ -67,7 +67,7 @@ export default async function HomePage({
 
   return (
     <SectionShell surface="ink" labelledBy="belege">
-      <h2 id="belege">Was andere sagen</h2>
+      <h2 id="belege">Stimmen aus der Praxis</h2>
       <ProofStream>
         {proof.entries.map((entry) =>
           entry.kind === "item" ? (
