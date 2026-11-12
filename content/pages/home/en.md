@@ -362,7 +362,16 @@ are not here: every proof section carries the same head from
 3. The adult education centre publishes its complete course programme in the village calendar. — Adult education centres in Vorpommern-Greifswald, Pasewalk
 4. "The project can make a valuable contribution to economic recovery and to visibility in rural areas." — Kulturlandbüro Uecker-Randow, Schloss Bröllin
 
+**Link:** View in the archive
+
 <!-- note: authoring note from here on, not copy — the passage quotes forbidden terms in order to forbid them (DEC-0142 §1) -->
+
+Since #36 every teaser carries exactly one link to its evidence entry in
+`/about/archive` (label: **Link** above, the same for all four). The sentences
+are unchanged; the anchors are the hub's media-echo ids that each record lists
+in `media_echo`. `kulturlandbuero-broellin` lists none; its Usage section points
+to "media-echo 2024-09", the same row (mapping in `app/[lang]/_proof-links.ts`).
+Merging this PR is the owner's approval of the link text (DEC-0222 §3).
 
 Names, figures, titles, and years are taken from the records as they
 stand: the 17 places, the name "LeLender" and the foundation's ownership

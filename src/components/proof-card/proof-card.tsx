@@ -34,6 +34,8 @@ export interface ProofCardLogo {
 export interface ProofCardLink {
   readonly label: string;
   readonly to?: RouteId;
+  /** Fragment on `to`, without `#` — a deeplink to one entry (issue #36). */
+  readonly hash?: string;
   readonly href?: string;
 }
 
@@ -192,7 +194,7 @@ export function ProofCard({
         {link ? (
           <div className={styles.link}>
             {link.to ? (
-              <RouteLink locale={locale} to={link.to}>
+              <RouteLink hash={link.hash} locale={locale} to={link.to}>
                 {link.label}
               </RouteLink>
             ) : link.href ? (

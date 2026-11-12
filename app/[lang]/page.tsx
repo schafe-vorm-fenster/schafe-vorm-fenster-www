@@ -41,6 +41,7 @@ import { buildDay } from "./_build-day";
 import { HomeHeroContent, HomeNearby, type HomeFocusCopy } from "./_home-focus";
 import { PlacePhotoLayer } from "./_place-photo";
 import { proofIntro, selectProof } from "./_proof";
+import { proofDeeplink } from "./_proof-links";
 import { PageJsonLd } from "./_structured-data";
 import { pageContent } from "./_content";
 import { localeFrom, pageMetadataFor } from "./_locale";
@@ -126,6 +127,8 @@ function proofCandidates(proof: ContentSlot): ProofCandidate[] {
       claim: card.claim,
       attribution: card.attribution,
       geoCommunity: place === "" ? null : place,
+      // Issue #36: the hub proof id behind this line names the evidence entry.
+      deeplink: proofDeeplink(proof.derivedFrom, index),
       demo: isDemoSlot(proof),
     };
   });
@@ -501,6 +504,12 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
                   emphasis={position === 0 ? "feature" : "compact"}
                   logo={partnerLogo(entry.candidate.contextLine)}
                   key={entry.candidate.id}
+                  /* Issue #36: one link to the evidence entry, labelled by the slot. */
+                  link={
+                    entry.candidate.deeplink && proof.fields["Link"]
+                      ? { label: proof.fields["Link"], ...entry.candidate.deeplink }
+                      : undefined
+                  }
                   locale={locale}
                   state={entry.state}
                 />
