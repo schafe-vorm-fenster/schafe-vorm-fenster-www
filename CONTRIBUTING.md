@@ -22,7 +22,8 @@ belong to the owner.
    `docs/<slug>`, in a worktree of its own
    (`git worktree add ../schafe-vorm-fenster-www-<slug> -b <branch> origin/next-2026`;
    agent worktrees live under `.claude/worktrees/`, which is gitignored). The
-   main checkout keeps whatever someone else has open in it.
+   main checkout stays on `next-2026`, clean and current
+   (`git pull --ff-only`); feature work happens in worktrees only.
 2. **Green locally first.** `pnpm check` passes (the pre-commit hook runs it),
    and the e2e specs your change touches pass locally before you push.
 3. **The PR** targets `next-2026`, carries `Closes #<issue>`, and says in plain
@@ -30,8 +31,9 @@ belong to the owner.
    design or tooling, what you ran to validate it, and what follow-up stays
    open.
 4. **Merge** by squash, after bringing the branch up to date with `next-2026`
-   and seeing CI green; delete the branch and remove its worktree afterwards.
-   Several PRs merge in the order of their issues — the change queue in
+   and seeing CI green. Afterwards close the issue by hand — `Closes #<issue>`
+   fires only on a merge into `main` — delete the branch remotely and locally,
+   remove its worktree, and pull `next-2026` in the main checkout. Several PRs merge in the order of their issues — the change queue in
    `.agents/roles/orchestrator.md` runs exactly this loop.
 
 **Shared files.** Most merge conflicts here come from a short list of files
