@@ -180,28 +180,20 @@ nächsten Wochen ansteht." Der Ortsname kommt aus
 
 <!-- id: dein-kalender-3b-embed-config; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar", ia]; status: draft -->
 
-**Überschrift:** Was drinsteht, bestimmt ihr
+**Überschrift:** Was drinsteht, bestimmt ihr.
 
-Die Termine kommen, wie sie reinkommen — und landen trotzdem alle auf eurer
-Website.
+Ihr bindet den Kalender auf eurer Website ein, und er erscheint in eurem Design: ohne Logo von Schafe vorm Fenster, passend zu Schrift und Farben eurer Seite. Ihr legt fest, welche Termine erscheinen, egal ob sie per WhatsApp, aus einem Google Kalender oder von der Website eines Vereins kommen.
 
-**Quellen:** WhatsApp · Google Kalender · Websites der Akteure
-
-**Ziel:** eure Website
-
-Auch Termine von Vereinen, die ihren Flyer einfach per WhatsApp geschickt
-haben.
-
-**Einstellungs-Überschrift:** Ihr könnt selbst bestimmen:
+**Einstellungs-Überschrift:** Das könnt ihr einstellen
 
 | Einstellung | Kernsatz | Beispiel | Chips |
 | --- | --- | --- | --- |
-| Orte | Einzelne Orte oder ganze Gemeinden. | Die Kulturgesellschaft einer Stadt nimmt nur das Stadtgebiet — aus Nachbarorten taucht nichts auf. | Stadtgebiet, Ortsteile, ~~Nachbarorte~~ |
-| Veranstalter | Nur die, die zu euch gehören — die anderen erscheinen nicht. | Eine Stiftung zeigt nur ihre Partner und die Projekte aus den eigenen Förderprogrammen. | Partner, Geförderte, ~~Alle anderen~~ |
-| Kategorien | Welche Art Termine bei euch steht. | Ein Kulturkalender nimmt Kultur, Tourismus, Bildung und Gesundheit, aber keine Versorgung. Ein Gemeindekalender nimmt alles. | Kultur, Tourismus, Bildung, ~~Versorgung~~ |
-| Zeitraum | Wie weit der Kalender nach vorn schaut. | | |
-| Darstellung | Der Kalender übernimmt einfach euer Design und passt sich an. Kein Logo von uns — euer Kalender auf eurer Webseite. Wer will, stellt Details selbst ein; es geht aber auch ohne. | | |
-| Aktualisierung | Bei jedem Seitenaufruf aktuell. Damit es schnell lädt, speichern wir wenige Minuten zwischen. | | |
+| Orte | Ihr wählt einzelne Orte oder ganze Gemeinden. | Die Kulturgesellschaft einer Stadt zeigt nur das Stadtgebiet. Termine aus Nachbarorten tauchen nicht auf. | Stadtgebiet, Ortsteile, ~~Nachbarorte~~ |
+| Veranstalter | Ihr zeigt nur die Veranstalter, die zu euch gehören. | Eine Stiftung zeigt nur ihre Partner und die Projekte aus den eigenen Förderprogrammen. | Partner, Geförderte, ~~Alle anderen~~ |
+| Kategorien | Ihr wählt, welche Art von Terminen bei euch steht. | Ein Kulturkalender zeigt Kultur, Tourismus, Bildung und Gesundheit, aber keine Versorgung. Ein Gemeindekalender zeigt alles. | Kultur, Tourismus, Bildung, ~~Versorgung~~ |
+| Zeitraum | Ihr legt fest, wie weit der Kalender nach vorn schaut. | | |
+| Darstellung | Der Kalender übernimmt euer Design und passt sich eurer Seite an. Wer will, stellt Details selbst ein. Es geht aber auch ohne. | | |
+| Aktualisierung | Der Kalender ist bei jedem Seitenaufruf aktuell. Damit er schnell lädt, speichern wir die Termine wenige Minuten zwischen. | | |
 
 **Link-Label:** Alle Einstellungen im Detail
 
@@ -216,20 +208,12 @@ Quelle:
 - **Kein „Umkreis"** bei den Orten — `plan/reviews/2026-09-23/spec-impact.md`
   Zeile 315: „Umkreis" steht in keinem Offering-Datensatz und kollidiert mit
   `TS-WEB-0026-A2` und `TS-WEB-0005 D1`.
-- **Kein „im Amt"** im Benefit-Band — CG-036, und das Review sagt es für
-  genau diesen Satz selbst („Beim Umsetzen anpassen").
-- **Ohne das Wort „Beispiel:"** vor den Beispielsätzen. Der Entwurf
-  beschriftet sie so; auf der Seite darf das Wort nicht stehen (Jans
-  Entscheidung vom 2026-09-18, `e2e/content-compliance.spec.ts`: keine
-  sichtbare Kennzeichnung von Stellvertreter-Inhalt). `setting-row` trennt
-  Kernsatz und Beispiel ohnehin typografisch, die Beschriftung sagt also
-  nichts, was die Zeile nicht schon zeigt.
-- **„Websites der Akteure" statt „Vereinswebsite" und statt „eure eigene
-  Website"** (DEC-0172 §3). Die Quellen sind die Wege der Akteure, das Ziel
-  ist eure Website. CG-040 ersetzt „Vereinswebseite" durch „eure eigene
-  Website"; neben dem Ziel „eure Website" stand damit zweimal fast dasselbe
-  Wort für zwei verschiedene Orte (Review 2026-10-27, #96). „Akteure" ist das
-  Wort, das Zeile 3 des Vergleichs für dieselben Leute schon benutzt.
+- **Mit fettem „Beispiel:"** vor den Beispielsätzen (#162, DEC-0204). Das
+  Wort steht nicht im Artefakt, `setting-row` setzt es vor jedes Beispiel.
+  Es hebt Jans Entscheidung vom 2026-09-18 für genau diese Zeilen auf: die
+  Sätze sind echte Anwendungsfälle, kein Stellvertreter-Inhalt.
+- **Quellen-/Ziel-Fluss entfällt** (#162, DEC-0204): Die Kanäle stehen in der
+  Einleitung, der Lime-Block „So kommen sie rein / Hier landen sie" ist entfernt.
 - **Zeitraum ohne Beispiel und ohne Chips**, dafür mit der Markierung
   „wird geprüft" (Review: „Müssen wir bei Portalize nachsehen, was wirklich
   geht"). Die Markierung ist der Platzhalter-Badge, nicht Copy.

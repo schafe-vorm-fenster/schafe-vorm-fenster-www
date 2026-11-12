@@ -271,16 +271,14 @@ proof section before it as one ground, and the owner read it as the old state
 (#91). The subjects stand side by side from `xl`, each a mono label over its
 paragraph under a hairline in the ground's label colour (A26).
 
-### D12 — The benefit band is a flow, not a row of pills [FIXED: DEC-0172 §3]
+### D12 — The settings section has no source-to-target band [FIXED: DEC-0204]
 
-`embed-config`'s `lime-500` band shows where the dates come from and the one
-place they land, as SRC-0014 §Source-to-target flow: a captioned plain list of
-the sources, a decorative arrow, one square `paper` target field, and the
-benefit sentence as the figure's caption. It was three white pills, an arrow on
-a line of its own and one black pill — four things drawn as buttons that were
-not controls, in two fills whose meaning nothing stated (#96). The sources are
-the actors' channels and never addressed to the reader, the target is the
-reader's website and appears once (SRC-0017 CG-040 as amended by DEC-0172 §3).
+`embed-config` carries no `lime-500` band (it replaced DEC-0172 §3's flow,
+#162). Its head explains the embedding in two sentences (kicker "Euer Kalender
+auf eurer Website", heading with a full stop), a mono label "Das könnt ihr
+einstellen" precedes the six `setting-row`s, and each example opens with a bold
+"Beispiel:" (DEC-0204 lifts the 2026-09-18 ban on the word for these rows).
+The section stays on `paper`.
 
 ### D11 — Local advertising appears nowhere [FIXED: DEC-0052 §3, resolves Q-0006]
 
@@ -321,7 +319,7 @@ TS-WEB-0018 D8's budget constant is 0 for this route.
 | TS-WEB-0024-A17 | e2e | The closing CTA carries the same conversion goal id, target and label as the primary CTA and does not use the Pulse fill; the context band names exactly the three non-focus jobs. |
 | TS-WEB-0024-A18 | static | No content file bound to this route references `local-advertising`, none carries a `withheld_mention` field, and the rendered page contains no advertising CTA or `request-ad-placement` call site. |
 | TS-WEB-0024-A23 | e2e | At 390 and 1280 px, `data-block="contrast"` holds four `[data-half="today"]` on `archive ground` and four `[data-half="with"]` on `lime-100`, none with a radius or a shadow; each label is a block above its sentence; the two halves of a pair butt — stacked below `xl`, side by side from it (D4, DEC-0172 §2). `e2e/module-designs.spec.ts`. |
-| TS-WEB-0024-A24 | e2e | At 390 and 1280 px, the `lime-500` band of `data-block="embed-config"` holds one `figure[data-flow]` with a `figcaption`, three `li[data-flow-source]` in a list with no fill and no radius, one `[data-flow-target]` on `paper` with radius 0, a decorative arrow, and no link or button; no source text addresses the reader ("eure", "your"); the target follows the sources below `xl` and stands to their right from it (D12, DEC-0172 §3). `e2e/module-designs.spec.ts`. |
+| TS-WEB-0024-A24 | e2e | At 390 and 1280 px, `data-block="embed-config"` holds no `lime-500` surface, no `figure[data-flow]` and neither "So kommen sie rein" nor "Hier landen sie", and shows the label "Das könnt ihr einstellen" (D12, DEC-0204). `e2e/module-designs.spec.ts`. |
 | TS-WEB-0024-A25 | e2e | At 390 and 1280 px, each of the three items of `data-block="proof"` has no fill and a `hairlineOnLime` top border, carries an `aria-hidden` 40 × 40 initials well under its claim — or the voice's logo in its place, 40 px high (DEC-0183) — and from `xl` the two compact items share one row (D9, DEC-0172 §1). `e2e/module-designs.spec.ts`. |
 | TS-WEB-0024-A26 | e2e | At 390 and 1280 px, `data-block="trust"` stands on `violet-500`, not on the ground of `data-block="proof"`, and its two subjects stand side by side from `xl` (D10, DEC-0172 §4). `e2e/module-designs.spec.ts`. |
 | TS-WEB-0024-A19 | manual | Every sentence in `data-block="trust"` about operations and AI names a hub record in its `derived_from`. A sentence without one blocks the block from shipping; the data-protection sentences alone may ship. |

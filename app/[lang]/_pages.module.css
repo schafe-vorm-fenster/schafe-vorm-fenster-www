@@ -41,151 +41,24 @@
  * band, and the six settings (TS-WEB-0024 D2 block `embed-config`).
  */
 .configLead {
+  color: var(--color-neutral-text2);
   font-size: var(--type-lead-size);
+  font-weight: 600;
   line-height: var(--leading-normal);
   margin: var(--space-3) 0 0;
   max-width: var(--measure-reading);
 }
 
-/*
- * Where the dates come from, and the one place they land. A full-bleed band,
- * not a box inside the section's padding: a panel framed by 16 px of paper is
- * a picture in a mount, and the section stops being a surface (SRC-0014
- * §Page Rhythm). It republishes the lime ground's own pairs, the way
- * `price-band` does.
- */
-.benefitBand {
-  --ground-kicker: var(--color-lime-900);
-  --ground-link: var(--color-lime-900);
-  --ground-link-hover: var(--color-neutral-ink);
-
-  background: var(--color-lime-500);
-  color: var(--color-lime-900);
-  margin-block: var(--section-padding-block);
-  padding-block: var(--section-padding-block);
-}
-
-/*
- * The flow — SRC-0014 §Source-to-target flow, DEC-0172 §3. Where the dates
- * come from, an arrow, and the one place they land. Nothing in it is a
- * control, so nothing in it is a pill: the sources are a plain list with
- * their glyphs, the target a flat square `paper` field (radius 0 — a place,
- * not a button). Below `xl` the three parts stack and the arrow points down;
- * from `xl` they stand in one row, sources · arrow · target.
- */
-.flow {
-  display: grid;
-  gap: var(--space-3);
-  grid-template-columns: minmax(0, 1fr);
-  margin: 0;
-}
-
-.flowCaption {
-  color: var(--color-lime-900);
+/* The mono label above the list: "Das könnt ihr einstellen" (issue 162). */
+.settingsHeading {
+  color: var(--color-lime-800);
   font-family: var(--font-mono);
   font-size: var(--type-label-size);
   font-weight: 700;
-  letter-spacing: var(--type-label-tracking);
+  letter-spacing: 0.12em;
   line-height: var(--leading-normal);
-  margin: 0 0 var(--space-1);
+  margin: var(--space-6) 0 var(--space-2);
   text-transform: uppercase;
-}
-
-/* A wrapping row of plain items below `xl` — the section budget (G-4) holds
-   `embed-config` at its recorded height — and one column beside the arrow
-   from `xl`. */
-.flowSourceList {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-1) var(--space-4);
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.flowSource {
-  align-items: center;
-  color: var(--color-neutral-ink);
-  display: flex;
-  font-size: var(--type-body-size);
-  font-weight: 700;
-  gap: var(--space-3);
-  line-height: var(--leading-normal);
-}
-
-/* Decorative: it carries no text, and the order of the markup already reads
-   sources → target. Turned to point down while the parts stack. */
-.flowArrow {
-  color: var(--color-neutral-ink);
-  display: flex;
-  transform: rotate(90deg);
-  width: fit-content;
-}
-
-.flowTarget {
-  background: var(--color-neutral-paper);
-  border-radius: 0;
-  color: var(--color-neutral-ink);
-  padding: var(--space-3) var(--space-4);
-}
-
-.flowTarget .flowCaption {
-  color: var(--color-neutral-muted);
-}
-
-.flowTargetName {
-  align-items: center;
-  display: flex;
-  font-size: var(--type-subhead-size);
-  font-weight: 800;
-  gap: var(--space-3);
-  letter-spacing: var(--type-subhead-tracking);
-  line-height: var(--leading-tight);
-  margin: 0;
-}
-
-.flow .benefitLine {
-  margin: 0;
-}
-
-@media (min-width: 64rem) {
-  .flow {
-    align-items: center;
-    column-gap: var(--space-6);
-    grid-template-columns: minmax(0, 5fr) auto minmax(0, 6fr);
-  }
-
-  .flowSourceList {
-    flex-direction: column;
-    gap: var(--space-2);
-  }
-
-  .flowArrow {
-    transform: none;
-  }
-
-  .flowTarget {
-    padding: var(--space-6);
-  }
-
-  .flow .benefitLine {
-    grid-column: 1 / -1;
-  }
-}
-
-.benefitLine {
-  font-size: var(--type-body-size);
-  line-height: var(--leading-normal);
-  margin: var(--space-3) 0 0;
-  max-width: var(--measure-reading);
-}
-
-.settingsHeading {
-  font-size: var(--type-card-size);
-  font-weight: 800;
-  letter-spacing: var(--type-card-tracking);
-  line-height: var(--type-card-leading);
-  margin: 0 0 var(--space-3);
 }
 
 .configLink {
