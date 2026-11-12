@@ -136,8 +136,8 @@ export interface PlaceDatesIslandProps {
   readonly titleHidden?: boolean;
   /**
    * Which categories a **story-capped** module would rather show, best
-   * first. Ignored unless the list is capped to one row; position 1 stays
-   * chronological, always.
+   * first. Ignored unless the list is capped to one row. The rows it picks
+   * from are the server's preferred twelve (DEC-0210).
    */
   readonly prefer?: readonly EventCategory[];
   /** The app handover's label. `{place}` is filled in; omitted means no CTA. */

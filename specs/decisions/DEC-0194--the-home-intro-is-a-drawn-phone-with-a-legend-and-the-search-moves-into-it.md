@@ -27,8 +27,9 @@ place search and its location hint, because the new section carries both.
    Gemeindeleben, Bildung & Gesundheit, Kultur & Tourismus, In den Nachbarorten.
    The legend (stroke from the frame, lime dot, label) is positioned from the
    numbers 150 / 82 / 10 (`legendCenters`), never by hand.
-3. **A slot is filled on its own**: the next date of its category in the
-   recognised place, else its fixed default row (neutral on purpose: no firm,
+3. **A slot is filled on its own**: the preferred date of its category in the
+   recognised place (a one-off before a recurring date, culture on a tie, then
+   the earliest — amended by DEC-0210), else its fixed default row (neutral on purpose: no firm,
    no place name). Real and default rows may mix; the order is the legend's,
    not the calendar's. The category ids are `src/lib/live/categories.ts`'s —
    Versorgung `everyday-supply`, Gemeindeleben `community-life`, Bildung &
