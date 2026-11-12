@@ -282,6 +282,8 @@ content, delivered as packages; SRC-0009).
 | [FUN-WEB-0124](FUN-WEB-0124.md) | SRC-0006, DEC-0004, DEC-0028 | S3 |
 | [FUN-WEB-0125](FUN-WEB-0125.md) | SRC-0001#boundaries, SRC-0003 | S2 |
 | [FUN-WEB-0126](FUN-WEB-0126.md) | derived; convention | S1 |
+| [FUN-WEB-0211](FUN-WEB-0211.md) | DEC-0218 | S3 |
+| [FUN-WEB-0212](FUN-WEB-0212.md) | DEC-0218 | S3 |
 
 ### Security
 

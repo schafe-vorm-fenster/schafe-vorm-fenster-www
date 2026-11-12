@@ -1,41 +1,15 @@
 /**
- * The one factory a page or component calls — TS-WEB-0012 D2's replaceability
- * rule made concrete: swapping the vendor touches this function, nothing
- * else.
- *
- * Today it always returns the mock (`mock-tracker.ts`): the real adapter
- * (`etracker-tracker.ts`) is written but stays off until the eTracker
- * account and field mapping are confirmed (state/open.md row 12, Q-0040,
- * TS-WEB-0012 D4 rule 4). `NEXT_PUBLIC_ETRACKER_REAL_ADAPTER` is that one
- * injection point — flipping it to `"true"` after the confirmation is the
- * entire hardening step for this module.
+ * The analytics module's public surface — TS-WEB-0012 D2. `getAnalyticsTracker()`
+ * (`tracker.ts`) is the one factory; everything else here is the registry,
+ * the naming schemes and the campaign helpers.
  */
 
-import { createEtrackerTracker } from "./etracker-tracker";
-import { createMockTracker } from "./mock-tracker";
-
-import type { AnalyticsTracker } from "./types";
-
-let cachedTracker: AnalyticsTracker | undefined;
-
-export function getAnalyticsTracker(): AnalyticsTracker {
-  if (!cachedTracker) cachedTracker = createTracker();
-  return cachedTracker;
-}
-
-/** Test-only: forces the next `getAnalyticsTracker()` to rebuild. */
-export function resetAnalyticsTrackerForTests(): void {
-  cachedTracker = undefined;
-}
-
-function createTracker(): AnalyticsTracker {
-  const realAdapterEnabled =
-    process.env.NEXT_PUBLIC_ETRACKER_REAL_ADAPTER === "true";
-  return realAdapterEnabled ? createEtrackerTracker() : createMockTracker();
-}
-
+export { getAnalyticsTracker, resetAnalyticsTrackerForTests } from "./tracker";
 export { appendCampaignParams, CAMPAIGN_PARAMS, extractCampaignParams, hasCampaignParams } from "./attribution";
 export type { CampaignParam, CampaignParams } from "./attribution";
+export { etrackerSecureCode } from "./config";
+export { CTA_ACTION, ctaEvent, GOAL_BY_ROUTE, isTrackedCta, NAVIGATION_CATEGORY, OUTBOUND_CATEGORY } from "./cta-event";
+export type { CtaElement, CtaEvent } from "./cta-event";
 export {
   CONVERSION_EVENTS,
   conversionEvent,
@@ -45,4 +19,6 @@ export {
 export type { ConversionEventDefinition, ConversionGoalId } from "./event-registry";
 export { createEtrackerTracker } from "./etracker-tracker";
 export { createMockTracker } from "./mock-tracker";
+export { NOT_FOUND_PAGE, pageView } from "./page-view";
+export type { PageView } from "./page-view";
 export type { AnalyticsTracker, ConversionAttributes, EventStage } from "./types";

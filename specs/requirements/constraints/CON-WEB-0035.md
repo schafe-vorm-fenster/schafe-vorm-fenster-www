@@ -32,4 +32,6 @@ The solution SHALL ship conversion measurement only at launch, one eTracker even
 
 ## Source
 
-DEC-0016, DEC-0028
+DEC-0016, DEC-0028, DEC-0218
+
+DEC-0218 §3–§4 adds a click event per CTA beside the conversion events (`FUN-WEB-0212`). It stays conversion measurement: each click event is categorised by the conversion goal its target serves, and the one event per goal ID this constraint names is unchanged — the action (`click` against `handover`/`completed`) tells them apart.

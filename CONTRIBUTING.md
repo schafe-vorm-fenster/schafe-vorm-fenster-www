@@ -221,6 +221,24 @@ Vercel's Git integration deploys one for every push. Production — `--prod`,
 promotion, production environment variables, production domains — is the
 owner's.
 
+### Environment Variables
+
+Set in the Vercel project, never committed (`.env*` stays gitignored). The
+public ones below are optional: unset, each falls back to a mock or a
+default, never to an error.
+
+| Variable | What it does | Unset |
+| --- | --- | --- |
+| `NEXT_PUBLIC_ETRACKER_SECURE_CODE` | eTracker's secure code: mounts the loader on every page of `app/[lang]` and the 404, and switches the real tracker on (DEC-0218, `src/lib/analytics/config.ts`). Inlined at build time, so a change needs a redeploy | no loader, no request, the mock tracker logs to the console |
+| `NEXT_PUBLIC_BRIEFING_URL` | the booking link of the contact section (`src/lib/live/briefing.ts`) | the hub's booking URL |
+| `NEXT_PUBLIC_COMMUNITY_SITE_ORIGIN` | where village calendars live (`src/lib/live/app-handover.ts`) | `https://schafe-vorm-fenster.de` |
+
+To test page tracking locally without contacting eTracker, start the dev
+server with any code-shaped value and let `e2e/analytics-tracking.spec.ts`
+answer `code.etracker.com` with its stub:
+`NEXT_PUBLIC_ETRACKER_SECURE_CODE=e2eStubCode PORT=3494 pnpm next dev -p 3494`,
+then the same variable on `pnpm exec playwright test e2e/analytics-tracking.spec.ts`.
+
 ## Continuous Integration
 
 - `.github/workflows/check.yml` — `pnpm check` · `pnpm build` ·

@@ -1,25 +1,25 @@
 /**
  * The eTracker loader tag — TS-WEB-0012 D2, extracted from SRC-0010
- * (`legacy-content/app/layout.tsx`) and carried over unchanged in meaning.
+ * (`legacy-content/app/layout.tsx`); mounted by `etracker-analytics.tsx`
+ * since DEC-0218.
  *
- * **Not mounted anywhere yet.** `getAnalyticsTracker()` (`index.ts`) never
- * returns the real adapter today (row 12/Q-0040 open), so there is nothing
- * for this script to talk to — mounting it before then would load a
- * third-party script for no measurement, which D9's "no page waits on the
- * tracker" spirit and the mock rule both argue against. It is exported so
- * whoever closes row 12 has the one line to add to `app/[lang]/layout.tsx`:
- *
- * ```tsx
- * import { EtrackerLoader } from "@/src/lib/analytics/etracker-loader";
- * // inside <head> or <body>, once:
- * <EtrackerLoader secureCode={process.env.ETRACKER_SECURE_CODE} />
- * ```
+ * One attribute departs from the legacy tag, by DEC-0218 §2:
+ * `data-page-changed-detection` is `off`, not `url`. With `url` the loader
+ * sends its own virtual page view on every URL change and names the page
+ * after the URL (`et_getAutoPageName()`), so the stable route names of
+ * `page-view.ts` would never reach the report — and a router hook beside it
+ * would count every client navigation twice. TS-WEB-0012 leaves exactly this
+ * choice [FREE] ("solely on `data-page-changed-detection` or on an explicit
+ * router hook, provided no duplicate page views result"); the hook is
+ * `etracker-analytics.tsx`.
  *
  * `next/script` with `strategy="afterInteractive"` keeps it out of the LCP
  * critical path (TS-WEB-0003 D4, TS-WEB-0012 D9) without hand-rolling `async`.
  */
 
 import Script from "next/script";
+
+export const ETRACKER_LOADER_SRC = "https://code.etracker.com/code/e.js";
 
 export interface EtrackerLoaderProps {
   /**
@@ -35,12 +35,12 @@ export function EtrackerLoader({ secureCode }: EtrackerLoaderProps) {
 
   return (
     <Script
-      id="_etLoader"
-      strategy="afterInteractive"
-      src="https://code.etracker.com/code/e.js"
       data-block-cookies="true"
+      data-page-changed-detection="off"
       data-secure-code={secureCode}
-      data-page-changed-detection="url"
+      id="_etLoader"
+      src={ETRACKER_LOADER_SRC}
+      strategy="afterInteractive"
     />
   );
 }
