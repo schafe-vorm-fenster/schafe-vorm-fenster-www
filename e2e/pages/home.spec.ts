@@ -189,7 +189,7 @@ async function sceneFacts(page: Page) {
               : "instance",
         ),
       opener: carrier?.querySelector("h2")?.textContent?.trim() ?? "",
-      steps: [...(carrier?.querySelectorAll("[data-explain-step]") ?? [])].map((step) =>
+      steps: [...(carrier?.querySelectorAll("[data-explain-row]") ?? [])].map((step) =>
         (step.textContent ?? "").replace(/\s+/gu, " ").trim(),
       ),
       /** One secondary CTA per mechanism, so the set is comparable across loads. */
@@ -208,7 +208,7 @@ async function sceneFacts(page: Page) {
         .filter((id) =>
           [
             "focus-block",
-            "place-dates",
+            "dorfkalender",
             "proof-stream",
             "context-band",
           ].includes(id),
@@ -320,25 +320,39 @@ test.describe("TS-WEB-0019 — home", () => {
     // between jobs and stay as they are (TS-WEB-0006 D4).
     const linksAboveTheFold = await page.evaluate((foldHeight) => {
       const main = document.querySelector("main");
-      if (!main) return -1;
+      if (!main) return ["no main"];
+      // The section "Dein digitaler Dorfkalender." carries one link by design
+      // (to the place's own calendar, DEC-0194); it is not a link "to see
+      // what is on" on another page of this site.
       return [...main.querySelectorAll("a[href]")].filter(
-        (link) => link.getBoundingClientRect().top < foldHeight,
-      ).length;
+        // A hidden link (the credit panels' source links) is on no screen.
+        (link) =>
+          !link.closest("#dorfkalender") &&
+          link.getClientRects().length > 0 &&
+          link.getBoundingClientRect().top < foldHeight,
+      ).map((link) => (link.getAttribute("href") ?? "") + "@" + Math.round(link.getBoundingClientRect().top));
     }, PHONE.height);
-    expect(linksAboveTheFold).toBe(0);
+    expect(linksAboveTheFold).toEqual([]);
   });
 
   for (const viewport of [PHONE, DESKTOP]) {
-    test(`TS-WEB-0006-A3 / TS-WEB-0019-A2: the primary CTA is above the fold at ${viewport.width}×${viewport.height}`, async ({
+    // DEC-0194: the stage carries no search any more, so the primary CTA of S1
+    // is the submit of the section directly under it, not a control above the
+    // fold. The generic "above the fold" rule of TS-WEB-0006-A3 does not hold
+    // on `/` in S1 (open point of the PR for the owner).
+    test(`TS-WEB-0019-A2: the primary CTA is the submit of the section directly under the stage at ${viewport.width}×${viewport.height}`, async ({
       page,
     }) => {
       await page.setViewportSize(viewport);
       await page.goto("/");
       await blockOneSettled(page);
-      const box = await page.locator('[data-cta="primary"]').boundingBox();
-      expect(box).not.toBeNull();
-      expect(box!.y).toBeGreaterThanOrEqual(0);
-      expect(box!.y + box!.height).toBeLessThanOrEqual(viewport.height);
+      await expect(page.locator('#focus-block [data-cta="primary"], #focus-block input')).toHaveCount(0);
+      await expect(page.locator('#dorfkalender [data-cta="primary"]')).toHaveCount(1);
+      const stage = await page.locator("#focus-block").boundingBox();
+      const section = await page.locator("#dorfkalender").boundingBox();
+      expect(stage).not.toBeNull();
+      expect(section).not.toBeNull();
+      expect(Math.abs(section!.y - (stage!.y + stage!.height))).toBeLessThanOrEqual(24);
     });
 
     test(`TS-WEB-0017-A9: no horizontal scroll at ${viewport.width}×${viewport.height}`, async ({
@@ -364,13 +378,11 @@ test.describe("TS-WEB-0019 — home", () => {
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
       "Das ist los in Quilow",
     );
-    // The module slot streams over its S1 fallback: for a few hundred ms the
-    // resolved section sits in React's hidden streaming container next to the
-    // visible Schlatkow fallback, and a strict locator sees two `#place-dates`.
-    // Measured (3 workers, `next dev`): both present at 0 ms, one at 500 ms.
-    const dates = page.locator("#place-dates").filter({ visible: true });
-    await expect(dates).toContainText("Quilow");
-    await expect(dates.locator("article")).toHaveCount(3);
+    // The drawn phone of "Dein digitaler Dorfkalender." names the chosen place
+    // (DEC-0194) and always holds its five fixed slots, real or default.
+    const graphic = page.locator("#dorfkalender [data-dorfkalender-graphic]");
+    await expect(graphic).toContainText("Quilow");
+    await expect(graphic.locator("[data-slot]")).toHaveCount(5);
 
     const primary = page.locator('[data-cta="primary"]');
     await expect(primary).toHaveCount(1);
@@ -401,18 +413,76 @@ test.describe("TS-WEB-0019 — home", () => {
     await expect(primary).toHaveCount(1);
     await expect(primary).toHaveAttribute("href", `/mitmachen/registrieren?ort=${slug}`);
 
-    // No text claims dates in that place.
-    const dates = (await page.locator("#place-dates").innerText()).trim();
-    expect(dates).not.toMatch(/^Das ist los in/m);
+    // No text claims dates in that place: the section that said "Das ist los in"
+    // is gone (DEC-0194).
+    await expect(page.getByText(/^Das ist los in/u)).toHaveCount(0);
   });
 
-  test("TS-WEB-0019-A5: an uncovered place typed into the search navigates to /dein-ort/starten?ort=", async ({
+  test("TS-WEB-0019-A5: the search of the Dorfkalender section loads a place in place and never navigates", async ({
+    page,
+  }) => {
+    await page.setViewportSize(DESKTOP);
+    await page.goto("/");
+    await blockOneSettled(page);
+
+    const field = page.locator('#dorfkalender input[type="search"]');
+    const graphic = page.locator("#dorfkalender [data-dorfkalender-graphic]");
+    await expect(graphic).toContainText("Schlatkow");
+    await field.fill("Quilow");
+    await field.press("Enter");
+    await expect(graphic).toContainText("Quilow");
+    await expect(page).toHaveURL(/\/$/u);
+    // Five slots, always; the stage did not change.
+    await expect(graphic.locator("[data-slot]")).toHaveCount(5);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Was ist los in deinem Dorf?");
+
+    // An unknown place leaves the phone as it was — no navigation, no message.
+    await field.fill("99999");
+    await field.press("Enter");
+    await page.waitForTimeout(600);
+    await expect(page).toHaveURL(/\/$/u);
+    await expect(graphic).toContainText("Quilow");
+  });
+
+  test("TS-WEB-0008-A15: the Dorfkalender search suggests places, and a pick loads one into the phone in place", async ({
+    page,
+  }) => {
+    await page.setViewportSize(DESKTOP);
+    await page.goto("/");
+    await blockOneSettled(page);
+
+    const field = page.locator('#dorfkalender input[type="search"]');
+    const graphic = page.locator("#dorfkalender [data-dorfkalender-graphic]");
+    // The suggestion overlay is the stage's, moved with the search (issue 143).
+    await expect(field).toHaveAttribute("role", "combobox", { timeout: 15_000 });
+    await field.fill("Quil");
+
+    const options = page.locator("#dorfkalender").getByRole("option");
+    await expect(options.first()).toBeVisible({ timeout: 10_000 });
+    expect(await options.count()).toBeLessThanOrEqual(4);
+
+    // The row reads "Ort (Gemeinde)"; the place is the part before the bracket.
+    const picked = ((await options.first().textContent()) ?? "").replace(/\s*\(.*\)\s*$/u, "").trim();
+    expect(picked).not.toBe("");
+
+    // Keyboard first: ArrowDown marks a row, Enter picks it.
+    await field.press("ArrowDown");
+    await expect(field).toHaveAttribute("aria-activedescendant", /option-0$/u);
+    await field.press("Enter");
+
+    await expect(graphic).toContainText(picked);
+    await expect(field).toHaveValue(picked);
+    await expect(page.locator("#dorfkalender").getByRole("listbox")).toHaveCount(0);
+    await expect(page).toHaveURL(/\/$/u);
+  });
+
+  test("TS-WEB-0019-A5: an uncovered place typed into the closing search navigates to /dein-ort/starten?ort=", async ({
     page,
   }) => {
     await page.setViewportSize(DESKTOP);
     await page.goto("/");
 
-    const field = page.locator('input[type="search"]').first();
+    const field = page.locator("#ort-suche-abschluss");
     await field.fill("99999"); // the fixture's own uncovered postcode
     await field.press("Enter");
 
@@ -483,19 +553,46 @@ test.describe("TS-WEB-0019 — home", () => {
     }
     await expect(explainModule.locator('[data-explain-step][aria-current="step"]')).toHaveCount(1);
 
-    // DOM order inside the scene: opener · module · the block's one concrete
-    // instance, a live event row (DEC-0110 §1's render order).
+    // DEC-0192: step 2 carries the hub's WhatsApp number (substituted from the
+    // record, not typed), and the module's one CTA is a teaser plus the
+    // "Termine veröffentlichen" button on `takePart`; the flyer row is gone.
+    // Since the 2026-11-12 amendment the number is a real link to the
+    // click-to-chat URL, outside the step's button (no nested interactive).
+    const stepTwo = explainModule.locator('[data-explain-row="2"]');
+    await expect(stepTwo).toContainText(/\+49[\d\s]{8,}/);
+    await expect(stepTwo).not.toContainText("{whatsapp}");
+    const numberLink = stepTwo.locator("a");
+    await expect(numberLink).toHaveCount(1);
+    await expect(numberLink).toHaveAttribute("href", /^https:\/\/wa\.me\/\d{8,}$/);
+    await expect(numberLink).toHaveText(/\+49[\d\s]{8,}/);
+    await expect(steps.nth(1).locator("a")).toHaveCount(0);
+    // The teaser and the button stand below the module (it keeps its 360 px
+    // budget), and the module itself carries no CTA.
+    await expect(explainModule.locator("[data-cta]")).toHaveCount(0);
+    await expect(whatsapp.locator('[data-cta="secondary"]')).toHaveText(/Mehr zum Veröffentlichen von Terminen/);
+    await expect(whatsapp.locator("p", { hasText: "Google Kalender" })).toHaveCount(1);
+    await expect(whatsapp.getByText("Aus dem Flyer geworden")).toHaveCount(0);
+
+    // DOM order inside the scene: opener · module. The flyer row that stood
+    // below the module as the scene's instance is gone (owner, DEC-0192 §5),
+    // so nothing but the module's own stage calendar renders event rows.
     const order = await whatsapp.evaluate((node) =>
-      [...node.querySelectorAll("h2, [data-explain-module], article")].map((element) =>
-        element.tagName === "H2"
-          ? "opener"
-          : element.hasAttribute("data-explain-module")
-            ? "module"
-            : "instance",
-      ),
+      [...node.querySelectorAll("h2, [data-explain-module], article")]
+        .filter(
+          (element) =>
+            element.hasAttribute("data-explain-module") ||
+            element.closest("[data-explain-module]") === null,
+        )
+        .map((element) =>
+          element.tagName === "H2"
+            ? "opener"
+            : element.hasAttribute("data-explain-module")
+              ? "module"
+              : "instance",
+        ),
     );
     expect(order[0]).toBe("opener");
-    expect(order.indexOf("module")).toBeLessThan(order.lastIndexOf("instance"));
+    expect(order).toEqual(["opener", "module"]); // DEC-0192 §5: the flyer row is gone
 
     // The other two scenes carry neither.
     await expect(
@@ -655,6 +752,9 @@ test.describe("TS-WEB-0019 — home", () => {
       "provenance",
       "whatsapp",
     ]);
+    // The scene's live row loads in the browser after first paint (DEC-0163):
+    // read the triple only once it stands.
+    await expect(page.locator('main [data-block="scene"] article').first()).toBeVisible({ timeout: 20_000 });
     const professional = await sceneFacts(page);
 
     await page.goto("/");
@@ -663,6 +763,7 @@ test.describe("TS-WEB-0019 — home", () => {
       "embed",
       "provenance",
     ]);
+    await expect(page.locator('main [data-block="scene"] article').first()).toBeVisible({ timeout: 20_000 });
     const direct = await sceneFacts(page);
 
     // The scene containing the module is last in the first load and first in
@@ -673,7 +774,7 @@ test.describe("TS-WEB-0019 — home", () => {
 
     // The same opener · module · instance triple with the same three step
     // lines — the module is not forked for a position (DEC-0110 §2).
-    expect(professional.triple).toEqual(["opener", "module", "instance"]);
+    expect(professional.triple).toEqual(["opener", "module"]); // DEC-0192: no instance row
     expect(professional.triple).toEqual(direct.triple);
     expect(professional.steps).toHaveLength(3);
     expect(professional.steps).toEqual(direct.steps);
@@ -759,7 +860,7 @@ test.describe("TS-WEB-0019 — home", () => {
         .filter((id) =>
           [
             "focus-block",
-            "place-dates",
+            "dorfkalender",
             "nearby",
             "scene-1",
             "scene-2",
@@ -792,7 +893,7 @@ test.describe("TS-WEB-0019 — home", () => {
      */
     expect(ids).toEqual([
       "focus-block",
-      "place-dates",
+      "dorfkalender",
       "scene-1",
       "scene-2",
       "scene-3",
@@ -965,7 +1066,7 @@ test.describe("TS-WEB-0019 — home", () => {
     });
 
     await page.goto("/");
-    const handover = page.locator('#place-dates a[rel~="external"], #place-dates a[target="_blank"], #place-dates a[href^="https://schafe-vorm-fenster.de/"]').first();
+    const handover = page.locator('#dorfkalender a[href^="https://schafe-vorm-fenster.de/"]').first();
     await expect(handover).toBeVisible();
     // The listener lives in a client component, so the click has to land
     // after hydration or nothing is logged. Wait for the tracker's own
@@ -1009,40 +1110,34 @@ test.describe("TS-WEB-0019 — home", () => {
   }
 
   for (const [path, label, placeholder] of [
-    ["/", "Dein Ort", "Tipp den Ortsnamen ein"],
-    ["/en", "Your place", "Type the place name"],
+    ["/", "Ort suchen", "Dein Ort"],
+    ["/en", "Search for a place", "Your place"],
   ] as const) {
-    test(`TS-WEB-0019-A17: the stage search on ${path} carries its instruction in the placeholder`, async ({
+    test(`TS-WEB-0019-A17: ${path} has no search on the stage; the Dorfkalender search carries its instruction in the placeholder`, async ({
       page,
     }) => {
       await page.setViewportSize(PHONE_WIDE);
       await page.goto(path);
-      const field = page.locator("#ort-suche-fokus");
-      await expect(field).toHaveAttribute("placeholder", placeholder);
-      // The visible hint goes, the field's name does not.
-      await expect(page.locator('label[for="ort-suche-fokus"]')).toHaveText(label);
 
+      // DEC-0194: neither the input nor the location control stands on the stage.
       const hero = page.locator("#focus-block");
-      const heroText = (await hero.innerText()).replace(/\s+/gu, " ");
-      expect(heroText).not.toMatch(/Vorschläge kommen|suggestions start/u);
+      await expect(hero.locator("input")).toHaveCount(0);
+      await expect(hero.locator("[data-locate-control]")).toHaveCount(0);
 
-      // The location control stands directly under the field: nothing between
-      // them, at most one `space-3` of air.
-      const pill = await field.locator("xpath=ancestor::form").boundingBox();
-      const control = hero.locator("[data-locate-control]");
+      const field = page.locator('#dorfkalender input[type="search"]');
+      await expect(field).toHaveAttribute("placeholder", placeholder);
+      await expect(page.locator(`#dorfkalender label[for="${(await field.getAttribute("id")) ?? ""}"]`)).toHaveText(label);
+
+      // The locate control is the round icon button inside the pill, 44 px.
+      const control = page.locator("#dorfkalender [data-locate-control]");
       await expect(control).toBeVisible();
-      const button = await control.boundingBox();
-      expect(button!.y - (pill!.y + pill!.height)).toBeGreaterThanOrEqual(0);
-      expect(button!.y - (pill!.y + pill!.height)).toBeLessThanOrEqual(12);
-      expect(button!.height).toBeGreaterThanOrEqual(44);
-      // Its explanation is still its description, and still findable.
-      const describedBy = await control.getAttribute("aria-describedby");
-      const explains = page.locator(`[id="${describedBy}"]`);
-      await expect(explains).not.toBeEmpty();
-      await expect(control).toHaveAttribute("title", /.+/u);
-      // …but not as standing text on the stage: read, not seen.
-      const explainsBox = await explains.boundingBox();
-      expect(explainsBox?.width ?? 0, "the explanation is not printed on the stage").toBeLessThanOrEqual(1);
+      const box = await control.boundingBox();
+      expect(box!.width).toBeGreaterThanOrEqual(44);
+      expect(box!.height).toBeGreaterThanOrEqual(44);
+      await expect(control).toHaveAttribute("aria-label", /.+/u);
+      const pill = await field.locator("xpath=ancestor::form").boundingBox();
+      expect(box!.x).toBeGreaterThanOrEqual(pill!.x);
+      expect(box!.x + box!.width).toBeLessThanOrEqual(pill!.x + pill!.width);
 
       // A placeholder cannot wrap, so it must fit: at 360 px it is not cut.
       const fits = await field.evaluate((input: HTMLInputElement) => {
@@ -1055,32 +1150,55 @@ test.describe("TS-WEB-0019 — home", () => {
     });
   }
 
-  test("TS-WEB-0019-A19: the hand-off under the rows is a row of its own with one secondary button", async ({
+  test("TS-WEB-0019-A19: the Dorfkalender section carries no button, one new-tab link, and a described drawing", async ({
     page,
   }) => {
     for (const path of ["/", "/?ort=schlatkow"]) {
+      await page.setViewportSize(DESKTOP);
       await page.goto(path);
-      const dates = page.locator("#place-dates").filter({ visible: true });
-      const handoff = dates.locator("[data-handoff]");
-      await expect(handoff).toHaveCount(1);
-      await expect(handoff).toContainText("Fehlt deine Veranstaltung?");
-      const action = handoff.locator('[data-cta="secondary"]');
-      await expect(action).toHaveCount(1);
-      await expect(action).toHaveAttribute("href", "/mitmachen");
-      await expect(handoff.locator('[data-cta="primary"]')).toHaveCount(0);
-      // It is the block's last row, below the dates it is about.
-      const lastRow = await dates.locator("article").last().boundingBox();
-      const row = await handoff.boundingBox();
-      expect(row!.y).toBeGreaterThan(lastRow!.y + lastRow!.height);
-      // Its question reads above body size — no longer a meta-size footnote.
-      const size = await handoff
-        .locator("p")
-        .first()
-        .evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize));
-      expect(size).toBeGreaterThan(18);
+      const section = page.locator("#dorfkalender");
+      await expect(section).toBeVisible();
+      await expect(section.locator('[data-cta="secondary"]')).toHaveCount(0);
+      // Not the credit panel's own link: the one calendar link.
+      const link = section.locator('a[href^="https://schafe-vorm-fenster.de/"]');
+      await expect(link).toHaveCount(1);
+      await expect(link).toHaveAttribute("target", "_blank");
+      await expect(link).toHaveAttribute("rel", /noopener/u);
+      await expect(link).toContainText("Kalender von Schlatkow öffnen");
+      // The drawing is one image with a description.
+      const image = section.locator('[role="img"]');
+      await expect(image).toHaveCount(1);
+      await expect(image).toHaveAttribute("aria-label", /^Smartphone mit den aktuellen Terminen von Schlatkow/u);
+      await expect(section.locator("h2")).toHaveText(/Dein digitaler\s+Dorfkalender\./u);
       // The page keeps exactly one primary.
       await expect(page.locator('main [data-cta="primary"]').filter({ visible: true })).toHaveCount(1);
     }
+  });
+
+  test("DEC-0194: at 1280 the legend entries stand level with the header and the five rows, 82 px apart", async ({
+    page,
+  }) => {
+    await page.setViewportSize(DESKTOP);
+    await page.goto("/");
+    const graphic = page.locator("#dorfkalender [data-dorfkalender-graphic]");
+    await expect(graphic.locator("[data-slot]")).toHaveCount(5);
+    const centres = await graphic.evaluate((root) => {
+      const middle = (element: Element) => {
+        const box = element.getBoundingClientRect();
+        return box.top + box.height / 2;
+      };
+      const header = root.querySelector('[data-has-photo]');
+      const rows = [...root.querySelectorAll("[data-slot]")];
+      const legend = [...root.querySelectorAll("ol > li")];
+      return {
+        areas: [header, ...rows].map((element) => middle(element!)),
+        legend: legend.map(middle),
+      };
+    });
+    expect(centres.legend).toHaveLength(6);
+    centres.legend.forEach((centre, index) => {
+      expect(Math.abs(centre - centres.areas[index]!), `legend entry ${index}`).toBeLessThanOrEqual(1);
+    });
   });
 
   test("SRC-0014 §Shape and Space: every section's own lines keep the horizontal gutter", async ({

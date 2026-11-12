@@ -25,10 +25,12 @@
 
 import { EVENT_CATEGORIES, type EventCategory } from "@/src/components/event-row/event-row";
 import { EVENT_STATUSES, type EventStatus } from "@/src/components/event-status-badge/event-status-badge";
+import { withChannelLinks } from "@/src/lib/contact/contact-channels";
 
 import type { ExplainStep } from "@/src/components/content-fragments";
 import type { ThreeOf } from "@/src/components/explain-module/explain-module";
 import type { ContentBlock } from "@/src/lib/content/types";
+import type { Locale } from "@/src/lib/i18n/locales";
 
 /** Core and detail of one authored line. */
 export const CORE_DETAIL = " — ";
@@ -150,4 +152,17 @@ export function threeSampleRows(
     throw new Error(`${slotId}: a stage calendar shows three rows, found ${rows.length}`);
   }
   return [rows[0], rows[1], rows[2]];
+}
+
+/**
+ * The step lines with their channel tokens turned into links — today the
+ * WhatsApp number in step 2 (DEC-0192 amendment 2026-11-12). Call it on the
+ * raw lines, before any `withChannelTokens` substitution.
+ */
+export function withStepLinks(steps: ThreeOf<ExplainStep>, locale: Locale): ThreeOf<ExplainStep> {
+  const [one, two, three] = steps.map((step) => ({
+    ...step,
+    detail: typeof step.detail === "string" ? withChannelLinks(step.detail, locale) : step.detail,
+  })) as [ExplainStep, ExplainStep, ExplainStep];
+  return [one, two, three];
 }

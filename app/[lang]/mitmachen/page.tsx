@@ -16,7 +16,7 @@ import { ProofCard } from "@/src/components/proof-card/proof-card";
 import { ProofStream } from "@/src/components/proof-stream/proof-stream";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { StatusBadge } from "@/src/components/status-badge/status-badge";
-import { contactHref } from "@/src/lib/contact/contact-channels";
+import { contactHref, withChannelTokens } from "@/src/lib/contact/contact-channels";
 import { dictionary } from "@/src/lib/i18n/dictionary";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { pageImage } from "@/src/lib/content/images";
@@ -39,7 +39,7 @@ import { PageFrame } from "../_page-frame";
 
 import { REFERENCE_PLACE, selectExamplePlace } from "./example-place";
 import { pageMeta } from "./page.meta";
-import { listAt, splitCoreDetail, threeSampleRows, threeSteps } from "./paths";
+import { listAt, splitCoreDetail, threeSampleRows, threeSteps, withStepLinks } from "./paths";
 import { LiveStageCalendar, SampleStageCalendar } from "./stage-islands";
 
 import type { ExplainModuleProps } from "@/src/components/explain-module/explain-module";
@@ -369,7 +369,7 @@ export default async function Page({
             <StageChat
               key="2"
               locale={locale}
-              reply={fieldAt(whatsappSteps.blocks, 1) ?? ""}
+              reply={withChannelTokens(fieldAt(whatsappSteps.blocks, 1) ?? "")}
               time={fieldAt(whatsappSteps.blocks, 2) ?? ""}
             />,
             // State 3 is "the date is in the calendar", and the calendar it
@@ -390,9 +390,9 @@ export default async function Page({
               slug={liveSlug}
             />,
           ]}
-          steps={threeSteps(
-            listAt(whatsappSteps.blocks, 0),
-            "mitmachen-3a-path-whatsapp-steps-demo",
+          steps={withStepLinks(
+            threeSteps(listAt(whatsappSteps.blocks, 0), "mitmachen-3a-path-whatsapp-steps-demo"),
+            locale,
           )}
           title={fieldAt(pathWhatsapp.blocks, 3) ?? ""}
         />

@@ -1,0 +1,489 @@
+/*
+ * "Dein digitaler Dorfkalender." — issue issue 143, DEC-0194. Tokens only; the one
+ * colour that is not the palette's, the phone's light-blue metal, is a token of
+ * `app/styles/brand.css` (`--device-frame-*`).
+ *
+ * The switch between the one-column and the two-column layout hangs on the
+ * width of the section itself (a container query at 760 px), not on the
+ * window: `.wrap` is the container. Container queries are not `@media`, so
+ * TS-WEB-0017 D2's "min-width media queries only" does not reach them; the
+ * mobile layout is the base and the wider one is a `min-width` step.
+ */
+
+/* The shell's own vertical padding gives way to the section's (80 px / 36 px):
+   two classes' worth of specificity so no stylesheet order decides it. */
+.shell[data-surface] {
+  padding-block: 0;
+}
+
+.wrap {
+  container-type: inline-size;
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 36px var(--gutter) 40px;
+}
+
+.text {
+  min-width: 0;
+}
+
+/* ── Text block ───────────────────────────────────────────────────────── */
+
+.title {
+  color: var(--color-neutral-paper);
+  font-size: 44px;
+  font-weight: 800;
+  letter-spacing: var(--type-display-tracking);
+  line-height: 0.92;
+  margin: 0 0 20px;
+}
+
+.titleLine {
+  display: block;
+}
+
+.accent {
+  color: var(--color-lime-500);
+}
+
+.sentence {
+  color: var(--color-neutral-surface2);
+  font-size: var(--font-size-body-lg);
+  font-weight: 600;
+  line-height: 1.4;
+  margin: 0 0 28px;
+  max-width: none;
+}
+
+/* ── The place search: a paper pill, locate button · input · submit ───── */
+
+.pill {
+  align-items: center;
+  background: var(--color-neutral-paper);
+  border-radius: var(--radius-pill);
+  display: flex;
+  gap: var(--space-2);
+  max-width: 480px;
+  min-height: var(--height-search);
+  padding: 0 6px;
+  /* The anchor of the suggestion overlay, which hangs from the pill and takes no space. */
+  position: relative;
+  width: 100%;
+}
+
+.pill:focus-within {
+  outline: var(--focus-ring-width) solid var(--focus);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.label {
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.input {
+  background: transparent;
+  border: 0;
+  color: var(--color-neutral-ink);
+  flex: 1;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-body);
+  min-width: 0;
+  padding: 0;
+  text-shadow: none;
+  /* An input's intrinsic width must not widen a shrink-to-fit ancestor
+     (TS-WEB-0017-A9, no horizontal scroll at 360 and 320 px). */
+  width: 0;
+}
+
+.input::placeholder {
+  color: var(--color-neutral-muted);
+  opacity: 1;
+}
+
+/* The pill owns the focus ring of the compound control. */
+.input:focus-visible {
+  outline: none;
+}
+
+/* ── The link to the place's own calendar ─────────────────────────────── */
+
+.calendarLink {
+  --ground-link: var(--color-lime-300);
+  --ground-link-hover: var(--color-lime-100);
+  font-size: 17px;
+  font-weight: 700;
+  margin: 20px 0 0;
+}
+
+/* ── The drawing: phone and legend, scaled as one ─────────────────────── */
+
+/* The drawing is 500 × 580 px (phone 300 + legend 200). `--s` scales it as a
+   whole; the box it occupies is scaled with it, so nothing overflows. */
+.graphic {
+  --s: 0.57;
+  flex: none;
+  height: calc(580px * var(--s));
+  position: relative;
+  width: calc(500px * var(--s));
+}
+
+.scaled {
+  height: 580px;
+  position: relative;
+  transform: scale(var(--s));
+  transform-origin: 0 0;
+  width: 500px;
+}
+
+.drawing {
+  inset: 0;
+  position: absolute;
+}
+
+.phone {
+  background: var(--device-frame-sheen);
+  border-radius: 46px;
+  height: 580px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 300px;
+}
+
+/* The black rim between the metal and the display. */
+.phone::before {
+  background: var(--color-neutral-ink);
+  border-radius: 40px;
+  content: "";
+  inset: 6px;
+  position: absolute;
+}
+
+/* Side keys on the left only — the legend attaches on the right. */
+.key {
+  background: var(--device-frame-4);
+  border-radius: 1px;
+  left: -2px;
+  opacity: 0.7;
+  position: absolute;
+  width: 2px;
+}
+
+.key[data-key="1"] {
+  height: 30px;
+  top: 104px;
+}
+
+.key[data-key="2"] {
+  height: 56px;
+  top: 150px;
+}
+
+.key[data-key="3"] {
+  height: 56px;
+  top: 216px;
+}
+
+.screen {
+  background: var(--color-neutral-paper);
+  border-radius: 36px;
+  color: var(--color-neutral-ink);
+  inset: 10px;
+  overflow: hidden;
+  position: absolute;
+}
+
+.island {
+  background: var(--color-neutral-ink);
+  border-radius: var(--radius-pill);
+  height: 24px;
+  left: calc(50% - 42px);
+  position: absolute;
+  top: 20px;
+  width: 84px;
+}
+
+/* The photo header: 150 px, darkened towards the bottom so the name reads. */
+.header {
+  background-color: var(--color-neutral-muted);
+  background-position: center;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  height: 150px;
+  justify-content: flex-end;
+  padding: 0 16px 12px;
+  position: relative;
+}
+
+.header::before {
+  background: linear-gradient(to bottom, var(--color-scrim-0) 30%, var(--color-scrim-72));
+  content: "";
+  inset: 0;
+  position: absolute;
+}
+
+.placeName,
+.commune {
+  color: var(--color-neutral-paper);
+  margin: 0;
+  max-width: none;
+  overflow: hidden;
+  position: relative;
+  text-overflow: ellipsis;
+  text-shadow: var(--shadow-text-on-photo);
+  white-space: nowrap;
+}
+
+.placeName {
+  font-size: 31px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.commune {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.row {
+  align-items: center;
+  border-bottom: 1px solid var(--color-neutral-line);
+  box-sizing: border-box;
+  display: flex;
+  gap: 12px;
+  height: 82px;
+  padding: 0 14px;
+}
+
+.row:last-child {
+  border-bottom: 0;
+}
+
+/* The calendar leaf: plain grey, rounded, weekday and day number — no month,
+   which a website's picture soon gets wrong. */
+.sheet {
+  align-items: center;
+  background: var(--color-neutral-line);
+  border-radius: 10px;
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  height: 46px;
+  justify-content: center;
+  width: 42px;
+}
+
+.weekday {
+  color: var(--color-neutral-text2);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.day {
+  color: var(--color-neutral-ink);
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.rowText {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.meta {
+  color: var(--color-neutral-muted);
+  display: flex;
+  font-size: 12px;
+  gap: 10px;
+  line-height: 1.2;
+  min-width: 0;
+}
+
+.metaItem {
+  align-items: center;
+  display: inline-flex;
+  flex: none;
+  gap: 4px;
+}
+
+.metaPlace {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.ellipsis {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* A row's height never changes: a long title or place is cut, not wrapped. */
+.rowTitle {
+  color: var(--color-neutral-ink);
+  display: block;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+/* ── The legend: stroke from the frame, dot at the label ──────────────── */
+
+.legend {
+  inset: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+}
+
+/* `top` is the entry's centre, computed from the header, row and rim sizes in
+   `legendCenters` — never set by hand. */
+.legendItem {
+  align-items: center;
+  display: flex;
+  left: 300px;
+  position: absolute;
+  transform: translateY(-50%);
+  width: 200px;
+}
+
+.legendLine {
+  background: var(--color-lime-500);
+  flex: none;
+  height: 2px;
+  width: 38px;
+}
+
+.legendDot {
+  background: var(--color-lime-500);
+  border-radius: 50%;
+  flex: none;
+  height: 12px;
+  margin-inline: -6px 12px;
+  width: 12px;
+}
+
+.legendLabel {
+  color: var(--color-neutral-paper);
+  flex: 1;
+  font-size: var(--font-size-body-lg);
+  font-weight: 800;
+  line-height: 1.1;
+  min-width: 0;
+}
+
+/* The © control of the header photograph stands over the header, outside the
+   drawing's image role and at its own (unscaled) size — a control must stay a
+   44 px target however small the drawing is. */
+.creditSlot {
+  height: calc(150px * var(--s));
+  left: calc(10px * var(--s));
+  pointer-events: none;
+  position: absolute;
+  top: calc(10px * var(--s));
+  width: calc(280px * var(--s));
+}
+
+.creditSlot > * {
+  pointer-events: auto;
+}
+
+/* The drawing's size on a phone, by the section's own width: the whole
+   drawing (500 px) must fit inside the 16 px gutters. */
+@container (min-width: 22rem) {
+  .graphic {
+    --s: 0.62;
+  }
+}
+
+@container (min-width: 23.75rem) {
+  .graphic {
+    --s: 0.71;
+  }
+}
+
+/* ── From 761 px of section width: two columns ────────────────────────── */
+
+@container (min-width: 47.5625rem) {
+  .inner {
+    align-items: stretch;
+    flex-direction: row;
+    gap: 48px;
+    justify-content: space-between;
+    margin-inline: auto;
+    max-width: calc(var(--measure-page) + 96px);
+    padding: 80px 48px;
+  }
+
+  .text {
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: column;
+    max-width: 520px;
+  }
+
+  /* Title, sentence and search stand level with the middle of the drawing;
+     the link sits at the bottom, level with the phone's lower edge. */
+  .mid {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .title {
+    font-size: clamp(40px, 5.2cqi, 58px);
+  }
+
+  .calendarLink {
+    margin-top: 0;
+  }
+
+  .graphic {
+    --s: 0.6;
+  }
+}
+
+@container (min-width: 56.25rem) {
+  .graphic {
+    --s: 0.75;
+  }
+}
+
+@container (min-width: 68.75rem) {
+  .graphic {
+    --s: 1;
+  }
+}
+
+/* The icons are 12 px inside the drawn phone: a shrunken picture, not a control. */
+.metaIcon {
+  flex: none;
+  height: 12px;
+  width: 12px;
+}

@@ -103,6 +103,14 @@ const BREAKPOINTS = new Map<string, string>([
  */
 const CONTAINER_THRESHOLDS = new Map<string, string>([
   ["30rem", "event-row: badge plus a complete meta line (SRC-0014 §Event row)"],
+  // dorfkalender-intro (issue 143, DEC-0194): the section switches layout on its
+  // own width, 760 px by the owner's design, and scales its 500 px drawing in
+  // steps so it fits the gutters.
+  ["22rem", "dorfkalender-intro: drawing at 0.62 — a section 352 px wide (issue 143)"],
+  ["23.75rem", "dorfkalender-intro: drawing at 0.71 — a section 380 px wide (issue 143)"],
+  ["47.5625rem", "dorfkalender-intro: two columns from 761 px (container query at 760, issue 143)"],
+  ["56.25rem", "dorfkalender-intro: drawing at 0.75 from 900 px (issue 143)"],
+  ["68.75rem", "dorfkalender-intro: drawing at full size from 1100 px (issue 143)"],
 ]);
 
 /** The authored-source universe. Nothing outside these is ever scanned. */

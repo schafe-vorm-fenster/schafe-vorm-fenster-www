@@ -1,5 +1,6 @@
 import { imageCredit } from "@/src/components/photo-surface/image-credit";
 import { Button } from "@/src/components/button/button";
+import { DorfkalenderIntro } from "@/src/components/dorfkalender-intro/dorfkalender-intro";
 import { ExplainModule } from "@/src/components/explain-module/explain-module";
 import { StageChat, StageFlyerPhoto } from "@/src/components/explain-stage/explain-stage";
 import { HeroBlock } from "@/src/components/hero-block/hero-block";
@@ -9,15 +10,18 @@ import { PlaceSearch } from "@/src/components/place-search/place-search";
 import { ProofCard } from "@/src/components/proof-card/proof-card";
 import { ProofStream } from "@/src/components/proof-stream/proof-stream";
 import { SceneBlock } from "@/src/components/scene-block/scene-block";
+import { EmbedScene } from "@/src/components/embed-scene/embed-scene";
 import { WebCalendarOverlay } from "@/src/components/web-calendar-overlay/web-calendar-overlay";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { dictionary } from "@/src/lib/i18n/dictionary";
 import { fieldAt } from "@/src/lib/content/blocks";
+import { embedCalendarFrom } from "@/src/lib/content/embed-calendar";
 import { pageImage } from "@/src/lib/content/images";
 import { partnerLogo } from "@/src/lib/content/partner-logos";
 import { HERO_IMAGE_ID } from "@/src/lib/pages/hero-images";
 import { slot } from "@/src/lib/content/loader";
 import { isDemoSlot } from "@/src/lib/content/provenance";
+import { withChannelTokens } from "@/src/lib/contact/contact-channels";
 import { ctaLabelOnly } from "@/src/lib/content/text";
 import { SHOWCASE_COMMUNITY } from "@/src/lib/live/showcase";
 import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
@@ -30,12 +34,13 @@ import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
  * cannot drift apart and the step-line contract ("exactly three", D4) is
  * enforced by one tested function. Nothing here is edited by this page.
  */
-import { listAt, threeSampleRows, threeSteps } from "./mitmachen/paths";
+import { listAt, threeSampleRows, threeSteps, withStepLinks } from "./mitmachen/paths";
 import { LiveStageCalendar } from "./mitmachen/stage-islands";
 
 
+import styles from "./_pages.module.css";
 import { buildDay } from "./_build-day";
-import { FlyerExample, HomeFocusModules, HomeHeroContent, HomeSubmit, type HomeFocusCopy } from "./_home-focus";
+import { HomeHeroContent, HomeNearby, type HomeFocusCopy } from "./_home-focus";
 import { PlacePhotoLayer } from "./_place-photo";
 import { selectProof } from "./_proof";
 import { PageJsonLd } from "./_structured-data";
@@ -117,27 +122,23 @@ export async function generateMetadata({
 const UI_STRING_FALLBACKS: Record<
   Locale,
   {
-    flyerExample: string;
     geo: string;
   }
 > = {
   de: {
-    flyerExample: "Aus dem Flyer geworden",
     geo: "Beleg aus der Region",
   },
   en: {
-    flyerExample: "Made from the flyer",
     geo: "Proof from the region",
   },
 };
 
-/** The two short UI strings, read off `home-12-ui-strings` where the slot
+/** The one short UI string (the flyer caption went with DEC-0192), read off `home-12-ui-strings` where the slot
  * has them, falling back to the stand-ins otherwise. */
 function uiStringsFrom(uiStrings: ContentSlot, locale: Locale) {
   const fallback = UI_STRING_FALLBACKS[locale];
   return {
-    flyerExample: fieldAt(uiStrings.blocks, 0) ?? fallback.flyerExample,
-    geo: fieldAt(uiStrings.blocks, 1) ?? fallback.geo,
+    geo: fieldAt(uiStrings.blocks, 0) ?? fallback.geo,
   };
 }
 
@@ -186,6 +187,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
   const sceneWhatsapp = slot(page, "home-4-scene-whatsapp");
   const whatsappSteps = slot(page, "home-4a-scene-whatsapp-steps-demo");
   const sceneEmbed = slot(page, "home-5-scene-embed");
+  const embedCalendar = embedCalendarFrom(slot(page, "home-5a-scene-embed-calendar-demo").blocks);
   const sceneProvenance = slot(page, "home-6-scene-provenance");
   const stamps = slot(page, "home-7-provenance-stamps");
   const proof = slot(page, "home-8-proof-stream");
@@ -232,20 +234,16 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
    */
   const submitLabel = hero.cta ?? words.search.submit;
 
-  const search = (primary: boolean) => (
+  const search = () => (
     <PlaceSearch
       stage
       typeahead
-      id={primary ? "ort-suche-fokus" : "ort-suche-abschluss"}
+      id="ort-suche-abschluss"
       // Issue #20: the placeholder carries the instruction and the helper
       // line is gone, so the field's name comes from the dictionary ("Dein
       // Ort") — the visible hint goes, the field's label does not.
       locale={locale}
       placeholder={searchPlaceholder}
-      // DEC-0078: the hero instance is the one whose `data-cta="primary"`
-      // moves with the place, so only that instance hands its submit to a
-      // boundary. The closing block's copy keeps the plain default.
-      submit={primary ? <HomeSubmit copy={focusCopy} /> : undefined}
       submitLabel={submitLabel}
       to="place"
       /*
@@ -264,11 +262,8 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
   const focusCopy: HomeFocusCopy = {
     locale,
     s1Headline: hero.fields["Headline"] ?? "",
-    submitLabel,
     datesHeadline: dates.fields["Headline"] ?? "",
     datesCta: dates.cta ?? "",
-    handoffQuestion: fieldAt(dates.blocks, 2) ?? "",
-    handoffCta: fieldAt(dates.blocks, 3) ?? "",
     nearbyHeading: fieldAt(nearby.blocks, 0) ?? "",
     invitation: fieldAt(nearby.blocks, 1) ?? "",
     publishCta: ctaLabelOnly(nearby.cta ?? fieldAt(nearby.blocks, 2) ?? "") ?? "",
@@ -306,11 +301,16 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
         photoLayer={<PlacePhotoLayer locale={locale} ownPhotoPlace={heroImage?.place} />}
         credit={imageCredit(heroImage, locale)}
           placeholderId={heroImage?.placeholderId}
-        search={search(true)}
         src={heroImage?.src}
         wideSrc={heroImage?.wideSrc}
       />
-      <HomeFocusModules copy={focusCopy} search={search(false)} />
+      {/* Block 1' - "Dein digitaler Dorfkalender." (issue 143, DEC-0194): the one
+          `ink` section of the page rhythm, in every state; S3's widened radius
+          follows it. */}
+      <MotionReveal>
+        <DorfkalenderIntro locale={locale} />
+      </MotionReveal>
+      <HomeNearby copy={focusCopy} />
       {/* Block 2a — three scenes, one mechanism each (TS-WEB-0006 D7), all
           three declaring `data-block="scene"` (TS-WEB-0019-A6). The record
           below is written in the `direct` order of TS-WEB-0019 D3a, and
@@ -323,8 +323,9 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
 
           Each block carries exactly one CTA at secondary treatment, pointing
           at the page that owns its job (D3a, DEC-0082 §4). In the `whatsapp`
-          block that CTA is the **module's own** and the scene adds none —
-          "wrapping does not double the CTA" (DEC-0110 §1). */}
+          block the module renders none since DEC-0192 §4 and the scene's own
+          `cta` (teaser + button) is the one — "wrapping does not double the
+          CTA" (DEC-0110 §1) still holds, the count is one. */}
       <HomeScenes
         scenes={{
           whatsapp: (
@@ -354,11 +355,25 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
                       this substitution). It is also what brings the section back
                       inside the 1270 px budget of polish brief G-4. */}
                   <SceneBlock
-                    instance={
-                      /* The outcome, not a list (polish brief, page 1, fix 3):
-                         one real date, under the line that says what it is,
-                         loaded in the browser (DEC-0163, `_home-focus.tsx`). */
-                      <FlyerExample heading={demo.flyerExample} locale={locale} />
+                    /* DEC-0192 §4 (owner): the scene's one CTA is a teaser (other
+                       ways exist) and one button on the topic "Termine
+                       veröffentlichen". It stands below the module, not in it, so
+                       the module's own height stays inside the one-viewport budget
+                       at 360 px (TS-WEB-0022 D4, TS-WEB-0019-A6); the block still
+                       carries exactly one `data-cta`. */
+                    cta={
+                      <>
+                        <p className={styles.sceneHint}>{fieldAt(sceneWhatsapp.blocks, 4)}</p>
+                        <Button
+                          dataCta="secondary"
+                          locale={locale}
+                          onward
+                          to="takePart"
+                          variant="secondary"
+                        >
+                          {ctaLabelOnly(sceneWhatsapp.cta ?? "") ?? ""}
+                        </Button>
+                      </>
                     }
                     locale={locale}
                     mechanism="whatsapp"
@@ -371,12 +386,6 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
                     module={
                       <div data-demo={isDemoSlot(whatsappSteps) ? "true" : undefined} data-scene-module="">
                         <ExplainModule
-                          cta={{
-                            label: ctaLabelOnly(sceneWhatsapp.cta ?? "") ?? "",
-                            locale,
-                            onward: true,
-                            to: "takePart",
-                          }}
                           locale={locale}
                           mechanism="whatsapp"
                           ordinal={1}
@@ -389,7 +398,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
                             <StageChat
                               key="2"
                               locale={locale}
-                              reply={fieldAt(whatsappSteps.blocks, 1) ?? ""}
+                              reply={withChannelTokens(fieldAt(whatsappSteps.blocks, 1) ?? "")}
                               time={fieldAt(whatsappSteps.blocks, 2) ?? ""}
                             />,
                             // State 3 — "the date is in the calendar", and the
@@ -409,9 +418,9 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
                               slug={SHOWCASE_COMMUNITY.slug}
                             />,
                           ]}
-                          steps={threeSteps(
-                            listAt(whatsappSteps.blocks, 0),
-                            "home-4a-scene-whatsapp-steps-demo",
+                          steps={withStepLinks(
+                            threeSteps(listAt(whatsappSteps.blocks, 0), "home-4a-scene-whatsapp-steps-demo"),
+                            locale,
                           )}
                           title={fieldAt(sceneWhatsapp.blocks, 3) ?? ""}
                         />
@@ -425,18 +434,18 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
           ),
           embed: (
             <>
-              {/* The embed scene's photograph runs full-bleed: the section gives up
+              {/* The embed scene is the one with the calendar graphic (issue 145,
+                  DEC-0193): a kicker, then heading · lead · three ticked points in
+                  the container, the town-hall photograph full-bleed and the
+                  graphic on its lower edge, the button below. The section gives up
                   its container and the scene puts it back around everything but the
-                  instance. A photograph framed by the section's 16 px padding is a
-                  picture in a mount and the section stops being a surface (SRC-0014
-                  §"Section grounds carry rhythm, not meaning"). The ground moved with
-                  it — `surface-2` is one of the sober greys the design system keeps
-                  for the municipal argument and for inactive things, and this is
-                  solution content, which takes a fresh ground. `lime-100` and not
-                  `paper`, because the scene before it is now `paper` for its module's
-                  sake: with the S3 widening block (`surface-2`) above them, three
-                  neutral grounds would stand in a row and `checkRhythm`'s family rule
-                  allows two (DEC-0129 §11). */}
+                  photograph (SRC-0014 §"Section grounds carry rhythm, not meaning").
+                  The ground stays `lime-100`, and not `paper`, because the scene
+                  before it is `paper` for its module's sake: with the S3 widening
+                  block (`surface-2`) above them, three neutral grounds would stand
+                  in a row and `checkRhythm`'s family rule allows two (DEC-0129
+                  §11). The scene has no transition line any more: the owner's
+                  design opens on the kicker and the heading. */}
               <MotionReveal>
                 <SectionShell
                   contained={false}
@@ -444,11 +453,8 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
                   id="scene-2"
                   kicker={fieldAt(sceneEmbed.blocks, 2)}
                   surface="lime-100"
-                  transition={fieldAt(sceneEmbed.blocks, 3)}
                 >
-                  <SceneBlock
-                    bleed
-                    body={fieldAt(sceneEmbed.blocks, 1)}
+                  <EmbedScene
                     cta={
                       <Button
                         dataCta="secondary"
@@ -460,31 +466,28 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
                         {ctaLabelOnly(sceneEmbed.cta ?? "") ?? ""}
                       </Button>
                     }
-                    instance={
-                      /* #32, DEC-0162 §5: a drawing of the website calendar lies
-                         over the town-hall photograph, so the scene says "a
-                         calendar on your website" at a glance. The drawing is
-                         decorative; the photograph's `alt` names both. */
-                      <WebCalendarOverlay>
-                        <MediaFrame
-                          alt={sceneEmbedImage?.alt ?? ""}
-                          locale={locale}
-                          aiEdited={sceneEmbedImage?.aiEdited} notDepicting={sceneEmbedImage?.notDepicting}
-                          credit={imageCredit(sceneEmbedImage, locale)}
-                          placeholderId={sceneEmbedImage?.placeholderId}
-                          /* 16 : 9 across the section's whole width — the review's own
-                             shape for this photograph ("auf die volle Breite in 16:9
-                             oder 21:9 ziehen"); `map` is that ratio token. */
-                          ratio="map"
-                          sizes="100vw"
-                          src={sceneEmbedImage?.src}
-                          state={sceneEmbedImage ? undefined : "empty"}
-                        />
-                      </WebCalendarOverlay>
-                    }
-                    locale={locale}
-                    mechanism="embed"
+                    /* The calendar graphic is its own element with its own label
+                       (a client island; its prerender is the first category). */
+                    graphic={<WebCalendarOverlay copy={embedCalendar} />}
+                    lead={fieldAt(sceneEmbed.blocks, 1) ?? ""}
                     opener={fieldAt(sceneEmbed.blocks, 0) ?? ""}
+                    /* The photograph keeps its credit; it is a fixed band (500 px,
+                       240 px on the phone) cropped from the top, so `ratio` only
+                       reserves the box until the stylesheet narrows it. */
+                    photo={
+                      <MediaFrame
+                        alt={sceneEmbedImage?.alt ?? ""}
+                        locale={locale}
+                        aiEdited={sceneEmbedImage?.aiEdited} notDepicting={sceneEmbedImage?.notDepicting}
+                        credit={imageCredit(sceneEmbedImage, locale)}
+                        placeholderId={sceneEmbedImage?.placeholderId}
+                        ratio="map"
+                        sizes="100vw"
+                        src={sceneEmbedImage?.src}
+                        state={sceneEmbedImage ? undefined : "empty"}
+                      />
+                    }
+                    points={[3, 4, 5].map((index) => fieldAt(sceneEmbed.blocks, index) ?? "")}
                   />
                 </SectionShell>
               </MotionReveal>

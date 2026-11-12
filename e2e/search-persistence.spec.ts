@@ -67,9 +67,10 @@ interface SearchRoute {
 }
 
 const SEARCH_ROUTES: readonly SearchRoute[] = [
-  // The two the defect was measured on.
-  { path: "/", inputId: "ort-suche-fokus", submitsTo: `/dein-ort?ort=${TYPED}` },
-  { path: "/en", inputId: "ort-suche-fokus", submitsTo: `/en/your-place?ort=${TYPED}` },
+  // The two the defect was measured on. Since DEC-0194 the stage of `/` has no
+  // search; the field that navigates is the closing block's.
+  { path: "/", inputId: "ort-suche-abschluss", submitsTo: `/dein-ort?ort=${TYPED}` },
+  { path: "/en", inputId: "ort-suche-abschluss", submitsTo: `/en/your-place?ort=${TYPED}` },
   // Every other route carrying a place search — the same rule, checked
   // rather than assumed.
   { path: "/dein-ort", inputId: "ort-suche-fokus", submitsTo: `/dein-ort?ort=${TYPED}` },

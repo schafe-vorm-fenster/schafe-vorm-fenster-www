@@ -41,3 +41,5 @@ TS-WEB-0017-A12 ("the calendar entry in the header of every page") is walked
 from `md` up; on the phone the e2e asserts the pill is absent and the
 overlay's first job carries its target. The tablet tier (40–64rem) keeps
 pill and burger and gets the same overlay.
+
+**Amendment 2026-11-12 (owner, DEC-0191):** the calendar pill is removed from the header at every width, and the tablet tier takes the phone's bar. §1 and the Consequences above no longer hold; §2 to §5 stand.

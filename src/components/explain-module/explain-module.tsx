@@ -64,7 +64,11 @@ export interface ExplainModuleProps {
   readonly steps: ThreeOf<ExplainStep>;
   /** Exactly three — the graphic of each state, in order (T-03's `explain-stage`). */
   readonly stage: ThreeOf<ReactNode>;
-  readonly cta: ExplainModuleCta;
+  /**
+   * Omitted only where the scene around the module carries the one CTA itself —
+   * `/` since DEC-0192 §4, whose teaser plus button stand below the module.
+   */
+  readonly cta?: ExplainModuleCta;
   /** `h3` under a scene opener or a section heading; `h2` where the module is the block. */
   readonly headingLevel?: 2 | 3;
   /** The language of the two stage arrows' accessible names. */
@@ -110,7 +114,7 @@ function paneOffset(stage: HTMLElement, step: StepIndex): number {
  * `active-step`, `auto-advance`; DEC-0105 §6, DEC-0109, DEC-0110.
  *
  * Structure: mono ordinal (display-mono, 800, `ink`) with the title at card
- * size beside it; a graphic stage; **exactly three** step lines, each a real
+ * size beside it; a graphic stage; **exactly three** step lines, each a row (disc, a real
  * `<button>` with a numbered disc, the bold core (18/700) and the normal
  * detail (15/400); one CTA, `data-cta="secondary"` and never anything else.
  * Two layouts, one content tree, one `min-width` switch at `lg` (48rem):
@@ -137,6 +141,9 @@ function paneOffset(stage: HTMLElement, step: StepIndex): number {
  * arrow buttons inside it (issue #27, DEC-0161). A swipe that settles on a
  * pane selects that step; an arrow selects the neighbour. Both are handwork
  * and stop the pass for good, like a step line.
+ * Each step line is an `li` row: the disc, one `<button>` holding the core and
+ * stretched over the row (`::after`), and the detail, which may carry a link
+ * (the WhatsApp number) above that overlay — never inside the button.
  * A11y: the step lines are the WCAG 2.2.2 mechanism (TS-WEB-0002 D7) — real
  * buttons at every size, `Tab`, `Enter`/`Space`, `aria-current="step"` on
  * the active one. Focus anywhere in the module, or a click anywhere in it,
@@ -366,7 +373,15 @@ export function ExplainModule({
           const step = STEP_INDICES[index] as StepIndex;
           const active = state.active === step;
           return (
-            <li className={styles.step} key={step}>
+            <li
+              className={styles.step}
+              data-active={active ? "true" : undefined}
+              data-explain-row={step}
+              key={step}
+            >
+              <span aria-hidden className={styles.disc}>
+                {step}
+              </span>
               <button
                 aria-current={active ? "step" : undefined}
                 className={styles.stepLine}
@@ -374,32 +389,31 @@ export function ExplainModule({
                 onClick={() => dispatch({ type: "select", step })}
                 type="button"
               >
-                <span aria-hidden className={styles.disc}>
-                  {step}
-                </span>
                 <span className={styles.core}>{line.core}</span>
-                <span className={styles.detail}>{line.detail}</span>
               </button>
+              <span className={styles.detail}>{line.detail}</span>
             </li>
           );
         })}
       </ol>
 
-      <div className={styles.cta} data-explain-cta="">
-        <Button
-          dataCta="secondary"
-          hash={cta.hash}
-          href={cta.href}
-          icon={cta.icon}
-          locale={cta.locale}
-          onward={cta.onward}
-          query={cta.query}
-          to={cta.to}
-          variant="secondary"
-        >
-          {cta.label}
-        </Button>
-      </div>
+      {cta ? (
+        <div className={styles.cta} data-explain-cta="">
+          <Button
+            dataCta="secondary"
+            hash={cta.hash}
+            href={cta.href}
+            icon={cta.icon}
+            locale={cta.locale}
+            onward={cta.onward}
+            query={cta.query}
+            to={cta.to}
+            variant="secondary"
+          >
+            {cta.label}
+          </Button>
+        </div>
+      ) : null}
     </div>
   );
 }

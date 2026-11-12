@@ -59,6 +59,9 @@ describe("TS-WEB-0022 D4 — the fixed render form", () => {
       expect(html).toContain(`>${step.core}</span>`);
       expect(html).toContain(`>${step.detail}</span>`);
     }
+    // The button holds the core only; the detail is the row's own sibling, so
+    // a link in it never nests in a button (axe `nested-interactive`).
+    expect(html).toMatch(/<li [^>]*><span aria-hidden="true" class="[^"]*">1<\/span><button [^>]*><span [^>]*>Core one<\/span><\/button><span [^>]*>Detail one\.<\/span><\/li>/);
     // An ordered list, so the count is machine-readable and the order is semantic.
     expect(count(html, "<li")).toBe(3);
   });
@@ -68,6 +71,18 @@ describe("TS-WEB-0022 D4 — the fixed render form", () => {
     expect(html.indexOf('data-explain-pane="1"')).toBeLessThan(html.indexOf('data-explain-pane="2"'));
     expect(html.indexOf('data-explain-pane="2"')).toBeLessThan(html.indexOf('data-explain-pane="3"'));
     for (const state of [1, 2, 3]) expect(html).toContain(`data-fixture-state="${state}"`);
+  });
+
+  it("lets a detail carry a link outside any button (DEC-0192 amendment 2026-11-12)", () => {
+    const linked = render({
+      steps: [
+        STEPS[0],
+        { core: "Core two", detail: <a href="https://wa.me/1">+49 1</a> },
+        STEPS[2],
+      ],
+    });
+    expect(linked).toContain('<a href="https://wa.me/1">+49 1</a>');
+    expect(linked).not.toMatch(/<button[^>]*>(?:(?!<\/button>).)*<a /);
   });
 
   it("stage · step lines · CTA, in that DOM order, below the header", () => {
@@ -114,6 +129,12 @@ describe("one CTA, secondary by construction", () => {
     expect(count(html, "data-cta=")).toBe(1);
     expect(html).toContain('data-cta="secondary"');
     expect(html).not.toContain('data-cta="primary"');
+  });
+
+  it("renders no CTA at all where the scene carries it (DEC-0192 §4)", () => {
+    const html = render({ cta: undefined });
+    expect(count(html, "data-cta=")).toBe(0);
+    expect(html).not.toContain("data-explain-cta");
   });
 
   it("goes through the route facade for a route id and renders a plain link for a handover", () => {

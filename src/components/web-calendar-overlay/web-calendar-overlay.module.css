@@ -1,83 +1,163 @@
 /*
- * `web-calendar-overlay` — SRC-0014 §Web-calendar overlay, DEC-0162 §5.
- * Tokens only. A flat `paper` block: radius 0, no border, no shadow.
+ * `web-calendar-overlay` — issue 145, DEC-0193 (first drawn for #32, DEC-0162 §5).
+ * Tokens only. A flat `paper` block: radius 0, no border, no shadow. Phone
+ * first; the desktop form (labelled filter buttons) starts at `lg`.
  */
-.stage {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  width: 100%;
-}
-
-.media {
-  width: 100%;
-}
-
-/* Below `xl`: under the photograph's lower edge, overlapping it by one
-   step, right-aligned on the page gutter. */
-.drawing {
-  align-self: flex-end;
+.graphic {
   background: var(--color-neutral-paper);
   color: var(--color-neutral-ink);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-  margin-inline-end: var(--gutter);
-  margin-top: calc(-1 * var(--space-12));
-  padding: var(--space-3) var(--space-4) var(--space-4);
-  position: relative;
-  width: min(20rem, calc(100% - 2 * var(--gutter)));
-  z-index: 1;
+  width: 100%;
 }
 
-/* From `xl`: inside the photograph's lower right, on the container's right
-   edge. The photograph is 16:9 across the viewport, so the drawing covers
-   its lower right quarter and leaves the motif (focal `x` 42 %) clear. */
-@media (min-width: 64rem) {
-  .drawing {
-    bottom: var(--space-8);
-    margin: 0;
-    position: absolute;
-    right: max(var(--gutter), calc((100% - var(--measure-page)) / 2));
-    width: 22rem;
-  }
-}
-
+/* The browser strip: globe and address, `surface-2` like the design's grey. */
 .chrome {
   align-items: center;
   background: var(--color-neutral-surface2);
   color: var(--color-neutral-muted);
   display: flex;
   gap: var(--space-2);
-  margin: calc(-1 * var(--space-3)) calc(-1 * var(--space-4)) 0;
-  padding: var(--space-2) var(--space-4);
+  padding: var(--space-2) var(--space-3);
 }
 
 .address {
   background: var(--color-neutral-paper);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   flex: 1;
-  height: var(--space-4);
+  font-size: var(--type-meta-size);
+  line-height: var(--leading-snug);
+  min-width: 0;
+  overflow: hidden;
+  padding: var(--space-1) var(--space-3);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
 }
 
 .head {
   align-items: center;
-  color: var(--color-lime-800);
+  color: var(--color-neutral-ink);
   display: flex;
+  font-size: 1.25rem;
+  font-weight: 800;
+  gap: var(--space-3);
+  line-height: var(--leading-snug);
+  margin: 0;
+  max-width: none;
+}
+
+.head svg {
+  color: var(--color-lime-800);
+  flex: none;
+}
+
+.filters {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--space-2);
 }
 
-.headBar {
-  background: var(--color-neutral-ink);
-  height: var(--space-3);
-  width: 45%;
+.funnel {
+  align-items: center;
+  display: inline-flex;
+  flex: none;
+  height: 2.75rem;
+  justify-content: center;
+  width: 2.25rem;
 }
 
+/* Inactive: `surface` with the category's own colour on the glyph. Active:
+   ink with a paper glyph and name. */
+.filter {
+  align-items: center;
+  background: var(--color-neutral-surface);
+  border: 0;
+  border-radius: var(--radius-pill);
+  color: var(--filter-color);
+  cursor: pointer;
+  display: inline-flex;
+  flex: none;
+  font: inherit;
+  font-size: var(--type-meta-size);
+  font-weight: 700;
+  gap: var(--space-2);
+  height: 2.75rem;
+  justify-content: center;
+  padding: 0;
+  width: 2.75rem;
+}
+
+.filter[aria-pressed="true"] {
+  background: var(--color-neutral-ink);
+  color: var(--color-neutral-paper);
+}
+
+.filter[aria-pressed="false"]:hover {
+  background: var(--color-neutral-surface2);
+}
+
+.filter[data-category="community-life"],
+.coin[data-category="community-life"] {
+  --filter-color: var(--color-status-error);
+  --coin-fill: var(--color-status-error);
+}
+
+.filter[data-category="education-health"],
+.coin[data-category="education-health"] {
+  --filter-color: var(--color-status-warning);
+  --coin-fill: var(--color-status-warning);
+}
+
+/* Supply is the design's dark green; a dark-green *fill* is never allowed
+   (DEC-0160, TS-WEB-0017-A30), so the coin takes the merchants pair —
+   `lime-600` with an ink glyph — and the dark green stays on the bare glyph. */
+.filter[data-category="everyday-supply"],
+.coin[data-category="everyday-supply"] {
+  --filter-color: var(--color-lime-800);
+  --coin-fill: var(--color-lime-600);
+  --coin-glyph: var(--color-neutral-ink);
+}
+
+.filter[data-category="culture-tourism"],
+.coin[data-category="culture-tourism"] {
+  --filter-color: var(--color-category-culture-tourism);
+  --coin-fill: var(--color-category-culture-tourism);
+}
+
+/* Phone: icon-only buttons; the name of the chosen category stands below.
+   Read, not drawn — the labels stay in the tree at every width (the way
+   `event-row`'s category label does), so the page's visible text order is the
+   same at 360 and 1280 (TS-WEB-0017 D2(d), `e2e/smoke.spec.ts`). */
+.filterText {
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.chosen {
+  font-size: var(--type-meta-size);
+  font-weight: 800;
+  line-height: var(--leading-snug);
+  margin: 0;
+  max-width: none;
+  padding-inline-start: 2.75rem;
+}
+
+/* Three rows of 64 px are reserved whichever category shows: nothing shifts. */
 .rows {
-  display: flex;
-  flex-direction: column;
+  border-bottom: 0;
   list-style: none;
   margin: 0;
+  min-height: calc(3 * 4rem);
   padding: 0;
 }
 
@@ -86,56 +166,90 @@
   border-top: 1px solid var(--color-neutral-line);
   display: grid;
   gap: var(--space-3);
-  grid-template-columns: auto auto minmax(0, 1fr);
-  padding-block: var(--space-2);
+  grid-template-columns: 3rem 2.25rem minmax(0, 1fr);
+  height: 4rem;
+}
+
+.date {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
 }
 
 .day {
   font-family: var(--font-mono);
-  font-size: var(--type-figure-size);
+  font-size: 1.5rem;
   font-weight: 800;
-  line-height: 1;
 }
 
-/* The category coin of SRC-0014 §Category colours: fill and glyph tokens. */
+.weekday {
+  color: var(--color-neutral-muted);
+  font-family: var(--font-mono);
+  font-size: var(--type-meta-size);
+  font-weight: 700;
+  margin-top: var(--space-1);
+}
+
 .coin {
   align-items: center;
-  border-radius: 999px;
+  background: var(--coin-fill);
+  border-radius: var(--radius-pill);
+  color: var(--coin-glyph, var(--color-neutral-paper));
   display: inline-flex;
-  height: var(--space-8);
+  height: 2.25rem;
   justify-content: center;
-  width: var(--space-8);
-}
-
-.coin[data-category="culture-tourism"] {
-  background: var(--color-category-culture-tourism);
-  color: var(--color-category-culture-tourism-glyph);
-}
-
-.coin[data-category="community-life"] {
-  background: var(--color-category-community-life);
-  color: var(--color-category-community-life-glyph);
-}
-
-.coin[data-category="everyday-supply"] {
-  background: var(--color-category-everyday-supply);
-  color: var(--color-category-everyday-supply-glyph);
+  width: 2.25rem;
 }
 
 .lines {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--space-1);
+  min-width: 0;
 }
 
-.titleBar {
-  background: var(--color-neutral-text2);
-  height: var(--space-3);
-  width: 85%;
+.title {
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: var(--leading-snug);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.metaBar {
-  background: var(--color-neutral-line);
-  height: var(--space-2);
-  width: 55%;
+.meta {
+  color: var(--color-neutral-muted);
+  font-size: var(--type-meta-size);
+  line-height: var(--leading-snug);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* lg — 48rem: labelled buttons, which wrap onto a second row in the 460 px graphic. */
+@media (min-width: 48rem) {
+  .filter {
+    padding-inline: var(--space-3);
+    width: auto;
+  }
+
+  .filterText {
+    clip-path: none;
+    height: auto;
+    overflow: visible;
+    position: static;
+    width: auto;
+  }
+
+  /* The pressed button names the category here; the caption is read, not drawn. */
+  .chosen {
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+  }
 }
