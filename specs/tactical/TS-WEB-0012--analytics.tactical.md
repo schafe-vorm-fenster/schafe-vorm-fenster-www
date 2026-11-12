@@ -4,7 +4,7 @@ id: TS-WEB-0012
 kind: system
 status: DRAFT
 version: 0.1.0
-implements: [NFR-WEB-0061, NFR-WEB-0062, CON-WEB-0028, CON-WEB-0029, FUN-WEB-0124, NFR-WEB-0022, CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064, FUN-WEB-0207, FUN-WEB-0208]
+implements: [NFR-WEB-0061, NFR-WEB-0062, CON-WEB-0028, CON-WEB-0029, FUN-WEB-0124, NFR-WEB-0022, CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064, FUN-WEB-0211, FUN-WEB-0212]
 sources: [SRC-0006, SRC-0010, SRC-0003]
 decisions: [DEC-0004, DEC-0013, DEC-0016, DEC-0017, DEC-0028, DEC-0108, DEC-0218]
 ai_provenance:
@@ -314,8 +314,8 @@ cannot be attributed to a returning visitor.
 | CON-WEB-0036 (measure up to the handover only) | D4, D5, D6, D8, D9 · A3, A5, A6, A7, A10, A11 |
 | CON-WEB-0037 (keep the etcc_* convention for campaign attribution) | D4, D5, D6, D8, D9 · A3, A5, A6, A7, A10, A11 |
 | NFR-WEB-0064 (Experiment, variant and bucketing code in the build = 0) | D4, D5, D6, D8, D9 · A3, A5, A6, A7, A10, A11 |
-| FUN-WEB-0207 (count every page view under a stable name) | D2 (mounting, page views and names) · A12 |
-| FUN-WEB-0208 (one click event per CTA) | D4 (click layer), D9 · A13, A14 |
+| FUN-WEB-0211 (count every page view under a stable name) | D2 (mounting, page views and names) · A12 |
+| FUN-WEB-0212 (one click event per CTA) | D4 (click layer), D9 · A13, A14 |
 
 ## Open points
 

@@ -1,6 +1,6 @@
 ---
 artefact: requirement
-id: FUN-WEB-0208
+id: FUN-WEB-0212
 class: FUN
 form: F1
 domain: WEB
@@ -14,7 +14,7 @@ source:
   excerpt: "3. **Every CTA click reports one event.** Category is the hub conversion goal its target serves, or `navigation`, or `outbound`."
 evidence_sufficiency: S3
 fit_criterion:
-  scale: "acceptance criteria of FUN-WEB-0208 that pass"
+  scale: "acceptance criteria of FUN-WEB-0212 that pass"
   operator: "="
   value: 2
   unit: criteria
@@ -26,7 +26,7 @@ ai_provenance:
   generated_at: "2026-11-12T18:10:00+01:00"
 ---
 
-# FUN-WEB-0208
+# FUN-WEB-0212
 
 When a visitor clicks a call to action, the website SHALL report one click event categorised by the conversion goal the target serves.
 

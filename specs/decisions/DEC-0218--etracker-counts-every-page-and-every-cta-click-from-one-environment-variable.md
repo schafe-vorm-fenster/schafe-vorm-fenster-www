@@ -35,5 +35,5 @@ button and CTA, named after the conversion it serves.
 ## Consequences
 
 - `TS-WEB-0012` D2, D4 and D7 change; `CON-WEB-0035` names the click events beside the conversion events.
-  `FUN-WEB-0207` (page views) and `FUN-WEB-0208` (CTA clicks) are new. Criteria `TS-WEB-0012-A12` to `-A14` are new.
+  `FUN-WEB-0211` (page views) and `FUN-WEB-0212` (CTA clicks) are new. Criteria `TS-WEB-0012-A12` to `-A14` are new.
 - Owner task: set `NEXT_PUBLIC_ETRACKER_SECURE_CODE` in the Vercel project for Preview and Production; the value never enters the repository.

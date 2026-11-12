@@ -1,6 +1,6 @@
 ---
 artefact: requirement
-id: FUN-WEB-0207
+id: FUN-WEB-0211
 class: FUN
 form: F1
 domain: WEB
@@ -14,7 +14,7 @@ source:
   excerpt: "2. **Every page view is counted, client navigation included, under a stable name.**"
 evidence_sufficiency: S3
 fit_criterion:
-  scale: "acceptance criteria of FUN-WEB-0207 that pass"
+  scale: "acceptance criteria of FUN-WEB-0211 that pass"
   operator: "="
   value: 1
   unit: criteria
@@ -26,7 +26,7 @@ ai_provenance:
   generated_at: "2026-11-12T18:10:00+01:00"
 ---
 
-# FUN-WEB-0207
+# FUN-WEB-0211
 
 While the eTracker secure code is configured, the website SHALL count one page view per page a visitor reaches, client navigation included, named by route and language.
 
