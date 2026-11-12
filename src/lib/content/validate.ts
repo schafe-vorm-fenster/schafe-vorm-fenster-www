@@ -345,6 +345,16 @@ export const AVOID_TERMS: readonly AvoidTerm[] = [
   },
   { rule: "CG-005", pattern: /\bWarum es (heute )?hakt\b/i, scope: "section-title" },
   { rule: "CG-035", pattern: /\bPresse- und Auftrittshistorie\b/i },
+  // — CG-035, issue #37: an instruction to the author or the generator, or a
+  //   field name, printed as page text. `Beleg aus der Region` was the value of
+  //   the field `Geo-Label auf den Belegkarten` and reached the page as a badge.
+  //   The field's `**Label:**` itself is not copy (`copyOf`); a value is.
+  { rule: "CG-035", pattern: /\bBeleg aus der Region\b/i },
+  { rule: "CG-035", pattern: /\bProof from the region\b/i },
+  { rule: "CG-035", pattern: /\bGeo-?Label\b/i },
+  { rule: "CG-035", pattern: /\bTODO\b/, scope: "standalone-claim" },
+  { rule: "CG-035", pattern: /\bPlatzhalter\b/i, scope: "standalone-claim" },
+  { rule: "CG-035", pattern: /\bplaceholder\b/i, scope: "standalone-claim" },
   { rule: "CG-004", pattern: /\bBeides gibt es\b/i, instead: "write the thing out" },
   { rule: "CG-004", pattern: /\bDieselben Termine\b/i, instead: "write the thing out" },
   { rule: "CG-004", pattern: /\bDer Name der Firma\b/i, instead: "write the thing out" },
@@ -716,19 +726,19 @@ export const RENDERED_BLOCKS: readonly {
     slot: "home-8-proof-stream",
     kind: "list",
     index: 0,
-    renderedBy: "app/[lang]/page.tsx:153",
+    renderedBy: "app/[lang]/page.tsx:119",
   },
   {
     slot: "home-4a-scene-whatsapp-steps-demo",
     kind: "list",
     index: 0,
-    renderedBy: "app/[lang]/page.tsx:387 (listAt, the three step lines)",
+    renderedBy: "app/[lang]/page.tsx:350 (listAt, the three step lines)",
   },
   {
     slot: "home-4a-scene-whatsapp-steps-demo",
     kind: "list",
     index: 1,
-    renderedBy: "app/[lang]/page.tsx:380 (listAt, the sample event rows)",
+    renderedBy: "app/[lang]/page.tsx:343 (listAt, the sample event rows)",
   },
   {
     slot: "mitmachen-2-objections",
