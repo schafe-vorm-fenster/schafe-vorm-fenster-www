@@ -141,7 +141,18 @@ so the copy is not the problem, the column width is.
 
 ### G-3 Every section boundary carries a hand-off
 
-**Rule.** No section may begin with only a heading on a new colour. Each
+> **Withdrawn as a duty by DEC-0206 (owner, 2026-11-12, issue #163).** Before
+> a section's content stand at most three text levels — kicker, heading,
+> intro. The heading is required; the kicker is optional and stands only
+> where it says what the heading does not (a question, a problem framing, a
+> role). A transition sentence is no level of its own: it becomes the intro
+> or goes. Kicker, heading and intro repeat neither a word stem nor a
+> statement. The rule now lives in TS-WEB-0006 D12; the vocabulary below is
+> a pool to pick from where a kicker earns its place, not a list every
+> section must draw from. The text below is kept as the record of what was
+> ordered.
+
+**Rule (withdrawn).** No section may begin with only a heading on a new colour. Each
 section after the hero opens with a **kicker** (mono 12 px, uppercase,
 the design system's badge shape) naming its role, and where the argument
 moves, a one-line **transition** sentence that ties it to the section
@@ -176,7 +187,8 @@ Part B.
 
 **Rule.** No section may exceed **1.5 phone screens (1270 px at 390 px
 width)**. A section that wants to be longer is two sections with
-different grounds and its own kicker each.
+different grounds and its own heading each (a kicker only where DEC-0206
+allows one).
 
 Today's violators, measured: `/mitmachen` paths 1995 px, `/ueber-uns`
 proof stream 1643 px and team 1380 px, `/dein-ort` value stories 1320 px,

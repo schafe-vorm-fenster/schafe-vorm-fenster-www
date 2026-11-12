@@ -704,8 +704,17 @@ Two forms. Both are mono, uppercase, 700, tracked `0.08em`.
 | Kicker (bare) | no pill, no ground, 15 px, `lime-800` on light, `archive ink` in an archive block, `paper` on ink or photo | The standing eyebrow above a section head |
 | Kicker (badge) | the badge above, with an 18 px icon | Where the kicker carries a mark: a step counter, an award, a status |
 
-The bare kicker is the default. The badge kicker stays available and is the
-alternative, not a decoration to be added on top.
+The bare kicker is the default form. The badge kicker stays available and is
+the alternative, not a decoration to be added on top.
+
+**A section needs no kicker** (DEC-0206, owner 2026-11-12). Before a section's
+content stand at most three text levels — kicker, heading, intro — and the
+heading is the one that is required. A kicker stands only where it says what
+the heading does not: a question, a problem framing, a role. It shares no word
+stem with the heading or the intro beneath it. A transition line between the
+kicker and the heading is no fourth level: it becomes the intro or goes. Where
+a module head below names its own kicker, headline and lead (story stage,
+price section), those are the three levels, and none of them is added on top.
 
 ### Event row
 

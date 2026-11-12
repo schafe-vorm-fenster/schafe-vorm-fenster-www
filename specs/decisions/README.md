@@ -30,11 +30,12 @@ and keeps both. The decisive field is `dp`: it is required and its pattern is
 closed at `DP-01…DP-14`, and most decisions recorded here — a stack choice, a
 compound split, a copy rule — are none of the fourteen.
 
-**There are no SDRs yet.** No decision point has been executed under
-`POL-GRADED-BY-IMPACT` since it was bound, because every artefact has a
-dependant and none reaches the low impact level (DEC-0089). `check:specs` E15
-anchors a status off `DRAFT` on an SDR, so the register's first row will be
-the first status move; E23 validates any record that appears.
+**One SDR so far, and it moves no status.** `SDR-2026-1112-0001` records the
+owner's DP-04 conflict resolution behind DEC-0206 (the section-head rule),
+status `PROPOSED`. No status has moved off `DRAFT`, because every artefact has
+a dependant and none reaches the low impact level (DEC-0089). `check:specs`
+E15 anchors a status off `DRAFT` on an SDR, so the first status move will be
+its own record; E23 validates every record that appears.
 
 ## Amending a record
 
@@ -230,3 +231,4 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0193 — The embed scene is redesigned around an interactive calendar graphic](DEC-0193--the-embed-scene-is-redesigned-around-an-interactive-calendar-graphic.md)
 - [DEC-0194 — The home intro is a drawn phone with a legend, and the place search moves into it](DEC-0194--the-home-intro-is-a-drawn-phone-with-a-legend-and-the-search-moves-into-it.md)
 - [DEC-0195 — The home page has no closing block, and its context band is headed "Erfahre mehr über unsere Kalenderplattform"](DEC-0195--the-home-page-has-no-closing-block-and-the-band-is-headed-learn-more.md)
+- [DEC-0206 — At most three text levels before a section's content, the kicker is optional, and the levels repeat nothing](DEC-0206--at-most-three-text-levels-before-a-sections-content-and-the-kicker-is-optional.md)

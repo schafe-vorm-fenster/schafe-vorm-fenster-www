@@ -1,0 +1,61 @@
+# STRICT decision record beside DEC-0206 (DEC-0100). Immutable once written:
+# a reversal is a new record naming this one in `supersedes`.
+#
+# It names its policy by title, not by identifier, on purpose: check:specs E15
+# lets a record that names an artefact and cites the policy identifier anchor
+# that artefact's status move, whatever this record's own status. This record
+# moves no status (DEC-0206 §7).
+decision_record:
+  id: SDR-2026-1112-0001
+  dp: DP-04
+  subject:
+    artefact_id: TS-WEB-0006
+    version: 0.1.0
+  impact: High
+  mode: HUMAN
+  executor: jan-henrik.hempel
+  accountable: "@domain-requirements-engineer"
+  criteria:
+    - name: conflict
+      value: >-
+        Polish brief G-3 requires a kicker on every section after the hero;
+        DEC-0120 §5 and DEC-0129 §9 exempt sections from it, and 19 of 43
+        sections stand three or more text levels before their content.
+      evidence: plan/polish-brief.md#L145
+      basis: issue #163, analysis comment of 2026-11-12
+    - name: resolution
+      value: >-
+        At most three text levels (kicker, heading, intro); transitions and
+        in-between lines become the intro or go; heading required, kicker
+        optional; no repeated word stem or statement between the levels.
+      evidence: specs/decisions/DEC-0206--at-most-three-text-levels-before-a-sections-content-and-the-kicker-is-optional.md#L35
+      basis: the owner's decision, quoted verbatim in DEC-0206
+    - name: impact level
+      value: High
+      evidence: null
+      basis: >-
+        Several dependants (TS-WEB-0006 and its page specs, SRC-0014, SRC-0017,
+        five page compositions) across two domains, copy and design — the
+        method's high row.
+  outcome: RESOLVED
+  status: PROPOSED
+  evidence_sufficiency: S3
+  rationale: >-
+    The owner resolved the conflict between G-3's duty and the sections
+    exempted from it in favour of a cap on the head of every section; DEC-0206
+    carries the reasoning and the rule texts it changes. Mode, executor and
+    accountable role are copied off the DP-04 row of the graded-by-impact
+    decision policy, which binds DP-04 to HUMAN at every impact level.
+  evidence:
+    - source_id: DEC-0206
+      loc: specs/decisions/DEC-0206--at-most-three-text-levels-before-a-sections-content-and-the-kicker-is-optional.md#L35
+      excerpt: "Vor dem Inhalt stehen höchstens drei Textebenen: Dachzeile/Kicker, Überschrift, Einleitung."
+    - source_id: DEC-0206
+      loc: specs/decisions/DEC-0206--at-most-three-text-levels-before-a-sections-content-and-the-kicker-is-optional.md#L36
+      excerpt: "Die Überschrift ist Pflicht. Der Kicker ist optional und steht nur da, wo er etwas sagt, was die Überschrift nicht sagt"
+    - source_id: DEC-0206
+      loc: specs/decisions/DEC-0206--at-most-three-text-levels-before-a-sections-content-and-the-kicker-is-optional.md#L37
+      excerpt: "Keine Wiederholung zwischen den Ebenen: Kicker, Überschrift und Einleitung wiederholen weder Wortstamm noch Aussage"
+  timestamp: "2026-11-12T12:02:29Z"
+  supersedes: null
+  recorded_by: "Claude Opus 5.5 (developer agent), from the owner's issue comment"
