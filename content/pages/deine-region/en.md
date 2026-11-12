@@ -188,7 +188,9 @@ referent: without the question above it, "that's" had none.
 
 **Heading (no county known):** This is what it already looks like: places that are already on board
 
-**Transition:** And this isn't a statement of intent — it's already running:
+The former transition ("And this isn't a statement of intent — it's
+already running:") is gone, and so is the section's kicker (DEC-0206): it
+repeated the heading's "already" and is no level of its own any more.
 
 While no county is known, the heading names none: the fallback read
 "the county of your region" until here, which is not a county
