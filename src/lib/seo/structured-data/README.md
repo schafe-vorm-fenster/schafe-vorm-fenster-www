@@ -41,12 +41,11 @@ export default async function CalendarPage({ params }: PageProps) {
 
 | Page | Nodes |
 | --- | --- |
-| every page | `webPageNode()` |
-| `/` | `webPageNode()` + `websiteNode()` + `organizationNode()` (the one full `Organization` node) |
+| every page | `webPageNode()` + `organizationNode()` (the one full `Organization` node: name, URL, logo; FUN-WEB-0213) |
+| `/` | + `websiteNode()` |
 | `placeStart`, `register`, `order`, `regionQuote`, `archive` (the five second-level pages) | + `breadcrumbListNode(route, locale, titleFor)` |
 | `/dein-kalender` | + `calendarServiceNode(locale, title)` |
 | `/deine-region` | + `regionServiceNode(locale, title)` |
-| `/ueber-uns` | + `organizationReference()` inside a custom node, never a second `Organization` |
 | any page with a visible Q&A block | + `faqPageNode(items)` — **or** microdata on the block, never both (one-entity rule) |
 | `/ueber-uns/archiv` | **no JSON-LD** — spread `itemListProps()`/`listItemProps()`/`citationWorkProps()` from `archive-microdata.ts` onto the existing list markup instead |
 | `/rechtliches`, 404, 500 | `webPageNode()` only (404/500: omit even that per D4) |

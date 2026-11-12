@@ -399,9 +399,9 @@ test.describe("/ueber-uns", () => {
     const persons = nodes.filter((node) => node["@type"] === "Person");
     expect(organizations).toHaveLength(1);
     expect(persons).toHaveLength(0);
-    // D4: a reference by `@id`, never a second full node — the page describes
-    // the organisation nowhere, it points at the description on `/`.
-    expect(Object.keys(organizations[0]!).sort()).toEqual(["@id", "@type"]);
+    // FUN-WEB-0213: the one full node, with name, URL and logo.
+    expect(organizations[0]).toMatchObject({ name: expect.any(String), url: expect.any(String) });
+    expect(organizations[0]).toHaveProperty("logo.url");
   });
 
   test("TS-WEB-0004-A1: no horizontal scroll at 360px", async ({ page }) => {

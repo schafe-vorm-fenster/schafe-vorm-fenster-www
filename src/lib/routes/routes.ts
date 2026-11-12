@@ -65,6 +65,11 @@ export const ROUTE_IDS = [
 
 export type RouteId = (typeof ROUTE_IDS)[number];
 
+/** Narrows an unvalidated path segment to a route id. */
+export function isRouteId(value: unknown): value is RouteId {
+  return typeof value === "string" && (ROUTE_IDS as readonly string[]).includes(value);
+}
+
 export interface RouteDefinition {
   /** Localized paths, without the language prefix. `/` for the home page. */
   readonly path: Readonly<Record<Locale, string>>;

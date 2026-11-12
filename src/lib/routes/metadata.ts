@@ -23,6 +23,13 @@ import {
   SITE_ORIGIN,
 } from "@/src/lib/routes/routes";
 
+import {
+  SHARE_IMAGE_SIZE,
+  SHARE_IMAGE_TYPE,
+  shareImageAlt,
+  shareImageUrl,
+} from "@/src/lib/seo/share-image";
+
 import type { Locale } from "@/src/lib/i18n/locales";
 import type { RouteId } from "@/src/lib/routes/routes";
 import type { Metadata } from "next";
@@ -63,11 +70,19 @@ export function pageMetadata(route: RouteId, locale: Locale): Metadata {
   // `pageDescription`. Next drops an `undefined` field from the head.
   const description = pageDescription(route, locale) || undefined;
   const url = canonicalUrl(route, locale);
+  // TS-WEB-0011 D6: the page's own 1200x630 image, absolute, with alt text.
+  const image = {
+    url: shareImageUrl(route, locale),
+    width: SHARE_IMAGE_SIZE.width,
+    height: SHARE_IMAGE_SIZE.height,
+    type: SHARE_IMAGE_TYPE,
+    alt: shareImageAlt(title, locale),
+  };
 
   return {
     metadataBase: new URL(SITE_ORIGIN),
     // The home page carries the brand itself, so the layout's
-    // `%s — Schafe vorm Fenster` template would say it twice (TS-WEB-0011 D5).
+    // `%s · Schafe vorm Fenster` template would say it twice (TS-WEB-0011 D5).
     title: route === "home" ? { absolute: title } : title,
     description,
     alternates: {
@@ -84,6 +99,16 @@ export function pageMetadata(route: RouteId, locale: Locale): Metadata {
       alternateLocale: LOCALES.filter((other) => other !== locale).map(
         (other) => OG_LOCALE[other],
       ),
+      images: [image],
+    },
+    // Emitted explicitly, same values as OpenGraph — never left to a
+    // scraper's fallback (TS-WEB-0011 D6). `twitter:site` is omitted: no
+    // account exists (TS-WEB-0011, open points).
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [{ url: image.url, alt: image.alt }],
     },
   };
 }

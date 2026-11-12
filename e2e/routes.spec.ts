@@ -268,7 +268,9 @@ test("TS-WEB-0001-A3: the redundant /de prefix redirects to the bare path", asyn
 test("F-3-13: every page links the brand icon, and it resolves", async ({ page, request }) => {
   for (const path of ["/", "/en", "/dein-ort", "/ueber-uns"]) {
     await page.goto(path);
-    const icon = page.locator('link[rel="icon"]');
+    // The SVG mark is the primary icon; the PNG raster fallback beside it
+    // is TS-WEB-0011-A16's.
+    const icon = page.locator('link[rel="icon"][type="image/svg+xml"]');
     await expect(icon, `icon link on ${path}`).toHaveCount(1);
     const href = await icon.getAttribute("href");
     // `/_next/static/media/…` locally and `/_next/static/immutable/media/…`
