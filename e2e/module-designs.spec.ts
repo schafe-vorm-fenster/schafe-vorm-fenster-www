@@ -3,7 +3,8 @@ import { expect, test, type Locator, type Page } from "@playwright/test";
 /**
  * DEC-0172 — the three modules of the owner's review of 2026-10-27 that read
  * as the old state (#91, #94, #96), held by their visual rules rather than by
- * their wording. Every assertion here is a structure, a token or a position;
+ * their wording. The comparison (#94) was redesigned again by DEC-0203
+ * (issue 159) and is held here in that design, on both pages it stands on. Every assertion here is a structure, a token or a position;
  * none of them names a sentence of copy (DEC-0083).
  *
  * The expected colours are read from the page's own tokens at run time — a
@@ -12,7 +13,8 @@ import { expect, test, type Locator, type Page } from "@playwright/test";
  * expectation with it.
  */
 
-const ARCHIVE_GROUND = "--color-archive-ground";
+const INK = "--color-neutral-ink";
+const SURFACE = "--color-neutral-surface";
 const LIME_100 = "--color-lime-100";
 const LIME_500 = "--color-lime-500";
 const VIOLET_500 = "--color-violet-500";
@@ -53,46 +55,110 @@ async function open(page: Page, path: string, viewport: { width: number; height:
 
 test.describe("DEC-0172: the comparison, the flow, the proof stream and the trust block", () => {
   for (const viewport of [PHONE, DESKTOP]) {
-    test(`TS-WEB-0024-A23: today stands on the archive ground, the solution on lime-100, as one pair per row — ${viewport.width}px`, async ({
-      page,
-    }) => {
-      await open(page, "/dein-kalender", viewport);
-      const block = page.locator('[data-block="contrast"]');
-      const today = block.locator('[data-half="today"]');
-      const withCalendar = block.locator('[data-half="with"]');
-      await expect(today).toHaveCount(4);
-      await expect(withCalendar).toHaveCount(4);
+    for (const [path, blockId, pairs] of [
+      ["/dein-kalender", "contrast", 4],
+      ["/mitmachen", "objections", 3],
+    ] as const) {
+      test(`TS-WEB-0024-A23 / TS-WEB-0022-A6: one block per pair, today on surface, the solution on lime-500 — ${path} ${viewport.width}px`, async ({
+        page,
+      }) => {
+        await open(page, path, viewport);
+        const block = page.locator(`[data-block="${blockId}"]`);
+        const pairItems = block.locator("li[data-pair]");
+        const today = block.locator('[data-half="today"]');
+        const withCalendar = block.locator('[data-half="with"]');
+        await expect(pairItems).toHaveCount(pairs);
+        await expect(today).toHaveCount(pairs);
+        await expect(withCalendar).toHaveCount(pairs);
 
-      for (let index = 0; index < 4; index += 1) {
-        const old = today.nth(index);
-        const fresh = withCalendar.nth(index);
-        // SRC-0014 §Archive: the old world on its own ground, and the solution
-        // never on it.
-        expect(await css(old, "background-color")).toBe(await token(page, ARCHIVE_GROUND));
-        expect(await css(fresh, "background-color")).toBe(await token(page, LIME_100));
-        // Surfaces are square, and nothing floats: no radius, no shadow.
-        for (const half of [old, fresh]) {
-          expect(await css(half, "border-top-left-radius")).toBe("0px");
-          expect(await css(half, "box-shadow")).toBe("none");
-        }
-        // The label stands above its sentence (Desktop Raster board), not
-        // inline in front of it.
-        const label = old.locator("> span").first();
-        expect(await css(label, "display")).toBe("block");
+        const ink = await token(page, INK);
+        const phone = viewport.width < 768;
+        for (let index = 0; index < pairs; index += 1) {
+          const old = today.nth(index);
+          const fresh = withCalendar.nth(index);
+          // DEC-0203: today on `surface`, the solution on `lime-500`.
+          expect(await css(old, "background-color")).toBe(await token(page, SURFACE));
+          expect(await css(fresh, "background-color")).toBe(await token(page, LIME_500));
+          for (const half of [old, fresh]) expect(await css(half, "box-shadow")).toBe("none");
 
-        // One pair is one row: stacked and butting below `xl`, 6 + 6 and
-        // butting from it.
-        const a = await box(old);
-        const b = await box(fresh);
-        if (viewport.width < 1024) {
-          expect(Math.abs(a.x - b.x)).toBeLessThanOrEqual(1);
-          expect(Math.abs(a.y + a.height - b.y)).toBeLessThanOrEqual(1);
-        } else {
-          expect(Math.abs(a.y - b.y)).toBeLessThanOrEqual(1);
-          expect(Math.abs(a.x + a.width - b.x)).toBeLessThanOrEqual(1);
+          // Rounded on the outside only, straight on the edge between the halves.
+          const outer = phone
+            ? [
+                [old, "border-top-left-radius"],
+                [old, "border-top-right-radius"],
+                [fresh, "border-bottom-left-radius"],
+                [fresh, "border-bottom-right-radius"],
+              ]
+            : [
+                [old, "border-top-left-radius"],
+                [old, "border-bottom-left-radius"],
+                [fresh, "border-top-right-radius"],
+                [fresh, "border-bottom-right-radius"],
+              ];
+          const seam = phone
+            ? [
+                [old, "border-bottom-left-radius"],
+                [old, "border-bottom-right-radius"],
+                [fresh, "border-top-left-radius"],
+                [fresh, "border-top-right-radius"],
+              ]
+            : [
+                [old, "border-top-right-radius"],
+                [old, "border-bottom-right-radius"],
+                [fresh, "border-top-left-radius"],
+                [fresh, "border-bottom-left-radius"],
+              ];
+          for (const [half, corner] of outer) {
+            expect(await css(half as Locator, corner as string)).toBe(phone ? "24px" : "28px");
+          }
+          for (const [half, corner] of seam) {
+            expect(await css(half as Locator, corner as string)).toBe("0px");
+          }
+
+          // The label stands above its sentence, not inline in front of it.
+          const label = old.locator("p > span").first();
+          expect(await css(label, "display")).toBe("block");
+
+          // One topic circle with today, one arrow circle with the solution:
+          // `ink` circles, decoration only.
+          const icon = old.locator("[data-pair-icon]");
+          const arrow = fresh.locator("[data-pair-arrow]");
+          await expect(icon).toHaveAttribute("aria-hidden", "true");
+          await expect(arrow).toHaveAttribute("aria-hidden", "true");
+          expect(await css(icon, "background-color")).toBe(ink);
+          expect(await css(arrow, "background-color")).toBe(ink);
+          const iconBox = await box(icon);
+          const arrowBox = await box(arrow);
+          expect(Math.round(iconBox.width)).toBe(52);
+          expect(Math.round(arrowBox.width)).toBe(44);
+
+          // One pair is one block: stacked and butting below `lg`, 50/50 and
+          // butting from it, the arrow on the edge between the halves.
+          const a = await box(old);
+          const b = await box(fresh);
+          const arrowCentre = { x: arrowBox.x + arrowBox.width / 2, y: arrowBox.y + arrowBox.height / 2 };
+          if (phone) {
+            expect(Math.abs(a.x - b.x)).toBeLessThanOrEqual(1);
+            expect(Math.abs(a.y + a.height - b.y)).toBeLessThanOrEqual(1);
+            expect(Math.abs(arrowCentre.y - b.y)).toBeLessThanOrEqual(1);
+            // The icon circle stands half over the block's top edge.
+            expect(Math.abs(iconBox.y + iconBox.height / 2 - a.y)).toBeLessThanOrEqual(1);
+          } else {
+            expect(Math.abs(a.y - b.y)).toBeLessThanOrEqual(1);
+            expect(Math.abs(a.x + a.width - b.x)).toBeLessThanOrEqual(1);
+            expect(Math.abs(a.width - b.width)).toBeLessThanOrEqual(1);
+            expect(Math.abs(arrowCentre.x - b.x)).toBeLessThanOrEqual(1);
+            // Both texts start at the same height.
+            const oldText = await box(old.locator("p"));
+            const freshText = await box(fresh.locator("p"));
+            expect(Math.abs(oldText.y - freshText.y)).toBeLessThanOrEqual(1);
+          }
         }
-      }
-    });
+
+        // The head is the kicker and the heading, nothing else (issue 159).
+        await expect(block.locator("[data-stack] > :not([data-kicker]):not([data-comparison])")).toHaveCount(0);
+      });
+    }
 
     test(`TS-WEB-0024-A24: the settings section has no lime band and no flow — ${viewport.width}px`, async ({
       page,

@@ -83,17 +83,15 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A12/A13/A16/A17/A18/A19: /mitmachen", 
     // (issue 154): the live example is gone, and the call to act follows the
     // third path directly.
     //
-    // Two things in this list are not D2 slots and are explained by G-4
-    // (DEC-0124). The objection block is two sections — `objections` and
-    // `archiv` — because together they measure 1627 px at 390 px and
-    // `e2e/section-budget.spec.ts` caps a section at 1270. The `wege` slot is
-    // three sections for the same reason. The `verweis` aside that stood after
-    // slot 3 is gone: the context band is the page's one hand-off (D9 as
-    // amended by DEC-0174 §3, issue #92).
+    // The `wege` slot is three sections, because one would break G-4's
+    // 1270 px (DEC-0124). The objection block is one section again since
+    // DEC-0203: the comparison module replaced its two halves, so the
+    // `archiv` section is gone (issue #46's order question goes with it).
+    // The `verweis` aside that stood after slot 3 is gone: the context band
+    // is the page's one hand-off (D9 as amended by DEC-0174 §3, issue #92).
     expect(blocks).toEqual([
       "scene",
       "objections",
-      "archiv",
       "wege",
       "wege",
       "wege",
@@ -193,37 +191,53 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A12/A13/A16/A17/A18/A19: /mitmachen", 
     await expect(page.locator('[data-cta="primary"]')).toHaveCount(1);
   });
 
-  test("TS-WEB-0022-A6: the objection block is a headline, n items, and a cleared proof or nothing", async ({
+  test("TS-WEB-0022-A6: the objection block is a headline, n pairs, and a cleared proof or nothing", async ({
     page,
   }) => {
     await page.goto("/mitmachen");
-    const upper = page.locator('[data-block="objections"]');
-    const archive = page.locator('[data-block="archiv"]');
-    await expect(page.getByText("Wer euren Termin heute nicht mitbekommt")).toBeVisible();
+    const block = page.locator('[data-block="objections"]');
+    await expect(page.locator('[data-block="archiv"]')).toHaveCount(0);
+
+    // One heading, named by the section (DEC-0203 §2). Its wording is copy,
+    // so the assertion is the structure.
+    await expect(block.locator("h2")).toHaveCount(1);
+    await expect(block).toHaveAttribute("aria-labelledby", "objections-heading");
 
     // CHANGED again (DEC-0175 §3): the proof position beside the block shows
     // a cleared proof or nothing. The flat "visibly empty" panel DEC-0124 had
     // brought back is a placeholder, and a placeholder never reaches the
     // website (owner's review of 2026-10-27, issue 105).
-    await expect(upper.locator("[data-empty-proof]")).toHaveCount(0);
+    await expect(block.locator("[data-empty-proof]")).toHaveCount(0);
 
-    // Two halves, as the 2026-09-23 draft has them: three people who do not
-    // hear about the date today, then the usual channels on the archive
-    // ground (the archive half's own facts are `e2e/objection-list.spec.ts`).
-    await expect(upper.locator("[data-objection-reach] li")).toHaveCount(3);
-    await expect(archive.locator('[data-archive-block="own"] li')).toHaveCount(3);
-    await expect(page.getByText("Das ist gut so, macht weiter.")).toBeVisible();
+    // Three pairs (DEC-0203): each usual channel beside what changes. The
+    // head is the kicker and the heading only, so the stack holds the kicker
+    // and the module and nothing else: no hand-off sentence above it, no
+    // closing line under it (issue 159).
+    await expect(block.locator("li[data-pair]")).toHaveCount(3);
+    await expect(block.locator('[data-half="today"]')).toHaveCount(3);
+    await expect(block.locator('[data-half="with"]')).toHaveCount(3);
+    const stack = await block
+      .locator("[data-stack] > *")
+      .evaluateAll((elements) =>
+        elements.map((element) => {
+          if (element.hasAttribute("data-kicker")) return "kicker";
+          if (element.hasAttribute("data-comparison")) return "module";
+          return element.tagName;
+        }),
+      );
+    expect(stack).toEqual(["kicker", "module"]);
 
-    const items = await page
-      .locator('[data-block="objections"] li, [data-block="archiv"] li')
+    const items = await block
+      .locator('[data-half="today"]')
       .evaluateAll((elements) => elements.map((element) => element.textContent ?? ""));
-    expect(items).toHaveLength(6);
+    expect(items).toHaveLength(3);
     for (const item of items) {
       const text = item.toLowerCase();
       // A6: no product name, no generic claim, no numeral asserting how many
-      // channels exist. The check is scoped to the block's items, which is
-      // what the criterion says — the paths slot's kicker is the review's own
-      // "So geht's einfacher" and is not an item (DEC-0124).
+      // channels exist. The check is scoped to the *today* halves, the
+      // problem items the criterion is about — the paths slot's kicker is the
+      // review's own "So geht's einfacher" and is not an item (DEC-0124). The
+      // product name is checked over the whole module below.
       for (const banned of ["einfach", "digital", "für alle", "modern", "innovativ", "portalize"]) {
         expect(text, `objection item names "${banned}"`).not.toContain(banned);
       }
@@ -231,6 +245,8 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A12/A13/A16/A17/A18/A19: /mitmachen", 
         /\b(zwei|drei|vier|fünf|sechs|sieben)\s+(Kanäle|Wege)\b/i,
       );
     }
+    // Neither half names the product (D1: "Portalize" does not occur here).
+    expect((await block.innerText()).toLowerCase()).not.toContain("portalize");
   });
 
   test("TS-WEB-0022-A12: no numeric price, no currency symbol, no 'ab', no 'Portalize', no 'local-advertising'", async ({

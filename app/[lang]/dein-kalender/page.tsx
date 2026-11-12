@@ -1,6 +1,9 @@
 import { imageCredit } from "@/src/components/photo-surface/image-credit";
 import { Button } from "@/src/components/button/button";
-import { ComparisonTable } from "@/src/components/comparison-table/comparison-table";
+import {
+  COMPARISON_SECTION_CLASS,
+  ComparisonTable,
+} from "@/src/components/comparison-table/comparison-table";
 import { EmbedFrame } from "@/src/components/embed-frame/embed-frame";
 import { HeroBlock } from "@/src/components/hero-block/hero-block";
 import { OutboundLink } from "@/src/components/outbound-link/outbound-link";
@@ -29,20 +32,20 @@ import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
 import { tierPrice } from "@/src/lib/pricing/offerings";
 import { dictionary } from "@/src/lib/i18n/dictionary";
 
+import { comparisonPairs } from "../_comparison";
 import { PageJsonLd } from "../_structured-data";
 import { pageContent } from "../_content";
 import { parseProofLine, proofHeading, quoteAuthor, selectProof, selectedProofKind } from "../_proof";
 import { localeFrom, pageMetadataFor } from "../_locale";
 import { PageFrame } from "../_page-frame";
 
-import { comparisonLabels, settingRows, tierChecks } from "./content";
+import { settingRows, tierChecks } from "./content";
 import { pageMeta } from "./page.meta";
 
 
 import pageStyles from "../_pages.module.css";
 
 import type { IconName } from "@/src/components/icon/icon";
-import type { FourComparisonRows } from "@/src/components/content-fragments";
 import type { ContentBlock } from "@/src/lib/content/types";
 import type { Locale } from "@/src/lib/i18n/locales";
 import type { Metadata } from "next";
@@ -131,6 +134,13 @@ const SETTING_ICONS: readonly IconName[] = [
   "circle-check",
 ];
 
+/**
+ * The four pairs' topic glyphs, in the artifact's row order (issue 159): the
+ * CMS module, who keeps it current, the second login, the boundary. Decorative,
+ * so the order is the only thing that binds a glyph to its pair.
+ */
+const CONTRAST_ICONS: readonly IconName[] = ["monitor", "users", "smartphone", "map-pin"];
+
 const TRUST_HEADLINE: Record<Locale, string> = {
   de: "Wie eure Daten hier behandelt werden",
   en: "How your data is handled here",
@@ -208,17 +218,10 @@ export default async function Page({
   const closing = slot(page, "dein-kalender-7-closing");
   const contextBand = slot(home, "home-10-context-band");
 
-  const table = contrast.blocks.find((block) => block.kind === "table");
-  const labels = comparisonLabels(contrast.blocks);
-  const comparisonRows: FourComparisonRows =
-    table && table.kind === "table" && table.rows.length === 4
-      ? (table.rows.map((row) => ({ today: row[0] ?? "", withProduct: row[1] ?? "" })) as unknown as FourComparisonRows)
-      : [
-          { today: "", withProduct: "" },
-          { today: "", withProduct: "" },
-          { today: "", withProduct: "" },
-          { today: "", withProduct: "" },
-        ];
+  // Four pairs, each with its topic glyph (TS-WEB-0024 D4, issue 159): a
+  // table that is not four rows fails the build rather than rendering a pair
+  // without a sentence or a glyph (DEC-0203 §3).
+  const comparison = comparisonPairs(contrast.blocks, CONTRAST_ICONS, "dein-kalender-2-contrast");
 
   /**
    * The tiers, in the order `TS-WEB-0024 D6/D6a` fixes, each with the one CTA
@@ -367,18 +370,22 @@ export default async function Page({
         />
       </div>
 
+      {/* The comparison module of issue 159, the same component as
+          `/mitmachen`'s, with the municipalities' four pairs. The head is the
+          kicker and the heading and nothing else (DEC-0203 §2). */}
       <SectionShell
+        className={COMPARISON_SECTION_CLASS}
         dataBlock="contrast"
         kicker={dictionary(locale).kickers.objection}
+        labelledBy="contrast-heading"
         surface="paper"
       >
-        {/* Kicker "Warum es heute hakt" over a title that says what goes —
-            the CG-005 / CG-018 split, with the review's own headline. */}
         <ComparisonTable
-          headline={fieldAt(contrast.blocks, 0)}
-          rows={comparisonRows}
-          todayLabel={labels.today}
-          withProductLabel={labels.withCalendar}
+          headingId="contrast-heading"
+          headline={fieldAt(contrast.blocks, 0) ?? ""}
+          rows={comparison.rows}
+          todayLabel={comparison.labels.today}
+          withProductLabel={comparison.labels.withCalendar}
         />
       </SectionShell>
 

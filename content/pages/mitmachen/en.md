@@ -155,8 +155,6 @@ carries an em dash inside its own sentence.
 
 **Statement 2 (lead):** And the date is in the calendar.
 
-**Hand-off into the objection block:** You've already printed the flyer anyway. Photograph it, send the picture by WhatsApp, done: the date is visible in your place, and in the places around it at the same time.
-
 **CTA label (primary):** Sign up for free now
 
 Source: `headline` and `relievers[0]` of `actors--community-calendar`.
@@ -168,23 +166,22 @@ with a question mark") the opener is **two short statements** instead of one
 question: the heading carries the first, the lead the second (CG-005,
 CG-020, CG-021; TS-WEB-0022-A4).
 
-## Slot 2 — Objection block: who doesn't hear about your date today
+The hand-off sentence into the objection block ("You've already printed the
+flyer anyway …") went with issue #159: the comparison module's head is the
+kicker and the heading only, and every pair puts the solution right beside
+the problem (DEC-0203).
 
-<!-- id: mitmachen-2-objections; content_type: objection-list; provenance: sourced; derived_from: ["@schafe-vorm-fenster/audiences@0.3.3#actors", "@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"]; status: draft -->
+## Slot 2 — Comparison: who doesn't hear about your date today
+
+<!-- id: mitmachen-2-objections; content_type: comparison; provenance: sourced; derived_from: ["@schafe-vorm-fenster/audiences@0.3.3#actors", "@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"]; status: draft -->
 
 **Heading:** Who doesn't hear about your date today
 
-- The neighbours — Same village, but not in the club and not in the group.
-- The next village — Five kilometres away. They'd come if they knew.
-- The new arrivals — Just moved in, on no list and in no channel.
-
-**Kicker of the lower half:** The usual channels
-
-- Flyers and notices stop at the village boundary. — And often they aren't even put up, because nobody has time to hand them out.
-- Newspaper and gazette have a deadline, and an editorial desk. — A rescheduled date arrives too late. And some of it never gets printed at all.
-- Your own website, Instagram, the WhatsApp group reach whoever already knows you. — That's good, keep it up. Only whoever doesn't know you yet hears nothing of it.
-
-**Closing line:** Volunteering leaves no time to enter every date over and over. You'd rather send it once by WhatsApp and be done.
+| Today | With your calendar |
+| --- | --- |
+| Flyers and notices stop at the village boundary. | A photo of the flyer by WhatsApp, and the date also shows up in the places around you. |
+| Newspaper and gazette have a deadline, and an editorial desk. | New, moved, cancelled: it's in the calendar right away, with no deadline. |
+| Website, Instagram and the WhatsApp group reach whoever already knows you. | In the village calendar the neighbours, the next village and the new arrivals see it too. |
 
 <!-- note: authoring note from here on, not copy — the passage quotes forbidden terms in order to forbid them (DEC-0142 §1) -->
 
@@ -193,6 +190,17 @@ are typed "by hand" into several channels) and `pains[]` from
 `actors--community-calendar` (5 entries). No channel count is stated —
 "six" in the audience record is a figure of speech, not an enumeration
 (TS-WEB-0022 D3).
+
+**Version of issue #159 (2026-11-12, DEC-0203), a draft translation.** The
+section is the comparison module "Today → With your calendar", the same
+component as on `/dein-kalender`: three pairs, each problem beside its
+solution. The six sentences translate the owner's German wording from the
+issue and wait for the owner's review (`state/open.md` row 295). Gone are the
+block "The neighbours / The next village / The new arrivals" (the three now
+stand in pair 3's solution), the detail lines of the usual channels and the
+closing line. The page sets the glyph per pair (megaphone, clock, users).
+
+What follows is the history of the earlier version.
 
 Two halves, as in the 2026-09-23 draft "Design – wo es hakt" (variant 2b
 "Angestaubt · Sepia"): above, the three concrete people who don't hear
