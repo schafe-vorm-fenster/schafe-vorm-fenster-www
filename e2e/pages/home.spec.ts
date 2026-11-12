@@ -476,20 +476,11 @@ test.describe("TS-WEB-0019 — home", () => {
     await expect(page).toHaveURL(/\/$/u);
   });
 
-  test("TS-WEB-0019-A5: an uncovered place typed into the closing search navigates to /dein-ort/starten?ort=", async ({
+  test("TS-WEB-0019-A5: `/` renders no uncovered place as data (the closing search is gone, DEC-0195)", async ({
     page,
   }) => {
     await page.setViewportSize(DESKTOP);
-    await page.goto("/");
-
-    const field = page.locator("#ort-suche-abschluss");
-    await field.fill("99999"); // the fixture's own uncovered postcode
-    await field.press("Enter");
-
-    await expect(page).toHaveURL(/\/dein-ort\/starten\?ort=99999$/);
-
-    // `/` itself renders no uncovered place as data.
-    await page.goto("/?ort=99999");
+    await page.goto("/?ort=99999"); // the fixture's own uncovered postcode
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
       "Was ist los in deinem Dorf?",
     );

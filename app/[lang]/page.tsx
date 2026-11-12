@@ -6,7 +6,6 @@ import { StageChat, StageFlyerPhoto } from "@/src/components/explain-stage/expla
 import { HeroBlock } from "@/src/components/hero-block/hero-block";
 import { MediaFrame } from "@/src/components/media-frame/media-frame";
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
-import { PlaceSearch } from "@/src/components/place-search/place-search";
 import { ProofCard } from "@/src/components/proof-card/proof-card";
 import { ProofStream } from "@/src/components/proof-stream/proof-stream";
 import { SceneBlock } from "@/src/components/scene-block/scene-block";
@@ -205,7 +204,6 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
   const sceneEmbedImage = pageImage(page, "home-scene-embed");
   const sceneProvenanceImage = pageImage(page, "home-scene-provenance");
 
-  const searchPlaceholder = fieldAt(hero.blocks, 1);
   const proofKicker = fieldAt(proof.blocks, 0);
 
   /** The build's day — what the sample panel is dated from in the static HTML (DEC-0163). */
@@ -224,39 +222,6 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
     surface: "home",
     candidates: proofCandidates(proof, demo.geo),
   });
-
-  /**
-   * The one primary conversion of the page (TS-WEB-0006 D3, TS-WEB-0019 D2 S1): the
-   * search submit itself. The same module, same submit label and same
-   * target repeats as the closing block — TS-WEB-0019-A10's "same target and
-   * label as the block-1 primary of the current state" — without the marker,
-   * which exists exactly once.
-   */
-  const submitLabel = hero.cta ?? words.search.submit;
-
-  const search = () => (
-    <PlaceSearch
-      stage
-      typeahead
-      id="ort-suche-abschluss"
-      // Issue #20: the placeholder carries the instruction and the helper
-      // line is gone, so the field's name comes from the dictionary ("Dein
-      // Ort") — the visible hint goes, the field's label does not.
-      locale={locale}
-      placeholder={searchPlaceholder}
-      submitLabel={submitLabel}
-      to="place"
-      /*
-       * Both instances take the dark treatment, because both stand on a
-       * dark ground: the hero over its scrim, the closing block on `ink`.
-       * SRC-0014 §"Search field" has exactly two variants and no third —
-       * "a search field only ever sits on a photo surface or on the `ink`
-       * section" — and the closing block shipped white on white, which is
-       * the defect that rule was rewritten for.
-       */
-      tone="dark"
-    />
-  );
 
   const heroImage = pageImage(page, HERO_IMAGE_ID.home);
   const focusCopy: HomeFocusCopy = {
