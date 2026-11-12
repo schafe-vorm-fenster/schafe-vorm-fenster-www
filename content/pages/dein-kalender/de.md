@@ -174,12 +174,13 @@ herkommt, eine Postleitzahl ist eine Abstraktion).
 
 **Überschrift:** Ein echter Kalender aus drei Nachbardörfern
 
-Das ist der Kalender von Schlatkow, Schmatzin und Wolfradshof. Er zeigt genau
-das, was dort in den nächsten Wochen ansteht.
+Hier seht ihr, was in Schlatkow, Schmatzin und Wolfradshof in den nächsten Wochen
+ansteht.
 
-Zwei Sätze statt fünf Zeilen (Review 2026-09-22, Abschnitt „So funktioniert
-es"): „Das ist der Kalender von [Ort]. Er zeigt genau das, was dort in den
-nächsten Wochen ansteht." Der Ortsname kommt aus
+Ein Satz statt zwei (Review 2026-09-22, Abschnitt „So funktioniert es"; Issue
+#163, DEC-0206, DEC-0213): Die Einleitung teilt keinen Wortstamm mit der
+Überschrift, und die Überleitung „So sieht das aus, wenn es bei euch steht:"
+entfällt, weil sie keine eigene Textebene ist. Die Ortsnamen kommen aus
 `src/lib/embed/portalize.ts` (`SHOWCASE_CALENDAR`), nicht aus dem Diktat.
 
 ## Slot 3b — Was drinsteht, bestimmt ihr (Konfigurationsblock)
@@ -377,6 +378,8 @@ Markenfläche, nie ein geliehenes Foto (Jan, 2026-09-18).
 <!-- id: dein-kalender-6-trust; content_type: section; provenance: mixed; derived_from: [ia, "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel", "@schafe-vorm-fenster/proof@0.3.5#in-operation-since-2018"]; status: draft -->
 
 **Überschrift:** Wie eure Daten hier behandelt werden
+
+<!-- note: Autorennotiz, keine Copy — Die Überleitung „Bleibt die Frage, wem ihr da eigentlich eure Daten gebt." entfällt (DEC-0206, DEC-0213): keine eigene Textebene, und sie wiederholt „Daten" aus der Überschrift. -->
 
 **Datenschutz:** Keine Tracking-Cookies, keine dauerhafte Nutzer-Kennung, kein Consent-Banner, keine Drittanbieter außer den in unserer Datenschutzerklärung genannten. → [`/rechtliches#datenschutz`](/rechtliches#datenschutz), [`/rechtliches#auftragsverarbeitung`](/rechtliches#auftragsverarbeitung)
 
