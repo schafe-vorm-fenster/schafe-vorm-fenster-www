@@ -225,4 +225,4 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0188 — The homescreen headline on /dein-ort carries no icon](DEC-0188--the-homescreen-headline-carries-no-icon.md)
 - [DEC-0189 — The phone header drops the calendar pill, and the menu overlay is the blurred page](DEC-0189--the-phone-header-drops-the-calendar-pill-and-the-menu-overlay-is-glass.md)
 - [DEC-0190 — On the phone the burger is a track that carries the page's job](DEC-0190--the-phone-burger-is-a-track-carrying-the-pages-job.md)
-- [DEC-0192 — The home intro is a drawn phone with a legend, and the place search moves into it](DEC-0192--the-home-intro-is-a-drawn-phone-with-a-legend-and-the-search-moves-into-it.md)
+- [DEC-0193 — The home intro is a drawn phone with a legend, and the place search moves into it](DEC-0193--the-home-intro-is-a-drawn-phone-with-a-legend-and-the-search-moves-into-it.md)

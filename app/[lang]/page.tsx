@@ -314,7 +314,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
         src={heroImage?.src}
         wideSrc={heroImage?.wideSrc}
       />
-      {/* Block 1' - "Dein digitaler Dorfkalender." (issue 143, DEC-0192): the one
+      {/* Block 1' - "Dein digitaler Dorfkalender." (issue 143, DEC-0193): the one
           `ink` section of the page rhythm, in every state; S3's widened radius
           follows it. */}
       <MotionReveal>

@@ -103,7 +103,7 @@ const BREAKPOINTS = new Map<string, string>([
  */
 const CONTAINER_THRESHOLDS = new Map<string, string>([
   ["30rem", "event-row: badge plus a complete meta line (SRC-0014 §Event row)"],
-  // dorfkalender-intro (issue 143, DEC-0192): the section switches layout on its
+  // dorfkalender-intro (issue 143, DEC-0193): the section switches layout on its
   // own width, 760 px by the owner's design, and scales its 500 px drawing in
   // steps so it fits the gutters.
   ["22rem", "dorfkalender-intro: drawing at 0.62 — a section 352 px wide (issue 143)"],

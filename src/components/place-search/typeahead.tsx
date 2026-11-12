@@ -38,7 +38,7 @@ export interface TypeaheadProps extends Omit<LinkOptions, "hash"> {
   readonly locale?: Locale;
   /**
    * Where a pick stays on the page instead of navigating — the home
-   * Dorfkalender section loads the place into its phone (issue 143, DEC-0192).
+   * Dorfkalender section loads the place into its phone (issue 143, DEC-0193).
    * The option keeps its real `href`, so a pick without JavaScript still lands
    * on the place page; with it, the slug goes here and the field takes the
    * place's name.

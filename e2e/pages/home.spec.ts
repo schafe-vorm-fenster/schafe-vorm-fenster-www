@@ -322,7 +322,7 @@ test.describe("TS-WEB-0019 — home", () => {
       const main = document.querySelector("main");
       if (!main) return ["no main"];
       // The section "Dein digitaler Dorfkalender." carries one link by design
-      // (to the place's own calendar, DEC-0192); it is not a link "to see
+      // (to the place's own calendar, DEC-0193); it is not a link "to see
       // what is on" on another page of this site.
       return [...main.querySelectorAll("a[href]")].filter(
         // A hidden link (the credit panels' source links) is on no screen.
@@ -336,7 +336,7 @@ test.describe("TS-WEB-0019 — home", () => {
   });
 
   for (const viewport of [PHONE, DESKTOP]) {
-    // DEC-0192: the stage carries no search any more, so the primary CTA of S1
+    // DEC-0193: the stage carries no search any more, so the primary CTA of S1
     // is the submit of the section directly under it, not a control above the
     // fold. The generic "above the fold" rule of TS-WEB-0006-A3 does not hold
     // on `/` in S1 (open point of the PR for the owner).
@@ -379,7 +379,7 @@ test.describe("TS-WEB-0019 — home", () => {
       "Das ist los in Quilow",
     );
     // The drawn phone of "Dein digitaler Dorfkalender." names the chosen place
-    // (DEC-0192) and always holds its five fixed slots, real or default.
+    // (DEC-0193) and always holds its five fixed slots, real or default.
     const graphic = page.locator("#dorfkalender [data-dorfkalender-graphic]");
     await expect(graphic).toContainText("Quilow");
     await expect(graphic.locator("[data-slot]")).toHaveCount(5);
@@ -414,7 +414,7 @@ test.describe("TS-WEB-0019 — home", () => {
     await expect(primary).toHaveAttribute("href", `/mitmachen/registrieren?ort=${slug}`);
 
     // No text claims dates in that place: the section that said "Das ist los in"
-    // is gone (DEC-0192).
+    // is gone (DEC-0193).
     await expect(page.getByText(/^Das ist los in/u)).toHaveCount(0);
   });
 
@@ -1099,7 +1099,7 @@ test.describe("TS-WEB-0019 — home", () => {
       await page.setViewportSize(PHONE_WIDE);
       await page.goto(path);
 
-      // DEC-0192: neither the input nor the location control stands on the stage.
+      // DEC-0193: neither the input nor the location control stands on the stage.
       const hero = page.locator("#focus-block");
       await expect(hero.locator("input")).toHaveCount(0);
       await expect(hero.locator("[data-locate-control]")).toHaveCount(0);
@@ -1155,7 +1155,7 @@ test.describe("TS-WEB-0019 — home", () => {
     }
   });
 
-  test("DEC-0192: at 1280 the legend entries stand level with the header and the five rows, 82 px apart", async ({
+  test("DEC-0193: at 1280 the legend entries stand level with the header and the five rows, 82 px apart", async ({
     page,
   }) => {
     await page.setViewportSize(DESKTOP);

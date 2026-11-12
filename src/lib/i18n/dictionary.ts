@@ -373,7 +373,7 @@ export interface Dictionary {
   };
   /**
    * The home page's "Dein digitaler Dorfkalender." module (issue issue 143,
-   * DEC-0192): the explanation, the controls and the drawn phone's fixed
+   * DEC-0193): the explanation, the controls and the drawn phone's fixed
    * fall-back rows. The German text is the owner's, verbatim; the English is a
    * translation that waits for the owner's review.
    */

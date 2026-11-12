@@ -1,6 +1,6 @@
 /**
  * The five fixed places of the drawn phone in "Dein digitaler Dorfkalender." —
- * issue issue 143, DEC-0192.
+ * issue issue 143, DEC-0193.
  *
  * The phone is not a list sorted by date but five **slots**, one per legend
  * entry. Each slot looks for the next real date of its category in the

@@ -35,7 +35,7 @@ export interface LocateControlProps extends Omit<LinkOptions, "hash"> {
    */
   readonly quiet?: boolean;
   /**
-   * In-place mode (issue issue 143, DEC-0192): the resolved slug goes to this
+   * In-place mode (issue issue 143, DEC-0193): the resolved slug goes to this
    * callback and the page does not navigate. Everything else — the click as
    * the only trigger, the refusal, the late-answer rule — is unchanged.
    */

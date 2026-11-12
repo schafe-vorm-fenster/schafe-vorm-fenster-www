@@ -208,7 +208,7 @@
   --font-sans: "Atkinson Hyperlegible Next", "Atkinson Hyperlegible Next Fallback", "Atkinson Hyperlegible", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
   /*
-   * The drawn phone's light-blue metal frame — issue #143, DEC-0192. The blue
+   * The drawn phone's light-blue metal frame — issue #143, DEC-0193. The blue
    * lies deliberately outside the palette: it draws a device, it is no surface
    * of the website, and it is used nowhere else. The five stops are the
    * design's diagonal sheen, light to dark and back. Colour literals may stand
