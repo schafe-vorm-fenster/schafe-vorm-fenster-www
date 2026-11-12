@@ -32,17 +32,15 @@ import type { RouteId } from "../src/lib/routes/routes";
 const CLOSING_THEN_OWN_BLOCKS: ReadonlyMap<RouteId, number> = new Map<RouteId, number>([["takePart", 1]]);
 
 const FLOW_ROUTES: ReadonlySet<RouteId> = new Set<RouteId>(["register", "order"]);
-/** The closing search on `ink` stays last (SRC-0014 §Page Rhythm, DEC-0117). */
-const SEARCH_CLOSING_LAST: ReadonlySet<RouteId> = new Set<RouteId>(["home"]);
-/** `/ueber-uns` has no closing CTA; the band is last in main (DEC-0186). */
-const NO_CLOSING_CTA: ReadonlySet<RouteId> = new Set<RouteId>(["about"]);
+/** `/ueber-uns` (DEC-0186) and `/` (DEC-0195) have no closing CTA; the band is last in main. */
+const NO_CLOSING_CTA: ReadonlySet<RouteId> = new Set<RouteId>(["about", "home"]);
 
 for (const { route, locale } of everyRoute()) {
   if (FLOW_ROUTES.has(route)) continue;
   const path = href(route, locale);
 
   test(`TS-WEB-0006-A6/A7: ${path} — ${
-    SEARCH_CLOSING_LAST.has(route) ? "band, then the closing search, last" : "closing block, then the band, last in main"
+    NO_CLOSING_CTA.has(route) ? "the band, last in main, no closing block" : "closing block, then the band, last in main"
   }`, async ({ page }) => {
     await page.goto(path);
     await expect(page.locator("#context-band")).toHaveCount(1);
@@ -80,8 +78,6 @@ for (const { route, locale } of everyRoute()) {
     const merged = tail!.at(-1) === "context-band" && (await page.locator("#context-band #closing-cta").count()) === 1;
     if (merged || NO_CLOSING_CTA.has(route)) {
       expect(tail!.at(-1)).toBe("context-band");
-    } else if (SEARCH_CLOSING_LAST.has(route)) {
-      expect(last, `the end of main on ${path}`).toEqual(["context-band", "closing-cta"]);
     } else {
       expect(last, `the end of main on ${path}`).toEqual(["closing-cta", "context-band"]);
     }

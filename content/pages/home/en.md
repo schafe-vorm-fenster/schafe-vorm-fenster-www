@@ -387,29 +387,11 @@ of the four is cleared; three are waiting for clearance and run with
 
 <!-- id: home-10-context-band; content_type: context-band; provenance: sourced; derived_from: [ia]; status: draft -->
 
-**Kicker:** Here for something else today?
+**Kicker:** Learn more about our calendar platform
 
 - **Publish dates:** By WhatsApp or from your calendar → `/mitmachen`
 - **Run your own calendar:** Under your own name, on your own website → `/dein-kalender`
 - **Who's behind it:** Who makes the village calendar → `/ueber-uns`
-
-## Closing CTA
-
-<!-- id: home-11-closing-cta; content_type: closing-cta; provenance: sourced; derived_from: [ia]; status: draft -->
-
-**Heading:** See what's on where you live.
-
-**Reassurance text:** Free, no account, permanently.
-
-The reassurance is the short form of the commitment in `price.note` of
-`community-calendar` ("Free for readers without any account … Permanent,
-not an introductory tier"), the same source as `/dein-ort` slot 8 — the
-home page says it in one line because here it stands under a search
-field rather than under a calendar button.
-
-Mirrors block 1's primary CTA in whichever state is current (S1 search,
-S2 open calendar, S3 publish first date) — no new text, same target id
-(TS-WEB-0006 D6).
 
 ## Slot 12 — UI strings no other slot carries
 
