@@ -31,7 +31,7 @@ describe("TS-WEB-0019: / section rhythm", () => {
   it("has no violations in S1/S2 — without the widened-radius section", () => {
     const sections = [
       "photo", // hero
-      "ink", // block 1′ — place-dates, the live data anchor
+      "ink", // block 1′ — dorfkalender, the ink anchor
       "paper", // block 2a scene 1 — whatsapp, and it carries the module
       "lime-100", // block 2a scene 2 — embed
       "violet-500", // block 2a scene 3 — provenance, block 2b

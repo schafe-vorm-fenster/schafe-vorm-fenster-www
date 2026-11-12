@@ -1,5 +1,6 @@
 import { imageCredit } from "@/src/components/photo-surface/image-credit";
 import { Button } from "@/src/components/button/button";
+import { DorfkalenderIntro } from "@/src/components/dorfkalender-intro/dorfkalender-intro";
 import { ExplainModule } from "@/src/components/explain-module/explain-module";
 import { StageChat, StageFlyerPhoto } from "@/src/components/explain-stage/explain-stage";
 import { HeroBlock } from "@/src/components/hero-block/hero-block";
@@ -39,7 +40,7 @@ import { LiveStageCalendar } from "./mitmachen/stage-islands";
 
 import styles from "./_pages.module.css";
 import { buildDay } from "./_build-day";
-import { HomeFocusModules, HomeHeroContent, HomeSubmit, type HomeFocusCopy } from "./_home-focus";
+import { HomeHeroContent, HomeNearby, type HomeFocusCopy } from "./_home-focus";
 import { PlacePhotoLayer } from "./_place-photo";
 import { selectProof } from "./_proof";
 import { PageJsonLd } from "./_structured-data";
@@ -236,20 +237,16 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
    */
   const submitLabel = hero.cta ?? words.search.submit;
 
-  const search = (primary: boolean) => (
+  const search = () => (
     <PlaceSearch
       stage
       typeahead
-      id={primary ? "ort-suche-fokus" : "ort-suche-abschluss"}
+      id="ort-suche-abschluss"
       // Issue #20: the placeholder carries the instruction and the helper
       // line is gone, so the field's name comes from the dictionary ("Dein
       // Ort") — the visible hint goes, the field's label does not.
       locale={locale}
       placeholder={searchPlaceholder}
-      // DEC-0078: the hero instance is the one whose `data-cta="primary"`
-      // moves with the place, so only that instance hands its submit to a
-      // boundary. The closing block's copy keeps the plain default.
-      submit={primary ? <HomeSubmit copy={focusCopy} /> : undefined}
       submitLabel={submitLabel}
       to="place"
       /*
@@ -268,11 +265,8 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
   const focusCopy: HomeFocusCopy = {
     locale,
     s1Headline: hero.fields["Headline"] ?? "",
-    submitLabel,
     datesHeadline: dates.fields["Headline"] ?? "",
     datesCta: dates.cta ?? "",
-    handoffQuestion: fieldAt(dates.blocks, 2) ?? "",
-    handoffCta: fieldAt(dates.blocks, 3) ?? "",
     nearbyHeading: fieldAt(nearby.blocks, 0) ?? "",
     invitation: fieldAt(nearby.blocks, 1) ?? "",
     publishCta: ctaLabelOnly(nearby.cta ?? fieldAt(nearby.blocks, 2) ?? "") ?? "",
@@ -285,7 +279,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
     <PageFrame
       closing={{
         variant: "module",
-        node: search(false),
+        node: search(),
         heading: fieldAt(closingCta.blocks, 0),
         reassurance: fieldAt(closingCta.blocks, 1),
         /* The one further `ink` section a page may carry, and it is the
@@ -318,11 +312,16 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
         photoLayer={<PlacePhotoLayer locale={locale} ownPhotoPlace={heroImage?.place} />}
         credit={imageCredit(heroImage, locale)}
           placeholderId={heroImage?.placeholderId}
-        search={search(true)}
         src={heroImage?.src}
         wideSrc={heroImage?.wideSrc}
       />
-      <HomeFocusModules copy={focusCopy} search={search(false)} />
+      {/* Block 1' - "Dein digitaler Dorfkalender." (issue 143, DEC-0194): the one
+          `ink` section of the page rhythm, in every state; S3's widened radius
+          follows it. */}
+      <MotionReveal>
+        <DorfkalenderIntro locale={locale} />
+      </MotionReveal>
+      <HomeNearby copy={focusCopy} />
       {/* Block 2a — three scenes, one mechanism each (TS-WEB-0006 D7), all
           three declaring `data-block="scene"` (TS-WEB-0019-A6). The record
           below is written in the `direct` order of TS-WEB-0019 D3a, and

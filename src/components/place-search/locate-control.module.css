@@ -73,3 +73,34 @@
 .dark .button:hover {
   color: var(--color-lime-100);
 }
+
+/* The icon-only form (issue issue 143): the 44 px round button that stands inside
+   the field's pill. The pill owns the focus ring of the compound control; the
+   button keeps its own as well, so a keyboard user sees which part is active. */
+.iconButton {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-pill);
+  color: var(--color-neutral-ink);
+  cursor: pointer;
+  display: inline-flex;
+  flex: none;
+  height: var(--height-control);
+  justify-content: center;
+  padding: 0;
+  width: var(--height-control);
+}
+
+.iconButton:hover {
+  background: var(--color-neutral-surface);
+}
+
+.iconButton:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.iconButton:disabled {
+  cursor: default;
+}

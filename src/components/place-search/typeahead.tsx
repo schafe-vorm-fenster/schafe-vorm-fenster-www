@@ -36,6 +36,14 @@ export interface TypeaheadProps extends Omit<LinkOptions, "hash"> {
   /** The query parameter the form uses for the place (`ort`). */
   readonly name?: string;
   readonly locale?: Locale;
+  /**
+   * Where a pick stays on the page instead of navigating — the home
+   * Dorfkalender section loads the place into its phone (issue 143, DEC-0194).
+   * The option keeps its real `href`, so a pick without JavaScript still lands
+   * on the place page; with it, the slug goes here and the field takes the
+   * place's name.
+   */
+  readonly onPick?: (slug: string) => void;
 }
 
 /** Below this nothing is requested: one letter matches hundreds of villages. */
@@ -78,7 +86,7 @@ export const DEBOUNCE_MS = 180;
  * in hand belongs to the value in the field. That is also what makes a stale
  * answer to an earlier keystroke unable to flash into the list.
  */
-export function PlaceTypeahead({ inputId, to, query, name = "ort", locale = "de" }: TypeaheadProps) {
+export function PlaceTypeahead({ inputId, to, query, name = "ort", locale = "de", onPick }: TypeaheadProps) {
   const listId = useId();
   const words = dictionary(locale).search;
 
@@ -260,6 +268,21 @@ export function PlaceTypeahead({ inputId, to, query, name = "ort", locale = "de"
                   data-typeahead-option
                   href={linkHref(to, { locale, query: { ...query, [name]: item.slug } })}
                   id={optionId(index)}
+                  onClick={
+                    onPick
+                      ? (event) => {
+                          // A modified click (new tab, new window) keeps the link's own meaning.
+                          if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+                          event.preventDefault();
+                          const input = inputRef.current;
+                          if (input) input.value = item.name;
+                          setTyped(item.name);
+                          setDismissed(true);
+                          setActive(-1);
+                          onPick(item.slug);
+                        }
+                      : undefined
+                  }
                   role="option"
                 >
                   <span className={styles.name}>
