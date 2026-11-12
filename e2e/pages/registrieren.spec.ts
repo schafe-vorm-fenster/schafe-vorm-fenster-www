@@ -79,11 +79,15 @@ test.describe("TS-WEB-0023 D10: the registration route embeds the live site's Go
     });
   }
 
-  test("issue 169: on a wide viewport the frame is the container's width, not Google's card width", async ({ page }) => {
+  test("issue 169: on a wide viewport the frame is 44rem wide (Google's 640 px card plus its margin), flush left with the heading", async ({
+    page,
+  }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto(href("register", "de"));
     const box = await page.locator(FRAME).boundingBox();
-    expect(box?.width ?? 0).toBeGreaterThan(770);
+    expect(box?.width ?? 0).toBe(704);
+    const heading = await page.locator("#register-form h1").boundingBox();
+    expect(box?.x ?? -1).toBeCloseTo(heading?.x ?? 0, 0);
   });
 
   for (const viewport of [
