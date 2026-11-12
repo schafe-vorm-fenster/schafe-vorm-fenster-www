@@ -87,6 +87,12 @@ The rules, as built:
 4. Result in start order; `window` is `week` while every row starts within 7
    days, else `upcoming`.
 
+## Amended by DEC-0210 (2026-11-12)
+
+The order of preference in "The rules, as built" 1 is now the shared one: a
+one-off first, then the least-represented category, then culture, then the
+earliest start. The organiser and recurring limits stay.
+
 ## Consequences
 
 - TS-WEB-0008 D3 step 2 and A18 are amended; A18 now counts the fortnight.

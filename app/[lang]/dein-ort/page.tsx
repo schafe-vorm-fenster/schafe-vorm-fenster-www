@@ -301,14 +301,13 @@ export default async function PlacePage({ params }: { params: Promise<{ lang: st
           control is "Weiter um …" (DEC-0170, issue #85). */}
       <MotionReveal>
         <StoryStage
-          calendarLabel={fieldAt(stage.blocks, 5) ?? ""}
-          headline={fieldAt(stage.blocks, 1) ?? ""}
+          calendarLabel={fieldAt(stage.blocks, 4) ?? ""}
+          headline={fieldAt(stage.blocks, 0) ?? ""}
           id="story-stage"
-          kicker={fieldAt(stage.blocks, 0) ?? ""}
-          lead={fieldAt(stage.blocks, 2)}
-          nextTemplate={fieldAt(stage.blocks, 3) ?? "{time}"}
-          pickerLabel={fieldAt(stage.blocks, 6) ?? ""}
-          restartLabel={fieldAt(stage.blocks, 4) ?? ""}
+          lead={fieldAt(stage.blocks, 1)}
+          nextTemplate={fieldAt(stage.blocks, 2) ?? "{time}"}
+          pickerLabel={fieldAt(stage.blocks, 5) ?? ""}
+          restartLabel={fieldAt(stage.blocks, 3) ?? ""}
           stories={stageStories}
         />
       </MotionReveal>

@@ -588,6 +588,27 @@ of a quote card; this rule asks it of every source line.
 - Use: *"Zukunftswege Ost-Vorpommern: Der Vollblutdigitalisierer von
   Schlatkow"*, linked, with its date — or no source line at all.
 
+### CG-048 — The solution first, then the problem, in every pair
+
+CG-042 fixes the order of sections on a page; this rule fixes it inside a
+section and across its head. Where a section sets a problem beside its
+solution — the comparison module of `/dein-kalender` and `/mitmachen`
+(`DEC-0203`) — the page has said the solution before the module opens (the hero,
+the paths), and the module answers it pair by pair: each problem stands
+**directly beside** its solution, never in a block of its own above or below
+the pairs (issues #44, #51).
+
+- The head follows CG-005 and DEC-0206: the title says what works; a problem
+  framing may be the kicker, and then it is the only place the problem is named
+  outside the pairs. No problem line stands between the head and the pairs.
+- A problem is never explained without its solution in view: no section whose
+  only content is what goes wrong today (CG-042).
+- Avoid: a problem section above the first mention of what the offering does;
+  a transition line that announces the problem ("Bleibt die Frage, …") before
+  the answer.
+- Use: solution in the hero, then the pairs *Heute* beside *Mit eurem
+  Kalender*.
+
 ---
 
 ## 8. Product naming
