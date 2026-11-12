@@ -23,13 +23,16 @@ belong to the owner.
    (`git worktree add ../schafe-vorm-fenster-www-<slug> -b <branch> origin/next-2026`;
    agent worktrees live under `.claude/worktrees/`, which is gitignored). The
    main checkout keeps whatever someone else has open in it.
-2. **Green locally first.** `pnpm check` passes (the pre-commit hook runs it),
+2. **Spec check first.** Decide whether the issue stays within the spec or
+   changes it; a spec change travels in the same PR as the code
+   (`AGENTS.md` → Working an Issue).
+3. **Green locally first.** `pnpm check` passes (the pre-commit hook runs it),
    and the e2e specs your change touches pass locally before you push.
-3. **The PR** targets `next-2026`, carries `Closes #<issue>`, and says in plain
-   language what changed and why, whether it touches content, structure,
-   design or tooling, what you ran to validate it, and what follow-up stays
-   open.
-4. **Merge** by squash, after bringing the branch up to date with `next-2026`
+4. **The PR** targets `next-2026`, carries `Closes #<issue>`, and says in plain
+   language what changed and why, which spec artefacts it changed (or
+   "within the spec"), whether it touches content, structure, design or
+   tooling, what you ran to validate it, and what follow-up stays open.
+5. **Merge** by squash, after bringing the branch up to date with `next-2026`
    and seeing CI green; delete the branch and remove its worktree afterwards.
    Several PRs merge in the order of their issues — the change queue in
    `.agents/roles/orchestrator.md` runs exactly this loop.

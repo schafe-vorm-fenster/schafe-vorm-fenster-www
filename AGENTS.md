@@ -11,10 +11,15 @@ The relaunch runs in three phases:
 1. **Concept — done.** Communication principles, relevance model, and
    information architecture live in `go-to-market-os`; the clickable
    prototype is in `concept/v1.0/`.
-2. **Specification — current phase.** Specs are derived from the concept
-   documents, the IA, and the wireframes, and written to `specs/`.
-3. **Content — after the specs.** Page copy is produced once the specs
-   exist.
+2. **Specification and first build — done.** The specs in `specs/` were
+   derived from the concept documents, the IA and the wireframes, and the
+   site was generated from them; the prototype milestone was accepted
+   (`reports/acceptance/final.md`).
+3. **Review loop — current phase.** Owner reviews and QA find bugs, defects
+   and room for improvement, and each becomes an issue. The specs stay the
+   contract the whole time: an issue that changes what a spec fixes —
+   behaviour, structure, a requirement, a decision — changes the spec in the
+   same PR as the code (**Working an Issue**).
 
 `legacy-content/` and `content/` predate the relaunch: an archive to look a
 phrase, a legal text or a support article up in, never a specification or a
@@ -104,9 +109,33 @@ rules and conventions. These guardrails bind every change under `specs/`:
 
 1. Build forward from the concept documents and the specs, not from what is already in this repository.
 2. A difference between the archive (`legacy-content/`, `content/`) and the concept documents is expected; leave it unreported. The archive folders stay where they are.
-3. While the specification phase runs, page copy is a marked placeholder.
+3. Page copy comes from the hub sources and the copy guide (`concept/website-copy-guide.md`); a fact no source carries stays a marked placeholder.
 4. A new technical foundation updates `README.md` and `CONTRIBUTING.md` in the same change.
 5. Every change lives on its own branch, in its own worktree, and reaches `next-2026` through a PR (`CONTRIBUTING.md` → Branches and Pull Requests). `main` and production belong to the owner.
+
+## Working an Issue
+
+Every issue starts with a **spec check**: find the tactical spec
+(`specs/tactical/`) and the requirements the change touches, and sort the
+issue into one of two kinds. The test: would someone who reads only the spec
+be surprised by the result?
+
+- **Within the spec** — the code misses what the spec fixes (a bug), or the
+  change stays inside what the spec leaves free: spacing within the tokens,
+  wording the copy guide already covers, polish. The PR holds code and tests.
+- **Changes the spec** — the change alters what a spec fixes, or adds
+  something no spec covers. The PR carries the chain top-down, in one go:
+  1. the requirement(s), and for a ruling — an owner review point, a
+     trade-off — a decision record `DEC-####` that cites the issue;
+  2. the tactical spec: the determination and its acceptance criteria. A new
+     `TS-WEB-####` only for a module no tactical spec covers;
+  3. the code, with tests that name the new criteria in their titles.
+
+**One issue, one PR, one merge**: requirement, decision, tactical spec and
+code reach `next-2026` together, never as separate PRs in sequence. A new
+acceptance criterion lands in the same commit as its test
+(`check:coverage`), so the spec change and the code that satisfies it are
+usually one commit.
 
 ## Change Queue
 
@@ -135,7 +164,7 @@ well under 1 % of the cost.
 
 ## Typical Tasks
 
-- implement an issue against its tactical spec, on a branch, as a PR to `next-2026`
+- work an issue: spec check, then spec and code in one PR to `next-2026`
 - work a list of fixes and change requests as a change queue
 - turn an owner review into issues (`plan/process.md` → Review intake)
 - write or refine a specification in `specs/`

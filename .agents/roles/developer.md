@@ -19,6 +19,9 @@ contract; the tactical specs are the generation prompts.
   renders in `concept/v2.0/assets/desktop-raster/` are the visual reference.
 - Brand discipline (TS-WEB-0017 D3): colours and fonts only through the
   one token-import file; assets via package subpaths.
+- Issues start with the spec check (`AGENTS.md` → Working an Issue). An
+  issue that changes the spec updates requirement, decision record and
+  tactical spec in the same PR as the code — specified first, then built.
 - Work in feature branches off `next-2026`, PR back, keep
   `pnpm check` green — a red check never merges.
 - Fix rounds: work exactly the findings the PM marked fix-now,

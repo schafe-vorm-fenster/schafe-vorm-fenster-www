@@ -15,9 +15,9 @@ explicitly, chosen by what the task demands:
 
 | Model | Task |
 | --- | --- |
-| `haiku` | wording, labels, links, alt texts, typos in existing files — no layout, no logic; chaos personas |
-| `sonnet` | a fix or adjustment inside one component or page: CSS, a prop, a test, a small behaviour; QA, review, UAT, customer acceptance, content |
-| `opus` | a module that combines design, copy and behaviour, spans several components, or needs a new tactical spec or decision record; project manager |
+| `haiku` | within the spec: wording, labels, links, alt texts, typos in existing files — no layout, no logic; chaos personas |
+| `sonnet` | a fix or adjustment inside one component or page, including one that adjusts that page's tactical spec; QA, review, UAT, customer acceptance, content |
+| `opus` | a module that combines design, copy and behaviour, spans several components, or changes a requirement or needs a decision record or a new tactical spec; project manager |
 
 An agent that reports it is out of its depth is dispatched again one level
 up, with its findings in the brief.
@@ -32,8 +32,11 @@ up, with its findings in the brief.
   the same reason.
 - **The queue order is the merge order**: the order the user gave, otherwise
   ascending issue number.
-- **Map each item to its files** — from the issue, or, where unclear, through
-  one `sonnet` Explore agent for the whole queue.
+- **Map each item to its files and its kind** — within the spec or changes
+  the spec (`AGENTS.md` → Working an Issue), with the tactical spec it
+  touches — from the issue, or, where unclear, through one `sonnet` Explore
+  agent for the whole queue. The kind sets the model; the agent confirms or
+  corrects it in its own spec check.
 - **Reserve numbers.** An item that needs a new `DEC-####` or `Q-####` gets
   its number from the orchestrator in the brief, in queue order.
 - Show the user the queue once — item, issue, model, lane — and start.
@@ -55,15 +58,18 @@ with `subagent_type: developer` (code) or `content-translation` (copy),
 
 The brief, at most 30 lines:
 
-- goal and issue number; the files or area; the tactical spec it implements
+- goal and issue number; the files or area; the tactical spec it touches and
+  the kind from intake
 - branch `fix/<issue>-<slug>` or `feat/<issue>-<slug>` off `origin/next-2026`
 - the mandatory skills for the step from the skill matrix in `plan/process.md`
 - reserved `DEC`/`Q` numbers, if any
-- **done when**: `pnpm check` is green, the e2e specs the change touches pass
-  locally, and a PR against `next-2026` is open with `Closes #<issue>` —
-  left unmerged
-- **return**, at most 15 lines: PR number, branch, worktree path, files
-  changed, checks run with their result, open points
+- **done when**: the spec check is done and, for a spec change, requirement,
+  decision record and tactical spec are updated in the same branch;
+  `pnpm check` is green; the e2e specs the change touches pass locally; and
+  a PR against `next-2026` is open with `Closes #<issue>` — left unmerged
+- **return**, at most 15 lines: PR number, branch, worktree path, kind and
+  spec artefacts changed, files changed, checks run with their result, open
+  points
 
 ### 4. Merge Loop
 
