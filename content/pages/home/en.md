@@ -345,20 +345,20 @@ DEC-0082 §4).
 <!-- source_note: the stage-0 rule "widest spread, most recent first" comes from gtm:concept/website-relevance-model.concept.md (context matrix, row "Direct visit, unknown"); the proof rule from gtm:concept/website-communication-principles.concept.md §4. -->
 <!-- id: home-8-proof-stream; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community", "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow", "@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin", "@schafe-vorm-fenster/media-echo@0.3.3#2026-08-abend-der-engagierten-lehre", "@schafe-vorm-fenster/media-echo@0.3.3#2026-05-noerd-2026-rostock", "@schafe-vorm-fenster/media-echo@0.3.3#2024-09-kulturlandbuero-volkshochschule"]; status: draft -->
 
-**Kicker above the stream:** Awards, press, and places already using the village calendar
-
 Selection and order of the four elements stay the relevance engine's job
-at runtime (TS-WEB-0005 D5, DEC-0048). This slot supplies the frame sentence and
-the candidate set it draws from — pool:
+at runtime (TS-WEB-0005 D5, DEC-0048). This slot supplies the candidate set
+it draws from — pool:
 `@schafe-vorm-fenster/proof@0.3.5` and
-`@schafe-vorm-fenster/media-echo@0.3.3`.
+`@schafe-vorm-fenster/media-echo@0.3.3`. The section's kicker and heading
+are not here: every proof section carries the same head from
+`dictionary.ts` (`proofSection`, DEC-0209).
 
 **Candidates (stage 0: widest spread, most recent first):**
 
-1. 17 places in and around Lehre, one calendar under its own name: LeLender. — Stiftung Lebendiges Lehre, Lehre (Lower Saxony)
-2. Won the NØRD Award 2026, Smart Community category, under Bitkom patronage. — NØRD digital convention, Rostock
-3. The adult education centres bring their course programme out to the villages. — Adult education centres in Vorpommern-Greifswald, Pasewalk
-4. "The project can make a valuable contribution … to visibility in rural areas." — Kulturlandbüro Uecker-Randow, Schloss Bröllin
+1. The foundation runs the village calendar for 17 places under its own name: LeLender. — Stiftung Lebendiges Lehre, Lehre (Lower Saxony)
+2. Schafe vorm Fenster won the NØRD Award 2026 in the Smart Community category, under the patronage of Bitkom e.V. — NØRD digital convention, Rostock
+3. The adult education centre publishes its complete course programme in the village calendar. — Adult education centres in Vorpommern-Greifswald, Pasewalk
+4. "The project can make a valuable contribution to economic recovery and to visibility in rural areas." — Kulturlandbüro Uecker-Randow, Schloss Bröllin
 
 <!-- note: authoring note from here on, not copy — the passage quotes forbidden terms in order to forbid them (DEC-0142 §1) -->
 
@@ -367,16 +367,26 @@ stand: the 17 places, the name "LeLender" and the foundation's ownership
 from `lehre-lelender`, the win and the Bitkom patronage from
 `noerd-award-2026-smart-community`, the course programme from
 `volkshochschule-uecker-randow`, the Kulturlandbüro's quotation from
-`kulturlandbuero-broellin`. The quotation keeps the modality the record keeps —
-"can make", shortened by "to economic recovery and", wording from §Evidence and
+`kulturlandbuero-broellin`. Since #160 (DEC-0209) every line is a whole
+sentence (CG-027) and, per record, the same line as on the other pages. The
+NØRD line is neutral, without the "proud" version CG-027 shows; the category's
+patron is from the record's body ("Schirmherr der Kategorie war der Bitkom
+e.V."), and the win came from a public vote, so no "jury". The adult education
+line follows the record (the course programme at the Pasewalk site); the
+benefit "courses in the villages too" is struck because no record carries it.
+The name "Adult education centres in Vorpommern-Greifswald" is the partner
+record's alias. Deviation: `@schafe-vorm-fenster/proof/lehre-lelender.proof.md#L8`
+says "Eine Gemeinde betreibt …"; the line names the foundation (review of
+2026-09-22, line 103). DEM-0080. The quotation keeps the modality the record
+keeps — "can make", now in full without an ellipsis, wording from §Evidence and
 the same sentence the reserved place on `/ueber-uns` carries
 (`content/pages/ueber-uns/en.md`). It is not a claim of ours: the record's
 assertive `claim:` is our own summary, not the Kulturlandbüro's sentence, and
 "valuable" comes from the quotation alone (the record's wording boundary). Four corrections from the 2026-09-22 review are
 in there: the foundation runs the LeLender, not the municipality; the NØRD
 Award was won, not merely entered; the adult education centres are named
-after the district and the benefit (courses in the villages too) belongs in
-the sentence; the Nordkurier nomination entry goes, because the award says
+after the district (the benefit, courses in the villages too, is struck again
+with DEC-0209, see above); the Nordkurier nomination entry goes, because the award says
 the same thing more strongly. The internal meta line "Press and appearance
 record 2018 to 2026" is struck with nothing in its place (CG-035). The
 fifth element ("Running since 2018", `in-operation-since-2018`) was dropped

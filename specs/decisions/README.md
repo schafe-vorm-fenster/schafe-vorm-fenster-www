@@ -238,6 +238,8 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0205 — The price section on /dein-kalender is three columns with three equal figures and three equal buttons](DEC-0205--the-price-section-is-three-columns-with-three-figures-and-three-buttons.md)
 - [DEC-0206 — At most three text levels before a section's content, the kicker is optional, and the levels repeat nothing](DEC-0206--at-most-three-text-levels-before-a-sections-content-and-the-kicker-is-optional.md)
 - [DEC-0208 — The context band is headed "Erfahre mehr über unsere Kalenderplattform" on every page](DEC-0208--the-context-band-is-headed-learn-more-on-every-page.md)
+- [DEC-0209 — Every proof section carries one head: "Was andere über uns sagen" over "Stimmen aus der Praxis"](DEC-0209--every-proof-section-carries-one-head.md)
+- [DEC-0218 — eTracker counts every page and every CTA click, switched on by one environment variable](DEC-0218--etracker-counts-every-page-and-every-cta-click-from-one-environment-variable.md)
 - [DEC-0210 — Every date selection prefers one-off dates, mixes the themes and takes culture on a tie](DEC-0210--every-date-selection-prefers-one-offs-mixes-themes-and-takes-culture-on-a-tie.md)
 - [DEC-0213 — The section heads of /dein-kalender follow the three-level rule, and the copy guide gets CG-048](DEC-0213--dein-kalender-section-heads-follow-the-three-level-rule.md)
 - [DEC-0202 — The image budget is 200 KB per delivered size, and a photograph is delivered responsively](DEC-0202--the-image-budget-is-200-kb-per-delivered-size.md)

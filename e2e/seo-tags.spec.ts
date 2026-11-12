@@ -1,13 +1,13 @@
 import { expect, test } from "@playwright/test";
 
 import { LOCALES } from "../src/lib/i18n/locales";
-import { alternateUrls, canonicalUrl, everyRoute, href } from "../src/lib/routes/routes";
+import { alternateUrls, canonicalUrl, everyRoute, href, SITE_ORIGIN } from "../src/lib/routes/routes";
 import { shareImageUrl } from "../src/lib/seo/share-image";
 
 /**
  * The required head tags of every page, in both languages — TS-WEB-0011 D5/D6/D10,
  * issue 195: TS-WEB-0011-A15 (head tags), A9 (the image), A16 (icons and
- * manifest). The requirements behind them are listed in TS-WEB-0011 D11.
+ * manifest), A17 (the JSON-LD `Organization`). The requirements behind them are listed in TS-WEB-0011 D11.
  *
  * `metadata-compliance.spec.ts` checks that title and description carry no
  * internal identifier; this file checks that the whole social and canonical
@@ -77,6 +77,32 @@ for (const { route, locale, path } of ROUTES) {
     expect(await meta('meta[name="twitter:image"]')).toBe(image);
     expect(await meta('meta[name="twitter:image:alt"]')).toBeTruthy();
 
+  });
+
+  test(`TS-WEB-0011-A17: ${path} (${route}/${locale}) carries one JSON-LD Organization with name, URL and logo`, async ({
+    page,
+    request,
+  }) => {
+    await page.goto(path);
+    const scripts = page.locator('script[type="application/ld+json"]');
+    await expect(scripts).toHaveCount(1);
+    const graph = JSON.parse((await scripts.textContent()) ?? "{}");
+    const organizations = (graph["@graph"] as Record<string, unknown>[]).filter(
+      (node) => node["@type"] === "Organization",
+    );
+    expect(organizations).toHaveLength(1);
+    const organization = organizations[0] as {
+      name?: string;
+      url?: string;
+      logo?: { url?: string };
+    };
+    expect(organization.name, "name").toBeTruthy();
+    expect(same(organization.url ?? null), "url").toBe(SITE_ORIGIN);
+    const logo = organization.logo?.url;
+    expect(logo, "logo url").toBeTruthy();
+    const response = await request.get(new URL(logo!).pathname);
+    expect(response.status()).toBe(200);
+    expect(response.headers()["content-type"]).toContain("image/png");
   });
 
   test(`TS-WEB-0011-A9: the share image of ${path} (${route}/${locale}) is a 1200x630 PNG within budget`, async ({

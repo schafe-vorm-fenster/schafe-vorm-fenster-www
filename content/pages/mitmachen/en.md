@@ -409,9 +409,9 @@ weakens the claim, but is never replaced by invented text.
 
 **Candidates (three, all publishing for themselves):**
 
-1. The foundation runs the calendar for 17 places as LeLender. — Stiftung Lebendiges Lehre, Lehre (Lower Saxony)
-2. The adult education centres publish their courses in the calendar. — Volkshochschulen in Vorpommern-Greifswald, Pasewalk; just as relevant in the villages as in town
-3. "The network's newsletter collects dates through the village calendar." — Zukunftswege Ost-Vorpommern, Ost-Vorpommern
+1. The foundation runs the village calendar for 17 places under its own name: LeLender. — Stiftung Lebendiges Lehre, Lehre (Lower Saxony)
+2. The adult education centre publishes its complete course programme in the village calendar. — Volkshochschulen in Vorpommern-Greifswald, Pasewalk
+3. The network collects the dates for its newsletter through the village calendar. — Zukunftswege Ost-Vorpommern, RAA Mecklenburg-Vorpommern
 
 Three real organizations publishing for themselves, which is exactly this
 page's job. Names, places, and figures are taken from the records as they
@@ -422,35 +422,28 @@ Uecker-Randow, Maria Elsner, September 2024), the newsletter dates from
 `zukunftswege-ost-newsletter` (documented in the Zukunftswege
 Ost-Vorpommern portrait, January 2026).
 
-Two corrections from the review of 2026-09-22 sit in cards 1 and 2, and
-both stand above the wording of the records (DEC-0104, DEC-0143 §5):
+Since #160 (DEC-0209) every line is a whole sentence (CG-027) and, per
+record, the same line as on the other pages; the section's kicker and
+heading come from `dictionary.ts` (`proofSection`), not from this slot.
 
 - Card 1 names the **foundation**, not the municipality: "Die 'Stiftung
   Lebendiges Lehre' verantwortet das Lebender Kalenderprojekt. Nicht die
-  Gemeinde … Es sind aber 17 Ort in und um die Gemeinde Lehre" (line
-  103). The quotation marks are gone: the line is a proof statement, not
-  a quote, and `lehre-lelender` carries no sentence in that wording.
-- Card 2 is called **"Volkshochschulen in Vorpommern-Greifswald"** and
-  carries the benefit the review names with it: "Sie wollen ihre
-  Kursangebote nicht nur in den Städten sondern auch in den Dörfern
-  kommunizieren und da sind die Angebote ja genauso relevant" (line
-  109). **Both halves are authored, neither is quoted:** the first
-  summarises the record's `evidence:` (the Pasewalk course programme
-  appearing in the village calendars), the second restates the review's
-  benefit. The record's `claim:` reads "Eine Bildungsinstitution nutzt den Dorfkalender
-  produktiv als Verbreitungskanal für ihr komplettes Kursprogramm." and
-  shares no sentence with the card; the record carries neither the
-  county-wide name nor the benefit either. Card 1 is authored for the same
-  reason and is not quoted — it stands on `lehre-lelender`'s `evidence:`
-  and on line 103. Neither line is marked `demo` (both institutions and
-  both records are real, and a `demo` flag would claim the opposite), so
-  both go to the owner as `state/open.md` row 281, in the shape row 279
-  takes for the heading. The same correction stands on `/` in a shorter form
-  (`content/pages/home/en.md`, candidate 3), so that no two pages carry
-  the same sentence (DEC-0143 §6). The other half of the benefit —
-  "offer more courses in the villages on the ground" — is on no card: that
-  is an intention of the adult education centres, not proof about the
-  service (`state/open.md`).
+  Gemeinde … Es sind aber 17 Ort in und um die Gemeinde Lehre" (review of
+  2026-09-22, line 103). Deviation:
+  `@schafe-vorm-fenster/proof/lehre-lelender.proof.md#L8` names a
+  municipality as the operator. DEM-0080.
+- Card 2 follows the record `volkshochschule-uecker-randow`: the course
+  programme at the Pasewalk site appears in the village calendar (`claim:`
+  and `evidence:`). The addition "just as relevant in the villages as in
+  town" is struck because no record carries it. The name "Volkshochschulen
+  in Vorpommern-Greifswald" is the partner record's
+  (`@schafe-vorm-fenster/partners#volkshochschule-vorpommern-greifswald`).
+- Card 3 carries no quotation marks: `zukunftswege-ost-newsletter` holds no
+  quotation, only the finding that the newsletter collects its dates through
+  the village calendar (`evidence:`). The attribution names the carrier from
+  `source:` ("Zukunftswege Ost-Vorpommern / RAA MV").
+
+No line is marked `demo`: all three institutions and records are real.
 
 ## Slot 8 — Closing CTA with permanence reassurance
 

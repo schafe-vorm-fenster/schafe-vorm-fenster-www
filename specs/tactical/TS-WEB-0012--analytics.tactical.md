@@ -4,9 +4,9 @@ id: TS-WEB-0012
 kind: system
 status: DRAFT
 version: 0.1.0
-implements: [NFR-WEB-0061, NFR-WEB-0062, CON-WEB-0028, CON-WEB-0029, FUN-WEB-0124, NFR-WEB-0022, CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064]
+implements: [NFR-WEB-0061, NFR-WEB-0062, CON-WEB-0028, CON-WEB-0029, FUN-WEB-0124, NFR-WEB-0022, CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064, FUN-WEB-0211, FUN-WEB-0212]
 sources: [SRC-0006, SRC-0010, SRC-0003]
-decisions: [DEC-0004, DEC-0013, DEC-0016, DEC-0017, DEC-0028, DEC-0108]
+decisions: [DEC-0004, DEC-0013, DEC-0016, DEC-0017, DEC-0028, DEC-0108, DEC-0218]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -67,16 +67,37 @@ The legacy configuration is extracted from SRC-0010
 | --- | --- | --- |
 | script id | `_etLoader` | vendor contract |
 | `data-block-cookies` | `true` | this is what makes D1 true at the vendor |
-| `data-secure-code` | the legacy account code, from SRC-0010, supplied as a build-time env var — never inlined in a committed file | one code = one property (D3) |
-| `data-page-changed-detection` | `url` | App Router client navigation must produce page views without a full load |
+| `data-secure-code` | the legacy account code, from SRC-0010, supplied as the build-time env var `NEXT_PUBLIC_ETRACKER_SECURE_CODE` — never inlined in a committed file (DEC-0218 §1) | one code = one property (D3) |
+| `data-page-changed-detection` | `off` since DEC-0218 §2 (legacy: `url`) — client navigation is counted by the router hook below, under the stable names of the page-name table | App Router client navigation must produce page views without a full load, once each |
 | `src` | `https://code.etracker.com/code/e.js` | scheme pinned (legacy used protocol-relative); host is the CSP entry (CON-WEB-0030) |
 | loading | `async`, deferred, outside the LCP critical path | TS-WEB-0003 D4 |
+
+**Mounting (DEC-0218 §1).** The loader is mounted by one client component in
+`app/[lang]/layout.tsx` and in the per-language 404's layout, and only while
+`NEXT_PUBLIC_ETRACKER_SECURE_CODE` is set. Unset, no loader renders, no
+request leaves, and the mock tracker answers every call. `/start` mounts
+nothing (`TS-WEB-0016 D15`).
+
+**Page views and names (DEC-0218 §2).** The same component reads the route
+off the router tree and calls `trackPageView` once per route change. The
+first view of a document only names the page (`et_pagename`, `et_areas`
+globals), which the loader counts on arrival; every later view is a virtual
+page view, `et_eC_Wrapper({ et_et, et_pagename, et_areas })`.
+
+| Page | `et_pagename` | `et_areas` |
+| --- | --- | --- |
+| a route | `<lang>/<route trail>`, e.g. `de/calendar/order` | `<lang>/<top-level route>`, e.g. `de/calendar` |
+| a 404 | `<lang>/not-found` | `<lang>/not-found` |
+
+Route ids rather than paths: a path segment can be renamed, the route id
+stays, and both languages of one page sit side by side.
 
 **Replaceability is a build rule, not an intention.** No page, component,
 or content file calls the eTracker API directly. Everything goes through
 one internal module (working name `lib/analytics`) exposing exactly:
-`trackPageView()` (only if `data-page-changed-detection` proves
-insufficient) and `trackConversion(goalId, stage, attributes)`. Swapping
+`trackPageView()` (since DEC-0218 the router hook above),
+`trackConversion(goalId, stage, attributes)` and, since DEC-0218,
+`trackCtaClick(event)` (D4, click layer). Swapping
 the vendor replaces that module and nothing else; the D4 registry, the
 event IDs, and every call site survive the swap.
 
@@ -131,7 +152,45 @@ Rules:
 4. Mapping `stage` and the goal ID onto eTracker's concrete event fields
    (event name / category / object / action, and their character limits)
    is verified in the account before launch — the *contract* above binds,
-   the field mapping is [PROPOSED].
+   the field mapping is [PROPOSED]. Since DEC-0218 §5 the adapter sends
+   `_etracker.sendEvent(new et_UserDefinedEvent(object, category, action,
+   type))` with category = goal ID, action = `stage`, object = the
+   attributes (`channel=whatsapp;route=calendar`) or the goal ID, type =
+   the page name. How the account reports these fields stays Q-0040.
+
+**Click layer (DEC-0218 §3–§4).** Beside the one conversion event per
+completed trigger, every CTA click reports one event. A CTA is any element
+carrying a `data-cta` rank (TS-WEB-0006 D3) and every link that leaves the
+site. One delegated listener in the analytics module reads the clicked
+element; `src/lib/analytics/cta-event.ts` names the event. No component
+carries an event of its own.
+
+| Field | Value |
+| --- | --- |
+| category | the hub conversion goal the target serves (table below), `navigation` for a target that serves none, `outbound` for an unrecognised external target |
+| action | `click` |
+| object | the CTA id `<target>.<rank>`: target = route id, a fixed external key, `submit:<route>` or `action:<name>`; rank = the `data-cta` value, `link` for an unranked outbound link |
+| type | the page name of the page-name table (D2) |
+
+| Target | Key | Category |
+| --- | --- | --- |
+| `/`, `/dein-ort` | `home`, `place` | `save-calendar-to-homescreen` |
+| `/dein-ort/starten`, `/mitmachen`, `/mitmachen/registrieren`, `/start` | `placeStart`, `takePart`, `register`, `start` | `register-as-publisher` |
+| `/dein-kalender`, `/dein-kalender/bestellen` | `calendar`, `order` | `buy-calendar-licence` |
+| `/deine-region`, `/deine-region/angebot` | `region`, `regionQuote` | `request-licence-quote` |
+| `/ueber-uns`, `/ueber-uns/archiv`, `/rechtliches` | `about`, `archive`, `legal` | `navigation` |
+| booking link (contact row `appointment`) | `appointment` | `request-product-briefing` |
+| WhatsApp, phone, mail (contact rows) | `whatsapp`, `phone`, `mail` | `make-contact` |
+| Google Form | `registration-form` | `register-as-publisher` |
+| a village calendar (`<slug>.<geonameId>`) | `village-calendar` | `save-calendar-to-homescreen` |
+| any other external link | `external:<host>` | `outbound` |
+| a ranked button whose form goes to a route | `submit:<route>` | that route's category |
+| any other ranked button | `action:<name>` | the current page's category |
+
+The click event and the conversion event of the same CTA share the category
+and differ in the action, so rule 2 and A5 ("exactly one event with the
+correct goal ID and `stage`") are unaffected. Rule 3 applies: the object is
+built from route ids, fixed keys and host names, never from a label.
 
 ### D5 — The measurement boundary [FIXED: DEC-0028, CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064]
 
@@ -179,7 +238,7 @@ is a decision, not an implementation detail.
 
 | Collector | Scope | Basis |
 | --- | --- | --- |
-| eTracker | page views + the D4 conversion events | DEC-0004, CON-WEB-0028, CON-WEB-0029, FUN-WEB-0124 |
+| eTracker | page views + the D4 conversion events + the D4 click layer | DEC-0004, CON-WEB-0028, CON-WEB-0029, FUN-WEB-0124, DEC-0218 |
 | Vercel Speed Insights | Web Vitals only, cookieless, no behavioural data | FUN-WEB-0114, FUN-WEB-0115, TS-WEB-0003 D7 |
 
 Excluded by this determination, with no exception at launch: tag
@@ -237,6 +296,9 @@ cannot be attributed to a returning visitor.
 | TS-WEB-0012-A9 | static | Exactly one analytics loader in the rendered HTML, with `data-block-cookies="true"` and the secure code from an env var; no second analytics/tag/pixel vendor in dependencies or markup. |
 | TS-WEB-0012-A10 | manual | In the eTracker account: website and app events arrive in one property under one secure code; a `stage: handover` and a `stage: completed` event for the same goal ID appear side by side; campaigns from the `svf.li` QR redirects show up under `etcc_cmp`. |
 | TS-WEB-0012-A11 | static | No experiment/variant/bucketing code and no A/B dependency in the build. |
+| TS-WEB-0012-A12 | e2e | With `NEXT_PUBLIC_ETRACKER_SECURE_CODE` set, every route of the D1 inventory in both languages and the 404 render exactly one loader carrying the code, `data-block-cookies="true"` and `data-page-changed-detection="off"`, and name the page as the D2 page-name table says; one client-side navigation sends exactly one virtual page view under the new route's name; `/start` renders no loader. Without the variable no loader renders, no request goes to eTracker and no page error occurs. |
+| TS-WEB-0012-A13 | unit | The D4 click layer: every route maps to a hub goal ID or `navigation`; every row of the CTA target table resolves to its key and category; page names are unique per route and language. |
+| TS-WEB-0012-A14 | e2e | On a sample of pages, every element carrying `data-cta` and every link that leaves the site reports exactly one click event, with action `click`, a category from the D4 click-layer table and the page name as type. |
 
 ## Coverage
 
@@ -252,6 +314,8 @@ cannot be attributed to a returning visitor.
 | CON-WEB-0036 (measure up to the handover only) | D4, D5, D6, D8, D9 · A3, A5, A6, A7, A10, A11 |
 | CON-WEB-0037 (keep the etcc_* convention for campaign attribution) | D4, D5, D6, D8, D9 · A3, A5, A6, A7, A10, A11 |
 | NFR-WEB-0064 (Experiment, variant and bucketing code in the build = 0) | D4, D5, D6, D8, D9 · A3, A5, A6, A7, A10, A11 |
+| FUN-WEB-0211 (count every page view under a stable name) | D2 (mounting, page views and names) · A12 |
+| FUN-WEB-0212 (one click event per CTA) | D4 (click layer), D9 · A13, A14 |
 
 ## Open points
 
@@ -291,6 +355,15 @@ cannot be attributed to a returning visitor.
   Speed Insights, which the legacy text does not mention. Owned by the
   legal import (DEC-0012), not by this spec — flagged so it is not
   discovered after launch.
+- **The secure code is not yet set in Vercel** (DEC-0218 §1). Until the
+  owner sets `NEXT_PUBLIC_ETRACKER_SECURE_CODE` for Preview and
+  Production, every deployment runs the mock. Addressee: jan-henrik.
+- **What the account-specific loader contacts beyond `code.etracker.com`**
+  was read only from the account-neutral `e.js` (2026-11-12), which names no
+  other host. A first preview with the real code has to confirm that the
+  CSP (CON-WEB-0030) admits every request and that no web-storage
+  identifier is written (A2). Addressee: QA on the first preview with the
+  code set.
 - **[PROPOSED] items awaiting confirmation:** D2 loader details, D4
   per-goal triggers and field mapping, D6 parameter extension, D9 queue
   shape.

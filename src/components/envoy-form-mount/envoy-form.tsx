@@ -43,7 +43,7 @@ import Link from "next/link";
 import { Icon } from "../icon/icon";
 import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 
-import { getAnalyticsTracker } from "@/src/lib/analytics";
+import { getAnalyticsTracker } from "@/src/lib/analytics/tracker";
 
 import { ENVOY_FORM_WORDS, type EnvoyFormField, type EnvoyFormKind } from "./fields";
 import { FIELD_MAX_LENGTH, MESSAGE_MAX_LENGTH } from "./fields";

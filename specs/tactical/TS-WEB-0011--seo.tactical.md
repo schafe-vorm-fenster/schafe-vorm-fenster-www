@@ -4,7 +4,7 @@ id: TS-WEB-0011
 kind: rule
 status: DRAFT
 version: 0.1.0
-implements: [FUN-WEB-0070, FUN-WEB-0071, FUN-WEB-0072, FUN-WEB-0074, CON-WEB-0075, FUN-WEB-0076, FUN-WEB-0077, FUN-WEB-0078, FUN-WEB-0207, FUN-WEB-0208, FUN-WEB-0209, FUN-WEB-0210, NFR-WEB-0066, NFR-WEB-0067]
+implements: [FUN-WEB-0070, FUN-WEB-0071, FUN-WEB-0072, FUN-WEB-0074, CON-WEB-0075, FUN-WEB-0076, FUN-WEB-0077, FUN-WEB-0078, FUN-WEB-0207, FUN-WEB-0208, FUN-WEB-0209, FUN-WEB-0210, FUN-WEB-0213, NFR-WEB-0066, NFR-WEB-0067]
 sources: [SRC-0003, SRC-0006, SRC-0010, SRC-0019]
 decisions: [DEC-0018, DEC-0020, DEC-0022, DEC-0026, DEC-0035, DEC-0036, DEC-0037]
 ai_provenance:
@@ -78,6 +78,16 @@ does, the rows below are the confirmed floor.
 | `/hilfe/{slug}` | help articles | `https://schafe-vorm-fenster.de/hilfe/{slug}` | same slug, per article (community-site#204) |
 | apex `/:community` | village calendars | TS-WEB-0004 D3 rule 6 | not this spec's row |
 
+Inventory check of 2026-11-12 (issues 192 and 193): the live legacy site lists
+exactly six pages (`/`, `/funktionen`, `/start`, `/presse`, `/impressum`,
+`/hilfe`) and 36 `/hilfe/{slug}` articles, the same 36 as `content/support/`;
+it has no sitemap.xml and no robots.txt (both answer 404). All 36 targets on
+community-site answered 200. `/` and `/start` stay live (no row; see the module
+doc of `redirect-map.ts`). The slug list is `LEGACY_HELP_SLUGS` there and
+`redirect-map.test.ts` holds it against the archived articles. The apex
+`/hilfe/{slug}` row is therefore complete for the known legacy site; Q-0016
+stays open only for URLs that were indexed but never linked.
+
 ### D3 — Semantic skeleton and the demotion registry [FIXED: SRC-0006 / FUN-WEB-0071, FUN-WEB-0077; ties TS-WEB-0002 D5]
 
 One skeleton per page: `header > nav` · `main > article` · `aside`\* ·
@@ -135,12 +145,11 @@ Emitted types:
 
 | Page | JSON-LD | Microdata |
 | --- | --- | --- |
-| every page | `WebPage` (`inLanguage`, `isPartOf` → `WebSite`, `primaryImageOfPage`, `description`) | — |
-| `/` | `WebSite` + `Organization` (the full node, `@id` = site root) | — |
+| every page | `WebPage` (`inLanguage`, `isPartOf` → `WebSite`, `primaryImageOfPage`, `description`) and `Organization` (the one full node: `name`, `url`, `logo`, `@id` = site root; FUN-WEB-0213, `Q-0098`) | — |
+| `/` | `WebSite` | — |
 | second-level pages (`/dein-ort/starten`, `/mitmachen/registrieren`, `/dein-kalender/bestellen`, `/deine-region/angebot`, `/ueber-uns/archiv`) | `BreadcrumbList` — **all five** (DEC-0071) | — (one entity, one representation: the trail is described in JSON-LD, so it is not also marked up in microdata) |
 | `/dein-kalender` | `Service` + `Offer` with a `priceSpecification` (`price` 480, `priceCurrency` EUR, `valueAddedTaxIncluded: false`, `unitCode` ANN, `referenceQuantity` 1 with `unitText` naming the **organisation**, `provider` → `Organization` `@id`) — see D4a | — |
 | `/deine-region` | `Service` **without** any price or `Offer` (BUS-WEB-0015, FUN-WEB-0202: the region price is not published) | — |
-| `/ueber-uns` | `Organization` (reference by `@id`, not a second full node) | — |
 | `/ueber-uns/archiv` | — | `ItemList` of `NewsArticle`/`CreativeWork`, each with the **outlet** as `publisher` and `url` to the original — a citation list, never authored content |
 | any page with a visible Q&A block | `FAQPage` | alternatively microdata on the block; one of the two, per the one-entity rule |
 | `/rechtliches` | `WebPage` only | — |
@@ -321,7 +330,7 @@ artwork is new in the brand package, not CSS here; until it ships, the barely
 rounded square of today stays (`state/open.md` row 214). Open until then:
 the brand-package issue the orchestrator opens (number to be entered here).
 
-Not emitted: `Organization.logo` in the JSON-LD (D4) — `Q-0098`.
+The JSON-LD `Organization.logo` is the 512 px rendition above (FUN-WEB-0213, `Q-0098`); the round rendition follows with issue #199.
 
 ### D11 — Inventory of the search and sharing surfaces [FIXED: the requirements named]
 
@@ -347,7 +356,7 @@ restate it.
 | Share image (per page and language, title and brand mark) | FUN-WEB-0207, NFR-WEB-0066, NFR-WEB-0067 | D6 | TS-WEB-0011-A9 |
 | Favicon, touch icon, app icons | FUN-WEB-0209 (shape `Q-0095`) | D10 | TS-WEB-0011-A16 |
 | Web app manifest | FUN-WEB-0210 | D10 | TS-WEB-0011-A16 |
-| Structured data (JSON-LD, microdata) | FUN-WEB-0072 (`Organization.logo` `Q-0098`) | D4 | TS-WEB-0011-A5, A6, A14 |
+| Structured data (JSON-LD, microdata) | FUN-WEB-0072, FUN-WEB-0213 (`Organization` with logo, `Q-0098`) | D4 | TS-WEB-0011-A5, A6, A14, A17 |
 | `/llms.txt` | FUN-WEB-0170 | TS-WEB-0004 D1, DEC-0018 | TS-WEB-0004-A5 |
 
 ## Free for the generator
@@ -382,6 +391,7 @@ restate it.
 | TS-WEB-0011-A14 | integration | Each of the five second-level pages emits exactly one `BreadcrumbList` whose `itemListElement` positions match the visible trail of TS-WEB-0006 D2 item for item, and whose last item is the current page. No other page emits one, and no page emits the trail twice (JSON-LD and microdata both). |
 | TS-WEB-0011-A15 | e2e | On every (path, language) of the route table, the rendered head carries a non-empty title, a description of 120–160 characters, the self-canonical, one hreflang per language plus `x-default`, `og:title`, `og:description` equal to the description, `og:type` `website`, `og:url` equal to the canonical, `og:image` equal to the page's own share image with width 1200 and height 630, a non-empty `og:image:alt`, `twitter:card` `summary_large_image`, explicit `twitter:title`, `twitter:description` and `twitter:image`, and a non-empty `twitter:image:alt`. |
 | TS-WEB-0011-A16 | e2e | `/` links `rel="icon"`, `rel="apple-touch-icon"` and `rel="manifest"` (the root layout emits them, so every page does); the touch icon, the manifest and the 32, 192 and 512 px app icons each answer 200, the 192 px icon as `image/png`. |
+| TS-WEB-0011-A17 | e2e | On every (path, language) of the route table the one JSON-LD graph holds exactly one `Organization` node with a non-empty `name`, `url` equal to the site origin and a `logo` whose `url` answers 200 as `image/png`. |
 
 ## Coverage
 
@@ -399,6 +409,7 @@ restate it.
 | FUN-WEB-0208 (a text alternative for the share image, in the page language) | D6 · A15 |
 | FUN-WEB-0209 (favicon, touch icon and app icons from the brand mark) | D10 · A16 |
 | FUN-WEB-0210 (a web app manifest naming the site and its icons) | D10 · A16 |
+| FUN-WEB-0213 (a JSON-LD `Organization` with name, URL and logo on every page) | D4 · A17 |
 | NFR-WEB-0066 (share image 1200 × 630 px) | D6 · A9 |
 | NFR-WEB-0067 (share image ≤ 300 KB) | D6 · A9 |
 
@@ -431,8 +442,9 @@ restate it.
   package); `Q-0096` no meta keywords, on purpose; `Q-0097` no `twitter:site`,
   there is no account (`Organization.sameAs` lists only profiles that exist,
   none now).
-- **Q-0098 — `Organization.logo`.** Whether the JSON-LD node carries the brand
-  mark, and which rendition.
+- **Answered 2026-11-12 by the owner:** `Q-0098` yes, the `Organization` node
+  carries the brand mark as `logo`, on all pages (FUN-WEB-0213); the round
+  rendition follows with issue #199.
 - **Amendment owed to TS-WEB-0004 D3:** the legacy redirect map is a new
   step 0 in the proxy's evaluation order (D1).
 - **Amendment owed to TS-WEB-0001 D6:** the query-parameter canonical rule of

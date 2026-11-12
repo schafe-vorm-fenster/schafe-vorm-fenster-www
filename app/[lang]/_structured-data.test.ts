@@ -27,17 +27,17 @@ import type { RouteId } from "@/src/lib/routes/routes";
 /** D4's table, as the expectation. `@type` values, in emission order. */
 const EXPECTED_TYPES: Readonly<Record<RouteId, readonly string[]>> = {
   home: ["WebPage", "WebSite", "Organization"],
-  place: ["WebPage"],
-  placeStart: ["WebPage", "BreadcrumbList"],
-  takePart: ["WebPage"],
-  register: ["WebPage", "BreadcrumbList"],
-  calendar: ["WebPage", "Service"],
-  order: ["WebPage", "BreadcrumbList"],
-  region: ["WebPage", "Service"],
-  regionQuote: ["WebPage", "BreadcrumbList"],
+  place: ["WebPage", "Organization"],
+  placeStart: ["WebPage", "Organization", "BreadcrumbList"],
+  takePart: ["WebPage", "Organization"],
+  register: ["WebPage", "Organization", "BreadcrumbList"],
+  calendar: ["WebPage", "Organization", "Service"],
+  order: ["WebPage", "Organization", "BreadcrumbList"],
+  region: ["WebPage", "Organization", "Service"],
+  regionQuote: ["WebPage", "Organization", "BreadcrumbList"],
   about: ["WebPage", "Organization"],
-  archive: ["WebPage", "BreadcrumbList"],
-  legal: ["WebPage"],
+  archive: ["WebPage", "Organization", "BreadcrumbList"],
+  legal: ["WebPage", "Organization"],
 };
 
 function typesOf(graph: { readonly "@graph": readonly unknown[] }): string[] {
@@ -71,7 +71,7 @@ describe("TS-WEB-0011-A4: every page emits exactly the nodes D4's table names", 
     }
   });
 
-  it("emits the one full Organization and the WebSite on `/` only", async () => {
+  it("emits the one full Organization on every page and the WebSite on `/` only", async () => {
     for (const locale of LOCALES) {
       const home = await pageGraph({ route: "home", locale });
       expect(home["@graph"][1]).toEqual(websiteNode(locale));
@@ -79,22 +79,24 @@ describe("TS-WEB-0011-A4: every page emits exactly the nodes D4's table names", 
     }
     const full = await organizationNode();
     for (const route of ROUTE_IDS) {
-      if (route === "home") continue;
       const graph = await pageGraph({ route, locale: "de" });
-      expect(graph["@graph"], `${route} emits a second full Organization`).not.toContainEqual(
-        full,
-      );
-      expect(typesOf(graph), `${route} emits a second WebSite`).not.toContain("WebSite");
+      expect(
+        graph["@graph"].filter((node) => (node as { "@type": string })["@type"] === "Organization"),
+        `${route} emits exactly one Organization`,
+      ).toEqual([full]);
+      if (route !== "home") {
+        expect(typesOf(graph), `${route} emits a second WebSite`).not.toContain("WebSite");
+      }
     }
   });
 
-  it("references the Organization on `/ueber-uns` instead of repeating it", async () => {
-    const graph = await pageGraph({ route: "about", locale: "de" });
-    // D4: a reference by `@id`, not a second full node — so the node carries
-    // its type and its id, and nothing else (no name, no address, no contact).
-    expect(graph["@graph"][1]).toEqual({
-      "@type": "Organization",
-      "@id": "https://www.schafe-vorm-fenster.de/#organization",
+  it("gives the Organization name, URL and logo (FUN-WEB-0213)", async () => {
+    const node = await organizationNode();
+    expect(node.name).toBeTruthy();
+    expect(node.url).toBe("https://www.schafe-vorm-fenster.de");
+    expect(node.logo).toEqual({
+      "@type": "ImageObject",
+      url: "https://www.schafe-vorm-fenster.de/api/icon/512",
     });
   });
 
@@ -114,13 +116,13 @@ describe("TS-WEB-0011-A4: every page emits exactly the nodes D4's table names", 
 
   it("prices the calendar service and never the region one (BUS-WEB-0015, FUN-WEB-0202)", async () => {
     const calendar = await pageGraph({ route: "calendar", locale: "de" });
-    expect(calendar["@graph"][1]).toEqual(
+    expect(calendar["@graph"][2]).toEqual(
       calendarServiceNode("de", pageTitle("calendar", "de")),
     );
     expect(JSON.stringify(calendar)).toContain("480");
 
     const region = await pageGraph({ route: "region", locale: "de" });
-    expect(region["@graph"][1]).toEqual(regionServiceNode("de", pageTitle("region", "de")));
+    expect(region["@graph"][2]).toEqual(regionServiceNode("de", pageTitle("region", "de")));
     expect(JSON.stringify(region)).not.toContain("priceSpecification");
   });
 

@@ -103,6 +103,7 @@ Protection with `VERCEL_AUTOMATION_BYPASS_SECRET` — the suite sends it as
 | `scripts/csp-adapter.mjs` | the Next adapter (`adapterPath`) that builds the per-page CSP hash map inside `next build` and ships it in the proxy function's assets, wrapping the platform's own adapter (DEC-0163) |
 | `src/lib/security/` | the policy as one typed structure, in one module |
 | `src/lib/seo/` | the indexability predicate and the robots surface |
+| `src/lib/analytics/` | **the one analytics module** (TS-WEB-0012, DEC-0218): the eTracker loader, page views on every page and the one CTA click listener, switched on by `NEXT_PUBLIC_ETRACKER_SECURE_CODE` (`CONTRIBUTING.md` → Environment Variables); unset, a console mock. Nothing outside it calls the vendor |
 | `app/api/` | **the BFF** (TS-WEB-0004 D5): eight GET-only route handlers, the browser's only data surface. No ecosystem host, token or visitor IP ever appears in a client request |
 | `src/lib/live/` | **the live-data layer** (TS-WEB-0008/TS-WEB-0009): one interface module per live module, the real/mock switch, the three-tier fallback, and the one module that knows the app's hostname. `src/lib/live/README.md` has the module map and the page-wiring example |
 | `src/clients/` | the pinned OpenAPI specs and the service clients built on them — one closed header set, one place a host or read token is read. Three clients: the two token-scoped APIs, and `community-site/`, which reads the **public** village calendar and is what puts real dates on a deployment with no credential at all |

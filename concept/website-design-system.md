@@ -377,7 +377,7 @@ looser one would be a second section.
 ```html
 <section class="section-shell standard paper">     <!-- owns padding-block -->
   <div class="container" data-stack>               <!-- owns the gaps -->
-    <p data-kicker>Was andere sagen</p>            <!-- block -->
+    <p data-kicker>Was andere über uns sagen</p>   <!-- block -->
     <h2>…</h2>                                     <!-- block: --block-gap-bound above -->
     <p>…</p>                                       <!-- block: --block-gap above -->
     <div data-stack>                               <!-- a group of blocks is a stack -->

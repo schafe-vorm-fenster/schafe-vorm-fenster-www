@@ -27,14 +27,8 @@ import type { Finding } from "../src/lib/content/validate";
  * named here for the same reason: a reader of a failure should not have to look
  * up which criterion just broke.
  *
- * `claim-budget` deliberately names **no** criterion. `CG-027`'s count is
- * assigned to `schema` by `specs/contracts/copy-contract.md:112` and no
- * acceptance criterion carries it: A16 of TS-WEB-0006 (spelled out so this
- * sentence is not scanned as coverage, DEC-0134) is the *manual* review
- * gate for the rules SRC-0018 assigns to review, and a meter cannot close a
- * manual criterion (`scripts/check-coverage.ts`) — naming it here would have
- * bought a false green, which is the exact defect DEC-0141 was built for. The
- * rule has a source; it does not yet have a criterion (DEC-0145 §4).
+ * The former `claim-budget` row (16) is retired: DEC-0154 withdrew `CG-027`'s
+ * 70-character budget, and no new number exists (`Q-0086`, DEC-0209 §5).
  */
 const CRITERION: Partial<Record<Finding["check"], string>> = {
   "avoid-list": "TS-WEB-0007-A13",
@@ -76,10 +70,9 @@ async function main(): Promise<void> {
 
   if (errors.length === 0) {
     console.log(
-      "Content pipeline is valid (TS-WEB-0007 D12) — rows 11, 13, 14, 15 and 16 measured: " +
+      "Content pipeline is valid (TS-WEB-0007 D12) — rows 11, 13, 14 and 15 measured: " +
         "TS-WEB-0007-A13 (glossary conformance), TS-WEB-0006-A8 (copy structure), " +
-        "TS-WEB-0029-A15 (register), TS-WEB-0006-A12 (a price is read, never typed), " +
-        "and CG-027 (the claim budget of a proof card, a contract rule with no criterion yet).",
+        "TS-WEB-0029-A15 (register) and TS-WEB-0006-A12 (a price is read, never typed).",
     );
     return;
   }

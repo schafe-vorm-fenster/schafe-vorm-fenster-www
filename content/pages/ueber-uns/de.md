@@ -185,8 +185,6 @@ ihrem Zeitraum im Text von Kapitel 02 (Review 2026-10-27, #104, DEC-0175 §2).
 
 **Kapitel 02 — Ort:** Gemeinde Schmatzin
 
-**Kapitel 03 — Überschrift:** Dann wurde es mehr als Brötchen.
-
 **Kapitel 03 — Ort:** Vorpommern-Greifswald
 
 **Geschichte — öffnen:** Die Geschichte
@@ -226,9 +224,9 @@ Geschichte ausdrücklich).
 
 **Überschrift:** Angefangen hat es mit Brötchen.
 
-**Absatz (Anfang):** Angefangen hat es mit der Suche nach frischen Brötchen. Nach dem Umzug von Berlin nach Schlatkow fragte die Familie zwei Wochen lang nach einem Bäckerwagen, legte sich schließlich morgens auf die Lauer und fuhr dem Wagen ins Nachbardorf hinterher, um einen Halt in Schlatkow zu vereinbaren.
+**Absatz (Anfang):** Nach dem Umzug von Berlin nach Schlatkow fragte die Familie zwei Wochen lang nach einem Bäckerwagen, legte sich schließlich morgens auf die Lauer und fuhr dem Wagen ins Nachbardorf hinterher, um einen Halt in Schlatkow zu vereinbaren.
 
-**Absatz (Name):** Von 2019 bis 2024 war Jan-Henrik Hempel ehrenamtlicher Bürgermeister von Schmatzin, zu dem auch Schlatkow gehört. An diese Zeit erinnert der Name Schafe vorm Fenster: Vom Küchenfenster aus sah man auf die Schafweide der Gemeinde.
+**Absatz (Name):** Von 2019 bis 2024 war Jan-Henrik Hempel ehrenamtlicher Bürgermeister von Schmatzin, zu dem auch Schlatkow gehört. An diese Zeit erinnert der Name Schafe vorm Fenster.
 
 **Zitat (Gründer):** Wenn man alles sammelt, ist plötzlich in jedem Dorf jeden Tag irgendwas los. Wir müssen das nur sichtbar machen.
 
@@ -267,17 +265,21 @@ Slot 3 und 3b).
 
 <!-- id: ueber-uns-3-proof-stream; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5", "@schafe-vorm-fenster/proof@0.3.5#homeoffice-mobile-anbieter", "@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis", "@schafe-vorm-fenster/proof@0.3.5#ukraine-integration-dorfleben", "@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow"]; status: draft -->
 
-**Überschrift:** Was andere sagen
-
 Pool: der volle `proof`-Bestand plus `media-echo` (31 Einträge). Seit dem
 Umbau nach dem Entwurf vom 2026-10-12 ist der Strom das Kapitel 03, „Dann
 wurde es mehr als Brötchen." (DEC-0162 §2): vier Geschichten, alle
 `usage_rights: cleared`, jede Zeile der wörtliche `claim:` ihres Datensatzes.
+Alle vier stammen aus dem eigenen eu:react-Abschlussbericht an den
+Fördergeber (`source:` der vier Datensätze). Das Kapitel trägt trotzdem
+denselben Kopf wie jede Beleg-Section: Kicker „Was andere über uns sagen",
+Überschrift „Stimmen aus der Praxis" (`proofIntro`, DEC-0209 §4, Owner
+2026-11-12). Die Quellenangabe jeder Zeile bleibt der eigene Bericht; eine
+Kapitelüberschrift im Slot gibt es nicht mehr.
 Die NØRD-Auszeichnung steht im eigenen Auszeichnungsblock (Slot 4), der
 Bürgermeister in Kapitel 02 (Slot 2), deshalb stehen beide hier nicht
 mehr:
 
-1. In der Pandemie wurden sämtliche Impfangebote und Testzentren-Öffnungszeiten des Landkreises tagesaktuell und ortsgenau über die Dorfkalender veröffentlicht. — Landkreis Vorpommern-Greifswald, 2022
+1. In der Pandemie wurden sämtliche Impfangebote und Testzentren-Öffnungszeiten des Landkreises tagesaktuell und ortsgenau über die Dorfkalender veröffentlicht. — eu:react-Abschlussbericht, Juli 2022
 2. Der Dorfkalender hat 2022 die Integration ukrainischer Geflüchteter ins Dorfleben unterstützt: Anschluss an Vereinstreffen, Veranstaltungen und mobile Händler. — eu:react-Abschlussbericht, Juli 2022
 3. Wer bei Google nach „Bäcker Schlatkow" sucht, findet das mobile Bäckerauto und seinen Tag — nicht Filialen in Anklam. — eu:react-Abschlussbericht, Juli 2022
 4. In der Corona-Zeit wurden Home-Office-Nutzer über die Dorfkalender erstmals auf mobile Anbieter aufmerksam — und teils zu Stammkunden. — eu:react-Abschlussbericht, Juli 2022
@@ -288,6 +290,11 @@ Relevanz-Maschine (TS-WEB-0005) aus demselben Pool. Der siebte Platz ist für
 den Typ `testimonial` reserviert und wird nie mit einem Element eines
 anderen Typs aufgefüllt (TS-WEB-0027 D5). Solange er leer ist, rendert er
 nichts — keine Karte, kein Platzhalter (DEC-0175 §3).
+
+Zeile 1 nannte bis #160 den „Landkreis Vorpommern-Greifswald" als Absender.
+Der Datensatz `impftermine-landkreis` nennt als Quelle den eigenen
+eu:react-Abschlussbericht (Juli 2022) und den Landkreis nur als Partner der
+Zusammenarbeit; die Zeile nennt deshalb den Bericht (DEC-0209 §4).
 
 Das sechste Element des Stroms ist gestrichen: „Der Dorfkalender ist seit
 2018 in Betrieb" (`in-operation-since-2018`) ist eine „seit …"-Aussage, und
@@ -336,7 +343,7 @@ die Webseite nie (Review 2026-10-27, #105, DEC-0175 §3).
 
 **Überschrift:** Ein Dorfprojekt, ausgezeichnet in Rostock.
 
-**Auszeichnung:** NØRD AWARD 2026, Kategorie Smart Community, unter Bitkom-Schirmherrschaft, verliehen am 28. Mai 2026 auf der NØRD digital convention in Rostock.
+**Auszeichnung:** Verliehen am 28. Mai 2026 unter Bitkom-Schirmherrschaft, auf der NØRD digital convention.
 
 **Quelle:** NØRD digital convention / digitales MV, Mai 2026
 
@@ -344,8 +351,10 @@ die Webseite nie (Review 2026-10-27, #105, DEC-0175 §3).
 
 **Link-Text:** Presse und Auszeichnungen → `/ueber-uns/archiv`
 
-Die Auszeichnung ist das frühere Element 1 des Belegstroms, wörtlich
-(`noerd-award-2026-smart-community`, `usage_rights: cleared`). Überschrift und
+Die Auszeichnung ist das frühere Element 1 des Belegstroms
+(`noerd-award-2026-smart-community`, `usage_rights: cleared`). Seit #163 (DEC-0206)
+trägt das Siegel Name und Kategorie, der Text nur noch Datum, Schirmherrschaft
+und Veranstaltung; Rostock steht in der Überschrift. Die Tatsachen sind dieselben. Überschrift und
 Link-Text sind die des Entwurfs vom 2026-10-12 (#55). Der Block trägt genau
 einen Link ins Archiv, keine Vorschau, keine Liste, keinen Zähler (TS-WEB-0027
 D6); das Archiv wird mit #56 zur Presseseite (`Q-0093`), das Ziel bleibt.

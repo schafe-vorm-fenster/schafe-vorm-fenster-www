@@ -92,13 +92,13 @@ content `describe()` names the rule rather than restating it.
 
 | Rule | Mechanism | The check |
 | --- | --- | --- |
-| CG-017 casual, never flat | `lint` · `review` | Lint: the four rejected headings are avoid-list rows. Flatness in a new heading is review. |
+| CG-017 casual, never flat | `lint` · `review` | Lint: the four rejected headings are avoid-list rows. Flatness in a new heading is review. The proof section's one head ("Was andere über uns sagen" over "Stimmen aus der Praxis", DEC-0209) is `dictionary.ts` `proofSection`, asserted by `app/[lang]/_proof.test.ts` and the page specs. |
 | CG-018 no abstraction heading | `lint` · `review` | Same shape — the rejected headings are avoid-list rows, flatness is review. CG-018's *use* examples are **question forms and are legal only as kickers**; the CG-005 lint (a `?` in a section-title field fails) is unchanged by them and is what keeps the two apart. A generator that reads CG-018 as permission to title a section *"Was hilft euch das?"* fails that row, which is the intended outcome. |
-| CG-019 kicker vocabulary per section role | `review` · `e2e` | The role table has three deliberately empty rows (SRC-0017 §5); a lint over it would enforce a gap. The section-head cap DEC-0206 added — at most three text levels, kicker optional, no word stem shared between kicker, title and intro — is read off the rendered page by `TS-WEB-0006-A21` (`e2e/section-heads.spec.ts`), as a warning until the page PRs of issue #163 land; a repeated *statement* in other words stays `review`. |
+| CG-019 kicker vocabulary per section role | `review` · `e2e` | The role table has one deliberately empty row, provenance (SRC-0017 §5; the proof row was filled by the owner, DEC-0209); a lint over it would enforce a gap. The section-head cap DEC-0206 added — at most three text levels, kicker optional, no word stem shared between kicker, title and intro — is read off the rendered page by `TS-WEB-0006-A21` (`e2e/section-heads.spec.ts`), as a warning until the page PRs of issue #163 land; a repeated *statement* in other words stays `review`. |
 
 ### Block budgets
 
-All thirteen are `schema` — one `max()` per field, the number from SRC-0017 §6.
+All thirteen were `schema` — one `max()` per field, the number from SRC-0017 §6. CG-027 is no longer: its budget is withdrawn (DEC-0154, DEC-0209 §5).
 **Five of them carry something a `max()` cannot express**, and each has its
 own row below; the other eight share the first row and are listed there once.
 (This table used to announce "three exceptions" over four rows and to name
@@ -110,7 +110,7 @@ five and every rule appears exactly once.)
 | CG-020 – CG-024, CG-029, CG-031, CG-032 | `schema` | `max()` per field; over budget fails the parse (TS-WEB-0007-A1) and the `check:content` run (TS-WEB-0007 D12 row 2). Eight rules. |
 | CG-025 explain-module step line | `schema` · `e2e` | `max()` per line, **plus** an e2e assertion that neither line wraps at 390 px and that the module with its three lines fits one viewport height (SRC-0014 "Explain module"). The e2e half is now written: **`TS-WEB-0022-A18`** is the 390 px single-line assertion and **`TS-WEB-0022-A19`** the one-viewport-below-`lg` assertion. Until 2026-09-25 this row delegated to a page criterion that did not exist, while `TS-WEB-0022 D4` left the step count and the render form `[FREE]` (audit A6). From the tablet breakpoint the three steps stand side by side and the one-viewport constraint does not apply — A19 asserts the side-by-side row instead. |
 | CG-026 CTA label | `schema` · `e2e` | `max()`, plus an e2e assertion that no button label wraps at 390 px. |
-| CG-027 proof card states the win | `schema` · `review` | The budget is schema; "a persuasion, not a report" is review. |
+| CG-027 proof card states the win | `review` | DEC-0154 withdrew the 70-character budget and no new number exists (`Q-0086`), so `check:content` measures nothing here any more (DEC-0209 §5). "A whole sentence with a verb" and "a persuasion, not a report" are review. |
 | CG-028 quote card | `schema` · `lint` · `review` **[PROPOSED — none of these fields exists yet]** | Schema: `quote`, `quote_author`, role, organisation and `source_url` all required on a quote card. Lint: a quote card whose `source_url` does not resolve fails. Verbatimness is review. **No schema carries `quote`, `quote_author`, `quote_date` or `source_url` today** — on the website's content types or on the hub's proof records — so both mechanisms are proposed, not live. The fields are a hub change request (proof schema) plus a website content type; until they land, a quote card cannot be authored at all, which is the honest state and better than a lint that silently passes over absent fields. |
 | CG-030 context-band entry | `schema` **[PROPOSED — the field does not exist yet]** | `max(80)` on a `blurb` field that `TS-WEB-0006 D5`'s entry and `TS-WEB-0007 D5`'s hierarchy do not have. SRC-0017 §6 names what must be added: a required per-entry `blurb`, sourced from the job registry so the three non-focus entries cannot drift from the fourth page's own description. Until then the budget governs nothing. |
 

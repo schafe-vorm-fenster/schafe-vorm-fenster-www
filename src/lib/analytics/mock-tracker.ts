@@ -2,19 +2,20 @@
  * The mock tracker — plan/guardrails.md's mock rule, applied to TS-WEB-0012 D2.
  *
  * Logs to the console and records nothing: no cookie, no `localStorage`,
- * `sessionStorage` or IndexedDB write, no network call. This is the
- * implementation every environment runs today (see `index.ts`) — the real
- * eTracker adapter exists (`etracker-tracker.ts`) but stays switched off
- * until the account/field-mapping open point closes (state/open.md row 12,
- * Q-0040, TS-WEB-0012 D4 rule 4).
+ * `sessionStorage` or IndexedDB write, no network call. This is what every
+ * environment runs while `NEXT_PUBLIC_ETRACKER_SECURE_CODE` is unset
+ * (`index.ts`, DEC-0218 §1): local development, CI and any deployment the
+ * owner has not given a secure code.
  */
 
+import type { CtaEvent } from "./cta-event";
+import type { PageView } from "./page-view";
 import type { AnalyticsTracker, ConversionAttributes, EventStage } from "./types";
 
 export function createMockTracker(): AnalyticsTracker {
   return {
-    trackPageView() {
-      logMock("pageview", {});
+    trackPageView(view: PageView) {
+      logMock("pageview", { pageName: view.pageName, areas: view.areas });
     },
     trackConversion(
       goalId: string,
@@ -23,10 +24,13 @@ export function createMockTracker(): AnalyticsTracker {
     ) {
       logMock("conversion", { goalId, stage, attributes });
     },
+    trackCtaClick(event: CtaEvent) {
+      logMock("cta", { ...event });
+    },
   };
 }
 
-function logMock(kind: "pageview" | "conversion", payload: Record<string, unknown>): void {
+function logMock(kind: "pageview" | "conversion" | "cta", payload: Record<string, unknown>): void {
   // The mock's entire job is to be visible in dev/preview, not to collect anything.
   console.info(`[analytics:mock] ${kind}`, payload);
 }

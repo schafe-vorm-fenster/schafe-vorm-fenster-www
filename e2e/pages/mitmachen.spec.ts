@@ -423,7 +423,7 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A12/A13/A16/A17/A18/A19: /mitmachen", 
    * level count and the repeated stems of every section are
    * `e2e/section-heads.spec.ts`'s (TS-WEB-0006-A21).
    */
-  test("DEC-0206: the paths slot's head is heading and intro, and a proof kicker that stays is marked", async ({
+  test("DEC-0206 / DEC-0209: the paths slot's head is its three lines, and the proof section carries the shared head", async ({
     page,
   }) => {
     await page.goto("/mitmachen");
@@ -435,28 +435,22 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A12/A13/A16/A17/A18/A19: /mitmachen", 
     await expect(page.locator("[data-wege-subline]")).toHaveText(
       "Drei Wege. Alle nutzt ihr eh schon.",
     );
-    // The proof section's kicker, where the page still sets it, is the
-    // customer-proof placeholder and carries its mark (DEC-0120 §5,
-    // state/open.md row 234). Whether it stays at all is the /mitmachen page
-    // PR's to decide under DEC-0206 §3.
+    /* The proof section carries the one head every page shares, named by the
+       owner (issue 160, DEC-0209): no placeholder kicker any more, and no verb the
+       heading repeats ("nutzt"/"benutzt"). */
     const proofKicker = page.locator("[data-block='beleg'] [data-kicker]");
-    for (const kicker of await proofKicker.all()) {
-      await expect(kicker).toHaveAttribute("data-demo", "true");
-    }
-    /* The h2 was "Was andere sagen" over a pool of three customers who
-       publish for themselves. The copy guide reserves that heading for press
-       proof only (`website-copy-guide.md:516`, CG-017) and the review splits
-       the two sections at line 462; the heading now comes from what the
-       section proves (T-18, DEC-0143 §2). */
-    await expect(page.locator("#beleg-heading")).toHaveText("Wo es wirklich benutzt wird");
-    await expect(page.locator("[data-block='beleg']").getByText("Was andere sagen")).toHaveCount(0);
+    await expect(proofKicker).toHaveText("Was andere über uns sagen");
+    await expect(proofKicker).not.toHaveAttribute("data-demo", "true");
+    await expect(page.locator("#beleg-heading")).toHaveText("Stimmen aus der Praxis");
   });
 
   /**
    * R-mitmachen-16, the attribution half: the Stiftung runs the LeLender, not
    * the Gemeinde, and the adult education centres are named after the county
-   * and carry the benefit the review names with them (review lines 103 and
-   * 109; T-18, DEC-0143 §5).
+   * (review lines 103 and 109; T-18, DEC-0143 §5). The benefit clause the
+   * card carried ("in den Dörfern genauso relevant wie in der Stadt") is gone
+   * since DEC-0209: no record carries it, and the line is a whole sentence
+   * from the record now (issue 160).
    */
   test("R-mitmachen-16: the proof block names the Stiftung and the county-wide Volkshochschulen", async ({
     page,
@@ -469,15 +463,8 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A12/A13/A16/A17/A18/A19: /mitmachen", 
 
     await expect(block.getByText("Volkshochschulen in Vorpommern-Greifswald")).toBeVisible();
     await expect(block.getByText("Volkshochschule Uecker-Randow")).toHaveCount(0);
-    // The benefit, not just the name: courses are as relevant in the villages
-    // as in town (review line 109). It now stands in the card's **context
-    // line**, after the attribution and separated by a semicolon rather than a
-    // second ` — `: CG-027 budgets the claim at 70 characters and the claim is
-    // the part before the *last* ` — `, so a benefit inside the claim cost the
-    // card its budget while a benefit beside the attribution does not
-    // (DEC-0145 §4, state/open.md row 286). The regex is unchanged, which is
-    // the point — the sentence a visitor reads did not move.
-    await expect(block.getByText(/in den Dörfern genauso relevant wie in der Stadt/)).toBeVisible();
+    await expect(block.getByText(/komplettes Kursprogramm im Dorfkalender/)).toBeVisible();
+    await expect(block.getByText(/in den Dörfern genauso relevant wie in der Stadt/)).toHaveCount(0);
   });
 
   /**

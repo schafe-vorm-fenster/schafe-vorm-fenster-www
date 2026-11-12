@@ -28,7 +28,7 @@ import { dictionary } from "@/src/lib/i18n/dictionary";
 import { CountersIsland, RegionExamplesIsland } from "../_islands";
 import { PageJsonLd } from "../_structured-data";
 import { pageContent } from "../_content";
-import { proofHeading, selectProof, selectedProofKind } from "../_proof";
+import { proofIntro, selectProof } from "../_proof";
 import { localeFrom, pageMetadataFor } from "../_locale";
 import { PageFrame } from "../_page-frame";
 
@@ -84,7 +84,6 @@ const PAGE_COPY: Record<
   Locale,
   {
     briefingLabel: string;
-    proofLabel: string;
     closingHeading: string;
     quoteFallback: string;
     territorySketchAlt: string;
@@ -97,7 +96,6 @@ const PAGE_COPY: Record<
     // so the quiet briefing link and the closing question are authored copy
     // rather than strings typed into a page file.
     briefingLabel: "Lieber erst sprechen? Kennenlerngespräch buchen",
-    proofLabel: "Beleg",
     closingHeading: "Sollen wir euch ein Angebot rechnen?",
     quoteFallback: "Angebot anfragen",
     territorySketchAlt: "Gebietsschnitt eines Landkreises",
@@ -106,7 +104,6 @@ const PAGE_COPY: Record<
   },
   en: {
     briefingLabel: "Rather talk first? Book an intro call",
-    proofLabel: "Proof",
     closingHeading: "Shall we put a quote together for you?",
     quoteFallback: "Request a quote",
     territorySketchAlt: "Outline of a county territory",
@@ -512,20 +509,14 @@ export default async function Page({
           no cleared reference case for a delivered territory exists. */}
       <SectionShell
         dataBlock="beleg"
-        // Customer proof: the placeholder kicker, marked (DEC-0120 §5).
-        kicker={words.kickers.customers}
-        kickerDemo
+        // The one head every proof section carries (DEC-0209).
+        kicker={proofIntro(locale).kicker}
         labelledBy="beleg"
         surface="lime-100"
       >
         <MotionReveal>
-          {/* The heading comes from what the section proves, not from this page:
-              "Was Landkreise und Institutionen sagen" was a variant of the
-              press heading over a pool of customer proof, and CG-017 reserves
-              that heading for press only (`website-copy-guide.md:516`,
-              review line 462). DEC-0143 §2. */}
-          <h2 id="beleg">{proofHeading(selectedProofKind(proofSelection), locale)}</h2>
-          <ProofStream label={copy.proofLabel}>
+          <h2 id="beleg">{proofIntro(locale).heading}</h2>
+          <ProofStream label={proofIntro(locale).heading}>
             {proofSelection.entries.map((entry) =>
               entry.kind === "item" ? (
                 <ProofCard

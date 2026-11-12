@@ -35,7 +35,17 @@ describe("TS-WEB-0011 D4: the Organization node", () => {
     expect(node).not.toHaveProperty("sameAs");
   });
 
-  it("D4 /ueber-uns: a reference is a bare @id, not a second full node", () => {
+  it("FUN-WEB-0213: carries name, URL and the brand mark as logo", async () => {
+    const node = await organizationNode();
+    expect(node.name).toBeTruthy();
+    expect(node.url).toBe("https://www.schafe-vorm-fenster.de");
+    expect(node.logo).toEqual({
+      "@type": "ImageObject",
+      url: "https://www.schafe-vorm-fenster.de/api/icon/512",
+    });
+  });
+
+  it("a reference: a reference is a bare @id, not a second full node", () => {
     expect(organizationReference()).toEqual({ "@id": ORGANIZATION_ID });
   });
 });

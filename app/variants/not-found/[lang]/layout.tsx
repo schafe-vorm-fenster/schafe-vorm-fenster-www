@@ -1,3 +1,4 @@
+import { EtrackerAnalytics } from "@/src/lib/analytics/etracker-analytics";
 import { HTML_LANG, resolveLocale } from "@/src/lib/i18n/locales";
 import { NOT_FOUND_VARIANTS } from "@/src/lib/routes/static-variants";
 
@@ -47,7 +48,11 @@ export default async function NotFoundRootLayout({
   const locale = resolveLocale((await params).lang);
   return (
     <html lang={HTML_LANG[locale]}>
-      <body>{children}</body>
+      <body>
+        {/* DEC-0218: a 404 is a page view too, counted as `<lang>/not-found`. */}
+        <EtrackerAnalytics locale={locale} notFound />
+        {children}
+      </body>
     </html>
   );
 }
