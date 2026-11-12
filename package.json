@@ -4,7 +4,10 @@
   "description": "The official Schafe vorm Fenster website.",
   "private": true,
   "license": "ISC",
-  "packageManager": "pnpm@10.26.0",
+  "packageManager": "pnpm@10.34.9",
+  "engines": {
+    "node": "26.x"
+  },
   "scripts": {
     "dev": "next dev --port ${PORT:-3100}",
     "build": "next build",
@@ -76,7 +79,7 @@
     "@schafe-vorm-fenster/posts": "^0.4.0",
     "@schafe-vorm-fenster/proof": "^0.3.5",
     "@types/js-yaml": "4.0.9",
-    "@types/node": "25.9.6",
+    "@types/node": "26.6.6",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "@vitest/coverage-v8": "4.1.11",
