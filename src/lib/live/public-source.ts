@@ -41,8 +41,9 @@ import {
   placeByCommunityId,
   placesWithin,
 } from "./place-index";
+import { pickPreferred } from "./event-preference";
 import { pickVariedWeek } from "./varied-week";
-import { byStart, withinWindow, type EventWindow } from "./widening";
+import { withinWindow, type EventWindow } from "./widening";
 
 import type { LiveEvent, Place } from "./types";
 
@@ -71,7 +72,9 @@ export async function publicPlaceEvents(
     return byId || (event.community?._id === undefined && OWN_SCOPES.has(event.scope ?? ""));
   });
 
-  return byStart(withinWindow(toLiveEventsFromSite(own), window, now)).slice(0, rowCount);
+  // The shared preference of DEC-0210 over everything the window holds: the
+  // pool is the whole window, so the pick never reaches outside it.
+  return pickPreferred(withinWindow(toLiveEventsFromSite(own), window, now), rowCount);
 }
 
 export interface PublicNearby {
