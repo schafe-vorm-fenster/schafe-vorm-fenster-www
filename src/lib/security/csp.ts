@@ -224,7 +224,6 @@ export const STATIC_SECURITY_HEADERS: ReadonlyArray<{
     value: [
       "accelerometer=()",
       "autoplay=()",
-      "browsing-topics=()",
       "camera=()",
       "display-capture=()",
       "encrypted-media=()",

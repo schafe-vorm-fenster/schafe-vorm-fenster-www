@@ -292,7 +292,6 @@ test("TS-WEB-0014-A2: the security headers of TS-WEB-0014 D4 are on the response
     [
       "accelerometer=()",
       "autoplay=()",
-      "browsing-topics=()",
       "camera=()",
       "display-capture=()",
       "encrypted-media=()",
