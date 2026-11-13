@@ -38,14 +38,26 @@ already exists.
 The website is a Next.js 16 application in the App Router, server-first,
 deployed to Vercel. TypeScript throughout, pnpm as the package manager,
 plain CSS and CSS Modules over the `@schafe-vorm-fenster/brand-design`
-tokens. `specs/decisions/DEC-0072--the-foundation-stack.md` records why each of
-those is what it is.
+tokens — no Tailwind. `specs/decisions/DEC-0072--the-foundation-stack.md`
+records why each of those is what it is; DEC-0221 the current versions.
+
+| Toolchain | Version | Set in |
+| --- | --- | --- |
+| Node.js | 26.x | `.nvmrc` (local, CI) · `engines.node` (Vercel) |
+| pnpm | 10.34.9 | `packageManager` |
+| Next.js · React | 16.4 · 19.3 | `package.json` |
+| TypeScript | 6.0 (7.0 waits for typescript-eslint) | `package.json` |
+| Vitest · Playwright · ESLint | 5.1 · 1.65 · 10 | `package.json` |
 
 ### Getting Started
 
 ```bash
-pnpm install            # the @schafe-vorm-fenster scope needs GITHUB_TOKEN
-pnpm dev                # http://localhost:3100
+fnm use                         # or: nvm use — reads .nvmrc (Node 26)
+export GITHUB_TOKEN=$(gh auth token)
+export LEAFCUTTER_REGISTRY_TOKEN=…
+sh scripts/registry-auth.sh     # once per machine: token placeholders into ~/.npmrc
+pnpm install
+pnpm dev                        # http://localhost:3100
 ```
 
 **Port 3100, not 3000.** Port 3000 is occupied on the build machine, so the
@@ -57,11 +69,14 @@ whole run uses 3100 — the `dev` and `start` scripts, the Playwright
 
 | Scope | Registry | Credential |
 | --- | --- | --- |
-| `@schafe-vorm-fenster` | GitHub Packages | `${GITHUB_TOKEN}` |
-| `@leafcutter-strict`, `@leafcutter-os` | `https://packages.leafcutteros.ai/` | none |
+| `@schafe-vorm-fenster` | GitHub Packages | `GITHUB_TOKEN` |
+| `@leafcutter-strict`, `@leafcutter-os` | `https://packages.leafcutteros.ai/` | `LEAFCUTTER_REGISTRY_TOKEN` |
 
-If your shell does not export a GitHub token,
-`export GITHUB_TOKEN=$(gh auth token)` before installing. The second
+The committed `.npmrc` carries no credential: pnpm ≥ 10.34.2 does not expand
+`${VAR}` from a repository `.npmrc` (GHSA-3qhv-2rgh-x77r).
+`scripts/registry-auth.sh` writes both token lines into the user-level config
+as placeholders, so the values stay in the environment; CI and the Vercel
+`installCommand` run it before every install (DEC-0221, DEC-0112). The second
 registry is where the **STRICT** specification method lives:
 `@leafcutter-strict/blueprint-complete` is a devDependency pinned exact, and
 `scripts/check-specs.ts` reads five of its controlled vocabularies straight
@@ -172,7 +187,8 @@ variables.
 subset of DEC-0031's stage 2, not the full merge-gating job graph:
 
 - **`check.yml`** — every push to `next-2026` and every pull request
-  targeting `next-2026` or `main`: install (the `@schafe-vorm-fenster` scope resolves from
+  targeting `next-2026` or `main`, on the Node major in `.nvmrc` (26):
+  registry credentials (`scripts/registry-auth.sh`) · install (the `@schafe-vorm-fenster` scope resolves from
   `npm.pkg.github.com` using `secrets.GITHUB_TOKEN` with `packages: read`)
   · *Production renders what preview renders* (`pnpm check:content:production`:
   no page or slot a production build would drop, DEC-0222)

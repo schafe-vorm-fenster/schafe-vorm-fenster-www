@@ -127,8 +127,11 @@ test.describe("/deine-region", () => {
       await expect(block.getByText(locale.token)).toHaveCount(0);
 
       // Exactly one node carries the figure, it belongs to `price-tag`, and it
-      // stands inside block 5's sentence rather than beside it.
-      const priced = block.locator('[class*="price-tag"]', { hasText: "480" });
+      // stands inside block 5's sentence rather than beside it. Located by the
+      // component's own hook: since Next 16.4 a production build names CSS
+      // module classes `<hash>_<local>`, so the file name `price-tag` is no
+      // longer in the class attribute (vercel/next.js pull 97944, DEC-0221).
+      const priced = block.locator("[data-price-tag]", { hasText: "480" });
       await expect(priced).toHaveCount(1);
       // The figure and its net qualifier reach the reader as one string, in the
       // locale's own currency order — "480 € / Jahr, zzgl. USt." and
