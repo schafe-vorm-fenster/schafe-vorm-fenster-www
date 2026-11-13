@@ -29,5 +29,5 @@ export default async function NotFoundVariant({
 }: {
   params: Promise<{ lang: string }>;
 }): Promise<ReactNode> {
-  return <NotFoundBody locale={resolveLocale((await params).lang)} />;
+  return <NotFoundBody locale={resolveLocale((await params).lang)} withChrome />;
 }

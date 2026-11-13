@@ -3,10 +3,43 @@ import { Icon } from "../icon/icon";
 import { RouteLink } from "../route-link/route-link";
 import { Skeleton } from "../skeleton/skeleton";
 
+import { DEFAULT_LOCALE } from "@/src/lib/i18n/locales";
+
 import type { RouteId } from "@/src/lib/routes/routes";
 import type { Locale } from "@/src/lib/i18n/locales";
 
 import styles from "./scope-picker.module.css";
+
+/**
+ * The component's own UI strings per language (issue 217). They used to be
+ * German defaults and rendered on `/en/your-calendar/order` too. The EN lines
+ * are new copy awaiting owner approval.
+ */
+const SCOPE_PICKER_COPY: Record<
+  Locale,
+  {
+    emptyHeadline: string;
+    emptyBody: string;
+    wholeDistrict: string;
+    remove: string;
+    collapsed: string;
+  }
+> = {
+  de: {
+    emptyHeadline: "Noch keine Auswahl.",
+    emptyBody: "Füge oben Orte oder eine Postleitzahl hinzu.",
+    wholeDistrict: "ganzer Landkreis",
+    remove: "entfernen",
+    collapsed: "{n} Orte ausgewählt",
+  },
+  en: {
+    emptyHeadline: "Nothing selected yet.",
+    emptyBody: "Add places or a postcode above.",
+    wholeDistrict: "whole district",
+    remove: "remove",
+    collapsed: "{n} places selected",
+  },
+};
 
 export interface ScopeChip {
   readonly id: string;
@@ -55,11 +88,12 @@ export function ScopePicker({
   to,
   locale,
   collapseAt = 12,
-  emptyHeadline = "Noch keine Auswahl.",
-  emptyBody = "Füge oben Orte oder eine Postleitzahl hinzu.",
+  emptyHeadline,
+  emptyBody,
   state = "ready",
   className,
 }: ScopePickerProps) {
+  const t = SCOPE_PICKER_COPY[locale ?? DEFAULT_LOCALE];
   const classes = [styles.picker, className].filter(Boolean).join(" ");
 
   if (isPending(state)) {
@@ -69,8 +103,8 @@ export function ScopePicker({
   if (items.length === 0) {
     return (
       <div className={classes}>
-        <p className={styles.emptyHeadline}>{emptyHeadline}</p>
-        <p className={styles.emptyBody}>{emptyBody}</p>
+        <p className={styles.emptyHeadline}>{emptyHeadline ?? t.emptyHeadline}</p>
+        <p className={styles.emptyBody}>{emptyBody ?? t.emptyBody}</p>
       </div>
     );
   }
@@ -86,10 +120,10 @@ export function ScopePicker({
     >
       <span className={styles.chipLabel}>
         {item.label}
-        {item.kind === "county" ? " (ganzer Landkreis)" : ""}
+        {item.kind === "county" ? ` (${t.wholeDistrict})` : ""}
       </span>
       <Icon name="circle-x" size={18} />
-      <span className={styles.srOnly}>entfernen</span>
+      <span className={styles.srOnly}>{t.remove}</span>
     </RouteLink>
   ));
 
@@ -97,7 +131,7 @@ export function ScopePicker({
     <div className={classes} data-demo={isMocked(state) ? "true" : undefined}>
       {items.length > collapseAt ? (
         <details className={styles.disclosure}>
-          <summary className={styles.summary}>{items.length} Orte ausgewählt</summary>
+          <summary className={styles.summary}>{t.collapsed.replace("{n}", String(items.length))}</summary>
           <div className={styles.chips}>{chips}</div>
         </details>
       ) : (

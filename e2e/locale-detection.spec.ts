@@ -135,7 +135,7 @@ test.describe("DEC-0038/053: the Accept-Language suggestion signal", () => {
     baseURL,
   }) => {
     test.skip(!isHostSpoofable(baseURL), SKIP_REASON);
-    const target = new URL("/en/mitmachen", baseURL);
+    const target = new URL("/en/take-part", baseURL);
     const response = await request.get(target.toString(), {
       headers: { host: "www.schafe-vorm-fenster.de", "accept-language": "en" },
     });
