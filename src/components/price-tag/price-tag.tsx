@@ -68,17 +68,17 @@ export function PriceTag({
   const permanent = permanentLabel ?? words.permanent;
   const onRequest = onRequestLabel ?? words.onRequest;
 
-  if (display === "withheld") return <span className={classes} />;
+  if (display === "withheld") return <span className={classes} data-price-tag="" />;
 
   if (display === "permanent") {
-    return <Text className={classes}>{permanent}</Text>;
+    return <Text className={classes} data-price-tag="">{permanent}</Text>;
   }
 
   if (display === "on-request") {
-    return <Text className={classes}>{onRequest}</Text>;
+    return <Text className={classes} data-price-tag="">{onRequest}</Text>;
   }
 
-  if (!figure) return <Text className={classes}>{onRequest}</Text>;
+  if (!figure) return <Text className={classes} data-price-tag="">{onRequest}</Text>;
 
-  return <Text className={classes}>{formatPriceFigure(figure, locale)}</Text>;
+  return <Text className={classes} data-price-tag="">{formatPriceFigure(figure, locale)}</Text>;
 }

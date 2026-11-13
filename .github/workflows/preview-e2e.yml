@@ -56,7 +56,7 @@ jobs:
       on_next_2026: ${{ steps.check.outputs.on_next_2026 }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -70,6 +70,41 @@ jobs:
             echo "on_next_2026=false" >> "$GITHUB_OUTPUT"
           fi
 
+  # Issue 216: runs for every Preview deployment, pull requests included (the
+  # `smoke` job below is limited to commits on `next-2026`). No browser needed.
+  image-routes:
+    name: Image routes answer on the preview
+    if: >
+      github.event.deployment_status.state == 'success' &&
+      github.event.deployment.environment == 'Preview' &&
+      github.event.deployment_status.environment_url != ''
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.deployment.sha }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: ".nvmrc"
+          cache: pnpm
+
+      - name: Registry credentials (user-level config; pnpm ignores ${VAR} in the committed .npmrc, DEC-0221)
+        run: sh scripts/registry-auth.sh
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Every icon and share-image route returns 200 with an image type
+        env:
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+        run: pnpm check:image-routes "${{ github.event.deployment_status.environment_url }}"
+
   smoke:
     name: E2E smoke against preview
     needs: gate
@@ -77,18 +112,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.event.deployment.sha }}
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
           node-version-file: ".nvmrc"
           cache: pnpm
+
+      - name: Registry credentials (user-level config; pnpm ignores ${VAR} in the committed .npmrc, DEC-0221)
+        run: sh scripts/registry-auth.sh
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -101,7 +139,7 @@ jobs:
           fi
 
       - name: Cache Playwright browsers
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         id: playwright-cache
         with:
           path: ~/.cache/ms-playwright
@@ -143,7 +181,7 @@ jobs:
 
       - name: Upload Playwright report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: preview-e2e-report
           path: playwright-report/

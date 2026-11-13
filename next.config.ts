@@ -14,6 +14,20 @@ const nextConfig: NextConfig = {
   // `NEXT_ADAPTER_PATH`; the wrapper delegates to it). See the file's header.
   adapterPath: join(process.cwd(), "scripts", "csp-adapter.mjs"),
 
+  // Issue 216: the icon and share-image routes read the brand logo and the
+  // brand typeface from `node_modules` with `fs` (`src/lib/seo/brand-assets.ts`).
+  // Output file tracing cannot see a computed path, so on Vercel the files were
+  // missing from the function bundle (ENOENT, 500). Listed here, they ship with
+  // exactly these two routes. Keys are route paths, brackets escaped.
+  outputFileTracingIncludes: {
+    "/api/icon/\\[size\\]": ["./node_modules/@schafe-vorm-fenster/brand-design/logos/*.png"],
+    "/api/og/\\[lang\\]/\\[route\\]": [
+      "./node_modules/@schafe-vorm-fenster/brand-design/logos/*.png",
+      "./node_modules/@fontsource/atkinson-hyperlegible-next/files/atkinson-hyperlegible-next-latin-400-normal.woff",
+      "./node_modules/@fontsource/atkinson-hyperlegible-next/files/atkinson-hyperlegible-next-latin-800-normal.woff",
+    ],
+  },
+
   // DEC-0163 §2: every page is static, and stays byte-identical for the life
   // of a deployment — its inline scripts are hashed at build time, so HTML
   // that regenerated would carry a flight payload no hash covers. `max` is
@@ -51,7 +65,13 @@ const nextConfig: NextConfig = {
   // path is typed here. Next.js evaluates redirects before rewrites, which is
   // the order both specs require.
   async redirects() {
-    return [...redirectTable()];
+    return [
+      // Issue 216: browsers and crawlers ask for `/favicon.ico` by themselves.
+      // No icon file is committed (TS-WEB-0017-A6), so it answers with the
+      // generated brand icon instead of a 404.
+      { source: "/favicon.ico", destination: "/api/icon/32", permanent: false },
+      ...redirectTable(),
+    ];
   },
 
   // TS-WEB-0004 D3 rule 2 / D3a: the public, localized path is rewritten onto the
