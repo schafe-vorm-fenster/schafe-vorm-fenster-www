@@ -41,7 +41,7 @@ import { buildDay } from "./_build-day";
 import { HomeHeroContent, HomeNearby, type HomeFocusCopy } from "./_home-focus";
 import { PlacePhotoLayer } from "./_place-photo";
 import { proofIntro, selectProof } from "./_proof";
-import { proofDeeplink } from "./_proof-links";
+import { proofCardLink, proofDeeplink } from "./_proof-links";
 import { PageJsonLd } from "./_structured-data";
 import { pageContent } from "./_content";
 import { localeFrom, pageMetadataFor } from "./_locale";
@@ -505,11 +505,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
                   logo={partnerLogo(entry.candidate.contextLine)}
                   key={entry.candidate.id}
                   /* Issue #36: one link to the evidence entry, labelled by the slot. */
-                  link={
-                    entry.candidate.deeplink && proof.fields["Link"]
-                      ? { label: proof.fields["Link"], ...entry.candidate.deeplink }
-                      : undefined
-                  }
+                  link={proofCardLink(entry.candidate, proof.fields["Link"])}
                   locale={locale}
                   state={entry.state}
                 />

@@ -36,6 +36,7 @@ import { comparisonPairs } from "../_comparison";
 import { PageJsonLd } from "../_structured-data";
 import { pageContent } from "../_content";
 import { parseProofLine, proofIntro, quoteAuthor, selectProof } from "../_proof";
+import { proofCardLink, proofDeeplink } from "../_proof-links";
 import { localeFrom, pageMetadataFor } from "../_locale";
 import { PageFrame } from "../_page-frame";
 
@@ -286,6 +287,8 @@ export default async function Page({
         // the heading is the same on every page (DEC-0143 §1, DEC-0209).
         proofKind: "customer" as const,
         ...(citation === undefined ? {} : { citation }),
+        // issue 220: the hub proof id behind this line names its archive entry.
+        deeplink: proofDeeplink(proofDemo.derivedFrom, index),
         demo: proofIsDemo,
       };
     }),
@@ -550,6 +553,7 @@ export default async function Page({
                 emphasis={position === 0 ? "feature" : "compact"}
                 logo={partnerLogo(entry.candidate.contextLine)}
                 key={entry.candidate.id}
+                link={proofCardLink(entry.candidate, proofDemo.fields["Link"])}
                 locale={locale}
                 state={entry.state}
               />

@@ -31,11 +31,20 @@ export const PROOF_DEEPLINKS: Readonly<Record<string, ProofDeeplink>> = {
     to: "archive",
     hash: "2024-09-kulturlandbuero-volkshochschule",
   },
-  // `kulturlandbuero-broellin.proof.md` has `media_echo: []`; its Usage section
-  // names "media-echo 2024-09" (the Kulturlandbüro, also the cooperation partner).
-  "kulturlandbuero-broellin": {
+  // The testimonials have `media_echo: []`: no press entry carries their words.
+  // Each stands in the archive as a row of its own (issue 220), anchored by the
+  // hub proof id itself.
+  "kulturlandbuero-broellin": { to: "archive", hash: "kulturlandbuero-broellin" },
+  "wendt-rubkow": { to: "archive", hash: "wendt-rubkow" },
+  "zschiesche-gross-kiesow": { to: "archive", hash: "zschiesche-gross-kiesow" },
+  "eichler-wasserschloss-quilow": { to: "archive", hash: "eichler-wasserschloss-quilow" },
+  "kurzweg-baeckerei": { to: "archive", hash: "kurzweg-baeckerei" },
+  // `leader-foerderung-2022.proof.md` → `media_echo: [2022-06-leader-foerderung]`
+  "leader-foerderung-2022": { to: "archive", hash: "2022-06-leader-foerderung" },
+  // `zukunftswege-ost-newsletter.proof.md` → `media_echo: [2026-01-zukunftswege-ost-vollblutdigitalisierer]`
+  "zukunftswege-ost-newsletter": {
     to: "archive",
-    hash: "2024-09-kulturlandbuero-volkshochschule",
+    hash: "2026-01-zukunftswege-ost-vollblutdigitalisierer",
   },
 };
 
@@ -56,4 +65,15 @@ export function proofDeeplink(
 ): ProofDeeplink | undefined {
   const id = hubProofIds(derivedFrom)[index];
   return id === undefined ? undefined : PROOF_DEEPLINKS[id];
+}
+
+/**
+ * The `ProofCard` link of a candidate: the slot's `Link` label over the
+ * candidate's deeplink, or `undefined` where either is missing.
+ */
+export function proofCardLink(
+  candidate: { readonly deeplink?: ProofDeeplink },
+  label: string | undefined,
+): (ProofDeeplink & { readonly label: string }) | undefined {
+  return candidate.deeplink && label ? { label, ...candidate.deeplink } : undefined;
 }

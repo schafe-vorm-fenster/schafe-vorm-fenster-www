@@ -8,6 +8,53 @@ import { href } from "../src/lib/routes/routes";
  * entry exists under the anchor the link names, and following the link scrolls
  * to it and marks it (`:target`).
  */
+const PROOF_SECTION =
+  "section:has(h2#proof-stream-heading, h2#proof-heading, h2#beleg, h2#beleg-heading)";
+
+/**
+ * Issue 220 — every page that shows proof teasers links each teaser to its own
+ * archive entry: one link per teaser, a unique anchor per page, and the anchor
+ * exists exactly once on the archive page (both locales).
+ */
+const PAGES = ["home", "calendar", "region", "takePart"] as const;
+
+for (const locale of ["de", "en"] as const) {
+  test.describe(`${locale}: proof teasers link to their own archive entry`, () => {
+    test("every teaser link on every page targets an existing, unique anchor", async ({
+      page,
+    }) => {
+      const archive = href("archive", locale);
+      const seen: string[] = [];
+
+      for (const route of PAGES) {
+        const path = href(route, locale);
+        await page.goto(path);
+        const teasers = page.locator(`${PROOF_SECTION} article`);
+        const count = await teasers.count();
+        expect(count, `${path} shows proof teasers`).toBeGreaterThan(0);
+
+        const anchors: string[] = [];
+        for (let i = 0; i < count; i += 1) {
+          const links = teasers.nth(i).locator("a");
+          await expect(links, `${path}: teaser ${i + 1} has exactly one link`).toHaveCount(1);
+          const target = await links.first().getAttribute("href");
+          expect(target, `${path}: teaser ${i + 1}`).toMatch(
+            new RegExp(`^${archive.replace(/\//g, "\\/")}#[^#]+$`),
+          );
+          anchors.push(target!.split("#")[1]);
+        }
+        expect(new Set(anchors).size, `${path}: anchors are unique`).toBe(anchors.length);
+        seen.push(...anchors);
+      }
+
+      await page.goto(archive);
+      for (const anchor of new Set(seen)) {
+        await expect(page.locator(`[id="${anchor}"]`), `${archive} carries #${anchor}`).toHaveCount(1);
+      }
+    });
+  });
+}
+
 for (const locale of ["de", "en"] as const) {
   const home = href("home", locale);
 

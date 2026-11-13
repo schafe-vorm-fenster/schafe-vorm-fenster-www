@@ -16,6 +16,47 @@ function homeDerivedFrom(locale: "de" | "en"): string[] {
   return JSON.parse(comment![1]) as string[];
 }
 
+/** Every page that shows proof teasers, with its slot (issue 220). */
+const PAGES = [
+  { dir: "home", slot: "home-8-proof-stream" },
+  { dir: "dein-kalender", slot: "dein-kalender-5-proof-demo" },
+  { dir: "deine-region", slot: "deine-region-6-proof-demo" },
+  { dir: "mitmachen", slot: "mitmachen-7-proof-demo" },
+] as const;
+
+function slotDerivedFrom(source: string, slot: string): string[] {
+  const comment = new RegExp(`<!-- id: ${slot};[^>]*derived_from: (\\[[^\\]]*\\])`).exec(source);
+  expect(comment, slot).not.toBeNull();
+  return JSON.parse(comment![1]) as string[];
+}
+
+describe("proof teaser deeplinks on every page (issue 220)", () => {
+  for (const { dir, slot } of PAGES) {
+    it.each(["de", "en"] as const)(`${dir} (%s): every proof line has a deeplink and the slot a Link label`, (locale) => {
+      const source = read(`content/pages/${dir}/${locale}.md`);
+      const derivedFrom = slotDerivedFrom(source, slot);
+      const ids = hubProofIds(derivedFrom);
+      expect(ids.length, slot).toBeGreaterThan(0);
+      ids.forEach((id, index) => {
+        expect(proofDeeplink(derivedFrom, index), `${dir}: ${id}`).toBeDefined();
+      });
+      const after = source.slice(source.indexOf(`<!-- id: ${slot};`));
+      // the proof lines come first, so the line index joins line and hub id
+      const list = /\n((?:\d\. [^\n]*\n)+)\n\*\*Link:\*\* \S/.exec(after);
+      expect(list, `${dir} ${locale}: list followed by a Link label`).not.toBeNull();
+      expect(list![1].trim().split("\n").length, `${dir}: one hub id per line`).toBe(ids.length);
+    });
+  }
+
+  it("gives no two proof records the same archive entry on one page", () => {
+    for (const { dir, slot } of PAGES) {
+      const derivedFrom = slotDerivedFrom(read(`content/pages/${dir}/de.md`), slot);
+      const hashes = hubProofIds(derivedFrom).map((id) => PROOF_DEEPLINKS[id]?.hash);
+      expect(new Set(hashes).size, dir).toBe(hashes.length);
+    }
+  });
+});
+
 describe("proof teaser deeplinks (issue #36)", () => {
   it("reads the hub proof ids off derived_from in order, skipping package-wide refs", () => {
     expect(
