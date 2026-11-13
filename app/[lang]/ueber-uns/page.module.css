@@ -163,7 +163,11 @@ section.quoteBand [data-photo-picture] {
 /*
  * The portrait runs to the viewport edge (SRC-0014 §Section grounds, "Images
  * inside a colour section run full-bleed"); the text keeps the page gutter.
- * From `xl` the portrait takes the left half and the text the right.
+ * Below `lg` (48rem, tablet portrait) the photograph stands above the text.
+ * From `lg` the photograph takes the left half and the text the right half,
+ * vertically centred (issue 205). `lg` is the earliest tier at which half the
+ * width still carries a readable text column: 768px gives about 330px of text
+ * beside a 384px photograph. `md` (640px) would leave under 270px.
  */
 .person {
   width: 100%;
@@ -180,7 +184,12 @@ section.personSection {
   gap: 0;
 }
 
-.profile > div {
+/* `:not(:first-child)` matches the specificity of `person-profile`'s own
+   `.text:not(:first-child)` (a small top padding under a portrait). Without it
+   that rule won over this one and cut the section's top padding from 28px to
+   8px, so the text was neither padded evenly nor centred beside the photograph
+   (issue 205). */
+.profile > div:not(:first-child) {
   margin-inline: auto;
   max-width: calc(var(--measure-page) + 2 * var(--gutter));
   padding-block: var(--section-padding-block);
@@ -188,16 +197,20 @@ section.personSection {
   width: 100%;
 }
 
-@media (min-width: 64rem) {
+@media (min-width: 48rem) {
   .profile {
     align-items: center;
-    column-gap: var(--space-12);
+    column-gap: var(--gutter);
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
 
-  .profile > div {
+  /* The text's right edge is the container's content edge (the page margin,
+     `--gutter`, until the 1200px content box is reached); its left edge is the
+     column gap after the photograph. */
+  .profile > div:not(:first-child) {
     margin-inline: 0;
+    max-width: none;
     padding-block: var(--space-6);
     padding-inline: 0 max(var(--gutter), calc((100vw - var(--measure-page)) / 2));
   }
