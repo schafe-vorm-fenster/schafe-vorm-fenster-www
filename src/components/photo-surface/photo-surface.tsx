@@ -5,6 +5,7 @@ import { isMocked, isPending, type DataStateProps } from "../data-state";
 import { PlaceholderSurface } from "../placeholder-surface/placeholder-surface";
 import { Skeleton } from "../skeleton/skeleton";
 
+import { HeroPreload } from "./hero-preload";
 import { PhotoCredit } from "./photo-credit";
 
 import { focalPosition, photoUrl } from "./url";
@@ -214,26 +215,7 @@ export function PhotoSurface({
         fetches the landscape frame and the desktop never fetches the upright
         one. React hoists them into `<head>`.
       */}
-      {priority && !missingPhoto ? (
-        <>
-          <link
-            as="image"
-            fetchPriority="high"
-            href={src}
-            media={wideSrc ? "(max-width: 47.999rem)" : undefined}
-            rel="preload"
-          />
-          {wideSrc ? (
-            <link
-              as="image"
-              fetchPriority="high"
-              href={wideSrc}
-              media="(min-width: 48rem)"
-              rel="preload"
-            />
-          ) : null}
-        </>
-      ) : null}
+      {priority && !missingPhoto ? <HeroPreload src={src} wideSrc={wideSrc} /> : null}
     <section
       aria-label={label}
       className={classes}

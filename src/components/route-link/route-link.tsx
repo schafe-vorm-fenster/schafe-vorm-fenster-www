@@ -56,11 +56,6 @@ export function RouteLink({
       className={classes}
       data-current={current ? "true" : undefined}
       href={linkHref(to, { locale, query, hash })}
-      // Issue 230: a viewport prefetch renders the destination page's tree on
-      // the client, which hoists its hero image preload (and its stylesheet)
-      // into the current document's head. The visitor never sees that hero,
-      // so Chrome logged "preloaded but not used" for each.
-      prefetch={false}
       {...rest}
     >
       {children}
