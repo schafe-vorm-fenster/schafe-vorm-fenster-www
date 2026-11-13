@@ -19,8 +19,10 @@
  * to the chrome strings.
  */
 
+import { ERROR_COPY } from "@/src/lib/i18n/error-copy";
 import { LOCALES } from "@/src/lib/i18n/locales";
 
+import type { ErrorCopy } from "@/src/lib/i18n/error-copy";
 import type { Locale } from "@/src/lib/i18n/locales";
 import type { RouteId } from "@/src/lib/routes/routes";
 
@@ -122,12 +124,8 @@ export interface Dictionary {
     /** The heading over the four jobs on the 404 (TS-WEB-0004-A4's jobs band). */
     jobsHeading: string;
   };
-  error: {
-    title: string;
-    body: string;
-    retry: string;
-    backHome: string;
-  };
+  /** Its own module, so `app/global-error.tsx` ships without this file (issue 214). */
+  error: ErrorCopy;
   /**
    * The words the live-data shells put on themselves. They live here rather
    * than in each component's default, because a component that hard-codes a
@@ -593,12 +591,7 @@ const de: Dictionary = {
     backHome: "Zur Startseite",
     jobsHeading: "Oder du bist mit einem anderen Anliegen hier:",
   },
-  error: {
-    title: "Da ist etwas schiefgelaufen",
-    body: "Bitte versuche es noch einmal. Wenn es dann immer noch nicht klappt, warte ein paar Minuten und lade die Seite neu.",
-    retry: "Erneut versuchen",
-    backHome: "Zur Startseite",
-  },
+  error: ERROR_COPY.de,
   live: {
     stale: "Stand",
     genericCounty: "deiner Region",
@@ -831,12 +824,7 @@ const en: Dictionary = {
     backHome: "To the home page",
     jobsHeading: "Or you are here for something else:",
   },
-  error: {
-    title: "Something went wrong",
-    body: "Please try again. If it still does not work, give it a few minutes and reload the page.",
-    retry: "Try again",
-    backHome: "To the home page",
-  },
+  error: ERROR_COPY.en,
   live: {
     stale: "As of",
     genericCounty: "your region",
