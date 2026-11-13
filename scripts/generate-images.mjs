@@ -45,7 +45,7 @@ import { dirname, join, relative } from "node:path";
 import { execFileSync } from "node:child_process";
 
 import { config as loadEnv } from "dotenv";
-import yaml from "js-yaml";
+import * as yaml from "js-yaml";
 import sharp from "sharp";
 
 import { DEFAULT_FOCAL, anchoredCropWindow, cropWindow } from "./lib/focal-crop.mjs";
@@ -193,7 +193,7 @@ function writeImages(file, images) {
   if (!match) throw new Error(`${file}: no frontmatter`);
   const block = match[1];
   const rendered = yaml
-    .dump({ images }, { lineWidth: 100, noRefs: true, quotingType: '"' })
+    .dump({ images }, { lineWidth: 100, noRefs: true, quoteStyle: "double" })
     .trimEnd();
 
   const lines = block.split("\n");
