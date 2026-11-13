@@ -1,0 +1,256 @@
+import { expect, test } from "@playwright/test";
+
+import type { Page } from "@playwright/test";
+
+import { everyRoute, href } from "../src/lib/routes/routes";
+
+/**
+ * One chrome per document — **across client-side navigation** (state/open.md
+ * row 204, acceptance finding R-6).
+ *
+ * Every other suite in this folder navigates with `page.goto()`, which is a
+ * fresh document every time. That is exactly the walk that cannot see this
+ * class of defect: with Cache Components on, the App Router does not unmount
+ * the page a visitor clicks away from — it keeps the last three route
+ * segments mounted inside hidden React `<Activity>` boundaries so their state
+ * survives a return (`node_modules/next/dist/docs/01-app/02-guides/
+ * preserving-ui-state.md`, "Next.js preserves up to 3 routes"). Anything a
+ * *page* renders is inside that boundary. While the chrome was the page's,
+ * one click left two `<header>`, two `<main id="main">` and two `<footer>`
+ * elements in the document and a second click left three: two `main`
+ * landmarks is WCAG 1.3.1, and the skip link's `#main` target was ambiguous
+ * for the rest of the session.
+ *
+ * So this file clicks. It walks **every internal link of every page in both
+ * languages** and asserts, after each navigation and after the return, that
+ * the document still has exactly one of each landmark. Nothing here would
+ * fail on a page load.
+ *
+ * Since DEC-0081 the count includes the **contact section**, which the same
+ * layout renders between `</main>` and the footer on every route: it carries
+ * `id="kontakt"`, the target every in-page booking CTA resolves to, so a
+ * duplicate left behind by a preserved segment would make that anchor
+ * ambiguous exactly the way `#main` was (DEC-0122 §1).
+ */
+
+interface Landmarks {
+  header: number;
+  main: number;
+  idMain: number;
+  /**
+   * The contact section is chrome for the same reason (DEC-0081 §2,
+   * DEC-0122 §1): it stands on every page, it is rendered by the layout, and
+   * a page that rendered it would leave a second `id="kontakt"` behind after
+   * one click — an ambiguous target for every in-page booking CTA, which is
+   * what DEC-0081 §3 resolves a booking to.
+   */
+  contact: number;
+  footer: number;
+}
+
+const ONE: Landmarks = { header: 1, main: 1, idMain: 1, contact: 1, footer: 1 };
+
+/**
+ * This file is the slowest in the suite by construction: 26 walks, each one
+ * clicking every internal link a page offers and coming back from each. The
+ * longest already ran at 25–27 s against Playwright's 30 s default, so a
+ * worker under load failed on the clock rather than on a landmark count — a
+ * failure that says nothing about the thing being tested. The budget is
+ * raised to match the shape of the walk; it is not a threshold this suite
+ * asserts anything against.
+ */
+test.describe.configure({ timeout: 120_000 });
+
+/**
+ * Everything the bfcache keeps is still in the DOM, so these count nodes
+ * rather than roles — the hidden copies are what has to be absent.
+ */
+/**
+ * A navigation that commits while this reads tears the execution context down
+ * underneath it — `page.evaluate: Execution context was destroyed`, which is
+ * what this walk started failing with on `/en/your-place` (R-6, M6 round).
+ *
+ * Measured before changing anything, by tracing every navigation request,
+ * response and history call for every link out of that page: **no link double-
+ * navigates.** There is no 3xx on any of them (the `?ort=` proxy hop, the one
+ * redirect this walk could have met, is not on a link this page offers), and
+ * every click and every back lands on the URL it should. What does happen is
+ * that the App Router commits a second, same-document history entry of its
+ * own a beat after a back navigation settles — every extra entry traced to
+ * `next/dist/client`, none to app code — and on a back that re-fetches the
+ * document, that second commit can land inside this read.
+ *
+ * So this is the walk racing the router, not the product navigating twice,
+ * and the answer is to read the steady state rather than whatever instant the
+ * timeout happened to end on: re-settle and read again, for that one error
+ * class only. Any other failure still throws on the first attempt.
+ */
+function isContextDestroyed(error: unknown): boolean {
+  return (
+    error instanceof Error && /Execution context was destroyed|Target closed/u.test(error.message)
+  );
+}
+
+async function landmarks(page: Page): Promise<Landmarks> {
+  for (let attempt = 0; ; attempt += 1) {
+    try {
+      return await page.evaluate(() => ({
+        header: document.querySelectorAll("body > header").length,
+        main: document.querySelectorAll("main").length,
+        idMain: document.querySelectorAll("#main").length,
+        contact: document.querySelectorAll("section#kontakt[data-contact-section]").length,
+        footer: document.querySelectorAll("body > footer").length,
+      }));
+    } catch (error) {
+      if (attempt >= 3 || !isContextDestroyed(error)) throw error;
+      await settle(page);
+    }
+  }
+}
+
+/**
+ * The router commits the new segment a beat after the URL changes, and a
+ * duplicate left behind by the bfcache persists rather than flickering — so a
+ * short settle measures the steady state the visitor is left in. `networkidle`
+ * is not usable here: the live modules keep polling.
+ */
+async function settle(page: Page): Promise<void> {
+  await page.waitForLoadState("domcontentloaded");
+  await page.waitForTimeout(300);
+}
+
+/** The internal destinations a page actually offers a visitor to click. */
+async function internalLinks(page: Page): Promise<string[]> {
+  const hrefs = await page
+    .locator("a[href^='/']")
+    .filter({ visible: true })
+    .evaluateAll((anchors) =>
+      anchors.map((anchor) => anchor.getAttribute("href") ?? ""),
+    );
+  return [...new Set(hrefs.filter((candidate) => !candidate.startsWith("//")))];
+}
+
+for (const { route, locale } of everyRoute()) {
+  const from = href(route, locale);
+
+  test(`row 204: every link out of ${from} leaves one chrome behind`, async ({
+    page,
+  }) => {
+    await page.goto(from);
+    await settle(page);
+    expect(await landmarks(page), `on load: ${from}`).toEqual(ONE);
+
+    const startPath = new URL(page.url()).pathname;
+    const targets = await internalLinks(page);
+    expect(targets.length, `internal links on ${from}`).toBeGreaterThan(0);
+
+    for (const target of targets) {
+      await page
+        .locator(`a[href="${target}"]`)
+        .filter({ visible: true })
+        .first()
+        .click();
+      await settle(page);
+      expect(await landmarks(page), `${from} → ${target}`).toEqual(ONE);
+
+      // A link that stays on this page (the logo, an in-page anchor) has no
+      // previous entry of its own to come back to. One that only changes the
+      // query does move the page, though: on `/dein-kalender/bestellen` the
+      // county chip (`?kreis=…`) advances the flow, read in the browser since
+      // DEC-0163, and the step-1 link collected at load is gone — the walk then
+      // waited 120 s for it. So the start state is restored before the next
+      // link, the same reset the redirect case below takes.
+      if (new URL(page.url()).pathname === startPath) {
+        const { pathname, search } = new URL(page.url());
+        if (`${pathname}${search}` !== from) {
+          await page.goto(from);
+          await settle(page);
+        }
+        continue;
+      }
+
+      // Back is the other half: the router *restores* a preserved segment
+      // here rather than creating one, and that path duplicated too.
+      await page.goBack();
+      await settle(page);
+      expect(await landmarks(page), `${target} → back`).toEqual(ONE);
+
+      // A route that answers a redirect for the parameter it was entered with
+      // (TS-WEB-0020 D2 row 5 / F-2-49) bounces the back step forward again. The
+      // landmark count has to hold wherever it lands — it was asserted above —
+      // but the next link has to be clicked from this page, so reset.
+      if (new URL(page.url()).pathname !== startPath) {
+        await page.goto(from);
+        await settle(page);
+      }
+    }
+  });
+}
+
+/**
+ * The bfcache holds three entries, so a chain is what made a third copy
+ * appear. Two clicks were enough to reach the cap before the fix.
+ */
+test("row 204: a chain of client navigations never accumulates chrome", async ({
+  page,
+}) => {
+  const chain = ["/ueber-uns", "/mitmachen", "/dein-kalender", "/deine-region", "/"];
+
+  await page.goto("/");
+  await settle(page);
+  for (const target of chain) {
+    await page.locator(`a[href="${target}"]`).filter({ visible: true }).first().click();
+    await page.waitForURL((url) => url.pathname === target);
+    await settle(page);
+    expect(await landmarks(page), `after → ${target}`).toEqual(ONE);
+  }
+
+  for (let step = 0; step < 3; step += 1) {
+    await page.goBack();
+    await settle(page);
+    expect(await landmarks(page), `after back ${step + 1}`).toEqual(ONE);
+  }
+});
+
+/**
+ * TS-WEB-0002 D5 — the skip link's target. `#main` resolved to whichever copy
+ * stood first in the document while row 204 was open; a visitor who had
+ * clicked once was jumping into an ambiguous id.
+ */
+test("row 204: the skip link keeps one unambiguous target after navigating", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await settle(page);
+  await page.locator('a[href="/ueber-uns"]').filter({ visible: true }).first().click();
+  await page.waitForURL((url) => url.pathname === "/ueber-uns");
+  await settle(page);
+
+  const skip = page.locator('a[href="#main"]');
+  await expect(skip).toHaveCount(1);
+
+  const target = page.locator("#main");
+  await expect(target).toHaveCount(1);
+  await expect(target).toBeVisible();
+  // And it is the page the visitor is actually on, not the one left behind.
+  await expect(target.locator("h1").first()).toBeVisible();
+});
+
+/**
+ * The landmarks the accessibility tree sees, after a navigation rather than
+ * after a load — `getByRole` filters hidden content, so this asserts the
+ * other half of the same fact.
+ */
+test("row 204: one banner, one main and one contentinfo in the a11y tree", async ({
+  page,
+}) => {
+  await page.goto("/en");
+  await settle(page);
+  await page.locator('a[href="/en/take-part"]').filter({ visible: true }).first().click();
+  await page.waitForURL((url) => url.pathname === "/en/take-part");
+  await settle(page);
+
+  await expect(page.getByRole("banner")).toHaveCount(1);
+  await expect(page.getByRole("main")).toHaveCount(1);
+  await expect(page.getByRole("contentinfo")).toHaveCount(1);
+});

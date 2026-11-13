@@ -1,0 +1,337 @@
+/*
+ * The mobile-first layout shell — TS-WEB-0017 D2.
+ *
+ * D2(a) Direction: everything below the first `@media` line is the phone.
+ *   Every query is `min-width`; a `max-width` query is a defect, because it
+ *   makes the desktop the base case (checked by scripts/check-brand.ts, A4).
+ * D2(b) Breakpoints: the six `breakpoint.*` token values of brand-design
+ *   (DEC-0067) — xs 22.5rem · sm 26.75rem · md 40rem · lg 48rem · xl 64rem ·
+ *   2xl 80rem. No call site invents one. CSS media queries cannot read custom
+ *   properties, so the literals appear here and are checked against the token
+ *   set rather than being free.
+ * D2(c) Width is not maximised: the container's *content box* is
+ *   `--measure-page` (75rem = 1200px) and the outer margin lies outside it
+ *   (DEC-0150). The text measure is `--measure-text` (68ch). Above the point
+ *   where the content reaches 1200px only the margin grows.
+ * Layout grid (SRC-0014 §Layout Grid, DEC-0150): three tiers on the six
+ *   breakpoints — mobile below md (1 column, 16px margin), tablet from md
+ *   (8 columns, 32px margin, 20px gutter), desktop from xl (12 columns, 24px
+ *   gutter, 48px margin minimum). `--span-N` is N desktop columns of the
+ *   nearest `.container`, measured in `cqi`, so a span means the same width
+ *   however deep the element sits; below xl every span is the full width.
+ * D2(d) One component tree. A breakpoint may change spacing, type step, image
+ *   aspect and the column count of a block that declares `data-columns-*`.
+ *   It may never change block order, block presence or wording.
+ *
+ * No colour and no font-family literal appears here — TS-WEB-0017 D3.1. Every
+ * value is a token from app/styles/brand.css.
+ */
+
+/* The component layer: type roles, category pairs, ratios, fixed heights and
+   the one motion, each composed from the tokens above (M2 component set). */
+@import "./components.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  color-scheme: light;
+  /* The outer margin per tier — SRC-0014 §Layout Grid, the six-row table
+     DEM-0042 asked for. 16px on every phone width. */
+  --gutter: var(--space-4);
+  /* The column gap between grid columns; no columns stand side by side below
+     xl, so on the phone and the tablet it only spaces stacked blocks. */
+  --grid-gap: var(--space-6);
+  /* The height of an event row whose title runs to its second line — the
+     reserve a live list holds while its rows load in the browser (DEC-0163):
+     hairline · padding · two title lines · the meta line, which the 24 px
+     category sets on the phone. A one-line row is 76 px
+     (`--height-event-row`); reserving the taller one is what keeps a list
+     from growing after paint whichever titles arrive. The category's form
+     follows the row's own width (`event-row.module.css`), so below `lg` a
+     wide row may carry the 26 px pill rather than the 24 px glyph: the
+     reserve takes the taller of the two. */
+  --height-event-row-tall: calc(
+    1px + 2 * var(--space-2) + 2 * var(--type-card-size) * var(--type-card-leading) +
+      max(1.5rem, var(--height-badge))
+  );
+  /* Column spans: the full width until the desktop tier defines them. */
+  --span-4: 100%;
+  --span-6: 100%;
+  --span-7: 100%;
+  --span-8: 100%;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  /*
+   * The header is sticky on every page and `fixed` over a hero photograph
+   * (round 3, Jan's point 2), so anything scrolled to — a fragment link, a
+   * focused element the browser brings into view — would otherwise land under
+   * it. One declaration here covers every anchor on the site;
+   * `legal-section`'s own `scroll-margin-top` stays, because that one also
+   * wants a little air above the heading.
+   */
+  scroll-padding-top: var(--site-header-height);
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-body);
+  font-weight: 400;
+  line-height: var(--leading-relaxed);
+  /* D2/A9: nothing may scroll sideways at 320px. */
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 800;
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+  margin: 0 0 var(--space-4);
+  text-wrap: balance;
+}
+
+h1 { font-size: var(--font-size-h1); }
+h2 { font-size: var(--font-size-h2); }
+h3 { font-size: var(--font-size-h3); font-weight: 700; }
+h4 { font-size: var(--font-size-h4); font-weight: 700; }
+
+p {
+  margin: 0 0 var(--space-4);
+  /* D2(c): the text measure is capped separately from the container. */
+  max-width: var(--measure-text);
+  text-wrap: pretty;
+}
+
+a {
+  color: var(--link);
+  text-underline-offset: 0.15em;
+}
+
+a:hover {
+  color: var(--link-hover);
+}
+
+img,
+svg,
+video {
+  display: block;
+  height: auto;
+  max-width: 100%;
+}
+
+/* Focus is visible on every interactive element, and only on keyboard entry. */
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Touch targets: 44px floor, 56px for primary actions (design system). */
+a,
+button,
+input,
+select,
+summary,
+textarea {
+  touch-action: manipulation;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── The shell ─────────────────────────────────────────────────────────── */
+
+.skip-link {
+  background: var(--bg);
+  border-radius: var(--radius-pill);
+  color: var(--text);
+  left: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  position: absolute;
+  top: calc(var(--space-2) * -10);
+  z-index: 10;
+}
+
+.skip-link:focus-visible {
+  top: var(--space-2);
+}
+
+.container {
+  /* The spans below are measured against this box (`cqi`), never against
+     whichever parent an element happens to sit in. */
+  container-type: inline-size;
+  margin-inline: auto;
+  /* D2(c), DEC-0150: the *content* stops at measure.page (1200px); the margin
+     is added outside it, so the padded box is 1200px plus two margins. */
+  max-width: calc(var(--measure-page) + 2 * var(--gutter));
+  padding-inline: var(--gutter);
+  width: 100%;
+}
+
+.site-header,
+.site-footer {
+  background: var(--bg-subtle);
+}
+
+.site-header__inner,
+.site-footer__inner {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  min-height: var(--target-comfortable);
+  padding-block: var(--space-3);
+}
+
+.wordmark {
+  align-items: center;
+  display: inline-flex;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-label);
+  font-weight: 700;
+  gap: var(--space-2);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.site-main {
+  padding-block: var(--space-8);
+}
+
+.site-footer__inner {
+  color: var(--text-muted);
+  font-size: var(--font-size-meta);
+}
+
+/* ── The content stack — DEC-0171 ─────────────────────────────────────────
+ * One owner per level of vertical space (SRC-0014 §Shape and Space):
+ *
+ *   section  owns its padding-block                 (`section-shell`)
+ *   stack    owns the space between its blocks      (this rule)
+ *   block    owns nothing outside its own box       (no outer margin)
+ *
+ * A *block* is a direct child of an element marked `data-stack`. Its own
+ * `margin-block` is cleared — a paragraph's or a heading's element default
+ * above as much as any component's — and every block after the first stands
+ * `--block-gap` below the one before it. Two blocks can therefore no longer
+ * touch because neither happened to carry a margin (#90: the path module and
+ * the hint banner on `/mitmachen`), and they no longer stand 24 px apart in
+ * one section and 16 px in the next because one component brought its own.
+ *
+ * A wrapper that groups several blocks inside a stack is a stack itself —
+ * `section-shell`'s container, `motion-reveal`, a page's own group (a chapter,
+ * a year of the archive). An unruled wrapper is how issue 108 happened: the space
+ * a page asked for through a `className` margin lost the cascade to the
+ * component's own `margin: 0`, and nothing else stood between the blocks.
+ *
+ * The one closer step is the kicker's: it names the block that follows it.
+ * The values step per tier (16/8 px, from xl 24/12 px) and are set in
+ * `components.css` only (DEC-0178, TS-WEB-0017-A34); this rule only reads them.
+ * `e2e/block-gaps.spec.ts` (TS-WEB-0017-A31) measures every stack on every
+ * route at 390, 800 and 1280 px.
+ * ─────────────────────────────────────────────────────────────────────── */
+
+/* `:nth-child()` lifts these to (0,2,0). A component's own root rule is one
+   class, and the production build ships the component chunks after this file
+   — at equal weight a `margin: 0` reset on a component root (a list's, a
+   paragraph's) would take the gap away again, the very cascade accident of
+   issue 108. Two-class rules still win, which is why the guard reads the computed
+   margin rather than trusting this file. */
+[data-stack] > :nth-child(n) {
+  margin-block: 0;
+}
+
+[data-stack] > :nth-child(n + 2) {
+  margin-block-start: var(--block-gap);
+}
+
+[data-stack] > [data-kicker] + :nth-child(n) {
+  margin-block-start: var(--block-gap-bound);
+}
+
+/* ── Switch points ─────────────────────────────────────────────────────────
+ * Only spacing and type steps change. The tree, the order and the wording
+ * are identical at every width (D2(d)); TS-WEB-0017-A8 tests exactly that.
+ * ─────────────────────────────────────────────────────────────────────── */
+
+/* md — 40rem / 640px: the tablet tier. 8 columns, 32px margin, 20px gutter.
+   The space scale has no 20px step yet (DEM-0071), so the gutter is the one
+   spacing literal in this file until brand-design ships it. */
+@media (min-width: 40rem) {
+  :root {
+    --gutter: var(--space-8);
+    --grid-gap: 1.25rem;
+  }
+}
+
+/* lg — 48rem / 768px: tablet portrait. */
+@media (min-width: 48rem) {
+  :root {
+    /* From here a list row is wide enough for the badge (`event-row.module.css`),
+       and the badge — with its icon, the taller of its two heights — sets the
+       meta line. */
+    --height-event-row-tall: calc(
+      1px + 2 * var(--space-2) + 2 * var(--type-card-size) * var(--type-card-leading) + var(--height-badge-icon)
+    );
+  }
+
+  .site-main {
+    padding-block: var(--space-12);
+  }
+}
+
+/* xl — 64rem / 1024px: the desktop tier. 12 columns, 24px gutter, 48px
+   margin minimum; the spans take their desktop widths (SRC-0014 §Layout Grid). */
+@media (min-width: 64rem) {
+  :root {
+    --gutter: var(--space-12);
+    --grid-gap: var(--space-6);
+    --grid-col: calc((100cqi - 11 * var(--grid-gap)) / 12);
+    --span-4: calc(4 * var(--grid-col) + 3 * var(--grid-gap));
+    --span-6: calc(6 * var(--grid-col) + 5 * var(--grid-gap));
+    --span-7: calc(7 * var(--grid-col) + 6 * var(--grid-gap));
+    --span-8: calc(8 * var(--grid-col) + 7 * var(--grid-gap));
+  }
+
+  /* Headlines at most 8 columns, running text at most 7 and never wider than
+     the text measure.
+
+     These are element defaults, so they carry an element's specificity
+     (0,0,1) and nothing more: `:where(.container)` adds none. A component
+     rule (a CSS-module class, 0,1,0) that narrows its own headline — the
+     hero's `h1` in 7 columns — then wins whatever order the stylesheets
+     arrive in. With `.container :where(h1, h2)` (0,1,0) the two tied, and the
+     production build ships this file after the component chunks, so the hero
+     `h1` took 8 columns there (792 px against 690 px at 1440) while the dev
+     server, loading it first, showed 7. Being later in this file than the
+     bare `p` rule is what still lets the paragraph cap replace it. */
+  :where(.container) :is(h1, h2) {
+    max-width: var(--span-8);
+  }
+
+  :where(.container) p {
+    max-width: min(var(--measure-text), var(--span-7));
+  }
+
+  .site-main {
+    padding-block: var(--space-16);
+  }
+}

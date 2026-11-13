@@ -1,0 +1,492 @@
+---
+id: mitmachen-de
+page_id: TS-WEB-0022
+route: "/mitmachen"
+seo:
+  "/mitmachen":
+    title: "Eure Termine veröffentlichen"
+    description: "Flyer fotografieren, per WhatsApp schicken, fertig: Euer Termin steht im Kalender eures Orts und in den Nachbarorten. Kostenlos anmelden."
+    provenance: generated
+content_type: section
+status: approved
+reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
+reviewed_at: "2026-11-13"
+locale: de
+sources:
+  - "@schafe-vorm-fenster/audiences@0.3.3#actors"
+  - "@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"
+  - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
+  - "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"
+  - "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow"
+  - "@schafe-vorm-fenster/proof@0.3.5#zukunftswege-ost-newsletter"
+  - "@schafe-vorm-fenster/media-echo@0.3.3#2022-nordkurier-plattform-doerfer"
+  - "ia"
+derived_from:
+  - "@schafe-vorm-fenster/audiences@0.3.3#actors"
+  - "@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"
+  - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
+  - "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"
+  - "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow"
+  - "@schafe-vorm-fenster/proof@0.3.5#zukunftswege-ost-newsletter"
+  - "@schafe-vorm-fenster/media-echo@0.3.3#2022-nordkurier-plattform-doerfer"
+  - "ia"
+generated_by: "playbook-content-production@1.0.0"
+generated_at: "2026-09-11"
+tone_profile: "du-everywhere"
+provenance: "sourced — every slot except the three `*-steps-demo` siblings, which are `provenance: generated; demo: true`: the step lines of the three explain modules exist only in the 2026-09-23 design drafts (DEC-0124, state/open.md). Slot 7 carries three real publish-weighted reference cases instead of demo quotes, and slot 8 cites the offering record together with the 2022 Nordkurier entry behind the permanence commitment; all of those are clearance: pending (Q-0014, Q-0045)"
+compliance_check: "state/content-map.md#compliance-checks — TS-WEB-0022"
+schema_note: "see content/pages/home/de.md — same TS-WEB-0007/schema gap, state/open.md #37"
+open_points:
+  - "state/open.md #17 — the permanence promise is now cited from `community-calendar` plus the 2022 Nordkurier media-echo entry; whether a proof element of its own gets minted stays open, and the press record has no `usage_rights` yet (Q-0045)"
+images:
+  - id: mitmachen-hero
+    slot: mitmachen-1-hero
+    ratio: hero
+    provenance: ai-edited
+    source: >-
+      Original: Wikimedia Commons, File:Osterfeuer 2023 in Schmatzin.jpg —
+      https://commons.wikimedia.org/wiki/File:Osterfeuer_2023_in_Schmatzin.jpg — Eigenaufnahme
+      (Jan-Henrik Hempel), April 2023, 5526×2378. Mit KI (Google Gemini) bearbeitet, Oktober 2026:
+      Bildausschnitt, Licht, Kontrast und Sättigung; Einzelheiten hat das Werkzeug dabei neu
+      gezeichnet (der Kinderwagen rechts fehlt). Öffentliche Dorfveranstaltung, Menschen nur klein
+      und aus der Entfernung. Entscheidung Q-0092 → DEC-0161. Nachweis hinter dem ©-Zeichen am Bild.
+    master: plan/reviews/2026-10-12/Design - Mitmachen Hero (Gemini).jpg
+    alt: >-
+      Osterfeuer in Schmatzin: Kinder und Familien an Biertischgarnituren auf der Wiese, ein
+      bemalter Bauwagen, dahinter kahle Bäume und das Dorf. Mit KI bearbeitet.
+    lcp: true
+    licence: CC BY-SA 4.0
+    credit: "Jan-Henrik Hempel, CC BY-SA 4.0, über Wikimedia Commons, mit KI bearbeitet"
+    credit_title: "Osterfeuer 2023 in Schmatzin"
+    credit_url: "https://commons.wikimedia.org/wiki/File:Osterfeuer_2023_in_Schmatzin.jpg"
+    focal:
+      x: 45
+      "y": 62
+    status: real
+    file: /images/real/mitmachen-hero.webp
+    width: 800
+    height: 900
+    wide_file: /images/real/mitmachen-hero-wide.webp
+    wide_width: 1190
+    wide_height: 510
+  - id: mitmachen-path-whatsapp
+    slot: mitmachen-3-path-whatsapp
+    ratio: feature
+    provenance: real
+    source: >-
+      Wikimedia Commons, File:Werbelow, Bushaltestelle.jpg —
+      https://commons.wikimedia.org/wiki/File:Werbelow,_Bushaltestelle.jpg — Eigenaufnahme von
+      Schafe vorm Fenster (Commons-Konto „Schafevormfenster", own work), Mai 2025, 3561×2409.
+      Nachweis hinter dem ©-Zeichen am Bild.
+    alt: >-
+      Bushaltestelle an einer Feldsteinmauer in Werbelow, an der Mauer hängen zwei Aushänge, davor
+      eine Bank und Blumenkübel.
+    licence: CC0 1.0
+    credit: "Schafe vorm Fenster, CC0 1.0, über Wikimedia Commons"
+    credit_title: "Werbelow, Bushaltestelle"
+    credit_url: "https://commons.wikimedia.org/wiki/File:Werbelow,_Bushaltestelle.jpg"
+    focal:
+      x: 45
+      "y": 55
+    status: real
+    file: /images/real/mitmachen-path-whatsapp.webp
+    width: 1400
+    height: 1000
+  - id: mitmachen-path-calendar
+    slot: mitmachen-4-path-calendar
+    ratio: feature
+    provenance: real
+    source: >-
+      Wikimedia Commons, File:Dorftreffpunkt, Schmatzin, Deutschland.jpeg —
+      https://commons.wikimedia.org/wiki/File:Dorftreffpunkt,_Schmatzin,_Deutschland.jpeg —
+      Eigenaufnahme (Jan-Henrik Hempel, Commons-Konto „J2hcom", own work), Mai 2020, 4032×3024.
+      Nachweis hinter dem ©-Zeichen am Bild.
+    alt: "Dorftreffpunkt in Schmatzin am Abend: eine Wiese mit altem Baum, Feuerstelle und Sitzplatz."
+    licence: CC BY-SA 4.0
+    credit: "Jan-Henrik Hempel, CC BY-SA 4.0, über Wikimedia Commons"
+    credit_title: "Dorftreffpunkt, Schmatzin, Deutschland"
+    credit_url: "https://commons.wikimedia.org/wiki/File:Dorftreffpunkt,_Schmatzin,_Deutschland.jpeg"
+    focal:
+      x: 45
+      "y": 58
+    status: real
+    file: /images/real/mitmachen-path-calendar.webp
+    width: 1400
+    height: 1000
+  - id: mitmachen-path-website
+    slot: mitmachen-5-path-website
+    ratio: feature
+    provenance: real
+    source: >-
+      @schafe-vorm-fenster/brand-identity@0.1.4#imagery/office/2020-07-loft-office-01.jpeg —
+      Eigenaufnahme (Jan-Henrik Hempel), unbeschränkte Nutzung, kein Credit nötig. Binärdatei liegt
+      im go-to-market-os-Repository, das npm-Paket liefert nur den .asset.md-Deskriptor.
+    alt: Schreibtisch mit Monitor, Laptop und Papieren in einem Dachbüro mit historischen Holzbalken.
+    licence: Eigenaufnahme, unbeschränkte Nutzung
+    credit: "Jan-Henrik Hempel"
+    focal:
+      x: 40
+      "y": 55
+    status: real
+    file: /images/real/mitmachen-path-website.webp
+    width: 1400
+    height: 1000
+---
+
+# Mitmachen (`/mitmachen`)
+
+Fokusjob „publish our dates" durchgängig, kein Preis, kein „Portalize",
+kein `local-advertising` auf dieser Seite (TS-WEB-0022 D1, D7, D11; DEC-0052
+§1/§3). Reihenfolge: Hero → Einwände → drei Publizierwege → Abschluss-CTA
+(Slot 8, auf `ink`) → Beleg (TS-WEB-0022 D2, geändert durch DEC-0196). Das
+Live-Beispiel (früher Slot 6 und 6a) steht seit DEC-0196 nicht mehr auf der
+Seite; die Slot-Nummern 7 bis 9 bleiben, weil Code und Register sie zitieren.
+
+Zwei Trennzeichen kommen in den Listen vor und sind Teil des Formats:
+` — ` trennt Kern und Ergänzung einer Zeile (Einwandzeilen, Schrittzeilen),
+` | ` trennt die Felder einer Beispiel-Terminzeile. Deshalb steht in keiner
+solchen Zeile ein Gedankenstrich im Satz selbst.
+
+## Slot 1 — Hero (Mechanismus: whatsapp)
+
+<!-- id: mitmachen-1-hero; content_type: hero; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"]; status: approved -->
+
+**Aussage 1 (Überschrift):** Ein Foto vom Flyer per WhatsApp.
+
+**Aussage 2 (Lead):** Und der Termin steht im Kalender.
+
+**CTA-Label (primär):** Jetzt kostenlos anmelden
+
+Quelle: `headline` und `relievers[0]` von
+`actors--community-calendar`. Nur dieser Block trägt `data-block="scene"`
+und das Mechanismus-Attribut `whatsapp` (TS-WEB-0022 D4).
+
+Der Opener ist seit dem Review vom 2026-09-22 („Lieber zwei Sätze, und als
+Aussage statt mit Fragezeichen") **zwei kurze Aussagen** statt einer Frage:
+die Überschrift trägt die erste, der Lead die zweite (CG-005, CG-020,
+CG-021; TS-WEB-0022-A4). Das CTA-Label ist die konkretere Fassung, die das
+Review nennt.
+
+Der Übergangssatz in den Einwandblock („Du hast den Flyer sowieso schon
+gedruckt …“) ist mit Issue #159 entfallen: Der Kopf des Vergleichsmoduls ist
+nur Dachzeile und Überschrift, die Lösung steht in jedem Paar direkt neben
+dem Problem (DEC-0203).
+
+## Slot 2 — Vergleich: wer euren Termin heute nicht mitbekommt
+
+<!-- id: mitmachen-2-objections; content_type: comparison; provenance: sourced; derived_from: ["@schafe-vorm-fenster/audiences@0.3.3#actors", "@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"]; status: approved -->
+
+**Überschrift:** Wer euren Termin heute nicht mitbekommt
+
+| Heute | Mit eurem Kalender |
+| --- | --- |
+| Flyer und Aushänge enden an der Ortsgrenze. | Ein Foto vom Flyer per WhatsApp, und der Termin steht auch in den Orten drumherum. |
+| Zeitung und Amtsblatt haben Redaktionsschluss, und eine Redaktion. | Neu, verschoben, abgesagt: Im Kalender steht es sofort, ohne Redaktionsschluss. |
+| Website, Instagram und WhatsApp-Gruppe erreichen die, die euch schon kennen. | Im Dorfkalender sehen es auch die Nachbarn, das Nachbardorf und die Neuen. |
+
+<!-- note: ab hier Autorennotiz, keine Copy — der Abschnitt zitiert verbotene Begriffe, um sie zu verbieten (DEC-0142 §1) -->
+
+Quelle: `@schafe-vorm-fenster/audiences#actors` Feld „Problem" (Termine
+werden „by hand" in mehrere Kanäle getippt) und `pains[]` aus
+`actors--community-calendar` (5 Einträge). Keine Kanalzahl wird genannt —
+„sechs" ist im Audience-Record eine Redewendung, keine Aufzählung
+(TS-WEB-0022 D3).
+
+**Fassung von Issue #159 (2026-11-12, DEC-0203).** Der Abschnitt ist das
+Vergleichsmodul „Heute → Mit eurem Kalender“, dieselbe Komponente wie auf
+`/dein-kalender`: drei Paare, je ein Problem neben seiner Lösung. Alle Sätze
+der Tabelle sind der Wortlaut des Owners aus dem Issue. Entfallen sind der
+Block „Die Nachbarn / Das Nachbardorf / Die Neuen“ (die drei stehen jetzt in
+der Lösung von Paar 3), die Ergänzungszeilen der üblichen Wege und der
+Abschlusssatz „Im Ehrenamt bleibt keine Zeit …“. Die Icons je Paar
+(megaphone, clock, users) setzt die Seite, nicht diese Datei.
+
+Was folgt, ist die Geschichte der Vorfassung.
+
+Zwei Hälften, wie im Entwurf „Design – wo es hakt" vom 2026-09-23
+(Variante 2b „Angestaubt · Sepia"): oben die drei konkreten Personen, die
+den Termin heute nicht mitbekommen (Review: „die Nachbarn, das
+Nachbardorf, die Neuen", CG-009), unten die üblichen Wege auf dem
+Archivgrund. Die drei Ergänzungen, die das Review verlangt, stehen darin —
+die Redaktion, die nicht alles druckt; „eigene Website" statt
+„Vereinswebseite"; die WhatsApp-Gruppe neben Instagram; und „Das ist gut
+so, macht weiter."
+
+Der Abschlusssatz ist gekürzt: „organisiert"/„Organisation" war eine
+Wortdoppelung (CG-015), und „schon gar nicht für ein neues Werkzeug" war
+gefährlich, weil wir selbst ein neues Werkzeug sind. Übrig bleibt der
+Punkt, den das Review wichtiger nennt — man will den Termin nicht mehrfach
+eintragen, sondern einmal per WhatsApp rausschicken.
+
+## Slot 3 — Publizierweg 1: Flyer per WhatsApp
+
+<!-- id: mitmachen-3-path-whatsapp; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: approved -->
+
+**Überschrift des Wege-Slots:** So kommen eure Termine rein
+
+**Unterzeile des Wege-Slots:** Drei Wege. Alle nutzt ihr eh schon.
+
+**Titel:** Flyer per WhatsApp
+
+**CTA-Label (sekundär):** Flyer per WhatsApp schicken
+
+Verfügbarkeit: `generally-available` (Hub-Datensatz `community-calendar`).
+Der CTA öffnet den Chat unter der Nummer aus dem Hub-Datensatz
+(`src/lib/contact/`), nie eine hier getippte Nummer, und trägt nie
+`data-cta="primary"` (TS-WEB-0022 D4, DEC-0082 §4).
+
+Überschrift und Unterzeile gehören dem ganzen Wege-Slot und stehen
+deshalb beim ersten Weg. Beide sind Wortlaut des Reviews beziehungsweise
+des Entwurfs vom 2026-09-23 („So kommen eure Termine rein · Drei Wege. Alle
+nutzt ihr eh schon.", CG-014). Die Dachzeile „So geht's einfacher“ aus
+demselben Entwurf entfällt seit DEC-0206: Sie sagte dasselbe wie die
+Überschrift („so“, wie es geht) und trug dazu „einfacher“ aus der Meidliste
+(CG-017); der Kopf hat nur noch Überschrift und Einleitung.
+
+### Slot 3a — Schrittzeilen und Bühnentexte von Weg 1 (Platzhalter)
+
+<!-- id: mitmachen-3a-path-whatsapp-steps-demo; content_type: publishing-path; provenance: generated; derived_from: []; status: approved; demo: true -->
+
+**Schritte:**
+
+1. Flyer fotografieren — Den ihr sowieso gedruckt habt.
+2. Per WhatsApp an uns schicken — An {whatsapp}. Im Chat prüft und bestätigt ihr den Termin.
+3. Termin wird automatisch online gestellt — In eurem Ort und drumherum.
+
+**Chat-Antwort (Zustand 2):** Danke! Bitte prüft den Termin und bestätigt ihn hier.
+
+**Chat-Uhrzeit (Zustand 2):** 14:06
+
+**Beispielzeilen (Zustand 3):**
+
+- Feuerwehrfest | Sa · 15:00 · Gerätehaus | social | Vereinsleben
+- Laternenumzug | Fr · 17:30 · Kirche | culture | Kultur
+- Dorfflohmarkt | So · 11:00 · Dorfplatz | social | Vereinsleben
+
+Schritt 2 und 3 und die Chat-Antwort sind Wortlaut des Owners (DEC-0192, 2026-11-12, Issue #141): Schritt 2 trägt die WhatsApp-Nummer des Hubs als Token `{whatsapp}`, das zur Renderzeit aus `contactChannel("whatsapp")` ersetzt wird, nie als getippte Nummer; Schritt 3 sagt „automatisch online gestellt". Der Slot bleibt `demo: true`, solange Schritt 1 und die Beispielzeilen Platzhalter sind. Keine Frist, keine Bearbeitungsdauer (CG-031, CG-033).
+
+Die drei Zeilen stehen so im Entwurf „3-Schritte-erklären" vom 2026-09-23
+(11.20.03) und sind bis zur Freigabe Platzhalter: `provenance: generated`,
+`demo: true`, im Markup `data-demo="true"` (DEC-0068, DEC-0124,
+`state/open.md`). Die Chat-Antwort und die Uhrzeit beschriften eine
+Illustration; sie nennen keine Antwortzeit und keine Bearbeitungsdauer
+(CG-031, CG-033) — deshalb steht dort „steht im Kalender" und nicht „ab
+morgen": keine freigegebene Quelle nennt eine Frist.
+
+Die drei Beispielzeilen sind der Rückfall des Live-Panels in Zustand 3,
+wenn der Live-Abruf weniger als drei Zeilen liefert. Es sind gewöhnliche
+kommende Termine ohne „verschoben"/„abgesagt", weil dieser Weg auf „Termin
+steht im Kalender" endet — die Muster von Weg 2 illustrieren „neu,
+verschoben, abgesagt" und passen hier nicht (DEC-0124 §5, `state/open.md`).
+Markierung wie bei Weg 2: `data-placeholder="sample-events"`, jede Zeile
+`data-demo`.
+
+## Slot 4 — Publizierweg 2: euren eigenen Kalender verbinden
+
+<!-- id: mitmachen-4-path-calendar; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: approved -->
+
+**Titel:** Euren Kalender verbinden
+
+**CTA-Label (sekundär):** Jetzt Kalender anmelden
+
+Verfügbarkeit: `generally-available` (Hub-Datensatz `community-calendar`).
+Der CTA zeigt über die Routen-Fassade auf `/mitmachen/registrieren`.
+
+### Slot 4a — Schrittzeilen und Bühnentexte von Weg 2 (Platzhalter)
+
+<!-- id: mitmachen-4a-path-calendar-steps-demo; content_type: publishing-path; provenance: generated; derived_from: []; status: approved; demo: true -->
+
+**Schritte:**
+
+1. Termin wie gewohnt eintragen — In euren eigenen Google Kalender.
+2. Kalender einmalig anmelden — Den Link bei uns eintragen, fertig.
+3. Der Rest läuft automatisch — Neu, verschoben, abgesagt: sofort da.
+
+**Kalender-Adresse (Zustand 2):** calendar.google.com/…/basic.ics
+
+**Beispielzeilen (Zustand 3):**
+
+- Chorprobe | Do · 20:00 statt 19:30 | culture | Kultur | verschoben | Verschoben
+- Kinderturnen | Sa · 10:00 · Halle | social | Vereinsleben
+- Seniorencafé | Di · 15:00 | social | Vereinsleben | abgesagt | Abgesagt
+
+Die Reihenfolge der Schritte ist die getauschte, die das Review verlangt:
+erst eintragen, dann einmalig anmelden, dann läuft es. Sie steht so im
+Entwurf „3-Schritte-erklären" vom 2026-09-23 (11.20.35 und 11.20.32). Die
+drei Beispielzeilen illustrieren „neu, verschoben, abgesagt" und sind als
+Muster markiert (`data-placeholder="sample-events"`, jede Zeile
+`data-demo`); der Ortsname kommt aus der konfigurierten Referenzgemeinde,
+nie aus einem erfundenen Ort (DEC-0068 Regel 3, DEC-0115).
+
+## Slot 5 — Publizierweg 3: eure Webseite als Quelle
+
+<!-- id: mitmachen-5-path-website; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: approved -->
+
+**Titel:** Eure Webseite als Quelle
+
+**Status-Badge:** In Erprobung
+
+**CTA-Label (sekundär):** Jetzt meine Webseite anmelden
+
+**Hinweis-Banner:** Bitte nachfragen, geht bisher nur für einige Webseiten.
+
+Verfügbarkeit: laut Hub-Datensatz **Alpha**, nicht `generally-available`
+— der Status-Badge muss sichtbar bleiben, solange das gilt (TS-WEB-0022 D4).
+
+Kein Querverweis auf `/dein-kalender` in diesem Slot (Review vom
+27.10.2026, Issue #92, DEC-0174 §3): das Kontextband übergibt an die drei
+anderen Aufgaben, „Dein Kalender" eingeschlossen.
+
+Der Hinweis-Satz ist der Wortlaut des Reviews („Bitte nachfragen, geht
+bisher nur für einige Webseiten"). Die Standardquellen, die das Banner
+aufzählt, kommen aus dem Angebots-Datensatz
+(`src/lib/pricing/standard-sources.ts`), nie aus dieser Datei
+(TS-WEB-0022 D11, TS-WEB-0022-A17). Kein Betrag, kein Währungszeichen,
+kein „ab".
+
+### Slot 5a — Schrittzeilen und Bühnentexte von Weg 3 (Platzhalter)
+
+<!-- id: mitmachen-5a-path-website-steps-demo; content_type: publishing-path; provenance: generated; derived_from: []; status: approved; demo: true -->
+
+**Schritte:**
+
+1. Termine wie gewohnt pflegen — Auf eurer Webseite, wie bisher.
+2. Nennt uns eure Webseite — Wir richten die Übernahme ein.
+3. Der Rest läuft automatisch — Neue Termine stehen im Dorfkalender.
+
+**Webseiten-Adresse (Zustand 2):** eure-webseite.de/termine
+
+**Beispielzeilen (Zustand 3):**
+
+- Gemeindevertretersitzung | Mi · 19:00 · Gemeindehaus | official | Amtliches
+- Sprechstunde der Bürgermeisterin | Do · 16:00 | official | Amtliches
+- Altpapiersammlung | Sa · 08:00 | merchants | Versorgung
+
+Auch hier ist die Reihenfolge die getauschte: erst auf der eigenen Webseite
+pflegen, dann uns die Seite nennen, dann läuft es. Für Weg 3 existiert kein
+Entwurf; die Zeilen sind aus den Sätzen des Reviews gebaut und deshalb
+ebenfalls Platzhalter. Konkret werden die Quellen im Banner, nicht in den
+Schritten — WordPress-Plugin und Ratsinformationssystem stehen im
+Angebots-Datensatz, nicht hier (`specs/README.md` Regel 1).
+
+### Slot 5b — Die Preisgrenze im Hinweis-Banner
+
+<!-- id: mitmachen-5b-path-website-banner-demo; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: approved -->
+
+**Preisgrenze:** Quellen, die wir schon lesen können, kosten euch nichts. Kostenpflichtig ist nur eine eigene Anbindung für ein System, das bei uns noch fehlt.
+
+Endgültige Fassung seit 2026-10-28 (DEC-0176, Nachtrag): die Tatsache steht im
+Angebots-Datensatz (`community-calendar.offering.md`, „A source the platform
+already supports publishes free … Only an individual integration … is
+priced“), der Satz ist kein Platzhalter mehr.
+
+Der Satz des Reviews in Slot 5 („Bitte nachfragen, geht bisher nur für
+einige Webseiten") sagt, für wie viele Webseiten der Weg heute reicht —
+nicht, was eine Anbindung kostet. FUN-WEB-0204 und TS-WEB-0022 D11
+verlangen aber genau die Preisgrenze von BUS-WEB-0017, und D11 trennt sie
+ausdrücklich vom Alpha-Badge: „D4's status_badge says path 03's mechanism
+is alpha; this says what a connection costs. Two different facts, two
+elements" (TS-WEB-0022:205, :210; DEC-0107 §3). Deshalb steht sie als
+zweiter Satz im Banner.
+
+Die Tatsachen stehen im Angebots-Datensatz
+(`community-calendar.offering.md`, Zeilen 112–123: „A source the platform
+already supports publishes free" und „Only an individual integration into a
+system the platform does not already support is priced, and that is
+custom-data-integration"). Die deutsche Formulierung hat niemand
+geschrieben, deshalb `provenance: generated`, `demo: true` und im Markup
+`data-demo="true"` (DEC-0068, DEC-0124, `state/open.md`). Kein Betrag, kein
+Währungszeichen, kein „ab": der Zusatz hat `price_status: on-request` und
+ist auf `/mitmachen` ohne Zahl zu nennen (TS-WEB-0022 D1/D11, A12, A17).
+
+## Slot 7 — Belegblock (3 Elemente, publish-gewichtet)
+
+<!-- id: mitmachen-7-proof; content_type: proof-card; provenance: sourced-empty-by-design; derived_from: ["@schafe-vorm-fenster/proof@0.3.5"]; status: approved -->
+
+Auswahl und Reihenfolge sind Aufgabe der Relevanz-Engine mit dem
+Gewichtsprofil „publish-our-dates" (TS-WEB-0005 D5, DEC-0048). Ein leerer Slot
+schwächt den Anspruch, wird aber nie durch erfundenen Text ersetzt.
+
+### Belegkarten, publish-gewichtet
+
+<!-- clearance: pending — alle drei Belege stehen auf `usage_rights: unverified` (Q-0014): `lehre-lelender` (schriftliche Freigabe der Stiftung steht aus), `volkshochschule-uecker-randow` (Freigabe der VHS steht aus), `zukunftswege-ost-newsletter` (Freigabe steht aus). Die geschützte Vorschau zeigt sie, der Härtungslauf vor dem Go-live klärt sie. -->
+<!-- source_note: Gewichtung „publish our dates" aus gtm:concept/website-relevance-model.concept.md (job_fit) und der Job-Tabelle in gtm:concept/website-communication-principles.concept.md Prinzip 1. -->
+<!-- id: mitmachen-7-proof-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow", "@schafe-vorm-fenster/proof@0.3.5#zukunftswege-ost-newsletter"]; status: approved -->
+
+**Kandidaten (drei, alle veröffentlichen selbst):**
+
+1. Die Stiftung führt den Dorfkalender für 17 Orte unter eigenem Namen: LeLender. — Stiftung Lebendiges Lehre, Lehre (Niedersachsen)
+2. Die Volkshochschule veröffentlicht ihr komplettes Kursprogramm im Dorfkalender. — Volkshochschulen in Vorpommern-Greifswald, Pasewalk
+3. Das Netzwerk sammelt die Termine für seinen Newsletter über den Dorfkalender. — Zukunftswege Ost-Vorpommern, RAA Mecklenburg-Vorpommern
+
+**Link:** Im Archiv ansehen
+
+Drei reale Einrichtungen, die selbst veröffentlichen — das ist genau der
+Job dieser Seite. Namen, Orte und Zahlen stehen so in den Belegen: die 17
+Orte und der Name „LeLender" aus `lehre-lelender`, das Kursprogramm am
+Standort Pasewalk aus `volkshochschule-uecker-randow` (dokumentiert vom
+Kulturlandbüro Uecker-Randow, Maria Elsner, September 2024), die
+Newsletter-Termine aus `zukunftswege-ost-newsletter` (dokumentiert im
+Porträt von Zukunftswege Ost-Vorpommern, Januar 2026).
+
+Seit #160 (DEC-0209) ist jede Zeile ein ganzer Satz (CG-027) und je
+Beleg dieselbe wie auf den anderen Seiten; Kicker und Überschrift der
+Section kommen aus `dictionary.ts` (`proofSection`), nicht aus diesem
+Slot.
+
+- Karte 1 nennt die **Stiftung**, nicht die Gemeinde: „Die ‚Stiftung
+  Lebendiges Lehre' verantwortet das Lebender Kalenderprojekt. Nicht die
+  Gemeinde … Es sind aber 17 Ort in und um die Gemeinde Lehre" (Review vom
+  2026-09-22, Zeile 103). Das Verb ist „führt", weil CG-033 dieses Verb
+  über den Dorfkalender meidet. Deviation:
+  `@schafe-vorm-fenster/proof/lehre-lelender.proof.md#L8` nennt eine
+  Gemeinde als Trägerin. DEM-0080.
+- Karte 2 folgt dem Datensatz `volkshochschule-uecker-randow`: Das
+  Kursprogramm am Standort Pasewalk erscheint im Dorfkalender (`claim:`
+  und `evidence:`). Der Zusatz „in den Dörfern genauso relevant wie in der
+  Stadt" ist gestrichen, weil ihn kein Beleg trägt. Den Namen
+  „Volkshochschulen in Vorpommern-Greifswald" führt der Partner-Datensatz
+  (`@schafe-vorm-fenster/partners#volkshochschule-vorpommern-greifswald`).
+- Karte 3 steht ohne Anführungszeichen: `zukunftswege-ost-newsletter`
+  enthält kein Zitat, nur den Befund, dass der Newsletter seine Termine über
+  den Dorfkalender sammelt (`evidence:`). Die Zuschreibung nennt den Träger
+  aus `source:` („Zukunftswege Ost-Vorpommern / RAA MV").
+
+Keine Zeile ist `demo`-markiert: Alle drei Einrichtungen und Belege sind
+echt.
+
+## Slot 8 — Abschluss-CTA mit Permanenz-Zusicherung
+
+<!-- clearance: pending für den Presse-Beleg — der Nordkurier-Eintrag von 2022 trägt kein `usage_rights` (Q-0045, `state/open.md` #1). Der Angebots-Datensatz selbst ist frei verwendbar. -->
+<!-- id: mitmachen-8-closing; content_type: closing-cta; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar", "@schafe-vorm-fenster/media-echo@0.3.3#2022-nordkurier-plattform-doerfer"]; status: approved -->
+
+**Abschluss-Überschrift:** Der nächste Flyer kann der erste Termin sein.
+
+**CTA-Label (identisch zu Slot 1, primär):** Jetzt kostenlos anmelden
+
+**Zusicherungstext:** Kostenlos anmelden, kostenlos bleiben — das steht seit 2022 öffentlich so da.
+
+Der Beleg liegt jetzt vor, wenn auch nicht in `proof/`: Der
+Offering-Datensatz `community-calendar` nennt den freien Zugang
+ausdrücklich „a public commitment, not a pricing decision that can be
+quietly reversed", und der Nordkurier-Artikel von 2022 hält dieselbe
+Zusage fest: „Das Basisangebot, das unter anderem beliebig viele Termine
+pro Dorf oder Gemeinde erlaubt, werde es auch danach bleiben." Der Satz
+nennt das Jahr, weil das Jahr belegt ist, und keine Größenordnung, weil
+es dafür keinen Beleg gibt. Offen bleibt, ob dafür ein eigenes Proof-Element
+entsteht (`state/open.md` #17).
+
+## Kontextband und Abschluss
+
+<!-- source_note: Angebotsformulierung statt Menü aus gtm:concept/website-communication-principles.concept.md Prinzip 2; die drei Jobs und ihre Formulierung aus der Job-Tabelle in Prinzip 1. Beantwortet state/open.md Zeile 95 für diese Seite: eigener Bandtext statt des geteilten Home-Satzes. -->
+<!-- id: mitmachen-9-context-band; content_type: context-band; provenance: sourced; derived_from: [ia]; status: approved -->
+
+**Kicker:** Erfahre mehr über unsere Kalenderplattform
+
+- **Sehen, was los ist:** Was in deinem Ort als Nächstes ansteht → `/dein-ort`
+- **Eigenen Kalender betreiben:** Unter eigenem Namen, auf eurer Website → `/dein-kalender`
+- **Wer dahintersteckt:** Wer den Dorfkalender macht → `/ueber-uns`
+
+Fokusjob dieser Seite ist „publish our dates". Das Band steht unter dem
+Hauptargument und über der Abschluss-CTA (Prinzip 2) und ist als Frage
+formuliert, nicht als Menü.

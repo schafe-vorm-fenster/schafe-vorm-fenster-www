@@ -1,0 +1,360 @@
+/*
+ * Four state graphics, one square each — SRC-0014 §Explain module: "one box
+ * at `ratio-square` … The box never changes size, so a state change cannot
+ * shift the page." Every graphic is the same box, so whichever one the
+ * stage shows, the stage is as tall as it was (TS-WEB-0022-A19).
+ */
+.stage {
+  aspect-ratio: var(--ratio-square);
+  display: block;
+  /* The ratio transfers a content-grown height to the width otherwise; the
+     width is always the pane's (owner's decision of 2026-10-13). */
+  min-width: 0;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+/* ── 1 · image ──────────────────────────────────────────────────────────── */
+
+.image {
+  background: var(--color-neutral-surface2);
+}
+
+.imageFrame {
+  height: 100%;
+}
+
+/* ── 2 · chat ───────────────────────────────────────────────────────────── */
+
+.chat {
+  background: var(--color-lime-100);
+  display: flex;
+  flex-direction: column;
+}
+
+/* The chat ground; the bubbles stack from the bottom of the box. No header
+   above it since 2026-10-27 (issue #89, DEC-0174 §2): the paper bar stood
+   white on the module's light ground and read as a stray strip. */
+.chatGround {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-2);
+  justify-content: flex-end;
+  min-height: 0;
+  padding: var(--space-4);
+}
+
+/* Bubble radius 8 px — illustration inside the graphic, not a surface. */
+.bubbleOut,
+.bubbleIn {
+  border-radius: var(--radius-lg);
+  max-width: 82%;
+  padding: var(--space-2);
+}
+
+.bubbleOut {
+  align-self: flex-end;
+  background: var(--color-lime-200);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 55%;
+}
+
+.bubbleIn {
+  align-self: flex-start;
+  background: var(--color-neutral-paper);
+  color: var(--color-neutral-ink);
+  font-size: var(--type-meta-size);
+  line-height: var(--leading-normal);
+  padding: var(--space-3);
+}
+
+/* The flyer in the bubble: the drawn flyer at the photo ratio (issue #26). */
+.flyer {
+  aspect-ratio: var(--ratio-feature);
+  border-radius: var(--radius-md);
+  display: block;
+  overflow: hidden;
+  width: 100%;
+}
+
+.flyerFrame {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.time {
+  align-items: center;
+  align-self: flex-end;
+  color: var(--color-neutral-muted);
+  display: inline-flex;
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  gap: var(--space-1);
+  letter-spacing: var(--tracking-mono);
+}
+
+/* ── Illustrations (issue #26, DEC-0161) ─────────────────────────────────
+   Inline SVG, coloured by class from the brand tokens — never a literal, and
+   never a dark-green (`lime-700`…`950`) fill. `ink` is neutral black. */
+
+.illustration {
+  background: var(--color-lime-100);
+}
+
+.art {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.artGround {
+  fill: var(--color-lime-100);
+}
+
+.artTable {
+  fill: var(--color-neutral-surface2);
+}
+
+.artPaper {
+  fill: var(--color-neutral-paper);
+  stroke: var(--color-neutral-line);
+  stroke-width: 1;
+}
+
+.artHead {
+  fill: var(--color-himbeere-500);
+}
+
+.artSun {
+  fill: var(--color-lime-500);
+}
+
+.artInk {
+  fill: var(--color-neutral-ink);
+}
+
+.artLine {
+  fill: var(--color-neutral-line);
+}
+
+.artDate {
+  fill: var(--color-violet-500);
+}
+
+.artPaperBar {
+  fill: var(--color-neutral-paper);
+}
+
+.artPin {
+  fill: var(--color-violet-500);
+}
+
+.artPhone {
+  fill: var(--color-neutral-ink);
+}
+
+.artScreen {
+  fill: var(--color-neutral-surface2);
+}
+
+.artFinder {
+  fill: none;
+  stroke: var(--color-lime-500);
+  stroke-linecap: round;
+  stroke-width: 3;
+}
+
+.artShutterRing {
+  fill: none;
+  stroke: var(--color-neutral-paper);
+  stroke-width: 2;
+}
+
+.artShutter {
+  fill: var(--color-neutral-paper);
+}
+
+/* The calendar and the website of paths 2 and 3 (issue #88, DEC-0174 §1).
+   No product's colours: a date is `violet-500` or `lime-200`, the one being
+   entered `lime-500` with an `ink` edge. */
+.artSoft {
+  fill: var(--color-lime-200);
+}
+
+.artNew {
+  fill: var(--color-lime-500);
+  stroke: var(--color-neutral-ink);
+  stroke-width: 1.5;
+}
+
+.artCard {
+  fill: var(--color-neutral-paper);
+  stroke: var(--color-neutral-line);
+  stroke-width: 1;
+}
+
+.artSave {
+  fill: var(--color-lime-500);
+}
+
+.artCursor {
+  fill: var(--color-neutral-ink);
+  stroke: var(--color-neutral-paper);
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+}
+
+.artWell {
+  fill: var(--color-neutral-surface2);
+}
+
+.artSiteHead {
+  fill: var(--color-violet-500);
+}
+
+.artPaperFill {
+  fill: var(--color-neutral-paper);
+}
+
+/* ── 3 · calendar ───────────────────────────────────────────────────────── */
+
+.calendar {
+  background: var(--color-neutral-ink);
+  color: var(--color-neutral-paper);
+  /* The square is a minimum here (owner's decision of 2026-10-13): with
+     overflow visible, the box's automatic minimum height is its content, so
+     three rows with two-line titles and a stacked meta grow it instead of
+     being cut off. Every other graphic keeps the clipped square. */
+  overflow: visible;
+  padding: var(--space-4);
+}
+
+/* The place, the way the app heads its list: uppercase, heavy, one line. */
+.place {
+  font-size: var(--type-subhead-size);
+  font-weight: 800;
+  letter-spacing: var(--type-subhead-tracking);
+  line-height: var(--leading-tight);
+  margin: 0 0 var(--space-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* The rows bring their own hairlines (`event-row`, dark tone). */
+.rows {
+  display: flex;
+  flex-direction: column;
+  /* Three rows at the two-line height plus the stacked meta's further lines
+     (DEC-0163, 2026-10-13): the live panel's rows load in the browser over
+     the sample, and the picture must not grow when a real title runs to its
+     second line. The stacked meta is the place, then distance and time: one
+     line more than `--height-event-row-tall` counts. Where the picture is
+     narrowest — three columns from `lg`, a 192 px row at 768 px — "19 km ·
+     16:00" itself wraps, so the reserve takes a second extra line there
+     until `xl` widens the columns again (measured 2026-10-13). The reserve is
+     what fixes the grown box before paint; a shorter answer leaves room at
+     the end. */
+  --calendar-meta-extra-lines: 1;
+
+  min-height: calc(
+    3 *
+      (
+        var(--height-event-row-tall) + var(--calendar-meta-extra-lines) * var(--type-meta-size) *
+          var(--leading-normal)
+      )
+  );
+}
+
+@media (min-width: 48rem) {
+  .rows {
+    --calendar-meta-extra-lines: 2;
+  }
+}
+
+@media (min-width: 64rem) {
+  .rows {
+    --calendar-meta-extra-lines: 1;
+  }
+}
+
+/* ── 4 · registration ───────────────────────────────────────────────────── */
+
+.registration {
+  background: var(--color-neutral-paper);
+}
+
+/* The source slot, cut on the diagonal so the card reads as "after": the
+   drawn calendar or website of state 1, never a hatch (DEC-0174 §1). */
+.screenshot {
+  background: var(--color-lime-100);
+  clip-path: polygon(0 0, 68% 0, 32% 100%, 0 100%);
+  inset: 0;
+  position: absolute;
+}
+
+/* The 44 px control well — `ink`, the arrow in `lime-500`. Not a control. */
+.well {
+  align-items: center;
+  background: var(--color-neutral-ink);
+  border-radius: var(--radius-pill);
+  color: var(--color-lime-500);
+  display: inline-flex;
+  height: var(--height-control);
+  justify-content: center;
+  left: 50%;
+  position: absolute;
+  top: 34%;
+  transform: translate(-50%, -50%);
+  width: var(--height-control);
+}
+
+/* The paper card: three spans — a label, a pill, a lime pill. */
+.card {
+  background: var(--color-neutral-paper);
+  bottom: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  position: absolute;
+  right: var(--space-4);
+  width: min(70%, 18rem);
+}
+
+.cardLabel {
+  color: var(--color-neutral-ink);
+  font-size: var(--type-meta-size);
+  font-weight: 700;
+}
+
+.addressPill {
+  background: var(--color-neutral-surface2);
+  border-radius: var(--radius-pill);
+  color: var(--color-neutral-text2);
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  letter-spacing: var(--tracking-mono);
+  min-height: var(--height-control);
+  overflow: hidden;
+  padding: var(--space-3) var(--space-4);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* `lime-500` with `ink` — the primary-on-dark pair, drawn, not a button. */
+.submitPill {
+  align-self: flex-start;
+  background: var(--color-lime-500);
+  border-radius: var(--radius-pill);
+  color: var(--color-neutral-ink);
+  font-size: var(--type-body-size);
+  font-weight: 700;
+  min-height: var(--height-control);
+  padding: var(--space-2) var(--space-6);
+}

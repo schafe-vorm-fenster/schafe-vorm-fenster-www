@@ -1,0 +1,115 @@
+{
+  "generatedFrom": "placeholders.manifest.json",
+  "slots": [
+    {
+      "id": "ueber-uns/gruender",
+      "aspect": "4:3",
+      "tone": "lime",
+      "label": "Porträt",
+      "note": "Gründerfoto — LCP-Element von /ueber-uns (TS-WEB-0003 D2)",
+      "w": 1600,
+      "h": 1200,
+      "src": "/src/generated/placeholders/ueber-uns/gruender.svg"
+    },
+    {
+      "id": "mitmachen/whatsapp-szene",
+      "aspect": "16:9",
+      "tone": "violet",
+      "label": "Szene",
+      "note": "Termin per WhatsApp einreichen — LCP-Element von /mitmachen (TS-WEB-0003 D2)",
+      "w": 1600,
+      "h": 900,
+      "src": "/src/generated/placeholders/mitmachen/whatsapp-szene.svg"
+    },
+    {
+      "id": "dein-kalender/portalize",
+      "aspect": "16:10",
+      "tone": "himbeere",
+      "label": "Produktansicht",
+      "note": "Kalender unter eigenem Namen",
+      "w": 1600,
+      "h": 1000,
+      "src": "/src/generated/placeholders/dein-kalender/portalize.svg"
+    },
+    {
+      "id": "ueber-uns/dorf",
+      "aspect": "3:2",
+      "tone": "lime",
+      "label": "Ort",
+      "note": "Das Dorf, aus dem heraus betrieben wird",
+      "w": 1600,
+      "h": 1067,
+      "src": "/src/generated/placeholders/ueber-uns/dorf.svg"
+    },
+    {
+      "id": "deine-region/karte",
+      "aspect": "3:2",
+      "tone": "violet",
+      "label": "Kartenausschnitt",
+      "note": "Aktive Orte im Landkreis — NOT USED: TS-WEB-0026 D3 forbids a map-labelled placeholder anywhere on /deine-region ('no hatched ratio-map box, no placeholder shaped like a map'); kept for the record rather than deleted (not this work package's file to remove), see state/open.md",
+      "w": 1600,
+      "h": 1067,
+      "src": "/src/generated/placeholders/deine-region/karte.svg"
+    },
+    {
+      "id": "deine-region/hero",
+      "aspect": "21:9",
+      "tone": "violet",
+      "label": "Gebietsübersicht",
+      "note": "Hero von /deine-region — Landkreise, Institutionen, große Städte (TS-WEB-0026 D2); deliberately not map-labelled (D3)",
+      "w": 1600,
+      "h": 686,
+      "src": "/src/generated/placeholders/deine-region/hero.svg"
+    },
+    {
+      "id": "deine-region/gebietsschnitt",
+      "aspect": "16:10",
+      "tone": "violet",
+      "label": "Gebietsschnitt",
+      "note": "Feature-Benefit-Bild von /deine-region Block 5 ('was dazukommt'); deliberately not map-labelled (D3)",
+      "w": 1600,
+      "h": 1000,
+      "src": "/src/generated/placeholders/deine-region/gebietsschnitt.svg"
+    },
+    {
+      "id": "home/hero",
+      "aspect": "21:9",
+      "tone": "lime",
+      "label": "Ortsansicht",
+      "note": "Hero von / — Headline und Ortssuche stehen auf dieser Fläche (TS-WEB-0019 D3)",
+      "w": 1600,
+      "h": 686,
+      "src": "/src/generated/placeholders/home/hero.svg"
+    },
+    {
+      "id": "dein-ort/hero",
+      "aspect": "21:9",
+      "tone": "lime",
+      "label": "Ortsansicht",
+      "note": "Hero von /dein-ort — Ortsname und nächste Termine (TS-WEB-0020 D1)",
+      "w": 1600,
+      "h": 686,
+      "src": "/src/generated/placeholders/dein-ort/hero.svg"
+    },
+    {
+      "id": "dein-ort-starten/hero",
+      "aspect": "21:9",
+      "tone": "violet",
+      "label": "Ortsansicht",
+      "note": "Hero von /dein-ort/starten — Bestätigung mit Ortsname (TS-WEB-0021 D2)",
+      "w": 1600,
+      "h": 686,
+      "src": "/src/generated/placeholders/dein-ort-starten/hero.svg"
+    },
+    {
+      "id": "og/default",
+      "aspect": "1.91:1",
+      "tone": "lime",
+      "label": "Vorschaubild",
+      "note": "Open-Graph-Fallback",
+      "w": 1600,
+      "h": 838,
+      "src": "/src/generated/placeholders/og/default.svg"
+    }
+  ]
+}

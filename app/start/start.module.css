@@ -1,0 +1,43 @@
+/*
+ * `/start` — the registration surface (TS-WEB-0016 D15/D17, DEC-0121).
+ * Tokens only — no colour, no font-family, no `max-width` media query
+ * (TS-WEB-0017 D2/D3, `pnpm check:brand`). The route has no section shell:
+ * one `main`, the page container's measure and the site's outer gutter.
+ */
+
+.page {
+  margin-inline: auto;
+  max-width: var(--measure-page);
+  padding: var(--space-6) var(--gutter) var(--space-12);
+}
+
+/*
+ * The notice (D17): one block above the frame, body size, the reading
+ * measure — it is read, not skimmed past, so it is not set at meta size.
+ */
+.notice {
+  margin: 0 0 var(--space-4);
+  max-width: var(--measure-text);
+}
+
+/*
+ * The frame is the page's content (D15: "the whole content of the route").
+ * Full width of the container and most of the viewport's height, so the
+ * form is visible at once on a phone and does not sit in a letterbox on a
+ * desktop; `border: 0` because the frame is not a card. The subtle ground
+ * is what shows while the third party's document is still loading — a
+ * visible box, never a zero-size one (TS-WEB-0016-A22).
+ */
+.frame {
+  background: var(--bg-subtle);
+  border: 0;
+  display: block;
+  margin: 0 0 var(--space-4);
+  min-height: 80vh;
+  width: 100%;
+}
+
+/* The e-mail line beside the frame (D15 "Beside it", D6's third rule). */
+.email {
+  margin: 0;
+}

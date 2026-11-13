@@ -1,0 +1,94 @@
+.form {
+  width: 100%;
+}
+
+/* The label is read, not seen — the pill carries the placeholder. */
+.label {
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.field {
+  align-items: center;
+  background: var(--color-neutral-paper);
+  border-radius: var(--radius-pill);
+  display: flex;
+  gap: var(--control-gap);
+  /* 6 px inset: the 44 px submit pill inside the 56 px field. */
+  min-height: var(--height-search);
+  padding: 0 6px 0 18px;
+}
+
+/* The compound control shows focus as a whole (Web Interface Guidelines). */
+.field:focus-within {
+  outline: var(--focus-ring-width) solid var(--focus);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.pin {
+  color: var(--color-neutral-muted);
+  flex: none;
+}
+
+.input {
+  background: transparent;
+  border: 0;
+  color: var(--color-neutral-ink);
+  flex: 1;
+  font-family: var(--font-sans);
+  font-size: var(--type-body-size);
+  min-width: 0;
+  padding: 0;
+  /* DEC-0147: `.input`'s own background is transparent, but it sits inside
+     `.field`'s opaque paper pill — the same fill that already gives the
+     submit button its contrast gives the typed text and the placeholder
+     theirs too. The photo-surface shadow this would otherwise inherit
+     would only blur it (schafe-vorm-fenster-www#8). */
+  text-shadow: none;
+  /* An `<input>` carries an intrinsic width from its default `size`, and that
+     width is what a shrink-to-fit ancestor (the hero's CTA slot) measures —
+     which pushed the whole pill ~32 px past the 360 px viewport. `flex: 1`
+     still grows it; `width: 0` only removes it from the intrinsic
+     calculation (TS-WEB-0017-A9, no horizontal scroll at 360 and at 320). */
+  width: 0;
+}
+
+.input::placeholder {
+  color: var(--color-neutral-muted);
+  opacity: 1;
+  text-shadow: none; /* DEC-0147 — same opaque field, same reason */
+}
+
+/* The field owns the focus ring; the input inside it must not draw a second. */
+.input:focus-visible {
+  outline: none;
+}
+
+.submit {
+  align-items: center;
+  background: var(--color-neutral-ink);
+  border: 0;
+  border-radius: var(--radius-pill);
+  color: var(--color-neutral-paper);
+  cursor: pointer;
+  display: inline-flex;
+  flex: none;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-body-sm);
+  font-weight: 700;
+  gap: var(--space-2);
+  min-height: var(--height-control);
+  padding: 0 var(--space-4);
+  /* DEC-0147: an opaque fill already gives the label its contrast on a
+     photo surface — the shadow `photo-surface.module.css` hands down to
+     every `button` would only blur it. */
+  text-shadow: none;
+}
+
+.submit:hover {
+  background: var(--fill-ink-hover); /* hover on ink, DEC-0160 */
+}

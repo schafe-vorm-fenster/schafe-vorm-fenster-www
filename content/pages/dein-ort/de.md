@@ -1,0 +1,411 @@
+---
+id: dein-ort-de
+page_id: TS-WEB-0020
+route: "/dein-ort"
+seo:
+  "/dein-ort":
+    title: "Was in deinem Ort los ist"
+    description: "Alle Termine aus deinem Ort an einer Stelle — Vereine, Gemeinde, Feuerwehr, Kirche. Ort suchen und den Kalender auf den Homescreen legen."
+    provenance: generated
+content_type: section
+status: approved
+reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
+reviewed_at: "2026-11-12"
+locale: de
+sources:
+  - "@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow"
+  - "@schafe-vorm-fenster/proof@0.3.5#homeoffice-mobile-anbieter"
+  - "@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis"
+  - "@schafe-vorm-fenster/proof@0.3.5#regional-footprint"
+  - "@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei"
+  - "@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"
+  - "@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin"
+  - "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow"
+  - "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow"
+  - "@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow"
+  - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
+  - "ia"
+derived_from:
+  - "@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow"
+  - "@schafe-vorm-fenster/proof@0.3.5#homeoffice-mobile-anbieter"
+  - "@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis"
+  - "@schafe-vorm-fenster/proof@0.3.5#regional-footprint"
+  - "@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei"
+  - "@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"
+  - "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow"
+  - "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow"
+  - "@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow"
+  - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
+  - "ia"
+generated_by: "playbook-content-production@1.0.0"
+generated_at: "2026-09-11"
+tone_profile: "du-everywhere"
+provenance: "sourced — every slot. The four value-story proof cards now carry the real testimonials of the hub (kurzweg-baeckerei, zschiesche-gross-kiesow, eichler-wasserschloss-quilow, wendt-rubkow) and the Volkshochschule reference case instead of generated demo quotes; all five are clearance: pending (Q-0014)"
+compliance_check: "state/content-map.md#compliance-checks — TS-WEB-0020"
+schema_note: "see content/pages/home/de.md — same TS-WEB-0007/schema gap, state/open.md #37"
+images:
+  - id: dein-ort-hero
+    slot: dein-ort-1-state-a
+    ratio: hero
+    provenance: real
+    source: >-
+      Wikimedia Commons, File:Dargitz, Bushaltestelle.jpg —
+      https://commons.wikimedia.org/wiki/File:Dargitz,_Bushaltestelle.jpg — Eigenaufnahme von Schafe
+      vorm Fenster (Commons-Konto „Schafevormfenster", own work), Mai 2025, 3272×2286. Nachweis hinter dem ©-Zeichen am Bild.
+    alt: >-
+      Bushaltestelle mit bepflanztem Wartehäuschen an der Dorfstraße in Dargitz, dahinter der
+      Kirchturm.
+    licence: CC0 1.0
+    credit: "Schafe vorm Fenster, CC0 1.0, über Wikimedia Commons"
+    credit_title: "Dargitz, Bushaltestelle"
+    credit_url: "https://commons.wikimedia.org/wiki/File:Dargitz,_Bushaltestelle.jpg"
+    place: dargitz
+    status: real
+    file: /images/real/dein-ort-hero.webp
+    width: 800
+    height: 900
+    wide_file: /images/real/dein-ort-hero-wide.webp
+    wide_width: 1400
+    wide_height: 600
+  - id: dein-ort-story-baeckerwagen
+    slot: dein-ort-3-story-baeckerwagen
+    ratio: feature
+    focal:
+      x: 55
+      "y": 40
+    anchor:
+      x: 50
+      "y": 30
+    provenance: real
+    source: >-
+      Wikimedia Commons, File:Brietzig, Kirche und Café.jpg —
+      https://commons.wikimedia.org/wiki/File:Brietzig,_Kirche_und_Caf%C3%A9.jpg — Eigenaufnahme von
+      Schafe vorm Fenster (Commons-Konto „Schafevormfenster", own work), Mai 2025, 2889×1929.
+      Nachweis hinter dem ©-Zeichen am Bild.
+    alt: >-
+      Dorfmitte von Brietzig: die Backsteinkirche, ein Wohnhaus und die Terrasse des Dorfcafés, an
+      der Gäste sitzen.
+    licence: CC0 1.0
+    credit: "Schafe vorm Fenster, CC0 1.0, über Wikimedia Commons"
+    credit_title: "Brietzig, Kirche und Café"
+    credit_url: "https://commons.wikimedia.org/wiki/File:Brietzig,_Kirche_und_Caf%C3%A9.jpg"
+    status: real
+    file: /images/real/dein-ort-story-baeckerwagen.webp
+    width: 1190
+    height: 850
+    stage_file: /images/real/dein-ort-story-baeckerwagen-stage.webp
+    stage_width: 1200
+    stage_height: 960
+  - id: dein-ort-story-kultur
+    slot: dein-ort-5-story-kultur
+    ratio: feature
+    focal:
+      x: 62
+      "y": 58
+    anchor:
+      x: 50
+      "y": 30
+    provenance: real
+    source: >-
+      Wikimedia Commons, File:Schönwalde, Schloss.jpg —
+      https://commons.wikimedia.org/wiki/File:Sch%C3%B6nwalde,_Schloss.jpg — Eigenaufnahme von
+      Schafe vorm Fenster (Commons-Konto „Schafevormfenster", own work), Mai 2025, 3908×2421.
+      Nachweis hinter dem ©-Zeichen am Bild.
+    alt: >-
+      Gutshaus in Schönwalde mit Freitreppe und rotem Ziegeldach, davor eine Wiese mit jungen
+      Bäumen.
+    licence: CC0 1.0
+    credit: "Schafe vorm Fenster, CC0 1.0, über Wikimedia Commons"
+    credit_title: "Schönwalde, Schloss"
+    credit_url: "https://commons.wikimedia.org/wiki/File:Sch%C3%B6nwalde,_Schloss.jpg"
+    status: real
+    file: /images/real/dein-ort-story-kultur.webp
+    width: 1400
+    height: 1000
+    stage_file: /images/real/dein-ort-story-kultur-stage.webp
+    stage_width: 1200
+    stage_height: 960
+  - id: dein-ort-homescreen-ios
+    slot: dein-ort-7-homescreen
+    ratio: portrait
+    provenance: real
+    source: >-
+      Screenshot der eigenen Kalender-Ansicht unter {APP_HOST}/{ort}, iOS/Safari — muss aufgenommen
+      werden. Keine Rendition: eine erfundene Oberfläche wäre eine Produktbehauptung (DEC-0068 Regel
+      3). Bis dahin bleibt die schraffierte Fläche (TS-WEB-0020-A7).
+    alt: >-
+      iPhone-Bildschirm mit dem Teilen-Menü von Safari und dem Eintrag zum Hinzufügen auf den
+      Home-Bildschirm.
+    status: needed
+  - id: dein-ort-homescreen-android
+    slot: dein-ort-7-homescreen
+    ratio: portrait
+    provenance: real
+    source: >-
+      Screenshot der eigenen Kalender-Ansicht unter {APP_HOST}/{ort}, Android/Chrome — muss
+      aufgenommen werden. Keine Rendition, gleicher Grund wie bei der iOS-Aufnahme. Bis dahin bleibt
+      die schraffierte Fläche (TS-WEB-0020-A7).
+    alt: Android-Bildschirm mit dem Chrome-Menü und dem Eintrag zum Hinzufügen auf den Startbildschirm.
+    status: needed
+---
+
+# Dein Ort (`/dein-ort`)
+
+Zwei Zustände auf einer Route (TS-WEB-0020 D2): **A** — Termine vorhanden,
+**B** — Ort ist erfasst, aber leer (Fokusjob wechselt zu „publish our
+dates"). Block- und DOM-Reihenfolge bleiben in beiden Zuständen gleich;
+nur der Angebotstext in Block 1 wechselt.
+
+## Slot 0 — Fokusblock, Zustand S0 (kein Ort bekannt)
+
+<!-- source_note: Stufe-0-Regel aus gtm:concept/website-communication-principles.concept.md Prinzip 6 („Stufe 0 muss für sich allein vollständig und überzeugend sein") und Prinzip 1 („know what is on wird an Ort und Stelle erfüllt, nicht verlinkt"); Register „du" aus Prinzip 1b. Ersetzt den generischen Fülltext `deinem Ort` in app/[lang]/dein-ort/page.tsx `PAGE_COPY` (state/open.md Zeile 93) — die Code-Bindung steht noch aus. -->
+<!-- id: dein-ort-0-state-s0; content_type: hero; provenance: sourced; derived_from: [ia]; status: approved -->
+
+**Headline:** Such deinen Ort, dann steht hier, was dort los ist.
+
+**Modul-Überschrift (eigener Radius, kein Ortsname):** Diese Woche in der Nähe
+
+**Geo-Badge am Modul:** Aus der Region
+
+**Platzhalter im Suchfeld:** Tipp den Ortsnamen ein
+
+**Überleitung zum Modul:** So sieht das aus, wenn ein Ort schon dabei ist:
+
+Stufe 0 nennt keinen Ort, weil keiner bekannt ist. Die Seite behauptet
+deshalb nichts über einen Ort, sondern zeigt die Suche und ein Modul aus
+der Region, dessen Radius im Badge steht. Die Zustände A und B (Slots 1
+und 2) setzen erst ein, wenn ein Ort feststeht.
+
+## Slot 1 — Fokusblock, Zustand A (Termine vorhanden)
+
+<!-- id: dein-ort-1-state-a; content_type: hero; provenance: sourced; derived_from: [ia]; status: approved -->
+
+**Headline:** Das ist los in {place}
+
+**CTA-Label (primär):** Kalender von {place} auf den Homescreen legen
+
+**Platzhalter im Suchfeld (anderer Ort):** Anderen Ort suchen
+
+Ortsname und Termine sind Live-Daten aus `/api/places/{slug}/events`. Das
+Suchfeld bleibt in Zustand A auf der Bühne (Review 2026-10-12, Issue #23;
+„Anderen Ort suchen" ist der Wortlaut des Issue-Titels — „Suche nach einem
+anderen Ort …" aus dem Review ist mit 270 px breiter als das Feld auf dem
+Telefon und würde abgeschnitten); der Platzhalter von Slot 0 trägt die Anleitung, ein
+Hinweistext unter dem Feld entfällt (Issue #20, DEC-0159).
+
+## Slot 2 — Fokusblock, Zustand B (Ort erfasst, keine Termine)
+
+<!-- id: dein-ort-2-state-b; content_type: hero; provenance: sourced; derived_from: [ia]; status: approved -->
+
+**Headline:** In {place} ist noch nichts eingetragen — du könntest die Erste sein.
+
+**CTA-Label (primär):** Ersten Termin veröffentlichen → `/mitmachen`
+
+**Abschluss-Überschrift:** Ein Termin reicht, damit in {place} etwas steht.
+
+Wörtliches Zitat aus SRC-0002 (TS-WEB-0020 D2, DEC-0071): Dieser Satz gehört nur
+hierher. Er unterstellt keinen Fehler und keine Entschuldigung — der
+Kalender für diesen Ort existiert bereits und wartet.
+
+## Slot 2b — Geschichten-Bühne: ein Tag im Dorf
+
+<!-- id: dein-ort-2b-story-stage; content_type: value-story; provenance: sourced; derived_from: [ia]; status: approved -->
+<!-- note: Texte aus dem Board concept/v2.0/Geschichten Modul.dc.html, Variante 1a (DEC-0153). -->
+
+**Überschrift:** Ein Dienstag im Dorf passt auf kein Plakat.
+
+**Einleitung:** Drei Menschen erzählen, warum das in einen Kalender gehört.
+
+**Weiter:** Weiter um {time}
+
+**Von vorn:** Von vorn
+
+**Im Kalender:** Im Kalender
+
+**Auswahl:** Uhrzeit wählen
+
+<!-- note: Kein Link „Was heute bei dir los ist" zurück nach oben (DEC-0170, Review 2026-10-27, Issue #85). Die Bühne hat genau eine Bedienung, „Weiter um …". -->
+
+## Slot 3 — Value Story 1: der Bäckerwagen
+
+<!-- id: dein-ort-3-story-baeckerwagen; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow", "@schafe-vorm-fenster/proof@0.3.5#homeoffice-mobile-anbieter"]; status: approved -->
+
+**Titel:** Der Bäckerwagen, mit Route
+
+**Warum es zählt:** Wann der Bäckerwagen kommt und wo er hält, ist keine Nebensache — es entscheidet, ob du frisches Brot bekommst oder nicht. Das gehört in denselben Kalender wie das Dorffest.
+
+**Überleitung:** Angefangen beim Brot.
+
+**Beispiel:** wiederkehrender Liefertermin in {place} oder in der Umgebung, live aus dem Kalender.
+
+**Testimonial:** Elisabeth Kurzweg, Bäckerei Kurzweg — Wortlaut in der Belegkarte unten.
+
+**Uhrzeit:** 08:30
+
+**Reiter:** Brot
+
+**Schlagzeile:** Um halb neun hält der Bäckerwagen.
+
+**Erzählung:** Steht er im Kalender, kommen nicht nur die am Fenster.
+
+<!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei"]; clearance: pending (usage_rights unverified, Q-0014) -->
+
+Die Story stützt sich auf zwei freigegebene Belege: die Google-Suche nach
+dem Bäcker in Schlatkow, die das Bäckerauto samt Wochentag statt der
+Stadtfiliale findet (`google-baecker-schlatkow`, `cleared`, dokumentiert im
+eu:react-Abschlussbericht vom Juli 2022), und die Erfahrungsberichte, nach
+denen Home-Office-Nutzer in der Corona-Zeit über die Dorfkalender erstmals
+auf mobile Anbieter aufmerksam wurden (`homeoffice-mobile-anbieter`,
+`cleared`). Der Bericht hält ausdrücklich fest, dass sich das nicht in
+Umsatzzahlen messen lässt — die Anekdote steht, die Zahl nicht.
+
+### Belegkarte zur Story 1
+
+<!-- clearance: pending — `kurzweg-baeckerei` steht auf `usage_rights: unverified` (Q-0014). Das Zitat stammt aus der Testimonial-Sektion der alten Website; eine schriftliche Freigabe liegt im Hub nicht vor. Die geschützte Vorschau zeigt es, der Härtungslauf vor dem Go-live klärt es. -->
+<!-- source_note: Das Zitat liegt im Paket in ASCII-Umschrift („Digitale Terminliste fuer die Doerfer"); hier mit Umlauten gesetzt, Wortlaut unverändert. -->
+<!-- id: dein-ort-3-story-baeckerwagen-demo-testimonial; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei"]; status: approved -->
+
+**Testimonial:** „Mit der Digitalen Terminliste für die Dörfer in Vorpommern-Greifswald werden die Fahrtrouten anderer Unternehmen transparenter." — Elisabeth Kurzweg, Bäckerei Kurzweg (2022)
+
+## Slot 4 — Value Story 2: die Ratssitzung
+
+<!-- id: dein-ort-4-story-ratssitzung; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis"]; status: approved -->
+
+**Titel:** Die Ratssitzung, bevor sie stattfindet
+
+**Warum es zählt:** Wer mitreden will, muss vom Termin erfahren, bevor er vorbei ist — nicht danach im Protokoll. Amtliche Termine gehören in denselben Kalender wie alles andere im Ort.
+
+**Überleitung:** Und es bleibt nicht beim Brot.
+
+**Beispiel:** ein amtlicher Termin aus {place} oder dem Landkreis, live aus dem Kalender.
+
+Beleg für die Tragfähigkeit in der Krise: Während der Pandemie liefen
+sämtliche Impfangebote und Testzentren-Öffnungszeiten des Landkreises
+tagesaktuell und ortsgenau über die Dorfkalender (`impftermine-landkreis`,
+`cleared`).
+
+**Testimonial:** Holger Wendt, Bürgermeister in Rubkow — Wortlaut in der Belegkarte unten.
+
+**Uhrzeit:** 17:00
+
+**Reiter:** Rat
+
+**Schlagzeile:** Um fünf tagt die Gemeindevertretung.
+
+**Erzählung:** Wer mitreden will, erfährt es vorher. Nicht erst aus dem Protokoll.
+
+<!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"]; clearance: pending (usage_rights unverified, Q-0014) -->
+
+### Belegkarte zur Story 2
+
+<!-- clearance: pending — `zschiesche-gross-kiesow` steht auf `usage_rights: unverified` (Q-0014), gleiche Herkunft wie die übrigen vier Testimonials der alten Website. -->
+<!-- source_note: Das Zitat liegt im Paket in ASCII-Umschrift („Fuer dieses Projekt", „Landbevoelkerung", „Haendler"); hier mit Umlauten gesetzt, Wortlaut unverändert. -->
+<!-- id: dein-ort-4-story-ratssitzung-demo-testimonial; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow"]; status: approved -->
+
+**Testimonial:** „Die selbstverwaltete und automatisierte Bereitstellung der Termindaten reduziert den Arbeitsaufwand unserer Gemeinde." — Holger Wendt, Bürgermeister in Rubkow (2022)
+
+## Slot 5 — Value Story 3: Kultur, die niemand gesucht hätte
+
+<!-- id: dein-ort-5-story-kultur; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow"]; status: approved -->
+
+**Titel:** Kultur, die du nicht gesucht hättest
+
+**Warum es zählt:** Das Konzert im Nachbardorf, die Ausstellung im Schloss — wer nicht zufällig davon hört, verpasst es. Im Kalender findet es dich, statt umgekehrt.
+
+**Überleitung:** Nicht alles davon würdest du suchen.
+
+**Beispiel:** ein Kulturtermin aus der Umgebung von {place}, live aus dem Kalender.
+
+**Testimonial:** Uwe Eichler, Wasserschloss Quilow — Wortlaut in der Belegkarte unten.
+
+**Uhrzeit:** 20:00
+
+**Reiter:** Kultur
+
+**Schlagzeile:** Um acht spielt im Schloss Musik.
+
+**Erzählung:** Im Kalender findet die Kultur dich, statt umgekehrt.
+
+<!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow", "@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin"]; clearance: pending (usage_rights unverified, Q-0014) -->
+
+Die Story hat jetzt einen echten Anker: Die Volkshochschule Uecker-Randow
+veröffentlicht ihr komplettes Kursprogramm über den Dorfkalender, am
+Standort Pasewalk und in weiteren Ortskalendern — beschrieben vom
+Kulturlandbüro Uecker-Randow (Maria Elsner, September 2024). Bildung und
+Kultur, die niemand im Ort gesucht hätte, stehen damit belegbar im
+Kalender.
+
+### Belegkarte zur Story 3
+
+<!-- clearance: pending — `eichler-wasserschloss-quilow` und `volkshochschule-uecker-randow` stehen beide auf `usage_rights: unverified` (Q-0014). -->
+<!-- source_note: Das Zitat liegt im Paket in ASCII-Umschrift („Flaechenland"); hier mit Umlauten gesetzt, Wortlaut unverändert. -->
+<!-- id: dein-ort-5-story-kultur-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow", "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow"]; status: approved -->
+
+**Beispiel:** Die Volkshochschule Uecker-Randow veröffentlicht ihr Kursprogramm über den Dorfkalender, Standort Pasewalk. — Kulturlandbüro Uecker-Randow, September 2024
+
+**Testimonial:** „Der Dienst hilft dabei, Angebote in einem Flächenland besser sichtbar und auffindbar zu machen." — Uwe Eichler, Wasserschloss Quilow (2022)
+
+## Slot 6 — Value Story 4: der Fünfzehn-Minuten-Radius
+
+<!-- id: dein-ort-6-story-radius; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#regional-footprint"]; status: approved -->
+
+**Beispiel:** Termine aus der Umgebung von {place}, live aus dem Kalender (Position 2, „diese Woche in der Nähe").
+
+Der Dorfkalender läuft heute in vier Bundesländern, und jede Region belegt
+eine andere Eigenschaft des Diensts — von Dichte über Zeit in
+Vorpommern-Greifswald bis zur Landkreis-Schnittstelle in
+Baden-Württemberg (`regional-footprint`, `cleared`, qualitative Aussage,
+keine Reichweitenzahl).
+
+<!-- note: Kein Testimonial (DEC-0170, Review 2026-10-27, Issue #84). Das Beispiel dieser Story ist eine Live-Liste („diese Woche in der Nähe"), und unter einer Live-Liste steht kein Belegzitat: Das Zitat von Dr. A. Zschiesche (`zschiesche-gross-kiesow`) stand als Text unter den Terminen, und der nächste Block, die Geschichten-Bühne, beginnt selbst mit einem Zitat. Die Belegkarte zur Story 4 ist entfallen. -->
+
+## Slot 7 — Homescreen-Block
+
+<!-- id: dein-ort-7-homescreen; content_type: howto-block; provenance: sourced; derived_from: [ia]; status: approved -->
+
+**Überschrift:** So landet der Kalender auf deinem Homescreen
+
+**iOS:** Öffne den Kalender von {place} in Safari. Tipp auf „Teilen", dann auf „Zum Home-Bildschirm". Fertig - er startet ab jetzt wie eine App.
+
+**Android:** Öffne den Kalender von {place} in Chrome. Tipp auf das Menü (drei Punkte), dann auf „Zum Startbildschirm hinzufügen". Fertig.
+
+Beide Anleitungen stehen immer nebeneinander, unabhängig vom Gerät der
+Besucherin (kein User-Agent-Sniffing, TS-WEB-0020 D4), beide im selben
+Muster: Plattform-Label über einer offenen nummerierten Liste.
+
+Seit DEC-0170 (Review 2026-10-27, Issue #86) ist dieser Block der
+Abschlussblock der Seite: Überschrift, die zwei Anleitungen und genau
+eine Aktion — in Zustand A „Kalender von {place} auf den Homescreen
+legen" (Slot 1), in S0 die Ortssuche —, darunter die Zusicherung aus
+Slot 8; das Kontextband folgt danach. Die Überschrift ist die dieses
+Slots; die frühere Abschluss-Überschrift „Einmal antippen, und er ist
+da, wo deine Apps sind." aus Slot 8 ist entfallen, weil zwei
+Überschriften für denselben Job zwei Module behaupten. In Zustand B
+steht hier das Angebot zum Veröffentlichen, keine Homescreen-Anleitung.
+
+## Slot 8 — CTA-Zusicherung (Permanenz-Versprechen)
+
+<!-- id: dein-ort-8-permanence; content_type: closing-cta; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: approved -->
+
+**Zusicherungstext:** Dauerhaft kostenlos und ohne Anmeldung.
+
+**Anderer Ort:** Anderer Ort?
+
+Quelle: `price.note` von `community-calendar` — „Free for readers without
+any account … No limit on the number of dates per place. Permanent, not
+an introductory tier." Der freie Zugang ist ein öffentliches Versprechen
+seit 2022, kein Preismodell, das sich leise ändern lässt.
+
+## Kontextband (3 Nicht-Fokus-Jobs)
+
+<!-- source_note: Angebotsformulierung statt Menü aus gtm:concept/website-communication-principles.concept.md Prinzip 2 („ordnen, nicht ausschließen"); die drei Jobs und ihre Formulierung aus der Job-Tabelle in Prinzip 1. Beantwortet state/open.md Zeile 95 für diese Seite: eigener Bandtext statt des geteilten Home-Satzes. -->
+<!-- id: dein-ort-9-context-band; content_type: context-band; provenance: sourced; derived_from: [ia]; status: approved -->
+
+**Kicker:** Erfahre mehr über unsere Kalenderplattform
+
+- **Termine veröffentlichen:** Per WhatsApp oder über deinen Kalender → `/mitmachen`
+- **Eigenen Kalender betreiben:** Unter eigenem Namen, auf eurer Website → `/dein-kalender`
+- **Wer dahintersteckt:** Wer den Dorfkalender macht → `/ueber-uns`
+
+Fokusjob dieser Seite ist „know what is on". Das Band steht darunter und
+nennt die drei anderen Anliegen, jedes in der Sprache der Leserin.

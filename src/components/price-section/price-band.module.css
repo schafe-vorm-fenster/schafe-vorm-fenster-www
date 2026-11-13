@@ -1,0 +1,42 @@
+/*
+ * The highlighted head of the price section — SRC-0014 §Page Rhythm. The
+ * ground republishes the same custom properties `section-shell`'s `.lime500`
+ * does, so a link or a kicker inside it reads the lime ground's pair.
+ */
+.band {
+  --ground-kicker: var(--color-lime-900);
+  --ground-link: var(--color-lime-900);
+  --ground-link-hover: var(--color-neutral-ink);
+
+  background: var(--color-lime-500);
+  color: var(--color-lime-900);
+  padding-block: var(--section-padding-block);
+}
+
+.kicker {
+  color: var(--ground-kicker);
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  font-weight: 700;
+  letter-spacing: var(--type-label-tracking);
+  line-height: 1.2;
+  margin: 0 0 var(--space-2);
+  text-transform: uppercase;
+}
+
+.headline {
+  color: var(--color-neutral-ink);
+  font-size: var(--type-section-size);
+  font-weight: 800;
+  letter-spacing: var(--type-section-tracking);
+  line-height: var(--leading-tight);
+  margin: 0;
+  text-wrap: balance;
+}
+
+.framing {
+  font-size: var(--type-lead-size);
+  line-height: var(--leading-normal);
+  margin: var(--space-3) 0 0;
+  max-width: var(--measure-reading);
+}

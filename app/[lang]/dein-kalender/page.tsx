@@ -1,0 +1,605 @@
+import { imageCredit } from "@/src/components/photo-surface/image-credit";
+import { Button } from "@/src/components/button/button";
+import {
+  COMPARISON_SECTION_CLASS,
+  ComparisonTable,
+} from "@/src/components/comparison-table/comparison-table";
+import { EmbedFrame } from "@/src/components/embed-frame/embed-frame";
+import { HeroBlock } from "@/src/components/hero-block/hero-block";
+import { OutboundLink } from "@/src/components/outbound-link/outbound-link";
+import {
+  PRICE_TIERS,
+  PriceSection,
+  PriceTierRow,
+  type PriceTierId,
+} from "@/src/components/price-section/price-section";
+import { ProofCard } from "@/src/components/proof-card/proof-card";
+import { ProofStream } from "@/src/components/proof-stream/proof-stream";
+import { QuoteCard } from "@/src/components/quote-card/quote-card";
+import { SectionShell } from "@/src/components/section-shell/section-shell";
+import { SettingRow, SettingRows } from "@/src/components/setting-row/setting-row";
+import { TrustBlock } from "@/src/components/trust-block/trust-block";
+import { CONTACT_SECTION_ID } from "@/src/components/contact-section/contact-section";
+import { fieldAt } from "@/src/lib/content/blocks";
+import { pageImage } from "@/src/lib/content/images";
+import { partnerLogo } from "@/src/lib/content/partner-logos";
+import { HERO_IMAGE_ID } from "@/src/lib/pages/hero-images";
+import { slot } from "@/src/lib/content/loader";
+import { isDemoSlot } from "@/src/lib/content/provenance";
+import { CONFIG_REPO_URL } from "@/src/lib/embed/config-repo";
+import { DEFAULT_WEEKS_AHEAD, DEIN_KALENDER_SHOWCASE } from "@/src/lib/embed/portalize";
+import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
+import { tierPrice } from "@/src/lib/pricing/offerings";
+import { dictionary } from "@/src/lib/i18n/dictionary";
+
+import { comparisonPairs } from "../_comparison";
+import { PageJsonLd } from "../_structured-data";
+import { pageContent } from "../_content";
+import { parseProofLine, proofIntro, quoteAuthor, selectProof } from "../_proof";
+import { proofCardLink, proofDeeplink } from "../_proof-links";
+import { localeFrom, pageMetadataFor } from "../_locale";
+import { PageFrame } from "../_page-frame";
+
+import { settingRows, tierChecks } from "./content";
+import { pageMeta } from "./page.meta";
+
+
+import pageStyles from "../_pages.module.css";
+
+import type { IconName } from "@/src/components/icon/icon";
+import type { ContentBlock } from "@/src/lib/content/types";
+import type { Locale } from "@/src/lib/i18n/locales";
+import type { Metadata } from "next";
+
+/**
+ * TS-WEB-0024 — `/dein-kalender`, the 480 € page.
+ *
+ * Own blocks, D2 order (seven since DEC-0131 §1): focus (Pulse + the
+ * equal-weight in-page link to the contact section) → contrast → embed demo →
+ * embed config → tiers → proof → trust. Context band and closing CTA are
+ * `PageFrame`'s, from `page.meta.ts`; the contact section is chrome
+ * (DEC-0122), and it carries the page's one appointment URL (DEC-0081 §3).
+ */
+
+const ROUTE = "calendar" as const;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  return pageMetadataFor(ROUTE, params);
+}
+
+function listItems(blocks: readonly ContentBlock[]): string[] {
+  return blocks.flatMap((block) => (block.kind === "list" ? block.items : []));
+}
+
+/**
+ * Strips a field's trailing `→ target` or `` `/path` `` note — the content
+ * artifact's own documentation of where a CTA points, not copy to display.
+ */
+function withoutArrow(text: string | undefined): string {
+  return (text ?? "").split(/→|`/)[0].trim();
+}
+
+/**
+ * The placeholder badge beside a setting the product holds but has not
+ * confirmed — `setting-row`'s `marker` slot (DEC-0118). The review asks for
+ * exactly this on the `Zeitraum` row ("Müssen wir bei Portalize nachsehen,
+ * was wirklich geht"), so it is the owner's word, not a softening of a claim.
+ * Driven from here rather than from the artifact, because which setting is
+ * unconfirmed is knowledge about the product, not copy taste.
+ */
+const SETTING_CHECKED_MARKER: Record<Locale, string> = {
+  de: "wird geprüft",
+  en: "being checked",
+};
+
+/** The bold label before each example (issue 162, DEC-0204). */
+const EXAMPLE_LABEL: Record<Locale, string> = { de: "Beispiel:", en: "Example:" };
+
+/** The row index whose fact is still open upstream — `Zeitraum` / `Window`. */
+const SETTING_UNCONFIRMED_INDEX = 3;
+
+/**
+ * The six settings' glyphs, in the artifact's row order — the drafts'
+ * `Design -. Portalize Einstellungen 1/2.png`. A glyph is decorative
+ * (`setting-row` A11y), so the order is the only thing that binds it to a
+ * row; a seventh row would render without one rather than borrow a
+ * neighbour's.
+ */
+const SETTING_ICONS: readonly IconName[] = [
+  "map-pin",
+  "users",
+  "theater",
+  "clock",
+  "monitor",
+  "circle-check",
+];
+
+/**
+ * The four pairs' topic glyphs, in the artifact's row order (issue 159): the
+ * CMS module, who keeps it current, the second login, the boundary. Decorative,
+ * so the order is the only thing that binds a glyph to its pair.
+ */
+const CONTRAST_ICONS: readonly IconName[] = ["monitor", "users", "smartphone", "map-pin"];
+
+const TRUST_HEADLINE: Record<Locale, string> = {
+  de: "Wie eure Daten hier behandelt werden",
+  en: "How your data is handled here",
+};
+
+const TRUST_PRIVACY_LABEL: Record<Locale, { privacy: string; dataProcessing: string }> = {
+  de: { privacy: "Datenschutzerklärung", dataProcessing: "Auftragsverarbeitung" },
+  en: { privacy: "Privacy policy", dataProcessing: "Data processing agreement" },
+};
+
+const TRUST_SUBJECT_LABEL: Record<Locale, { dataProtection: string; operations: string }> = {
+  de: { dataProtection: "Datenschutz", operations: "Betrieb" },
+  en: { dataProtection: "Data protection", operations: "Operations" },
+};
+
+const BRIEFING_LABEL: Record<Locale, string> = {
+  de: "Beratungstermin buchen",
+  en: "Book a briefing",
+};
+
+/** Fallback context line — used only where a quote's own attribution carries
+ * no organisation name to show instead (`parseDemoProofElement`). */
+const PROOF_FALLBACK_CONTEXT: Record<"demo" | "sourced", Record<Locale, string>> = {
+  demo: { de: "Rückmeldung", en: "Feedback" },
+  sourced: { de: "Rückmeldung", en: "Feedback" },
+};
+
+const PROOF_GEO_LABEL: Record<"demo" | "sourced", Record<Locale, string>> = {
+  demo: { de: "Beleg", en: "Reference" },
+  sourced: { de: "Beleg", en: "Reference" },
+};
+
+/** Strips the artifact's own "(Bild: …)" / "(image: …)" documentation note
+ * — never copy to display — before the shared quote parser runs. */
+function withoutImageNote(line: string): string {
+  return line.replace(/\s*\((?:Bild|image):[^)]*\)\s*$/i, "");
+}
+
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}) {
+  const locale = await localeFrom(params);
+  const page = await pageContent(ROUTE, locale);
+  const heroImage = pageImage(page, HERO_IMAGE_ID.calendar);
+  const home = await pageContent("home", locale);
+
+  const focus = slot(page, "dein-kalender-1-focus");
+  const contrast = slot(page, "dein-kalender-2-contrast");
+  const embedDemo = slot(page, "dein-kalender-3-embed-demo");
+  // The embed slot is a heading and one sentence now (review R-kalender-9,
+  // DEC-0213): the intro names the places and what is coming up, and shares
+  // no word stem with the heading. Everything the settings decide moved into its
+  // own slot with its own block, which is what `embed-config` is
+  // (TS-WEB-0024 D2 as amended, DEC-0131 §1).
+  const embedParagraphs = embedDemo.blocks.flatMap((block) =>
+    block.kind === "paragraph" ? [block.text] : [],
+  );
+  const embedConfig = slot(page, "dein-kalender-3b-embed-config");
+  const configParagraphs = embedConfig.blocks.flatMap((block) =>
+    block.kind === "paragraph" ? [block.text] : [],
+  );
+  const configSettings = settingRows(embedConfig.blocks);
+  const tiers = slot(page, "dein-kalender-4-tiers");
+  // The three check lines per tier are the drafts', not the owner's: their
+  // own slot, `provenance: generated; demo: true`, one row in state/open.md
+  // (DEC-0068, DEC-0131 §3).
+  const tierCheckSlot = slot(page, "dein-kalender-4-tiers-checks-demo");
+  const checks = tierChecks(tierCheckSlot.blocks, PRICE_TIERS);
+  /** Read off the slot, never hard-coded: the marking goes when the slot does. */
+  const tierChecksAreDemo = isDemoSlot(tierCheckSlot);
+  const proofDemo = slot(page, "dein-kalender-5-proof-demo");
+  const trust = slot(page, "dein-kalender-6-trust");
+  const closing = slot(page, "dein-kalender-7-closing");
+  const contextBand = slot(home, "home-10-context-band");
+
+  // Four pairs, each with its topic glyph (TS-WEB-0024 D4, issue 159): a
+  // table that is not four rows fails the build rather than rendering a pair
+  // without a sentence or a glyph (DEC-0203 §3).
+  const comparison = comparisonPairs(contrast.blocks, CONTRAST_ICONS, "dein-kalender-2-contrast");
+
+  /**
+   * The tiers, in the order `TS-WEB-0024 D6/D6a` fixes, each with the one CTA
+   * `DEC-0082 §4` allows it. Weight is not chosen here: `PriceTierRow`
+   * derives quiet · primary-light · quiet from the offering id, so a call
+   * site cannot put Pulse on a tier (A3, A8).
+   */
+  const tierRows: readonly {
+    readonly offeringId: PriceTierId;
+    readonly kicker: string;
+    readonly title: string;
+    readonly cta: { readonly label: string; readonly to: "register" | "order" | "region" };
+  }[] = [
+    {
+      offeringId: "community-calendar",
+      kicker: fieldAt(tiers.blocks, 2) ?? "",
+      title: fieldAt(tiers.blocks, 3) ?? "",
+      cta: { label: withoutArrow(fieldAt(tiers.blocks, 4)), to: "register" },
+    },
+    {
+      offeringId: "portalize-calendar",
+      kicker: fieldAt(tiers.blocks, 5) ?? "",
+      title: fieldAt(tiers.blocks, 6) ?? "",
+      cta: { label: withoutArrow(fieldAt(tiers.blocks, 7)), to: "order" },
+    },
+    {
+      offeringId: "portalize-enterprise",
+      kicker: fieldAt(tiers.blocks, 8) ?? "",
+      title: fieldAt(tiers.blocks, 9) ?? "",
+      cta: { label: withoutArrow(fieldAt(tiers.blocks, 10)), to: "region" },
+    },
+  ];
+
+  /**
+   * TS-WEB-0005 through, not around: DEC-0048's **3** inline positions beside the
+   * claim, selected by the engine rather than by file order.
+   *
+   * `dein-kalender-5-proof-demo` is `provenance: sourced` (state/open.md
+   * row 48, row 162), not `generated` — three real, named quotes, clearance
+   * pending (Q-0014). `demo` and every displayed label are therefore read off
+   * the slot (`isDemoSlot`), never hard-coded: a real quote no longer comes
+   * back `mocked`, and only a genuinely generated quote would still badge
+   * itself in `data-demo`; the words a visitor reads are the same either
+   * way (Jan, 2026-09-18).
+   */
+  const proofIsDemo = isDemoSlot(proofDemo);
+  const proofSelection = await selectProof({
+    routeId: ROUTE,
+    locale,
+    focusJob: "run-our-own-calendar",
+    surface: "inline",
+    candidates: listItems(proofDemo.blocks).map((line, index) => {
+      /**
+       * The citation comes off the line first, so a source's own ` — ` cannot
+       * be read as the attribution separator. Where the artifact names one,
+       * the element is somebody's words *with the proof that they said them*
+       * and renders as a `quote-card`; where it does not, the words render as
+       * the claim they are (SRC-0014 §Quote card, CG-028, DEC-0143 §3).
+       */
+      const { line: text, citation } = parseProofLine(withoutImageNote(line));
+      const card = parseDemoProofElement(
+        text,
+        PROOF_FALLBACK_CONTEXT[proofIsDemo ? "demo" : "sourced"][locale],
+      );
+      const place = card.attribution.split(", ").slice(1).join(", ").trim();
+      return {
+        id: `dein-kalender-5-proof-demo-${index + 1}`,
+        contextLine: card.contextLine,
+        claim: card.claim,
+        attribution: card.attribution,
+        geo: {
+          level: "snapshot" as const,
+          label: PROOF_GEO_LABEL[proofIsDemo ? "demo" : "sourced"][locale],
+        },
+        geoCommunity: place === "" ? null : place,
+        // Three mayors and an estate, all of them users of this tier: customer
+        // proof, never press (review line 458 — "hier gehören Belege von
+        // Kunden hin — der NØRD Award ist hier Quatsch"). A selection facet;
+        // the heading is the same on every page (DEC-0143 §1, DEC-0209).
+        proofKind: "customer" as const,
+        ...(citation === undefined ? {} : { citation }),
+        // issue 220: the hub proof id behind this line names its archive entry.
+        deeplink: proofDeeplink(proofDemo.derivedFrom, index),
+        demo: proofIsDemo,
+      };
+    }),
+  });
+
+  const focusHeadline = fieldAt(focus.blocks, 0) ?? "";
+  const orderLabel = withoutArrow(fieldAt(focus.blocks, 1));
+  const briefingLabel = withoutArrow(fieldAt(focus.blocks, 2)) || BRIEFING_LABEL[locale];
+
+  return (
+    <>
+      {/* TS-WEB-0011 D4 — one JSON-LD graph per page, server-rendered. */}
+      <PageJsonLd locale={locale} route={ROUTE} />
+    <PageFrame
+      closing={{
+        to: "order",
+        label: orderLabel,
+        heading: fieldAt(closing.blocks, 0),
+        /* No quiet second way under the button any more. It was a second
+           carrier of the appointment URL, and DEC-0081 §3 gives that URL one
+           place on a page: the contact section's first action row, which
+           stands directly below this block (TS-WEB-0024-A15). */
+      }}
+      contextBandHeading={fieldAt(contextBand.blocks, 0)}
+      locale={locale}
+      meta={pageMeta}
+    >
+      <div data-block="focus">
+        <HeroBlock
+          cta={
+            <>
+              <Button dataCta="primary" locale={locale} onward to="order" variant="pulse">
+                {orderLabel}
+              </Button>
+              {/* The consult half no longer leaves the site: it is an in-page
+                  link to this page's own contact section, where appointment,
+                  WhatsApp, phone and mail stand together and where the
+                  conversion is measured (TS-WEB-0024 D3, DEC-0081 §3). It
+                  carries no `ConversionTracker` — a click inside a document
+                  is navigation, and counting it would count one intent twice
+                  (DEC-0081 §4, TS-WEB-0024-A15) — and no outbound
+                  disclosure, because nothing outbound happens here. */}
+              <Button
+                dataCta="equal-weight"
+                hash={CONTACT_SECTION_ID}
+                locale={locale}
+                to={ROUTE}
+                variant="secondary"
+              >
+                {briefingLabel}
+              </Button>
+            </>
+          }
+          headline={focusHeadline}
+          id="hero"
+          // F-2-33: the hero's `photo-surface` badges itself out of the
+          // dictionary — without the page's language it marks an English
+          // page in German.
+          locale={locale}
+          focal={heroImage?.focal}
+          aiEdited={heroImage?.aiEdited} notDepicting={heroImage?.notDepicting}
+          credit={imageCredit(heroImage, locale)}
+          placeholderId={heroImage?.placeholderId}
+          src={heroImage?.src}
+          wideSrc={heroImage?.wideSrc}
+        />
+      </div>
+
+      {/* The comparison module of issue 159, the same component as
+          `/mitmachen`'s, with the municipalities' four pairs. The head is the
+          kicker and the heading and nothing else (DEC-0203 §2). */}
+      <SectionShell
+        className={COMPARISON_SECTION_CLASS}
+        dataBlock="contrast"
+        kicker={dictionary(locale).kickers.objection}
+        labelledBy="contrast-heading"
+        surface="paper"
+      >
+        <ComparisonTable
+          headingId="contrast-heading"
+          headline={fieldAt(contrast.blocks, 0) ?? ""}
+          rows={comparison.rows}
+          todayLabel={comparison.labels.today}
+          withProductLabel={comparison.labels.withCalendar}
+        />
+      </SectionShell>
+
+      {/*
+          The most persuasive module on the page, and for a long time the most
+          expensive defect on the site: an empty lilac rectangle where the
+          embedded calendar was meant to be. It is the real Portalize widget
+          now, showing the real calendar of three neighbouring villages — so
+          it gets the room it deserves and nothing else in its section.
+
+          The settings that produce it stand one section lower (G-4): the two
+          together measured 1772 px, a screen and a half over budget, and the
+          config list read as fine print under the picture rather than as the
+          answer to "but can we decide what is in it?". */}
+      <SectionShell
+        dataBlock="embed-demo"
+        kicker={dictionary(locale).kickers.howItWorks}
+        surface="violet-500"
+      >
+        <EmbedFrame
+          copy={embedParagraphs[0]}
+          heading={fieldAt(embedDemo.blocks, 0) ?? ""}
+          locale={locale}
+          // The real calendar of Rothenklempenow, Dorotheenwalde, Glashütte and Mewegen —
+          // `src/lib/embed/portalize.ts` records which one and why.
+          organizerId={DEIN_KALENDER_SHOWCASE.organizerId}
+          ratio="map"
+          showBranding={DEIN_KALENDER_SHOWCASE.branding}
+          state="ready"
+          weeksAhead={DEFAULT_WEEKS_AHEAD}
+        />
+      </SectionShell>
+
+      {/* "Eure Einstellungen" (DEC-0148) over a title that states what goes —
+          the calendar above shows the mechanism, and this block answers the
+          question a municipality, a Verein or a Stiftung actually has about
+          it: whether it decides what stands in it. Its own `data-block`
+          since DEC-0131 §1 — TS-WEB-0024 D2 lists seven blocks now, because
+          squeezing the settings back into `embed-demo` is what measured
+          1772 px at 390 px (G-4).
+
+          `paper`, not `surface-2`: the grey-greens are the old world's
+          ground and never carry positive content (SRC-0014 §Page Rhythm),
+          and the review says the settings looked "angestaubt" for exactly
+          that reason. The band inside runs edge to edge, so the section is
+          uncontained and each part brings its own container. */}
+      <SectionShell
+        contained={false}
+        dataBlock="embed-config"
+        kicker={dictionary(locale).kickers.yourSettings}
+        labelledBy="embed-config-heading"
+        surface="paper"
+      >
+        <div className="container">
+          <h2 id="embed-config-heading">{fieldAt(embedConfig.blocks, 0)}</h2>
+          <p className={pageStyles.configLead}>{configParagraphs[0]}</p>
+        </div>
+
+        <div className="container">
+          <h3 className={pageStyles.settingsHeading}>{fieldAt(embedConfig.blocks, 1)}</h3>
+          <SettingRows>
+            {configSettings.map((row, index) => (
+              <SettingRow
+                core={row.core}
+                example={row.example}
+                exampleLabel={EXAMPLE_LABEL[locale]}
+                icon={SETTING_ICONS[index] ?? "info"}
+                key={row.title}
+                marker={
+                  index === SETTING_UNCONFIRMED_INDEX ? SETTING_CHECKED_MARKER[locale] : undefined
+                }
+                tags={row.tags}
+                title={row.title}
+              />
+            ))}
+          </SettingRows>
+          {/* The config repo the review points at. No record in this
+              repository names its URL, so the link is configured or it does
+              not render — never a dead link on the page that asks for 480 €
+              (DEC-0131 §4, state/open.md). */}
+          {CONFIG_REPO_URL ? (
+            <p className={pageStyles.configLink}>
+              <OutboundLink href={CONFIG_REPO_URL} locale={locale}>
+                {fieldAt(embedConfig.blocks, 2)}
+              </OutboundLink>
+            </p>
+          ) : null}
+        </div>
+      </SectionShell>
+
+      {/* One `paper` section with the `lime-500` head band on top and the
+          three tiers as rows beneath it, divided by a hairline — never three
+          sections, never a 2 px lime rule (SRC-0014 §Page Rhythm, DEC-0118).
+          The framing line the band carries is the transition this section
+          used to render twice. */}
+      <PriceSection
+        dataBlock="tiers"
+        framing={fieldAt(tiers.blocks, 1) ?? ""}
+        headingId="tiers-heading"
+        headline={fieldAt(tiers.blocks, 0) ?? ""}
+        kicker={dictionary(locale).kickers.price}
+      >
+        {tierRows.map((tier) => (
+            <PriceTierRow
+              key={tier.offeringId}
+              checks={checks[tier.offeringId] ?? []}
+              // The nine check lines are the drafts', not the owner's, so the
+              // list they stand in says so in the markup — the marking the
+              // slot carries, published where a build can enumerate it
+              // (DEC-0068 guardrail 1, DEC-0131 §5, state/open.md row 254).
+              checksDemo={tierChecksAreDemo}
+              cta={{ label: tier.cta.label, to: tier.cta.to }}
+              kicker={tier.kicker}
+              locale={locale}
+              offeringId={tier.offeringId}
+              price={tierPrice(tier.offeringId, locale)}
+              title={tier.title}
+            />
+        ))}
+      </PriceSection>
+
+      {/* G-9 and G-7 together. The three cards carried an image slot with no
+          cleared image behind it: three identical 143 px bands in a row,
+          which also broke the design system's own "no two photo surfaces
+          adjacent" rule. The slot is gone — a mayor's portrait is not a
+          photo-contribution occasion — and the stream is one feature card
+          over two hairline rows, without the `Beleg` badge each card already
+          repeats in its own source line. 1176 px becomes about a third of
+          that. */}
+      <SectionShell
+        dataBlock="proof"
+        // The one head every proof section carries (DEC-0209).
+        kicker={proofIntro(locale).kicker}
+        labelledBy="proof-heading"
+        // `lime-100`, not `paper`: the price section above it is one paper
+        // section now (DEC-0118), and `embed-config` above that is a third —
+        // three neutral grounds in a row is the one rhythm rule this
+        // composition can break (`rhythm.test.ts`).
+        surface="lime-100"
+      >
+        <h2 id="proof-heading">{proofIntro(locale).heading}</h2>
+        <ProofStream label={proofIntro(locale).heading} layout="rows">
+          {proofSelection.entries.map((entry, position) => {
+            // A missing proof renders nothing (DEC-0175 §3).
+            if (entry.kind === "empty") return null;
+
+            /* Somebody's words become a `quote-card` only where the artifact
+               names the article they were said in **and** an author with a role
+               and an organisation: "a quote without a named source and a
+               working link does not ship", and "a name without a role and an
+               organisation is not a proof" (SRC-0014 §Quote card, CG-028).
+               None of the three records carries a source URL today — the hub's
+               proof schema has no field for one (spec-impact.md:99-102) — so
+               all three render as the `proof-card` their claim is, and the
+               first quote that gets a cleared article renders as a quote
+               without this page changing. DEC-0143 §3. */
+            const author = quoteAuthor(entry.candidate.attribution);
+            if (entry.candidate.citation && author) {
+              return (
+                <QuoteCard
+                  key={entry.candidate.id}
+                  locale={locale}
+                  name={entry.candidate.contextLine}
+                  organisation={author.organisation}
+                  quote={entry.candidate.claim}
+                  role={author.role}
+                  sourceLabel={entry.candidate.citation.label}
+                  sourceUrl={entry.candidate.citation.url}
+                />
+              );
+            }
+
+            return (
+              <ProofCard
+                attribution={entry.candidate.attribution}
+                claim={entry.candidate.claim}
+                contextLine={entry.candidate.contextLine}
+                emphasis={position === 0 ? "feature" : "compact"}
+                logo={partnerLogo(entry.candidate.contextLine)}
+                key={entry.candidate.id}
+                link={proofCardLink(entry.candidate, proofDemo.fields["Link"])}
+                locale={locale}
+                state={entry.state}
+              />
+            );
+          })}
+        </ProofStream>
+      </SectionShell>
+
+      {/* `violet-500`, the provenance ground (SRC-0014 §Violet): who runs the
+          service and what happens to the data is this page's provenance. On
+          `lime-100` it ran straight on from the proof above it, one ground
+          for two sections, and read as the old state (review 2026-10-27,
+          #91; DEC-0172 §4). */}
+      <SectionShell
+        dataBlock="trust"
+        kicker={dictionary(locale).kickers.trust}
+        surface="violet-500"
+      >
+        <TrustBlock
+          dataProcessingLabel={TRUST_PRIVACY_LABEL[locale].dataProcessing}
+          headline={fieldAt(trust.blocks, 0) ?? TRUST_HEADLINE[locale]}
+          locale={locale}
+          privacyLabel={TRUST_PRIVACY_LABEL[locale].privacy}
+          subjects={[
+            {
+              id: "data-protection",
+              label: TRUST_SUBJECT_LABEL[locale].dataProtection,
+              body: withoutArrow(fieldAt(trust.blocks, 1)),
+            },
+            {
+              // TS-WEB-0024-A19 / state/open.md row 163, row 19: the slot now carries a
+              // sourced operations sentence naming a hub record
+              // (`people@0.3.6#jan-henrik-hempel`,
+              // `proof@0.3.5#in-operation-since-2018`), so it ships. AI use
+              // stays unpublished — no hub record names it yet (D10), and
+              // A19 blocks any sentence without one; the content artifact's
+              // `derived_from: []` demo sentence for it is deliberately not
+              // read here.
+              id: "operations",
+              label: TRUST_SUBJECT_LABEL[locale].operations,
+              body: withoutArrow(fieldAt(trust.blocks, 2)),
+            },
+          ]}
+        />
+      </SectionShell>
+    </PageFrame>
+    </>
+  );
+}

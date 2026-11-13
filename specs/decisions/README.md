@@ -1,0 +1,250 @@
+# Decisions
+
+## Purpose
+
+Decision records for this specification. STRICT rule: executors propose,
+decision points decide — a requirement carries `S3` sufficiency only when a
+`DEC-####` backs it. The record keeps the ADR sections the organisation uses
+(status/context/decision/consequences); the file is named for the artefact it
+holds — `DEC-####--<slug>.md` — the way
+`@leafcutter-strict/method-identifier-and-locator-schema` requires an artefact
+to be resolvable by its identifier (DEC-0086).
+
+Repository-level decisions (content SSOT, audience model) live in
+`go-to-market-os/handbook/decisions/` and are referenced, not repeated.
+
+## Two artefacts live here
+
+- **`DEC-####--<slug>.md`** — an ADR: a choice and the reasoning behind it,
+  in the organisation's context/decision/consequences sections. 110 of them.
+  The citation count that stood here was produced by a one-off script and has
+  not been re-derived; a number nobody can reproduce is worse than none.
+- **`SDR-<yyyy>-<mmdd>-<nnnn>.yaml`** — a STRICT decision record: the
+  execution of one decision point on one subject, with every criterion of that
+  decision point, the mode and executor copied off the policy row, the bounds
+  evaluated and the subject's evidence sufficiency at the time. Immutable; a
+  reversal is a new record naming the old one in `supersedes`.
+
+DEC-0100 argues from the contracts that these are **not the same artefact**
+and keeps both. The decisive field is `dp`: it is required and its pattern is
+closed at `DP-01…DP-14`, and most decisions recorded here — a stack choice, a
+compound split, a copy rule — are none of the fourteen.
+
+**Two SDRs so far, and neither moves a status.** `SDR-2026-1112-0001` records
+the owner's DP-04 conflict resolution behind DEC-0206 (the section-head rule),
+and `SDR-2026-1112-0002` the one behind DEC-0222 (production renders what
+preview renders; the owner's approval of the content tree), both status
+`PROPOSED`. DEC-0222 approves *content* under `content/pages/**`, not a
+specification artefact. No status has moved off `DRAFT`, because every artefact has
+a dependant and none reaches the low impact level (DEC-0089). `check:specs`
+E15 anchors a status off `DRAFT` on an SDR, so the first status move will be
+its own record; E23 validates every record that appears.
+
+## Amending a record
+
+An ADR is amended where a later decision spends one of its reasons, and the
+amendment says so — DEC-0085 §6 carries five such rows. An SDR is never
+amended. That difference is the difference between the two artefacts.
+
+## Index
+
+- [DEC-0001 — Product docs are reviewed item by item, then removed](DEC-0001--product-docs-reviewed-then-removed.md)
+- [DEC-0002 — Next.js and Vercel are the website stack](DEC-0002--nextjs-vercel-stack.md)
+- [DEC-0003 — Domain scope: de, pl, at, international](DEC-0003--domain-scope.md)
+- [DEC-0004 — Cookieless analytics as requirement, eTracker as interim](DEC-0004--cookieless-analytics-etracker-interim.md)
+- [DEC-0005 — The product's locale model is adopted in full](DEC-0005--adopt-locale-model.md)
+- [DEC-0006 — Phase 1 languages: German and English on .de](DEC-0006--phase-1-languages.md)
+- [DEC-0007 — Performance budget adopted with INP](DEC-0007--performance-budget-inp.md)
+- [DEC-0008 — Extracted product-doc files are deleted](DEC-0008--delete-extracted-doc-files.md)
+- [DEC-0009 — Lead capture runs through the envoy web-component widget](DEC-0009--envoy-lead-widget.md)
+- [DEC-0010 — Product briefings are booked via Google Calendar appointment links](DEC-0010--briefing-via-google-calendar.md)
+- [DEC-0011 — Self-service purchase concludes on invoice](DEC-0011--purchase-on-invoice.md)
+- [DEC-0012 — BFSG conformity is targeted; legal texts keep the Google-Docs import](DEC-0012--bfsg-and-legal-import.md)
+- [DEC-0013 — No third-party embeds](DEC-0013--no-third-party-embeds.md)
+- [DEC-0014 — Spam protection is honeypot plus rate limiting](DEC-0014--spam-protection-honeypot.md)
+- [DEC-0015 — Strict security baseline from the start](DEC-0015--strict-security-baseline.md)
+- [DEC-0016 — Measure first, experiment later](DEC-0016--measure-first-experiment-later.md)
+- [DEC-0017 — Production monitoring uses Vercel-native means](DEC-0017--vercel-native-monitoring.md)
+- [DEC-0018 — AI crawlers are allowed; an llms.txt is maintained](DEC-0018--allow-ai-crawlers-llms-txt.md)
+- [DEC-0019 — Live data is served through a three-tier resilience chain](DEC-0019--three-tier-data-resilience.md)
+- [DEC-0020 — Website content is generated from GTM packages and sourced locally](DEC-0020--content-architecture.md)
+- [DEC-0021 — Service integration follows the product's OpenAPI contract pattern](DEC-0021--api-contracts-via-openapi.md)
+- [DEC-0022 — The new information architecture is authoritative; there is no news section](DEC-0022--ia-is-authoritative-no-news.md)
+- [DEC-0023 — Three-phase relaunch order; STRICT is the specification method](DEC-0023--three-phases-and-strict.md)
+- [DEC-0024 — Place search covers all of Germany; an uncovered place is a conversion moment](DEC-0024--place-search-covers-germany.md)
+- [DEC-0025 — The website is its own BFF; external API tokens never reach the client](DEC-0025--bff-no-external-tokens-client.md)
+- [DEC-0026 — Localized pages render localized content; original artifacts stay original](DEC-0026--localize-everything-but-artifacts.md)
+- [DEC-0027 — Legal texts come in DE and EN through the same Google-Docs import](DEC-0027--legal-multilanguage-same-import.md)
+- [DEC-0028 — One eTracker account and property across website and app](DEC-0028--single-etracker-account.md)
+- [DEC-0029 — App handover uses geo-api community slugs](DEC-0029--app-handover-via-slugs.md)
+- [DEC-0030 — The embed demo uses the finished Portalize loader](DEC-0030--embed-demo-via-portalize-loader.md)
+- [DEC-0031 — Two-stage deployment model — migration preview now, full pipeline later](DEC-0031--two-stage-deployment-model.md)
+- [DEC-0032 — Error pages — 404 converts, 500 stays static, module errors stay invisible](DEC-0032--error-pages.md)
+- [DEC-0033 — Skeletons and streaming everywhere, especially for geo-personalized content](DEC-0033--skeletons-and-streaming.md)
+- [DEC-0034 — Region page interim — active examples instead of place lists](DEC-0034--region-interim-active-examples.md)
+- [DEC-0035 — Domain layout — www is the website, apex serves the calendars until app.*; next.* is the migration preview](DEC-0035--domain-layout-and-preview.md)
+- [DEC-0036 — Routes speak in the second person — the dein family](DEC-0036--dein-route-family.md)
+- [DEC-0037 — The website never carries a place slug in a path](DEC-0037--no-place-slugs-on-the-website.md)
+- [DEC-0038 — Language is determined by the path; suggestion is client-side and one-off](DEC-0038--language-is-path-determined.md)
+- [DEC-0039 — Legal content is one long page with anchor navigation](DEC-0039--legal-as-one-page.md)
+- [DEC-0040 — Verification architecture — levels on acceptance criteria, IDs everywhere, Gherkin for journeys](DEC-0040--verification-architecture.md)
+- [DEC-0041 — Relevance engine — website-owned service, geo hierarchy of the geo-api, segmented not personalised](DEC-0041--relevance-engine-design.md)
+- [DEC-0042 — Hub content is referenced by package name, never by repository path](DEC-0042--reference-packages-by-name.md)
+- [DEC-0043 — The brand typeface is Atkinson Hyperlegible Next; Catamaran is retired](DEC-0043--brand-typeface-changed.md)
+- [DEC-0044 — Two brand packages, three levels of use](DEC-0044--brand-packages-three-levels.md)
+- [DEC-0045 — The CSP uses per-build hashes; the shell stays static](DEC-0045--csp-per-build-hashes.md)
+- [DEC-0046 — The last-good store is the Vercel Runtime Cache](DEC-0046--last-good-in-runtime-cache.md)
+- [DEC-0047 — Support articles move to the app; /hilfe redirects there](DEC-0047--support-content-moves-to-the-app.md)
+- [DEC-0048 — Stage-0 weights split between time and job; proof counts per surface](DEC-0048--stage-zero-weights-and-proof-counts.md)
+- [DEC-0049 — Assessments expire after twelve months or a major version](DEC-0049--assessment-review-trigger.md)
+- [DEC-0050 — A package publish dispatches the website content update](DEC-0050--content-update-trigger.md)
+- [DEC-0051 — envoy carries newsletter signup and the invoice handover](DEC-0051--envoy-carries-newsletter-and-invoicing.md)
+- [DEC-0052 — Page-level answers: product name, promotion material, local advertising, newsletter placement, DPA](DEC-0052--page-level-answers.md)
+- [DEC-0053 — One national language plus English per domain; the suggestion ships after launch](DEC-0053--language-scope-and-suggestion.md)
+- [DEC-0054 — Visual generation waits for the complete design system](DEC-0054--design-system-blocks-visual-generation.md)
+- [DEC-0055 — Segmentation cache cost is observed in production, not gated before launch](DEC-0055--cache-cost-observed-after-launch.md)
+- [DEC-0056 — The design system is delivered and binding](DEC-0056--design-system-delivered.md)
+- [DEC-0057 — Place-parameter pages are indexable with a parameter-free canonical](DEC-0057--place-parameter-pages-are-indexable.md)
+- [DEC-0058 — Service contracts are pinned in the repository and refreshed by script](DEC-0058--service-contracts-pinned.md)
+- [DEC-0059 — The home page's focus job is stable; entry context changes emphasis only](DEC-0059--home-focus-job-is-stable.md)
+- [DEC-0060 — The licence is priced per organisation; tiers differ by where the calendar runs](DEC-0060--licence-is-per-organisation.md)
+- [DEC-0061 — The map view is advertised with its date, not as existing](DEC-0061--map-announced-with-a-date.md)
+- [DEC-0062 — The glossary becomes a hub package; Actor is outward, Organizer is internal](DEC-0062--glossary-is-a-hub-package.md)
+- [DEC-0063 — Media echo uses the same clearance field as proof](DEC-0063--media-echo-clearance.md)
+- [DEC-0064 — The permanence promise gets a proof element; the channels get enumerated](DEC-0064--evidence-for-the-publishing-page.md)
+- [DEC-0065 — How the four hardest rules are verified — and where the coverage stops](DEC-0065--verification-of-the-hard-rules.md)
+- [DEC-0066 — One register for the whole site — informal du, including the Verwaltung](DEC-0066--one-register-du-everywhere.md)
+- [DEC-0067 — Six breakpoints, dense below the tablet — and why the spec's two were wrong](DEC-0067--six-breakpoints-dense-at-the-phone-end.md)
+- [DEC-0068 — Every gap is filled with a marked placeholder, never left empty](DEC-0068--placeholders-over-empty-slots.md)
+- [DEC-0069 — Answers from the PROPOSED review — price, accessibility, cache, budget, fallback, preview](DEC-0069--eleven-answers-from-the-proposed-review.md)
+- [DEC-0070 — Eleven determinations confirmed — the price predicate, its accepted risk, and the low-stakes block](DEC-0070--the-confirmation-block.md)
+- [DEC-0071 — The last four — reserved route, breadcrumbs everywhere, no geo in analytics, and one tone split in two](DEC-0071--the-last-four.md)
+- [DEC-0072 — The foundation stack follows the sibling repositories, with three deliberate deviations](DEC-0072--the-foundation-stack.md)
+- [DEC-0073 — The locale and URL layer: one typed table, no i18n library, and the 404 that actually renders](DEC-0073--locale-and-url-layer.md)
+- [DEC-0074 — The content pipeline reads the shipped page artifacts — one file per page, typed blocks, no markdown library](DEC-0074--content-pipeline-reads-the-shipped-artifacts.md)
+- [DEC-0075 — The last-good store is the Vercel Runtime Cache, behind one interface](DEC-0075--last-good-store-is-the-vercel-runtime-cache.md)
+- [DEC-0076 — @axe-core/playwright is the a11y sweep instrument for TS-WEB-0002-A1 and TS-WEB-0029-A12](DEC-0076--axe-core-playwright-for-a11y-e2e.md)
+- [DEC-0077 — Example imagery is model-generated, marked, and produced by a script — with `ai` and `sharp` as build-time tooling](DEC-0077--generated-imagery-pipeline.md)
+- [DEC-0078 — A streamed boundary never carries a control that holds what a visitor types — the search field lives in the static shell](DEC-0078--the-search-field-lives-in-the-static-shell.md)
+- [DEC-0079 — The place search asks for a place name; a postcode is not offered](DEC-0079--place-search-by-name.md)
+- [DEC-0080 — The website carries its own copy guide, bound by a contract](DEC-0080--website-copy-guide-bound-by-a-contract.md)
+- [DEC-0081 — The contact section replaces the contact form — one contact surface, and it hosts the booking](DEC-0081--contact-section-replaces-the-contact-form.md)
+- [DEC-0082 — One primary conversion per page stands — and the ladder every other CTA sits on](DEC-0082--one-primary-per-page-and-the-cta-ladder.md)
+- [DEC-0083 — A spec never carries the words — no verbatim copy, no fixed grammatical form](DEC-0083--no-verbatim-copy-in-a-spec.md)
+- [DEC-0084 — The village argument, re-derived — 280 inhabitants, no salesperson clause, and the counter module goes](DEC-0084--the-village-argument-and-the-counter-that-goes.md)
+- [DEC-0085 — STRICT is a versioned dependency, not a path — and the checker reads its vocabularies out of the package](DEC-0085--strict-is-a-versioned-dependency.md)
+- [DEC-0086 — Identifiers and file names follow the STRICT scheme — `<TYPE>-<DOMAIN>-<NNNN>`, and a file is named for the artefact it holds](DEC-0086--identifiers-and-file-names-follow-strict.md)
+- [DEC-0087 — The artefact shape follows STRICT — one requirement per document, the business-rule class, the slot grammar where meaning survives it, and DRAFT until a decision policy exists](DEC-0087--the-artefact-shape-follows-strict.md)
+- [DEC-0088 — A decision policy binds this repository — graded by impact, agent at the lowest level inside four bounds, owner everywhere else](DEC-0088--decision-policy-graded-by-impact.md)
+- [DEC-0089 — The policy applied — every artefact resolves to the owner, nothing moves off DRAFT, and the impact levels that decided it](DEC-0089--the-policy-applied-nothing-moves-off-draft.md)
+- [DEC-0090 — The acceptance criteria keep their verification level — the deviation from the contract is deliberate, recorded, and raised upstream](DEC-0090--acceptance-criteria-keep-the-verification-level.md)
+- [DEC-0091 — Provenance is on every record — the model and the hour come from the commit that wrote it, the prompt identity is UNKNOWN and says so](DEC-0091--provenance-on-every-record.md)
+- [DEC-0092 — A quality requirement is a measure — the 37 split, measured or reclassified, and not one number invented](DEC-0092--the-quality-class-is-a-measure.md)
+- [DEC-0093 — The compounds are split — one modal and one predicate per artefact, and the nine page rows are a shape the method has no form for](DEC-0093--the-compounds-split.md)
+- [DEC-0094 — The four buried business rules are their own artefacts — and the one constraint filed as a functional requirement](DEC-0094--the-four-buried-business-rules.md)
+- [DEC-0095 — The fit criterion is what already checks the requirement — and UNKNOWN where nothing does](DEC-0095--the-fit-criterion-is-what-already-checks-it.md)
+- [DEC-0096 — The test-reference scan is what actually runs — read off the runners, not listed by hand](DEC-0096--the-scan-set-is-what-runs.md)
+- [DEC-0097 — Every statement carries the position it rests on — 186 of 273 resolve to a line, and the 87 that cannot say why](DEC-0097--every-statement-carries-its-position.md)
+- [DEC-0098 — A source's trust level is the minimum of its six-dimension vector — computed, and fifteen of eighteen were not](DEC-0098--the-trust-level-is-computed.md)
+- [DEC-0099 — The conflict and demand registers exist, populated from what already happened — 22 conflicts and 57 demands, none invented](DEC-0099--the-conflict-and-demand-registers.md)
+- [DEC-0100 — An ADR and a STRICT decision record are two artefacts — both are kept, and the SDR starts at the next executed decision point](DEC-0100--an-adr-and-an-sdr-are-two-artefacts.md)
+- [DEC-0101 — The goal layer references the hub, it does not duplicate it — thirteen GOAL-WEB artefacts, no goal content copied](DEC-0101--the-goal-layer-references-the-hub.md)
+- [DEC-0102 — The need layer is read off the sources, never reconstructed — thirty-four needs, every one with a verified line](DEC-0102--the-need-layer-is-read-off-the-sources.md)
+- [DEC-0103 — The chain is wired and checked — 222 of 273 requirements answer to a need, and the 51 that do not say why](DEC-0103--the-chain-is-wired-and-checked.md)
+- [DEC-0104 — The specification carries the truth — a source is cited, not obeyed, and every deviation from one is recorded](DEC-0104--the-specification-carries-the-truth.md)
+- [DEC-0105 — The design layer's five undocumented decisions, recorded — and the scrim's ladder is fixed, not measured](DEC-0105--the-design-layer-decisions.md)
+- [DEC-0106 — The product name is an open question again — the website names no product until it closes, and the workaround is still forbidden](DEC-0106--the-product-name-is-open-again.md)
+- [DEC-0107 — A standard source publishes free; an individual integration into a system we do not already support is the paid add-on](DEC-0107--the-publishing-path-price-boundary.md)
+- [DEC-0108 — The registration embed is isolated with a notice above it — a notice is not consent, the banner-free requirement stands, and the residual legal risk is accepted on one route](DEC-0108--the-registration-embed-is-isolated-with-a-notice.md)
+- [DEC-0109 — On `/` only the WhatsApp scene becomes the explain module — the embed and provenance blocks stay scenes, and the module has to work in any of the three trait positions](DEC-0109--the-whatsapp-scene-becomes-the-explain-module.md)
+- [DEC-0110 — The scene wraps the explain module — the opener above it, the concrete instance below it, and `/` keeps three scene blocks](DEC-0110--the-scene-wraps-the-explain-module.md)
+- [DEC-0111 — The excerpt repairs the locator — a check reads every citation and says where a moved statement went](DEC-0111--the-excerpt-repairs-the-locator.md)
+- [DEC-0112 — The method registry needs a credential — the build reads it from the environment, and the claim that it did not was false for nineteen deployments](DEC-0112--the-method-registry-needs-a-credential.md)
+- [DEC-0113 — Hub contact values reach the site through a generated file — and the contact section's open choices, recorded](DEC-0113--hub-contact-values-through-a-generated-file.md)
+- [DEC-0114 — The explain module's pass is a pure state machine — four ticks, a settled state and a heading state, "once" held in the component instance, and a click or a focus is an interaction while a touch-scroll is not](DEC-0114--the-explain-module-state-machine.md)
+- [DEC-0115 — The stage graphics carry no sample of their own — the page passes real rows or a marked sample, the status sits on the event row, and a picture of a control is hidden from assistive technology](DEC-0115--the-stage-graphics-carry-no-sample-of-their-own.md)
+- [DEC-0116 — The scrim is composed from the ladder and the header blurs — the choices the photo-surface rewrite had to take, and where the blur's budget condition lives](DEC-0116--the-scrim-is-composed-and-the-header-blurs.md)
+- [DEC-0117 — The archive ground is its own colour family, the closing search block is the one further ink section, and the objection block's failures are neutral](DEC-0117--the-archive-ground-is-its-own-family.md)
+- [DEC-0118 — The price section is one paper section with a lime band and three rows — the row renders its one CTA itself, the setting row takes its shape from the drafts, and "wird geprüft" is the placeholder badge](DEC-0118--the-price-section-set.md)
+- [DEC-0119 — The search takes a name and the overlay shows four rows — the postcode mode leaves the search surfaces, `?zip=` stays for the order flow, and the geolocation control resolves through one `no-store` BFF route](DEC-0119--the-search-takes-a-name-and-the-overlay-shows-four-rows.md)
+- [DEC-0120 — The band is a menu with a blurb — the page's slot supplies it, the registry stands in, and the language switch offers only the other language](DEC-0120--the-band-is-a-menu-with-a-blurb.md)
+- [DEC-0121 — The fifth origin is the form's host, in `frame-src` alone — `/start` frames it with `?embedded=true`, and the notice above it is a placeholder until the owner words it](DEC-0121--the-fifth-origin-is-the-form-host.md)
+- [DEC-0122 — The contact section is chrome and the newsletter waits — the layout mounts the one contact surface on every page, the footer form and its envoy kind are gone, and the newsletter block renders nowhere until a sending system is named](DEC-0122--the-contact-section-is-chrome-and-the-newsletter-waits.md)
+- [DEC-0124 — The paths slot is one slot on three grounds — the objection block splits too, the proof slot comes back, and the step lines ship as marked placeholders](DEC-0124--the-paths-slot-is-one-slot-on-three-grounds.md)
+- [DEC-0128 — The registration step resolves a name — the `isZip` gate goes, a municipality hit asks which village, the step-1 submit is the page's one primary, and the typed string cannot be canonicalised in the page](DEC-0128--the-registration-step-resolves-a-name.md)
+- [DEC-0129 — The scene carries the module, block 2b is the scene, and `/` ends on ink — the twelve choices the home composition had to take](DEC-0129--the-scene-carries-the-module-and-the-page-ends-on-ink.md)
+- [DEC-0131 — The configuration block is its own block, the tiers are rows, and the product sentence moves under the row it belongs to — plus the two links `/dein-kalender` no longer carries](DEC-0131--the-configuration-block-is-its-own-block.md)
+- [DEC-0132 — The trust surface books — the closing block is its one primary, the reserved proof place speaks again, and the second proof section has no cleared record to stand on](DEC-0132--the-trust-surface-books.md)
+- [DEC-0133 — The booking CTA resolves in-page and the marking leaves the label — `<route>#kontakt` through the route facade, the scope rides along in the order flow, and the disclosure becomes a described `meta` span for every variant](DEC-0133--the-booking-cta-resolves-in-page.md)
+- [DEC-0134 — A comment is not a test — the coverage scan reads prose, so acceptance ids are spelled out, the gap gets a row, and the order flow's consult target is one builder two call sites share](DEC-0134--a-comment-is-not-a-test.md)
+- [DEC-0136 — The copy lint reads fields, not files — the field-role map, the scoped avoid list, and the eleven repairs the three new rows found](DEC-0136--the-copy-lint-reads-fields-not-files.md)
+- [DEC-0139 — The focal point is the crop — the motif rule picks four heroes, the declared pair cuts the file and positions the surface, and the flyer motif has no cleared photograph](DEC-0139--the-focal-point-is-the-crop.md)
+- [DEC-0140 — The entry trait arrives as one header — the proxy hands down a host and a medium, and block 2a reorders inside a boundary whose fallback is the direct order](DEC-0140--the-entry-trait-arrives-as-one-header.md)
+- [DEC-0141 — The instrument decides coverage, not the mention — and the backlog may only shrink](DEC-0141--the-instrument-decides-coverage-and-the-backlog-only-shrinks.md)
+- [DEC-0142 — A note says so, and position decides nothing — the copy lint binds a list to its field, the marker is the only exclusion, and the coverage gain is written down](DEC-0142--a-note-says-so-and-position-decides-nothing.md)
+- [DEC-0143 — The proof kind decides the heading, the element decides the page — a customer pool stops borrowing the press heading, a quote needs a cited source to be a quote, and the one price on `/deine-region` is read](DEC-0143--the-proof-kind-decides-the-heading.md)
+- [DEC-0144 — The instrument names the criterion, and a site-wide sentence is walked site-wide — the meters cite whole identifiers, three sweeps leave the home page, and two divergences are declared instead of assumed](DEC-0144--the-instrument-names-the-criterion.md)
+- [DEC-0145 — The four open points the owner answered — the legal route may name the product, a price is read, three authored proof lines are cleared, and the budget applies to what we wrote](DEC-0145--the-four-open-points-the-owner-answered.md)
+- [DEC-0146 — "The app" is community-site; community-calendar is being abandoned](DEC-0146--the-app-is-community-site.md)
+- [DEC-0147 — A control with its own opaque fill does not carry the photo-surface text shadow](DEC-0147--a-filled-control-does-not-carry-the-photo-shadow.md)
+- [DEC-0148 — The "benefit" kicker is not one phrase for every section](DEC-0148--the-benefit-kicker-is-not-one-phrase-for-every-section.md)
+- [DEC-0149 — Editorial review gets a chaos persona; its first round closes a recorded spec/test drift](DEC-0149--editorial-review-closes-the-customer-acceptance-gap.md)
+- [DEC-0150 — Surfaces run full-bleed, content stands in a 1200 px container — the desktop grid from the owner's design input](DEC-0150--surfaces-full-bleed-content-in-the-container.md)
+- [DEC-0151 — The scrim is neutral black, finally and everywhere — the tinted scrim leaves the boards, the dead tone prop leaves the code, and `check:brand` keeps both out](DEC-0151--the-scrim-is-neutral-black-everywhere.md)
+- [DEC-0152 — A story's example is chosen, not left over — strict category, the searched place's surroundings, no placeholders, distance on every nearby row, and the quotes where they argue](DEC-0152--a-story-example-is-chosen-not-left-over.md)
+- [DEC-0153 — One story stage instead of three story sections, and the focal point lands above the reading band](DEC-0153--one-story-stage-and-the-anchored-focal-point.md)
+- [DEC-0154 — The owner's review of 2026-10-12: what it settles, what it opens, and that every point is an issue](DEC-0154--the-review-of-2026-10-12.md)
+- [DEC-0155 — Ink is neutral black, readability goes before a fixed height, a review is not closed until every point is a task — and why the tests let these through](DEC-0155--ink-is-neutral-black-and-reviews-become-tasks.md)
+- [DEC-0156 — A link card is a control: the context band as the owner drew it on 2026-10-12](DEC-0156--a-link-card-is-a-control.md)
+- [DEC-0158 — The footer stands on ink, the language switch becomes a segmented control of two links, and the copyright line takes `line` and the imprint's legal name](DEC-0158--the-footer-on-ink-and-the-segmented-language-switch.md)
+- [DEC-0159 — The place stage is less full, keeps its search once a place is known, carries no counter, and hands off to publishing in a row of its own](DEC-0159--the-home-stage-is-less-full.md)
+- [DEC-0160 — The pin moves to brand-design 2.9.0, dark green leaves every fill, and a secondary action on a light ground is outlined in ink](DEC-0160--no-dark-green-fill-and-the-outlined-secondary.md)
+- [DEC-0161 — The explain module never truncates, swipes below lg, and draws the WhatsApp path; the /mitmachen hero is an AI-edited real photograph](DEC-0161--explain-module-never-truncates-swipes-and-draws.md)
+- [DEC-0162 — `/ueber-uns` in three chapters with expandable stories after the owner's design, a web-calendar drawing on the town-hall photograph, and the provenance photograph to the edge](DEC-0162--ueber-uns-in-chapters-and-the-two-home-photographs.md)
+- [DEC-0163 — Every page is static; live data and query-dependent states load in the browser from the site's own API routes; per-page CSP hashes delivered through the build adapter; the no-JavaScript rule for the place and flow routes is dropped](DEC-0163--static-pages-client-live-data-per-page-csp-hashes.md)
+- [DEC-0164 — `robots.txt`, `llms.txt` and the 404 are prerendered once per distinct output at their own paths; the proxy only chooses which file answers; the 404's status is set by the build adapter](DEC-0164--build-time-variants-for-robots-llms-and-the-404.md)
+- [DEC-0165 — Every photograph edited with an AI tool carries a visible sparkles mark and says so in its alt text](DEC-0165--an-ai-edited-photograph-carries-a-visible-mark.md)
+- [DEC-0166 — The archive becomes the press page — every media-echo entry as a citation, reached from /ueber-uns, the footer and /presse, never from the main menu](DEC-0166--the-archive-becomes-the-press-page.md)
+- [DEC-0167 — The stage shows the chosen place's own photograph: Wikidata's image through geo-api, delivered and attributed by assets-api; no licence, no photograph; a place without one keeps the page's photograph, labelled as an example](DEC-0167--the-stage-shows-the-place-photograph-from-geo-api-and-assets-api.md)
+- [DEC-0168 — One active place on the client: a single store keyed by query and generation from which headline, rows, calendar link, photograph and credit derive; the example place is explicit state; the credit is a © control; the calendar address is `<slug>.<geonameId>` on the village calendar's host](DEC-0168--one-active-place-on-the-client.md)
+- [DEC-0169 — Every link to another origin opens a new tab with `rel="noopener noreferrer"` and says so to a screen reader; `tel:` and `mailto:` stay; one component decides it, a static guard and a browser sweep hold it](DEC-0169--every-link-to-another-origin-opens-a-new-tab.md)
+- [DEC-0170 — One module per job, no proof quote under a live list, no two quotes in a row: `/dein-ort`'s homescreen module is its closing block and the context band follows it; the story stage carries no link back up the page](DEC-0170--one-module-per-job-no-quote-under-a-live-list.md)
+- [DEC-0171 — One owner per level of vertical space — the section owns its padding, a content stack owns the gap between blocks, a block brings no outer margin](DEC-0171--one-owner-per-level-of-vertical-space.md)
+- [DEC-0172 — The customer proof becomes a stream of voices, the comparison pairs the archive ground with a fresh one, the benefit band becomes a flow, the trust block takes the provenance ground — and nothing looks like a button that is not a control](DEC-0172--four-modules-get-their-design-and-nothing-looks-like-a-button-that-is-not-one.md)
+- [DEC-0173 — The embedded calendar is readable, names no organizer, and shows no test dates — every widget colour a token on the box's light ground, the own-events showcase off, a test organizer's events dropped on every surface](DEC-0173--the-embedded-calendar-is-readable-names-no-organizer-and-shows-no-test-dates.md)
+- [DEC-0174 — Every explain-stage graphic is drawn or photographed and the chat carries no header; the context band is a page's only hand-off to another job and stands after the page's own closing block](DEC-0174--every-stage-graphic-drawn-and-the-band-closes-the-page.md)
+- [DEC-0175 — The /ueber-uns stories become an accordion, chapter 02 tells the mayoralty once with its period, a missing proof renders nothing anywhere, and an emptied year leaves the press page](DEC-0175--ueber-uns-review-accordion-no-placeholder-one-claim-once.md)
+- [DEC-0176 — For the launch, /mitmachen/registrieren embeds the Google Form the live site uses; the three-step flow is kept in the code but not rendered, and its criteria are suspended until the app's registration entry has a contract](DEC-0176--the-registration-route-embeds-the-google-form-for-launch.md)
+- [DEC-0177 — Every link "to the app" goes to the Schlatkow village calendar until the app has its own domain; the retired app host leaves the code, the CSP and every rendered page](DEC-0177--every-app-link-goes-to-the-schlatkow-calendar-until-the-app-has-its-own-domain.md)
+- [DEC-0178 — The spacing scale per level and tier: one token per level, every tier's value in one stylesheet, a 24 px block gap and a 12 px bound gap from xl, and no component hands another its outer margin](DEC-0178--the-spacing-scale-per-level-and-tier-and-a-larger-block-gap-from-desktop.md)
+- [DEC-0179 — The website's functions run in Vercel region fra1, next to the APIs they call](DEC-0179--functions-run-in-fra1-next-to-their-upstreams.md)
+- [DEC-0180 — CI runs the technical tests and a preview smoke; the full Playwright suite runs on demand only](DEC-0180--ci-runs-technical-tests-and-a-smoke-the-full-suite-on-demand.md)
+- [DEC-0181 — geo-api's place lookups are cached for seven days apart from the dates, and the point search gets its own 3 s budget](DEC-0181--the-geo-lookups-are-cached-for-days-and-the-point-search-has-its-own-budget.md)
+- [DEC-0182 — Every explain graphic fills its pane, and the square floor below lg is the pane's, not the stage's](DEC-0182--every-explain-graphic-fills-its-pane-and-the-square-floor-is-the-panes.md)
+- [DEC-0183 — A voice's logo takes the initials well's place, and the home proof stream drops its fifth element](DEC-0183--a-voices-logo-takes-the-initials-well-and-the-home-stream-drops-its-fifth-element.md)
+- [DEC-0184 — The publish line of the context band names the two ways only](DEC-0184--the-publish-line-of-the-context-band-names-the-two-ways-only.md)
+- [DEC-0185 — The nearby module picks a varied week from the events-api instead of the first five by start time](DEC-0185--the-nearby-module-picks-a-varied-week-from-the-events-api.md)
+- [DEC-0186 — Three cuts from the owner's preview review — no Google notices on the register route, open stories on /ueber-uns, no closing CTA on /ueber-uns](DEC-0186--three-preview-review-cuts-register-notices-open-stories-no-about-cta.md)
+- [DEC-0187 — Every photograph shows its credit behind the © control, always in the same form; the credits section only points there](DEC-0187--every-photograph-shows-its-credit-behind-the-copyright-control.md)
+- [DEC-0188 — The homescreen headline on /dein-ort carries no icon](DEC-0188--the-homescreen-headline-carries-no-icon.md)
+- [DEC-0189 — The phone header drops the calendar pill, and the menu overlay is the blurred page](DEC-0189--the-phone-header-drops-the-calendar-pill-and-the-menu-overlay-is-glass.md)
+- [DEC-0190 — On the phone the burger is a track that carries the page's job](DEC-0190--the-phone-burger-is-a-track-carrying-the-pages-job.md)
+- [DEC-0191 — Two header variants, the track spreads its ghost layers, and the calendar button leaves the header](DEC-0191--two-header-variants-the-ghost-track-and-no-calendar-button.md)
+- [DEC-0192 — The WhatsApp scene names the real number and the check-and-approve flow, offers the other ways as its one CTA, and loses the flyer row](DEC-0192--the-whatsapp-scene-names-the-real-number-and-the-flyer-row-goes.md)
+- [DEC-0193 — The embed scene is redesigned around an interactive calendar graphic](DEC-0193--the-embed-scene-is-redesigned-around-an-interactive-calendar-graphic.md)
+- [DEC-0194 — The home intro is a drawn phone with a legend, and the place search moves into it](DEC-0194--the-home-intro-is-a-drawn-phone-with-a-legend-and-the-search-moves-into-it.md)
+- [DEC-0195 — The home page has no closing block, and its context band is headed "Erfahre mehr über unsere Kalenderplattform"](DEC-0195--the-home-page-has-no-closing-block-and-the-band-is-headed-learn-more.md)
+- [DEC-0196 — /mitmachen drops its live example, and the closing CTA follows the three paths directly, on ink](DEC-0196--mitmachen-drops-the-live-example-and-the-closing-cta-follows-the-paths-on-ink.md)
+- [DEC-0197 — The nearby section is one heading and one sentence over the list, composed once for / and /dein-ort](DEC-0197--the-nearby-section-is-one-heading-and-one-sentence-over-the-list.md)
+- [DEC-0203 — One comparison module, today beside with-your-calendar, on /dein-kalender and /mitmachen](DEC-0203--one-comparison-module-today-beside-with-your-calendar-on-both-pages.md)
+- [DEC-0204 — The settings section explains the embedding in its head, drops the source-to-target band and labels its examples "Beispiel:"](DEC-0204--the-settings-section-explains-the-embedding-in-its-head-and-labels-its-examples.md)
+- [DEC-0205 — The price section on /dein-kalender is three columns with three equal figures and three equal buttons](DEC-0205--the-price-section-is-three-columns-with-three-figures-and-three-buttons.md)
+- [DEC-0206 — At most three text levels before a section's content, the kicker is optional, and the levels repeat nothing](DEC-0206--at-most-three-text-levels-before-a-sections-content-and-the-kicker-is-optional.md)
+- [DEC-0208 — The context band is headed "Erfahre mehr über unsere Kalenderplattform" on every page](DEC-0208--the-context-band-is-headed-learn-more-on-every-page.md)
+- [DEC-0209 — Every proof section carries one head: "Was andere über uns sagen" over "Stimmen aus der Praxis"](DEC-0209--every-proof-section-carries-one-head.md)
+- [DEC-0218 — eTracker counts every page and every CTA click, switched on by one environment variable](DEC-0218--etracker-counts-every-page-and-every-cta-click-from-one-environment-variable.md)
+- [DEC-0210 — Every date selection prefers one-off dates, mixes the themes and takes culture on a tie](DEC-0210--every-date-selection-prefers-one-offs-mixes-themes-and-takes-culture-on-a-tie.md)
+- [DEC-0213 — The section heads of /dein-kalender follow the three-level rule, and the copy guide gets CG-048](DEC-0213--dein-kalender-section-heads-follow-the-three-level-rule.md)
+- [DEC-0202 — The image budget is 200 KB per delivered size, and a photograph is delivered responsively](DEC-0202--the-image-budget-is-200-kb-per-delivered-size.md)
+- [DEC-0221 — Node 26 everywhere, the toolchain on current majors, and the registry credentials out of the committed .npmrc](DEC-0221--node-26-current-toolchain-majors-and-registry-credentials-out-of-npmrc.md)
+- [DEC-0222 — Production renders what preview renders, and the owner approved every page and slot the preview shows](DEC-0222--production-renders-what-preview-renders-and-the-owner-approved-the-content-tree.md)

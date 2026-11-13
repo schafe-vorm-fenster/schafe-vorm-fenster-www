@@ -1,0 +1,220 @@
+/*
+ * contact-section — SRC-0014 §Contact section.
+ *
+ * One fixed ground, `lime-100`, on every page: audience addressing runs
+ * through the copy, never through the ground, which is what makes the
+ * section recognisable. The two buttons carry their own grounds; the head,
+ * the lead, the D16 note and the phone and mail row are read against
+ * `lime-100` directly, all in `ink`/`muted` on a near-white ground.
+ */
+.section {
+  background: var(--color-lime-100);
+  color: var(--color-neutral-ink);
+  padding-block: var(--section-padding-block);
+  /* The links inside carry their own colours; a bare link would take the ground's pair. */
+  --ground-link: var(--color-lime-800);
+  --ground-link-hover: var(--color-neutral-ink);
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* ── Head: portrait, section head, name and lead on one line ───────────── */
+
+.head {
+  align-items: center;
+  display: flex;
+  gap: var(--space-4);
+}
+
+/* An avatar at the logo's radius — `ratio-square`, clipped to 999, 96 px. */
+.portrait {
+  aspect-ratio: var(--ratio-square);
+  border-radius: var(--radius-pill);
+  flex: 0 0 auto;
+  height: var(--size-contact-portrait);
+  object-fit: cover;
+  width: var(--size-contact-portrait);
+}
+
+.titles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.heading {
+  font-size: var(--type-section-size);
+  font-weight: 800;
+  letter-spacing: var(--type-section-tracking);
+  line-height: 1.05;
+  margin: 0;
+}
+
+/* The person's name in bold, then the lead in body weight, one paragraph. */
+.byline {
+  font-size: var(--type-body-size);
+  line-height: 1.4;
+  margin: 0;
+  max-width: var(--measure-reading);
+}
+
+.name {
+  font-weight: 700;
+}
+
+.lead {
+  color: var(--color-neutral-muted);
+}
+
+/* ── The actions: two buttons, the note, phone and mail ─────────────────── */
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.buttons,
+.direct {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--control-gap);
+}
+
+/* Phone and mail: one small row, wrapping when it has to. */
+.direct {
+  column-gap: var(--space-6);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  row-gap: var(--space-1);
+}
+
+/*
+ * One `<a>`, the whole control the target. `.row.filled` at two classes, the
+ * pattern `button` records: a link's colour is otherwise settled by CSS-module
+ * import order, which the production bundle orders differently from `next dev`.
+ */
+.row {
+  align-items: center;
+  color: inherit;
+  display: flex;
+  gap: var(--space-3);
+  text-decoration: none;
+}
+
+.glyph {
+  flex: 0 0 auto;
+}
+
+/* The two buttons: a pill, icon and bold title centred, 56 px. */
+.row.filled,
+.row.outlined {
+  border-radius: var(--radius-pill);
+  justify-content: center;
+  min-height: var(--height-button);
+  padding: var(--space-2) var(--space-6);
+  width: 100%;
+}
+
+.title {
+  font-size: var(--type-body-size);
+  font-weight: 700;
+  letter-spacing: var(--tracking-tight);
+  line-height: 1.15;
+}
+
+.row.filled:hover .title,
+.row.outlined:hover .title {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+
+/* Filled: ink ground, paper title (21:1), lime-500 icon. */
+.row.filled {
+  background: var(--color-neutral-ink);
+  color: var(--color-neutral-paper);
+}
+
+.row.filled .glyph {
+  color: var(--color-lime-500);
+}
+
+/*
+ * Outlined: paper ground with a 2 px ink border. Paper on `lime-100` alone
+ * does not stand off its ground (TS-WEB-0017-A29), so the border carries the
+ * edge — the owner's design draws the white pill without one.
+ */
+.row.outlined {
+  background: var(--color-neutral-paper);
+  border: 2px solid var(--color-neutral-ink);
+  color: var(--color-neutral-ink);
+}
+
+/* Phone and mail: no fill, the icon and the value in mono, a 44 px target. */
+.row.inline {
+  min-height: var(--height-control);
+}
+
+.row.inline:hover .mono {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.15em;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: var(--type-meta-size);
+  letter-spacing: var(--tracking-mono);
+  overflow-wrap: anywhere;
+}
+
+/* The D16 marking: the `meta` role, after the buttons, never in a label. */
+.note {
+  color: var(--color-neutral-muted);
+  font-size: var(--type-meta-size);
+  line-height: 1.4;
+  margin: 0;
+  text-align: center;
+}
+
+/* From `xl`: head left, actions right, the two buttons side by side. */
+@media (min-width: 64rem) {
+  .inner {
+    align-items: center;
+    display: grid;
+    gap: var(--grid-gap);
+    /* Head in columns 1–5, the actions in 6–12, so both buttons hold their label on one line. */
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  }
+
+  .buttons {
+    flex-direction: row;
+  }
+
+  .buttons > li {
+    flex: 1 1 0;
+  }
+}
+
+/* The accessible name keeps the row title where the eye gets only the value. */
+.srOnly {
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}

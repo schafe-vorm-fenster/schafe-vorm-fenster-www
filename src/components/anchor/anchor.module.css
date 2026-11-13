@@ -1,0 +1,13 @@
+/*
+ * The new-tab note (DEC-0169): read, not seen. Out of flow, so it moves
+ * nothing in a flex row, a sentence or a pill's wrapper; the visible half of
+ * the announcement is the `external-link` glyph the callers draw.
+ */
+.note {
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}

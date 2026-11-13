@@ -1,0 +1,77 @@
+import { MediaFrame } from "../media-frame/media-frame";
+
+import type { DataState } from "../data-state";
+import type { ReactNode } from "react";
+
+import type { Locale } from "@/src/lib/i18n/locales";
+
+import styles from "./feature-benefit.module.css";
+
+export interface FeatureBenefitProps {
+  readonly feature: string;
+  /**
+   * The benefit sentence. A `ReactNode` rather than a string since T-18: on
+   * `/deine-region` the sentence names the calendar tier's price, and TS-WEB-0026
+   * D6 permits that figure only "read from its package by the same component,
+   * never typed into copy" — so the artifact writes a token and the page hands
+   * the sentence in with a `price-tag` node standing where the token stood
+   * (TS-WEB-0026-A4/A5, DEC-0143 §4). The component still renders exactly one
+   * paragraph, and it still types no price of its own.
+   */
+  readonly benefit: ReactNode;
+  /** An inline `proof-card` or similar, where the claim has one. */
+  readonly proofRef?: ReactNode;
+  readonly mediaSrc?: string;
+  readonly mediaAlt?: string;
+  readonly mediaState?: DataState;
+  /** The photograph's credit behind the © control (DEC-0187). */
+  readonly mediaCredit?: ReactNode;
+  /**
+   * The page's language — `media-frame` badges itself and reads it. Without
+   * it block 5 of `/en/your-region` hatched "Foto gesucht" (F-2-33).
+   */
+  readonly locale?: Locale;
+  readonly className?: string;
+}
+
+/**
+ * 28 `feature-benefit` [PROPOSED] — content type 8 `feature-benefit`,
+ * TS-WEB-0026 block 5.
+ *
+ * Structure: feature ↔ what it does for you, with an optional `proof_ref`.
+ * Carries "what the enterprise licence adds" on `/deine-region`: territory
+ * cut, map view, white-label registration, `custom-data-integration` as the
+ * add-on — each an instance of this component, not a variant of it.
+ * States: an unshippable claim is removed at the content layer, not rendered
+ * qualified — this component has no state of its own beyond its optional
+ * media, which carries its own D-9 states via `media-frame`.
+ * Inherits: never a checkmark grid; `ratio-feature` media where present; no
+ * price — that is `price-tag`'s job, never typed here.
+ * Space: the media ratio is declared before the asset arrives.
+ * A11y: the feature and its benefit are readable in linear order, not two
+ * columns that only make sense side by side.
+ */
+export function FeatureBenefit({
+  feature,
+  benefit,
+  proofRef,
+  mediaSrc,
+  mediaAlt = "",
+  mediaState,
+  mediaCredit,
+  locale,
+  className,
+}: FeatureBenefitProps) {
+  return (
+    <div className={[styles.pair, className].filter(Boolean).join(" ")}>
+      {mediaSrc !== undefined || mediaState ? (
+        <div className={styles.mediaRow}>
+          <MediaFrame alt={mediaAlt} credit={mediaCredit} locale={locale} ratio="feature" src={mediaSrc} state={mediaState} />
+        </div>
+      ) : null}
+      <h3 className={styles.feature}>{feature}</h3>
+      <p className={styles.benefit}>{benefit}</p>
+      {proofRef ? <div className={styles.proof}>{proofRef}</div> : null}
+    </div>
+  );
+}

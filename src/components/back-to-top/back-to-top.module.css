@@ -1,0 +1,31 @@
+.control {
+  align-items: center;
+  background: var(--color-neutral-paper);
+  border-radius: var(--radius-pill);
+  bottom: calc(var(--space-4) + env(safe-area-inset-bottom, 0px));
+  color: var(--color-neutral-ink);
+  display: inline-flex;
+  font-weight: 700;
+  gap: var(--space-2);
+  min-height: var(--height-control);
+  padding: 0 var(--space-4);
+  position: fixed;
+  right: calc(var(--space-4) + env(safe-area-inset-right, 0px));
+  text-decoration: none;
+  z-index: 15;
+}
+
+.control[data-visible="false"] {
+  display: none;
+}
+
+.control:hover {
+  background: var(--color-neutral-surface);
+}
+
+/* xl — 64rem / 1024px: the sticky section column takes over, so this goes. */
+@media (min-width: 64rem) {
+  .control {
+    display: none;
+  }
+}

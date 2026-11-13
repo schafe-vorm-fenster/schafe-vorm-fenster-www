@@ -1,0 +1,395 @@
+---
+id: ueber-uns-de
+page_id: TS-WEB-0027
+route: "/ueber-uns"
+seo:
+  "/ueber-uns":
+    title: "Vom Dorf fürs Dorf"
+    description: "Wer den Dorfkalender macht und warum er für die Orte kostenlos bleibt: ein Dorf in Vorpommern, das Ehrenamt und 25 Jahre IT an einer Stelle."
+    provenance: generated
+content_type: section
+status: approved
+reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
+reviewed_at: "2026-11-12"
+locale: de
+sources:
+  - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
+  - "@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar"
+  - "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor"
+  - "@schafe-vorm-fenster/proof@0.3.5"
+  - "@schafe-vorm-fenster/media-echo@0.3.3"
+  - "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel"
+  - "@schafe-vorm-fenster/people@0.3.6#christian-sauer"
+  - "@schafe-vorm-fenster/brand-identity@0.1.4#schafe-vorm-fenster"
+  - "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community"
+  - "@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis"
+  - "@schafe-vorm-fenster/proof@0.3.5#ukraine-integration-dorfleben"
+  - "@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow"
+  - "@schafe-vorm-fenster/proof@0.3.5#homeoffice-mobile-anbieter"
+  - "@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin"
+  - "@schafe-vorm-fenster/media-echo@0.3.3#2026-01-zukunftswege-ost-vollblutdigitalisierer"
+  - "ia"
+derived_from:
+  - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
+  - "@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar"
+  - "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor"
+  - "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel"
+  - "@schafe-vorm-fenster/people@0.3.6#christian-sauer"
+  - "@schafe-vorm-fenster/brand-identity@0.1.4#schafe-vorm-fenster"
+  - "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community"
+  - "@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis"
+  - "@schafe-vorm-fenster/proof@0.3.5#ukraine-integration-dorfleben"
+  - "@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow"
+  - "@schafe-vorm-fenster/proof@0.3.5#homeoffice-mobile-anbieter"
+  - "@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin"
+  - "@schafe-vorm-fenster/media-echo@0.3.3#2026-01-zukunftswege-ost-vollblutdigitalisierer"
+  - "ia"
+generated_by: "playbook-content-production@1.0.0"
+generated_at: "2026-09-11"
+tone_profile: "du-everywhere"
+provenance: "sourced — no generated slot left: `ueber-uns-2a-anecdotes-demo` went with DEC-0162 §3 and `ueber-uns-3a-empty-slot-demo` (the reserved place's label and sentence) with DEC-0175 §3, because a placeholder never reaches the website. Slot 1 carries the released h1 and the village argument in DEC-0084 §2 order, slot 2 the origin story with the cleared founder quote and its article, slot 3 five cleared proof elements, slot 5 the owner's own bio"
+compliance_check: "state/content-map.md#compliance-checks — TS-WEB-0027"
+open_points:
+  - "Clearance pending — the testimonial in slot 3 (`kulturlandbuero-broellin`) carries `usage_rights: unverified` (Q-0014) and its own record says 'nicht für neue öffentliche Flächen verwenden'. It is not rendered at all (TS-WEB-0027-A5); with a written clearance it takes the reserved seventh place"
+  - "Hub demand — `people@0.3.6#jan-henrik-hempel` says the move was 2008 and the Kulturverein 2014; the owner's own bio says 2011 and 'mitgegründet'. The page renders the owner's text (spec-impact K, state/open.md). The same record still carries Christian Sauer, whom the review takes off the team block"
+schema_note: "see content/pages/home/de.md — same TS-WEB-0007/schema gap, state/open.md #37"
+images:
+  - id: ueber-uns-hero
+    slot: ueber-uns-1-origin
+    ratio: hero
+    provenance: real
+    source: >-
+      Wikimedia Commons, File:Bauhof und Schafstall in Schlatkow.jpeg —
+      https://commons.wikimedia.org/wiki/File:Bauhof_und_Schafstall_in_Schlatkow.jpeg —
+      Eigenaufnahme von Schafe vorm Fenster (Commons-Konto „Schafevormfenster", own work), Juni
+      2021, 4032×2268. Der Ort, auf den der Firmenname zeigt. Nachweis hinter dem ©-Zeichen am Bild.
+    alt: Schafstall und Bauhof der Gemeinde in Schlatkow, ein weiß gekalkter Stall am Rand einer Wiese.
+    licence: CC BY-SA 4.0
+    credit: Schafe vorm Fenster, CC BY-SA 4.0, über Wikimedia Commons
+    credit_title: Bauhof und Schafstall in Schlatkow
+    credit_url: https://commons.wikimedia.org/wiki/File:Bauhof_und_Schafstall_in_Schlatkow.jpeg
+    focal:
+      x: 38
+      "y": 58
+    status: real
+    file: /images/real/ueber-uns-hero.webp
+    width: 680
+    height: 765
+    wide_file: /images/real/ueber-uns-hero-wide.webp
+    wide_width: 980
+    wide_height: 420
+  - id: ueber-uns-founder-portrait
+    slot: ueber-uns-1-origin
+    ratio: square
+    provenance: real
+    source: >-
+      @schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel/assets/2026-04-otcamp-neustrelitz-outdoor-session.jpeg
+      — `license: free use, credit advised`, `credit: openTransfer.de`, Fotograf: openTransfer.de
+      (Stiftung Bürgermut), openTransfer CAMP Zusammenhalt, Neustrelitz, April 2026, 1717×1717.
+      `press_clearance: cleared` steht im Personenprofil für alle vierzehn Assets. Binärdatei liegt
+      im go-to-market-os-Repository, das npm-Paket liefert nur den .asset.md-Deskriptor. Rendition
+      seit #164: die ganze Quelle als Quadrat, 1600×1600 (zuvor ein 4:5-Ausschnitt, hochskaliert).
+    alt: >-
+      Jan-Henrik Hempel sitzt im Freien in einem Stuhlkreis, Programmheft und Stift in den Händen,
+      hinter ihm zwei Transporter.
+    credit: openTransfer.de
+    credit_title: openTransfer CAMP Zusammenhalt, Neustrelitz
+    credit_url: https://opentransfer.de/dokumentation-camp-neustrelitz/
+    licence: "Freie Nutzung, Namensnennung erbeten (Rechteinhaber: openTransfer.de / Stiftung Bürgermut)"
+    focal:
+      x: 48
+      "y": 45
+    status: real
+    file: /images/real/ueber-uns-founder-portrait.webp
+    width: 1600
+    height: 1600
+  - id: ueber-uns-team-jan-henrik-hempel
+    slot: ueber-uns-5-team
+    ratio: feature
+    provenance: real
+    source: >-
+      @schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel/assets/2021-workshop-quilow-portrait.jpeg
+      — Eigenaufnahme (in-house), unbeschränkte Nutzung, kein Credit nötig. Nicht dasselbe Bild wie
+      im Herkunftsblock, damit die Seite ein Porträt nicht zweimal zeigt.
+    alt: Jan-Henrik Hempel erklärt etwas mit beiden Händen, hinter ihm Holzbalken.
+    licence: Eigenaufnahme, unbeschränkte Nutzung
+    credit: Jan-Henrik Hempel
+    focal:
+      x: 55
+      "y": 38
+    status: real
+    file: /images/real/ueber-uns-team-jan-henrik-hempel.webp
+    width: 1018
+    height: 727
+  - id: ueber-uns-team-christian-sauer
+    slot: ueber-uns-5-team
+    ratio: portrait
+    provenance: real
+    source: >-
+      @schafe-vorm-fenster/people@0.3.6#christian-sauer/assets/2019-christian.jpg — `license:
+      unverified`, Fotograf unbekannt, `press_clearance: unverified`. Nicht freigegeben, und ein
+      Porträt einer realen Person wird nie generiert (DEC-0068 Regel 3); bis zur Klärung zeigt die
+      Karte die Fläche „Foto gesucht“ (TS-WEB-0027-A9).
+    alt: Christian Sauer im Freien, er blickt in die Kamera.
+    status: needed
+---
+
+# Über uns (`/ueber-uns`)
+
+Fokusjob „understand who is behind it", **eigene Conversion
+`request-product-briefing`** (TS-WEB-0027 D1, DEC-0081 §6). Die feste Headline
+aus DEC-0036 §3 ist aufgehoben (DEC-0083 §5) — die `h1` ist hier Copy und
+steht in Slot 1. Kein Betriebs-Zähler, keine Jahreszahl als Modul, keine
+Ortszahl (TS-WEB-0027 D4, DEC-0084 §3).
+
+## Slot 1 — Herkunft (h1 und Dorfargument)
+
+<!-- id: ueber-uns-1-origin; content_type: hero; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/brand-identity@0.1.4#schafe-vorm-fenster", "@schafe-vorm-fenster/offerings@0.3.5#community-calendar", "@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar", "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor", "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel"]; status: approved -->
+
+**h1:** Vom Dorf fürs Dorf
+
+**Dorfargument 1 (der Bedarf):** Ein Dorf braucht einen einfachen Weg, damit alle, die sich im Ehrenamt engagieren, ihre Termine schnell kommunizieren können — und damit alle mitbekommen, was läuft.
+
+**Dorfargument 2 (was der Markt anbietet):** Als Ort oder Gemeinde will man sich nicht damit beschäftigen, eine App anzuschaffen oder eine komplizierte Webseite zu bauen, die dann keiner anguckt. Man braucht etwas Fertiges, das die Nachbarn gerne benutzen und mit dem man einfach starten kann.
+
+**Dorfargument 3 (was daraus folgt):** Deshalb ist der Dorfkalender kostenlos, und das bleibt so. Die Lizenz für den eigenen Kalender kostet {price:portalize-calendar} im Jahr statt eines Projektbudgets.
+
+<!-- note: ab hier Autorennotiz, keine Copy — der Abschnitt zitiert verbotene Begriffe, um sie zu verbieten (DEC-0142 §1) -->
+
+Die Reihenfolge ist DEC-0084 §2: der Bedarf → was der Markt darauf antwortet
+→ was daraus folgt. Satz 1 und 2 sind die Sätze des Reviews vom 2026-09-22
+(Abschnitt „Seite `/ueber-uns`", „Section ‚Warum das zählt'"), wörtlich
+übernommen. Gestrichen ist die Klausel, die den Preis aus dem Leisten-Können
+eines Dorfes und aus einem fehlenden Vertrieb herleitete — und mit ihr die
+Zahl „rund 400 Einwohner" aus dem Markenprofil, die falsch ist (DEC-0084 §1:
+rund 280). Preisangaben aus `community-calendar` (kostenlos, „forever") und
+`portalize-calendar` (480/EUR/Jahr) — gelesen, nicht getippt. Satz 3 trägt
+seit dem Review vom 2026-10-27 nur noch ein „Deshalb" (#106); die beiden
+Aussagen sind dieselben.
+
+Seit dem Umbau nach dem Entwurf vom 2026-10-12 (#55, DEC-0162) stehen die drei
+Sätze des Dorfarguments als die drei Grundsätze unter „Was wir daraus
+mitgenommen haben". Der frühere „Satz mit Beleg" („Der Gründer war selbst
+ehrenamtlicher Bürgermeister …", Quelle „Nordkurier, 2019 und 2022") ist
+gestrichen: Er wiederholte den Bürgermeister-Satz aus Kapitel 02, und die
+Quelle nannte zwei Jahre statt eines Artikels. Die Tatsache steht jetzt mit
+ihrem Zeitraum im Text von Kapitel 02 (Review 2026-10-27, #104, DEC-0175 §2).
+
+## Slot 1a — Kapitel (Bühne, Kapitelzeilen, Grundsätze, Auszeichnung)
+
+<!-- id: ueber-uns-1a-chapters; content_type: section; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel", "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor", "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community"]; status: approved -->
+
+**Bühne — Kicker:** Über uns · Schlatkow, Vorpommern
+
+**Kapitel 01 — Ort:** Schlatkow
+
+**Kapitel 02 — Überschrift:** Eine Schafweide vor dem Küchenfenster.
+
+**Kapitel 02 — Ort:** Gemeinde Schmatzin
+
+**Kapitel 03 — Ort:** Vorpommern-Greifswald
+
+**Geschichte — öffnen:** Die Geschichte
+
+**Geschichte — schließen:** Schließen
+
+**Grundsätze — Überschrift:** Was wir daraus mitgenommen haben.
+
+**Grundsatz 01 — Titel:** Einfach muss es sein.
+
+**Grundsatz 02 — Titel:** Fertig statt Projekt.
+
+**Grundsatz 03 — Titel:** Für das Dorf kostenlos.
+
+<!-- note: ab hier Autorennotiz, keine Copy -->
+
+Die Zeilen sind die Überschriften, Kicker und Bedienwörter des Entwurfs des
+Owners vom 2026-10-12 (`plan/reviews/2026-10-12/Design - Über uns Vorschau -
+*.jpg`, Issue #55), wörtlich übernommen, wie die Review-Sätze in Slot 1. Die
+Ortszeilen tragen nur Orte: Schlatkow, die Gemeinde Schmatzin, der Landkreis —
+vom Dorf über die Gemeinde zum Kreis. „Schmatzin · Bürgermeisteramt" hat das
+Review vom 2026-10-27 als abgehackt verworfen (#103); das Amt steht seitdem
+ausformuliert im Text von Kapitel 02 (Slot 2). Nicht übernommen ist, was im Entwurf als
+Fließtext oder Zahl ohne Quelle steht (DEC-0162 §3): der Lead der Bühne, der
+zweite Absatz von Kapitel 01, die Fortsetzung von Kapitel 02, die Einleitung
+von Kapitel 03, die drei Grundsatz-Texte (die Seite rendert dafür die drei
+Sätze des Dorfarguments aus Slot 1), die Schlagwörter der Person, „280
+Einwohner" (CG-034) und „Seit 2018" (TS-WEB-0027 D4). Die Geschichten in
+Kapitel 03 sind die belegten Elemente aus Slot 3 und 3b, nicht die
+Entwurfskacheln „Line Dancer" und „Bienenfotogalerie": für beide gibt es keinen
+belegten Einzelfall (`google-baecker-schlatkow` sagt das für die Line-Dance-
+Geschichte ausdrücklich).
+
+## Slot 2 — Die Geschichte
+
+<!-- id: ueber-uns-2-story; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/brand-identity@0.1.4#schafe-vorm-fenster", "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel", "@schafe-vorm-fenster/media-echo@0.3.3#2026-01-zukunftswege-ost-vollblutdigitalisierer"]; status: approved -->
+
+**Überschrift:** Angefangen hat es mit Brötchen.
+
+**Absatz (Anfang):** Nach dem Umzug von Berlin nach Schlatkow fragte die Familie zwei Wochen lang nach einem Bäckerwagen, legte sich schließlich morgens auf die Lauer und fuhr dem Wagen ins Nachbardorf hinterher, um einen Halt in Schlatkow zu vereinbaren.
+
+**Absatz (Name):** Von 2019 bis 2024 war Jan-Henrik Hempel ehrenamtlicher Bürgermeister von Schmatzin, zu dem auch Schlatkow gehört. An diese Zeit erinnert der Name Schafe vorm Fenster.
+
+**Zitat (Gründer):** Wenn man alles sammelt, ist plötzlich in jedem Dorf jeden Tag irgendwas los. Wir müssen das nur sichtbar machen.
+
+**Zitat — Name:** Jan-Henrik Hempel
+
+**Zitat — Rolle:** Gründer
+
+**Zitat — Organisation:** Schafe vorm Fenster
+
+**Zitat — Quelle (Titel):** Zukunftswege Ost-Vorpommern: Der Vollblutdigitalisierer von Schlatkow
+
+**Zitat — Quelle (Link):** https://www.zukunftswege-ost-vorpommern.de/vollblutdigitalisierer-von-schlatkow
+
+Herkunftsabsatz: Abschnitt „Origin story" des Markenprofils, dazu das
+Porträt von Zukunftswege Ost-Vorpommern (Januar 2026). Namensabsatz (Kapitel
+02): Markenprofil „The name honours the founder's time as volunteer mayor of
+Schmatzin: the municipal sheep pasture was visible from the kitchen window"
+(daher „erinnert an", nicht „stammt aus"), `founder-former-volunteer-mayor`
+für Amt und Amtsbeginn 2019 und Schlatkow als Ortsteil der Gemeinde. Das
+Amtsende 2024 ist die Angabe des Owners im Review vom 2026-10-27; der
+Hub-Datensatz lässt es offen („Offen bleibt: das Amtsende"), DEM-0074. Das Zitat steht
+wörtlich im Personenprofil (`press_clearance: cleared`) und im Porträt;
+Titel und Link kommen aus dem `media-echo`-Eintrag
+`2026-01-zukunftswege-ost-vollblutdigitalisierer` (Träger: RAA — Demokratie
+und Bildung Mecklenburg-Vorpommern e. V.). Zitat und Beleg stehen als ein
+Element (`quote-card`, CG-028).
+
+Die Platzhalter-Anekdoten, die hier als `ueber-uns-2a-anecdotes-demo` standen
+(`provenance: generated`, `demo: true`), sind mit dem Umbau nach dem Entwurf vom
+2026-10-12 gestrichen (DEC-0162 §3): Kapitel 03 zeigt nur belegte Geschichten,
+und eine Kachel ohne Quelle liefert die Seite nicht aus (#55). Die Corona- und
+Bäckerauto-Anekdote hat dafür jetzt einen Beleg (`homeoffice-mobile-anbieter`,
+Slot 3 und 3b).
+
+## Slot 3 — Belegstrom (7 Plätze, 1 typreserviert)
+
+<!-- id: ueber-uns-3-proof-stream; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5", "@schafe-vorm-fenster/proof@0.3.5#homeoffice-mobile-anbieter", "@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis", "@schafe-vorm-fenster/proof@0.3.5#ukraine-integration-dorfleben", "@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow"]; status: approved -->
+
+Pool: der volle `proof`-Bestand plus `media-echo` (31 Einträge). Seit dem
+Umbau nach dem Entwurf vom 2026-10-12 ist der Strom das Kapitel 03, „Dann
+wurde es mehr als Brötchen." (DEC-0162 §2): vier Geschichten, alle
+`usage_rights: cleared`, jede Zeile der wörtliche `claim:` ihres Datensatzes.
+Alle vier stammen aus dem eigenen eu:react-Abschlussbericht an den
+Fördergeber (`source:` der vier Datensätze). Das Kapitel trägt trotzdem
+denselben Kopf wie jede Beleg-Section: Kicker „Was andere über uns sagen",
+Überschrift „Stimmen aus der Praxis" (`proofIntro`, DEC-0209 §4, Owner
+2026-11-12). Die Quellenangabe jeder Zeile bleibt der eigene Bericht; eine
+Kapitelüberschrift im Slot gibt es nicht mehr.
+Die NØRD-Auszeichnung steht im eigenen Auszeichnungsblock (Slot 4), der
+Bürgermeister in Kapitel 02 (Slot 2), deshalb stehen beide hier nicht
+mehr:
+
+1. In der Pandemie wurden sämtliche Impfangebote und Testzentren-Öffnungszeiten des Landkreises tagesaktuell und ortsgenau über die Dorfkalender veröffentlicht. — eu:react-Abschlussbericht, Juli 2022
+2. Der Dorfkalender hat 2022 die Integration ukrainischer Geflüchteter ins Dorfleben unterstützt: Anschluss an Vereinstreffen, Veranstaltungen und mobile Händler. — eu:react-Abschlussbericht, Juli 2022
+3. Wer bei Google nach „Bäcker Schlatkow" sucht, findet das mobile Bäckerauto und seinen Tag — nicht Filialen in Anklam. — eu:react-Abschlussbericht, Juli 2022
+4. In der Corona-Zeit wurden Home-Office-Nutzer über die Dorfkalender erstmals auf mobile Anbieter aufmerksam — und teils zu Stammkunden. — eu:react-Abschlussbericht, Juli 2022
+
+Die Reihenfolge hier ist chronologisch, neueste zuerst — nicht die
+Anzeigereihenfolge: Welches Element auf welchem Platz steht, entscheidet die
+Relevanz-Maschine (TS-WEB-0005) aus demselben Pool. Der siebte Platz ist für
+den Typ `testimonial` reserviert und wird nie mit einem Element eines
+anderen Typs aufgefüllt (TS-WEB-0027 D5). Solange er leer ist, rendert er
+nichts — keine Karte, kein Platzhalter (DEC-0175 §3).
+
+Zeile 1 nannte bis #160 den „Landkreis Vorpommern-Greifswald" als Absender.
+Der Datensatz `impftermine-landkreis` nennt als Quelle den eigenen
+eu:react-Abschlussbericht (Juli 2022) und den Landkreis nur als Partner der
+Zusammenarbeit; die Zeile nennt deshalb den Bericht (DEC-0209 §4).
+
+Das sechste Element des Stroms ist gestrichen: „Der Dorfkalender ist seit
+2018 in Betrieb" (`in-operation-since-2018`) ist eine „seit …"-Aussage, und
+TS-WEB-0027 D4 verbietet sie auf dieser Seite ausdrücklich — „no year figure
+rendered as a module, no place count, no badge, no ‚seit …' claim anywhere on
+the page". Lücken verkürzen den Strom; ein leerer Platz wird nie gezeigt
+(D5, DEC-0175 §3).
+
+<!-- id: ueber-uns-3b-stories; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis", "@schafe-vorm-fenster/proof@0.3.5#ukraine-integration-dorfleben", "@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow", "@schafe-vorm-fenster/proof@0.3.5#homeoffice-mobile-anbieter"]; status: approved -->
+
+**Geschichte 1 (Impftermine):** Als es darauf ankam, trug der Dorfkalender die Daseinsvorsorge mit: Alle Impf- und Testangebote des Landkreises standen tagesaktuell und ortsgenau darin. Der Landkreis konnte die Daten nicht strukturiert übergeben, also wurden sie von Hand übernommen.
+
+**Geschichte 2 (Geflüchtete):** Mit Kriegsausbruch 2022 kamen Geflüchtete oft direkt in den Dörfern des Landkreises an. Der Kalender erleichterte ihnen den Zugang zum Dorfleben, zu Veranstaltungen, Vereinstreffen und mobilen Händlern. Daraus entstand eine mehrsprachige Ausgabe auf Deutsch, Polnisch, Ukrainisch und Russisch und Englisch.
+
+**Geschichte 3 (Bäcker Schlatkow):** Wer bei Google einen Bäcker im Dorf sucht, findet das Bäckerauto samt Wochentag statt der nächsten Filiale in der Stadt. So finden auch Ortsunkundige, Touristen und Zugezogene die Grundversorgung.
+
+**Geschichte 4 (Homeoffice):** Als in der Corona-Zeit mehr Menschen im Landkreis zu Hause arbeiteten, erreichten uns Erfahrungsberichte: Über die Kalender wurden sie zum ersten Mal auf mobile Dienste aufmerksam, und manche sind Stammkunden geworden.
+
+Je eine Geschichte zu jeder Zeile aus Slot 3, in derselben Reihenfolge (die
+Seite verbindet sie über die Position). Jeder Text erzählt den Fließtext des
+jeweiligen `proof`-Datensatzes nach und fügt keine Tatsache hinzu: keine Zahl,
+keine Person (`ukraine-integration-dorfleben`: „Keine Einzelpersonen benannt"),
+beim Homeoffice keine Umsatzangabe („ausdrücklich nicht quantifizierbar").
+Die Geschichten sind die aufklappbaren Texte von Kapitel 03 (DEC-0162 §2).
+
+<!-- id: ueber-uns-3-testimonial-slot-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin"]; status: approved -->
+
+**Reservierter Platz (Typ `testimonial`, Freigabe steht aus):** „Das Projekt kann einen wertvollen Beitrag zum wirtschaftlichen Wiederaufbau und zur Sichtbarkeit im ländlichen Raum leisten." — Kulturlandbüro Uecker-Randow, Schloss Bröllin
+
+Echtes Zitat aus `kulturlandbuero-broellin`, wörtlich, in normaler
+deutscher Rechtschreibung statt der ASCII-Umschrift der Quelldatei. Der
+Datensatz trägt `usage_rights: unverified` und den ausdrücklichen
+Vermerk „nicht für neue öffentliche Flächen verwenden" (Q-0014): Die
+Karte wird nicht gerendert (TS-WEB-0027-A5 — kein `unverified` im
+ausgelieferten HTML). Liegt eine schriftliche Freigabe vor, nimmt sie den
+reservierten Platz ein.
+
+Der frühere Slot `ueber-uns-3a-empty-slot-demo` („Beleg fehlt" und ein Satz,
+der den fehlenden Beleg benennt, `provenance: generated; demo: true`) ist
+gestrichen: Ein fehlender Beleg rendert nichts, und ein Platzhalter erreicht
+die Webseite nie (Review 2026-10-27, #105, DEC-0175 §3).
+
+## Slot 4 — Auszeichnung und Archiv-Verweis
+
+<!-- id: ueber-uns-4-archive; content_type: section; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community"]; status: approved -->
+
+**Überschrift:** Ein Dorfprojekt, ausgezeichnet in Rostock.
+
+**Auszeichnung:** Verliehen am 28. Mai 2026 unter Bitkom-Schirmherrschaft, auf der NØRD digital convention.
+
+**Quelle:** NØRD digital convention / digitales MV, Mai 2026
+
+**Siegel:** NØRD Award 2026 · Smart Community
+
+**Link-Text:** Presse und Auszeichnungen → `/ueber-uns/archiv`
+
+Die Auszeichnung ist das frühere Element 1 des Belegstroms
+(`noerd-award-2026-smart-community`, `usage_rights: cleared`). Seit #163 (DEC-0206)
+trägt das Siegel Name und Kategorie, der Text nur noch Datum, Schirmherrschaft
+und Veranstaltung; Rostock steht in der Überschrift. Die Tatsachen sind dieselben. Überschrift und
+Link-Text sind die des Entwurfs vom 2026-10-12 (#55). Der Block trägt genau
+einen Link ins Archiv, keine Vorschau, keine Liste, keinen Zähler (TS-WEB-0027
+D6); das Archiv wird mit #56 zur Presseseite (`Q-0093`), das Ziel bleibt.
+
+## Slot 5 — Team
+
+<!-- id: ueber-uns-5-team; content_type: profile; provenance: sourced; derived_from: ["@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel", "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor"]; status: approved -->
+
+**Person 1:** Jan-Henrik Hempel — Gründer, technische Leitung und Softwarearchitektur. Ich bin 2011 nach Schlatkow gezogen, habe hier den Kulturverein mitgegründet und sitze bis heute in der Gemeindevertretung. Beruflich mache ich seit 25 Jahren IT. Schafe vorm Fenster ist die Stelle, an der beides zusammenkommt: Ich weiß, wie Ehrenamt auf dem Dorf wirklich läuft — und ich weiß, was so eine Plattform braucht.
+
+Der Bio-Text ist der Vorschlag des Owners aus dem Review vom 2026-09-22
+(„Section ‚Wer dahinter steckt'"), wörtlich. Er nennt 2011 als Umzugsjahr;
+`people@0.3.6#jan-henrik-hempel` nennt 2008 und den Kulturverein 2014. Die
+Seite rendert den Text des Owners, und die Abweichung ist eine Forderung an
+den Hub (spec-impact K, `state/open.md`). Christian Sauer steht nicht mehr im
+Block (Review: „Christian Sauer nehmen wir raus"); sein Datensatz ist
+`status: draft` mit `press_clearance: unverified`, und das Zurückziehen des
+Datensatzes ist ebenfalls eine Hub-Forderung.
+
+## Slot 6 — Newsletter
+
+<!-- id: ueber-uns-6-newsletter; content_type: section; provenance: sourced; derived_from: [ia]; status: approved -->
+
+**Überschrift:** Auf dem Laufenden bleiben
+
+**Text:** Ein bis zwei Mal im Monat: was sich am Dorfkalender ändert, und was neue Orte damit machen.
+
+**Eingabefeld (Platzhaltertext):** `name@verein.de`
+
+**Button-Label:** Eintragen
+
+**Bestätigung:** Danke — notiert. Wir schicken dir gleich eine E-Mail zur Bestätigung.
+
+Der Block rendert nicht, solange kein Versandsystem benannt ist
+(`NEWSLETTER_SENDING_SYSTEM`, TS-WEB-0016-A21, DEC-0122 §3). Der Slot bleibt
+stehen, damit er mit dem Versandsystem zurückkommt (TS-WEB-0027 D8).

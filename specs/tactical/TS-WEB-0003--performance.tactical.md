@@ -1,0 +1,199 @@
+---
+artefact: tactical-spec
+id: TS-WEB-0003
+kind: rule
+status: DRAFT
+version: 0.1.0
+implements: [NFR-WEB-0039, NFR-WEB-0040, NFR-WEB-0041, NFR-WEB-0042, NFR-WEB-0043, NFR-WEB-0044, NFR-WEB-0045, NFR-WEB-0046, NFR-WEB-0047, NFR-WEB-0048, NFR-WEB-0049, NFR-WEB-0050, NFR-WEB-0051, NFR-WEB-0052, NFR-WEB-0053, NFR-WEB-0054, NFR-WEB-0055, NFR-WEB-0056, FUN-WEB-0107, FUN-WEB-0108, FUN-WEB-0109, FUN-WEB-0110, FUN-WEB-0111, FUN-WEB-0112, FUN-WEB-0113, FUN-WEB-0114, FUN-WEB-0115, NFR-WEB-0008, FUN-WEB-0116, FUN-WEB-0117, FUN-WEB-0105]
+sources: [SRC-0006, SRC-0007]
+decisions: [DEC-0007, DEC-0019, DEC-0162, DEC-0163, DEC-0181]
+ai_provenance:
+  prompt_id: UNKNOWN
+  prompt_version: UNKNOWN
+  model: "Claude Opus 5 (1M context)"
+  generated_at: "2026-09-09T16:07:54+02:00"
+---
+
+# TS-WEB-0003 — Performance
+
+## Purpose
+
+Resolves the adopted budget into per-route targets, loading rules, cache
+lifetimes, and CI enforcement.
+
+## Determinations
+
+### D1 — Global budgets [FIXED: DEC-0007]
+
+LCP < 2.5s · INP < 200ms · CLS < 0.1 · FCP < 800ms · TTFB < 200ms.
+Compressed: HTML ≤ 50KB · JS ≤ 100KB · CSS ≤ 30KB · fonts ≤ 50KB ·
+images ≤ 200KB each (DEC-0202). Lighthouse: 100 target / 98 floor (Performance),
+100 the rest — mobile and desktop.
+
+### D2 — LCP elements per page [FIXED: DEC-0068, DEC-0069]
+
+The LCP element is declared per page and eager-loaded; everything else
+must not compete:
+
+| Page | LCP element |
+| --- | --- |
+| `/` | place-search block (text/input, no image) |
+| `/dein-ort` | place name + next dates (text) |
+| `/mitmachen` | WhatsApp scene image |
+| `/dein-kalender` | ownership headline (text) |
+| `/ueber-uns` | the stage photograph (a `photo-surface` background, preloaded) — it was the founder photo until DEC-0162 moved the portrait into the quote band |
+
+Text-first LCP wherever the brief allows — images never above the fold
+without being the declared LCP element.
+
+The two image LCPs are safe to declare because the asset always exists:
+under DEC-0068 a missing photograph is filled by a generated placeholder
+at the declared aspect ratio, never by an empty slot. The LCP element
+therefore has its geometry from day one, and swapping the placeholder for
+the real photograph later changes the bytes, not the layout and not the
+budget. What the swap must not change is the aspect — the placeholder
+declares it, and the real image is cropped to it.
+
+### D3 — Fonts [FIXED: FUN-WEB-0109, FUN-WEB-0110, FUN-WEB-0111; subset PROPOSED]
+
+**Atkinson Hyperlegible Next** (plus the Mono variant for labels, dates
+and numbers), `woff2`, latin subset, self-hosted, preloaded,
+`font-display: swap`; total ≤ 50KB across both families and the three
+weights in use (400 · 700 · 800). Corrected 2026-09-11 per DEC-0043 — an
+earlier version named Inter, which was wrong.
+
+### D4 — JavaScript [FIXED: NFR-WEB-0052, NFR-WEB-0053, NFR-WEB-0054, NFR-WEB-0055, NFR-WEB-0056, FUN-WEB-0107, FUN-WEB-0108; split PROPOSED]
+
+Server-first rendering (DEC-0019); client JS only for: live-module
+hydration, place search, envoy widget, eTracker. Third-party rule:
+eTracker deferred (never render-blocking, excluded from LCP path); envoy
+widget loads lazily when its container approaches the viewport.
+Per-route first-load JS ≤ 100KB, ≤ 70KB target — **reported, not
+gating** [FIXED: DEC-0069]. The byte budget is a measure we watch; the
+build-failing gate is Lighthouse (D1, 100 target / 98 floor, fixed by
+DEC-0007). A route that exceeds the budget while Lighthouse stays green
+produces a warning in the run summary and a line in the release review,
+not a red build — what the visitor experiences is the thing being
+promised, and bytes are only a proxy for it. The budgets are not
+abandoned: a route that exceeds them *and* drops Lighthouse below the
+floor fails on the Lighthouse check, which is the one that matters.
+
+### D5 — Cache lifetimes (fills FUN-WEB-0105) [FIXED: DEC-0019, DEC-0069]
+
+> **Amended by DEC-0163 (2026-10-13).** Pages are static and never revalidate: their HTML is fixed for the life of a deployment (its inline scripts are hashed at build time, TS-WEB-0014 D3), so the "pages (HTML, ISR) · 1 h" row reads "until the next deploy". The live data rows below apply to the BFF routes' `Cache-Control` only — no page carries a `cacheLife` from this table any more; the browser loads live data from the routes after hydration. The proof stream rotates with the build's ISO week (TS-WEB-0005 D7).
+
+Vercel SWR semantics per DEC-0019 (serve cached, revalidate behind):
+
+| Data | Fresh TTL | Serve-stale window |
+| --- | --- | --- |
+| dates per place ("today", "this week") | 5 min | **3 d** |
+| active places / map | 1 h | **7 d** |
+| live counters (`/api/stats`) | 15 min | **3 d** — beyond: hide (FUN-WEB-0196, FUN-WEB-0197) |
+| geo lookups — point → communities, slug → community, id → community (DEC-0181) | 7 d | 7 d — the entry expires and is fetched again |
+| proof stream input (`media-echo`, build data) | build-time | until next deploy |
+| proof stream per segment (`{community, trait, job, isoWeek}`) | 1 week | until the ISO week turns (tagged, TS-WEB-0005 D7) |
+| pages (HTML, ISR) | 1 h | until next deploy |
+| landing-only domains | static | until next deploy |
+
+Freshness label ("Stand: …") appears when served data is older than its
+fresh TTL [FIXED: DEC-0019].
+
+**Why the stale windows are long.** Fresh TTL and stale window answer
+different questions. The fresh TTL decides how fast a correction reaches
+the page — five minutes for dates, and that is what matters in normal
+operation. The stale window decides only what happens when the upstream
+is *unreachable*, and there the choice is between a three-day-old date
+list carrying a visible "Stand: …" and no date list at all. An old answer
+that says how old it is beats an empty page, so the window is generous on
+purpose. It never delays a correction: as soon as upstream answers, the
+revalidation behind the served response replaces the stale copy.
+
+### D6 — Reduced data [FIXED: NFR-WEB-0008; measures PROPOSED]
+
+On `Save-Data: on` / `prefers-reduced-data`: hero/scene images drop to
+low-res variants, non-LCP images stay lazy with tighter thresholds, map
+module renders as list.
+
+### D7 — Enforcement [FIXED: FUN-WEB-0114, FUN-WEB-0115; config PROPOSED]
+
+- **Lighthouse CI** on every PR against: `/`, `/dein-ort`, `/mitmachen`,
+  `/dein-kalender`, `/ueber-uns` (mobile emulation, throttled);
+  asserts D1 scores. Performance < 98 fails the build.
+- **Bundle guard** in CI asserts D1/D4 size budgets per route.
+- **RUM**: Vercel Speed Insights (cookieless) watches D1 in production;
+  alerts on p75 regression.
+
+## Free for the generator
+
+- [FREE] Code-splitting strategy, component-level lazy boundaries —
+  within D4 budgets.
+- [FREE] Image formats/sizes pipeline, as long as ≤ 200KB and AVIF/WebP
+  preferred.
+
+## Acceptance criteria
+
+| ID | Level | Check |
+| --- | --- | --- |
+| TS-WEB-0003-A1 | tool | Lighthouse CI green on the five D7 routes, mobile + desktop. |
+| TS-WEB-0003-A2 | tool | Bundle guard runs on every route and writes the measured first-load bytes to the run summary; a route over the D1/D4 budget is reported as a warning. The job fails only when A1's Lighthouse floor fails — the byte budget never fails a build on its own (D4). |
+| TS-WEB-0003-A3 | static | Fonts: single variable woff2, preloaded, ≤ 50KB, swap. |
+| TS-WEB-0003-A4 | e2e | With app APIs blocked (simulated outage): every page renders tier-2/3 content, freshness labels shown, counters hidden after stale window. |
+| TS-WEB-0003-A5 | tool | eTracker and envoy absent from the critical request chain of the LCP element (verified in trace). |
+| TS-WEB-0003-A6 | e2e | `Save-Data: on` responses are measurably lighter (≥ 30 % image bytes saved) [PROPOSED threshold]. |
+| TS-WEB-0003-A7 | tool | CLS < 0.1 with live modules streaming in (reserved space, no shift). |
+| TS-WEB-0003-A8 | static | Every image below the fold carries `loading="lazy"`; the declared LCP element of each page (D2) carries `loading="eager"` and `fetchpriority="high"`. No image outside the D2 table is eager. |
+
+### D8 — Reserved space is how CLS is met [FIXED: DEC-0056, SRC-0014]
+
+Every box holding asynchronous content declares its shape before the
+content arrives: `aspect-ratio` on media (never a pixel height, so the
+ratio survives every viewport), fixed heights for controls whose content
+length varies, and `min-height: calc(<lines> · <line-height> · 1em)` for
+text that arrives with data. Event titles clamp to two lines and meta to
+one, so a long title cannot change a row's height; live counts sit in a
+fixed-height badge, so one digit becoming two does not reflow.
+
+The ratio set and the height table are in SRC-0014; this spec consumes
+them and restates none of the values. CLS < 0.1 (D1) is the outcome this
+determination produces rather than hopes for.
+
+## Coverage
+
+| Requirement | Discharged by |
+| --- | --- |
+| NFR-WEB-0039 (Lighthouse Performance score (mobile) >= 98 points) | D1 · D7 enforcement · A1 |
+| NFR-WEB-0040 (Lighthouse Performance score (desktop) >= 98 points) | D1 · D7 enforcement · A1 |
+| NFR-WEB-0041 (Lighthouse Accessibility score (mobile) = 100 points) | D1 · D7 enforcement · A1 |
+| NFR-WEB-0042 (Lighthouse Accessibility score (desktop) = 100 points) | D1 · D7 enforcement · A1 |
+| NFR-WEB-0043 (Lighthouse Best Practices score (mobile) = 100 points) | D1 · D7 enforcement · A1 |
+| NFR-WEB-0044 (Lighthouse Best Practices score (desktop) = 100 points) | D1 · D7 enforcement · A1 |
+| NFR-WEB-0045 (Lighthouse SEO score (mobile) = 100 points) | D1 · D7 enforcement · A1 |
+| NFR-WEB-0046 (Lighthouse SEO score (desktop) = 100 points) | D1 · D7 enforcement · A1 |
+| NFR-WEB-0047 (Largest Contentful Paint < 2.5 s) | D1, D2 · A1, A7 |
+| NFR-WEB-0048 (Interaction to Next Paint < 200 ms) | D1, D2 · A1, A7 |
+| NFR-WEB-0049 (Cumulative Layout Shift < 0.1) | D1, D2 · A1, A7 |
+| NFR-WEB-0050 (First Contentful Paint < 800 ms) | D1, D2 · A1, A7 |
+| NFR-WEB-0051 (Time to First Byte < 200 ms) | D1, D2 · A1, A7 |
+| NFR-WEB-0052 (Compressed size of the initial HTML, critical CSS included < 50 KB) | D1, D4 · A2, A3 |
+| NFR-WEB-0053 (Compressed size of the JavaScript < 100 KB) | D1, D4 · A2, A3 |
+| NFR-WEB-0054 (Compressed size of the CSS < 30 KB) | D1, D4 · A2, A3 |
+| NFR-WEB-0055 (Compressed size of the web fonts <= 50 KB) | D1, D4 · A2, A3 |
+| NFR-WEB-0056 (Size of every image the website serves <= 200 KB) | D1, D4 · A2, A3 |
+| FUN-WEB-0107 (inline the critical CSS) | D4 · A5 |
+| FUN-WEB-0108 (defer its execution) | D4 · A5 |
+| FUN-WEB-0109 (serve the brand kit's woff2 file from its own …) | D3 · A3 |
+| FUN-WEB-0110 (declare font-display: swap) | D3 · A3 |
+| FUN-WEB-0111 (preload the file) | D3 · A3 |
+| FUN-WEB-0114 (run Lighthouse CI against the routes of TS-WEB-0003 D7) | D7 · A1, A2 |
+| FUN-WEB-0115 (report field performance through cookieless real-user monitoring) | D7 · A1, A2 |
+| FUN-WEB-0116 (declare the holding box's aspect-ratio rather than a fixed …) | D8 · A7 |
+| FUN-WEB-0117 (reserve its height in line units) | D8 · A7 |
+| NFR-WEB-0008 (Image payload of a page response served under Save-Data: on or prefers-reduced) | D6 · A6 |
+| FUN-WEB-0105 (use the cache lifetime of TS-WEB-0003 D5) | D5 · A4 |
+| FUN-WEB-0112 (load it lazily) | D2, D6 · A8 |
+| FUN-WEB-0113 (load it eagerly at high fetch priority) | D2, D6 · A8 |
+
+## Open points
+
+- D4's split and D6's measures are [PROPOSED]; A6's threshold is [PROPOSED]. D2, D5's values and D4's enforcement stance are fixed by DEC-0069.
+- Q-0015 sliver (stats fields) touches D5's counter row.

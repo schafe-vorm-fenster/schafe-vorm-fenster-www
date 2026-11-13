@@ -1,0 +1,172 @@
+import { isPending, type DataStateProps } from "../data-state";
+import { EventRow, type EventCategory } from "../event-row/event-row";
+import { Skeleton } from "../skeleton/skeleton";
+
+import type { RouteId } from "@/src/lib/routes/routes";
+import type { Locale } from "@/src/lib/i18n/locales";
+import type { CSSProperties, ReactNode } from "react";
+
+import styles from "./event-list.module.css";
+
+export interface EventListItem {
+  readonly id?: string;
+  readonly date: string | Date;
+  readonly title: string;
+  readonly meta?: string;
+  readonly category: EventCategory;
+  readonly categoryLabel: string;
+  readonly to?: RouteId;
+}
+
+/**
+ * How many rows a list of this **role** shows — polish brief G-2, and the
+ * only three numbers this website uses.
+ *
+ * A list that illustrates is three rows; a list that *is* the answer to the
+ * visitor's question may be five; a list standing inside a story is one,
+ * because one real date makes the point and three make a list. Nothing shows
+ * more than five, ever. Eleven rows across three modules before the home
+ * page's first argument was what this replaces.
+ */
+export const EVENT_LIST_CAPS = {
+  illustrative: 3,
+  answering: 5,
+  story: 1,
+} as const;
+
+export type EventListRole = keyof typeof EVENT_LIST_CAPS;
+
+export interface EventListProps extends DataStateProps {
+  readonly items: readonly EventListItem[];
+  /** The fixed row count the module promises (3 at position 1, 5 at position 2). */
+  readonly rowCount: number;
+  /**
+   * The list's role, which fixes its row count (G-2). Where it is set it wins
+   * over a larger `rowCount`: the module may have asked its source for more
+   * dates than it is allowed to print, and the rest live behind `more`. The
+   * skeleton reserves the capped count too, so nothing moves when the data
+   * lands.
+   */
+  readonly role?: EventListRole;
+  /**
+   * The quiet affordance under a capped list — "Mehr Termine im Kalender von
+   * {ort}" (G-2). Never a second CTA, and never rendered where the cap hides
+   * nothing: a list that already shows everything it has has nothing to link
+   * on to.
+   */
+  readonly more?: ReactNode;
+  /** The conversion state for zero results — never an empty list (TS-WEB-0008 D4). */
+  readonly emptyState?: ReactNode;
+  /** `dark` inside the ink section that carries the live data — forwarded to every row. */
+  readonly tone?: "light" | "dark";
+  readonly locale?: Locale;
+  readonly className?: string;
+  /**
+   * Reserve the printed rows at the height of a two-line row (DEC-0163): the
+   * list's rows load in the browser, and its prerendered skeleton has to hold
+   * the space whatever titles arrive.
+   *
+   * `true` keeps the reserve in every state, so a shorter answer leaves room
+   * at the end rather than pulling up what stands below — the rule for a list
+   * above the fold, where that pull would be a visible shift. `"loading"`
+   * reserves for the skeleton only and lets the answer take the height of the
+   * rows it has: the rule for the nearby list, which stands below the fold
+   * and whose kept reserve left up to three empty rows above its own calendar
+   * link (review 2026-10-27, issue #83; `TS-WEB-0008-A18`).
+   */
+  readonly reserve?: boolean | "loading";
+  /** Forwarded to every row — see `EventRow`. */
+  readonly categoryPlacement?: "side" | "below";
+}
+
+/**
+ * 42 `event-list` [PROPOSED] — TS-WEB-0008 pos 1 / 2.
+ *
+ * Structure: `event-row`s inside a `live-module-frame` — position 1 the next
+ * 3 dates of the known place, position 2 the 5 dates this week nearby, each
+ * row naming its own place in its `meta` line.
+ * States (D-9, all four):
+ *   loading  → `skeleton` at exactly `rowCount` rows, no animation;
+ *   empty    → the caller's `emptyState` (the conversion state) — never an
+ *              empty list;
+ *   degraded → the rows render their snapshot unchanged, tier labelled by the
+ *              surrounding `live-module-frame`;
+ *   mocked   → the rows render dummy data, each carrying `data-demo`.
+ * Inherits: category colours from the table; hairline between rows, 76 px
+ * each.
+ * Space: the skeleton renders exactly `rowCount` rows before the data
+ * arrives, which is where the CLS risk lives (`skeleton`'s own contract);
+ * once real rows render, their own fixed 76 px height is the only geometry
+ * that matters.
+ * A11y: a list of `event-row`s; the date stays readable text in every row.
+ */
+export function EventList({
+  items,
+  rowCount,
+  role,
+  more,
+  emptyState,
+  tone,
+  locale,
+  state = "ready",
+  className,
+  reserve = false,
+  categoryPlacement,
+}: EventListProps) {
+  const limit = role ? Math.min(rowCount, EVENT_LIST_CAPS[role]) : rowCount;
+  const classes = [styles.list, className]
+    .filter(Boolean)
+    .join(" ");
+  const reserved = (node: ReactNode, pending = false) =>
+    reserve === true || (reserve === "loading" && pending) ? (
+      <div
+        className={styles.reserve}
+        // The one list that gives its reserve back once it answers marks
+        // itself, so the layout sweep can tell its collapse below the fold
+        // from a shift (`e2e/layout-stability.spec.ts`, TS-WEB-0008-A19).
+        data-reserve={reserve === "loading" ? "loading" : undefined}
+        style={
+          {
+            "--event-list-rows": limit,
+          } as CSSProperties
+        }
+      >
+        {node}
+      </div>
+    ) : (
+      node
+    );
+
+  if (isPending(state)) {
+    return reserved(<Skeleton className={classes} rows={limit} variant="row" />, true);
+  }
+
+  if (state === "empty" || items.length === 0) {
+    return <>{emptyState ?? null}</>;
+  }
+
+  const shown = items.slice(0, limit);
+  const rows = (
+    <div className={classes}>
+      {shown.map((item, index) => (
+        <EventRow
+          {...item}
+          categoryPlacement={categoryPlacement}
+          key={item.id ?? `${item.title}-${index}`}
+          locale={locale}
+          state={state}
+          tone={tone}
+        />
+      ))}
+    </div>
+  );
+
+  if (!more || items.length <= shown.length) return reserved(rows);
+
+  return (
+    <div className={styles.withMore}>
+      {rows}
+      {more}
+    </div>
+  );
+}

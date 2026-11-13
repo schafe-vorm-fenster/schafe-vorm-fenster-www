@@ -1,0 +1,51 @@
+.row {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-3);
+  margin: 0;
+  min-height: var(--height-badge);
+}
+
+.dots {
+  display: flex;
+  gap: var(--space-2);
+}
+
+/*
+ * One dot per step, numbered. The number is inside the dot rather than beside
+ * it, so the row costs a single line at 390 px and still says which step of
+ * how many this is without reading the sentence next to it.
+ */
+.dot {
+  align-items: center;
+  background: var(--color-neutral-surface2);
+  border-radius: var(--radius-pill);
+  color: var(--color-neutral-muted);
+  display: inline-flex;
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  font-weight: 700;
+  height: 26px;
+  justify-content: center;
+  letter-spacing: var(--type-label-tracking);
+  min-width: 26px;
+}
+
+.done {
+  background: var(--color-lime-500);
+  color: var(--color-neutral-ink);
+}
+
+.current {
+  background: var(--color-neutral-ink);
+  color: var(--color-neutral-paper);
+}
+
+.label {
+  color: var(--color-neutral-text2);
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  letter-spacing: var(--type-label-tracking);
+  text-transform: uppercase;
+}

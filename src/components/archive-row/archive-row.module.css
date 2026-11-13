@@ -1,0 +1,123 @@
+.row {
+  border-top: 1px solid var(--color-neutral-line);
+  display: flex;
+  gap: var(--space-4);
+  padding-block: var(--space-4);
+}
+
+/*
+ * `archive-filter` sets the `hidden` attribute on this element directly
+ * (F-2-59). The browser's own `[hidden] { display: none }` rule lives in the
+ * user-agent stylesheet, which any author rule of equal or higher
+ * specificity overrides regardless of origin ordering — `.row`'s
+ * `display: flex` above was silently winning, so a "hidden" row kept its
+ * box: the filter updated its count while every row stayed on screen. This
+ * rule is the author-stylesheet override that makes `hidden` win here too.
+ */
+.row[hidden] {
+  display: none;
+}
+
+/*
+ * Issue #36: a deeplink (`/ueber-uns/archiv#<id>`) from a proof teaser lands on
+ * its row and marks it — `lime-100` ground, an `ink` rule on the leading edge,
+ * existing tokens only. `:target` needs no script; `anchor-highlight` sets
+ * `data-anchored` where a client-side navigation leaves `:target` unset. The
+ * document's `scroll-padding-top` keeps the row clear of the sticky header.
+ */
+.row:target,
+.row[data-anchored="true"] {
+  background: var(--color-lime-100);
+  box-shadow: inset var(--space-1) 0 0 var(--color-neutral-ink);
+  padding-inline: var(--space-4);
+}
+
+.withPreview .preview {
+  flex: none;
+  width: 120px;
+}
+
+.body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.meta {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.date {
+  color: var(--color-neutral-muted);
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  letter-spacing: var(--type-label-tracking);
+  text-transform: uppercase;
+}
+
+.title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  font-size: var(--type-card-size);
+  font-weight: 700;
+  letter-spacing: var(--type-card-tracking);
+  line-clamp: 2;
+  line-height: var(--type-card-leading);
+  margin: 0;
+  overflow: hidden;
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.context {
+  /*
+   * Two lines, not one truncated one. At 390 px a single nowrap line cut
+   * two thirds of the entries mid-word ("Flechtorf (Landkreis Hel…"), and
+   * the part it cut is the part that says where the entry is from — which
+   * is what this line is for.
+   */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  color: var(--color-neutral-text2);
+  font-size: var(--type-meta-size);
+  line-clamp: 2;
+  margin: 0;
+  overflow: hidden;
+}
+
+/* The space is this component's own (DEC-0178 §4): a wrapper it owns pads it,
+   so no margin rides on another component's root through `className` (A32). */
+.linkRow {
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--space-1);
+}
+
+/* DEC-0166 — a quotation from the coverage: indented behind a hairline so it
+   reads as someone else's words, with the outlet as its source line. */
+.quote {
+  border-inline-start: 2px solid var(--color-neutral-line);
+  margin: var(--space-1) 0 0;
+  padding-inline-start: var(--space-3);
+}
+
+.quote blockquote {
+  font-size: var(--type-meta-size);
+  margin: 0;
+}
+
+.quote figcaption {
+  color: var(--color-neutral-text2);
+  font-size: var(--type-meta-size);
+}

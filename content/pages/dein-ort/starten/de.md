@@ -1,0 +1,186 @@
+---
+id: dein-ort-starten-de
+page_id: TS-WEB-0021
+route: "/dein-ort/starten"
+seo:
+  "/dein-ort/starten":
+    title: "Kalender für deinen Ort starten"
+    description: "Dein Ort steht noch nicht im Dorfkalender? Eine Person, ein Flyer, ein Foto per WhatsApp — mehr braucht es nicht, damit er dazukommt."
+    provenance: generated
+content_type: section
+status: approved
+reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
+reviewed_at: "2026-11-12"
+locale: de
+sources:
+  - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
+  - "@schafe-vorm-fenster/audiences@0.3.3#actors"
+  - "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"
+  - "@schafe-vorm-fenster/media-echo@0.3.3#2022-nordkurier-plattform-doerfer"
+  - "ia"
+derived_from:
+  - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
+  - "@schafe-vorm-fenster/audiences@0.3.3#actors"
+  - "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"
+  - "@schafe-vorm-fenster/media-echo@0.3.3#2022-nordkurier-plattform-doerfer"
+  - "ia"
+generated_by: "playbook-content-production@1.0.0"
+generated_at: "2026-09-11"
+tone_profile: "du-everywhere"
+provenance: "sourced — 0 generated slots. Slot 2 now cites the 2022 Nordkurier record behind the permanence commitment and slot 4 the Lehre reference case; both are clearance: pending (Q-0045, Q-0014)"
+compliance_check: "state/content-map.md#compliance-checks — TS-WEB-0021"
+schema_note: "see content/pages/home/de.md — same TS-WEB-0007/schema gap, state/open.md #37"
+images:
+  - id: dein-ort-starten-hero
+    slot: dein-ort-starten-1-ack
+    ratio: hero
+    provenance: real
+    source: >-
+      Wikimedia Commons, File:Groß Luckow, Feuerwehr und Gemeindezentrum.jpg —
+      https://commons.wikimedia.org/wiki/File:Gro%C3%9F_Luckow,_Feuerwehr_und_Gemeindezentrum.jpg —
+      Eigenaufnahme von Schafe vorm Fenster (Commons-Konto „Schafevormfenster", own work), Mai 2025,
+      3914×2281. Nachweis hinter dem ©-Zeichen am Bild.
+    alt: >-
+      Gerätehaus der Freiwilligen Feuerwehr und das Gemeindezentrum von Groß Luckow, dahinter der
+      Kirchturm.
+    licence: CC0 1.0
+    credit: "Schafe vorm Fenster, CC0 1.0, über Wikimedia Commons"
+    credit_title: "Groß Luckow, Feuerwehr und Gemeindezentrum"
+    credit_url: "https://commons.wikimedia.org/wiki/File:Gro%C3%9F_Luckow,_Feuerwehr_und_Gemeindezentrum.jpg"
+    status: real
+    file: /images/real/dein-ort-starten-hero.webp
+    width: 800
+    height: 900
+    wide_file: /images/real/dein-ort-starten-hero-wide.webp
+    wide_width: 1400
+    wide_height: 600
+---
+
+# Dein Ort gründen (`/dein-ort/starten`)
+
+Erreicht, wenn die Ortssuche **keinen** Ort findet (TS-WEB-0021 D3) — der
+Unterschied zu `/dein-ort` Zustand B ist bewusst: dort fehlen Termine,
+hier fehlt der Ort selbst im System. Diese Seite spricht die Leserin
+direkt an, wie jede Seite dieser Website (TS-WEB-0021 D9 in der Fassung
+vom 2026-09-24, Review-Entscheidung 15) — unterschiedlich ist nicht die
+Anrede, sondern die Bitte: „du könntest die Erste sein" gehört
+ausschließlich auf `/dein-ort`, wo ein Kalender wartet. Das frühere
+„nie direkt" ist zurückgezogen; wer es noch zitiert, zitiert eine
+zurückgezogene Festlegung.
+
+## Slot 1 — Bestätigung mit Ortsname
+
+<!-- id: dein-ort-starten-1-ack; content_type: hero; provenance: sourced; derived_from: [ia]; status: approved -->
+
+**Headline (mit Ort):** {ort} steht noch nicht im Dorfkalender.
+
+**Headline (ohne Ort, Fallback):** Dieser Ort steht noch nicht im Dorfkalender.
+
+**Unterzeile:** Das lässt sich ändern.
+
+Der Ortsname ist reiner Text, escaped, nie Teil eines Links, einer
+Kalender-Zeile oder einer Zahl (TS-WEB-0021 D6).
+
+## Slot 2 — Was es braucht
+
+<!-- clearance: pending für den Presse-Beleg — der Nordkurier-Eintrag von 2022 trägt kein `usage_rights` (Q-0045, state/open.md #1). Der Angebots-Datensatz selbst ist frei verwendbar. -->
+<!-- id: dein-ort-starten-2-was-es-braucht; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar", "@schafe-vorm-fenster/media-echo@0.3.3#2022-nordkurier-plattform-doerfer"]; status: approved -->
+
+**Überschrift:** Für {ort} im Kalender reicht eine Person
+
+**Text:** Ein Flyer, den es sowieso schon gibt, und ein Foto per WhatsApp. Mehr nicht: kostenlos, ohne Anmeldegebühr, dauerhaft.
+
+Quelle: `price.note` von `community-calendar` — „Free for readers without
+any account … Permanent, not an introductory tier." Das Angebot war
+während der React-EU/ESF-Förderung kostenlos, und dass es das danach
+bleibt, stand 2022 im Nordkurier: „Das Basisangebot, das unter anderem
+beliebig viele Termine pro Dorf oder Gemeinde erlaubt, werde es auch
+danach bleiben." Der Offering-Datensatz nennt das ausdrücklich eine
+öffentliche Zusage und keine Preisentscheidung, die sich still
+zurücknehmen lässt (dieselbe Zusicherung wie `/dein-ort` Slot 8).
+
+## Slot 3 — Live-Modul, nächster aktiver Ort
+
+<!-- id: dein-ort-starten-3-beispiel; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: approved -->
+
+**Modul-Überschrift:** So läuft das in {beispielort}
+
+Der gezeigte Ortsname kommt aus einem tatsächlich abgedeckten, aktiven
+Ort (TS-WEB-0021 D7) — nie aus dem gesuchten, nicht gefundenen Ort.
+
+## Slot 4 — Wer das meistens anstößt
+
+<!-- clearance: pending für `lehre-lelender` (`usage_rights: unverified`, schriftliche Freigabe der Stiftung steht aus). Der Audience-Datensatz ist frei verwendbar. -->
+<!-- id: dein-ort-starten-4-wer; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/audiences@0.3.3#actors", "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"]; status: approved -->
+
+**Überschrift:** Meistens stößt ein Verein oder die Feuerwehr es an
+
+**Text:** Manchmal die Kirchengemeinde, eine Initiative, ein Kulturbetrieb oder ein mobiler Dienst wie ein Bäcker- oder Arztwagen. Oft eine einzelne Person, die das nebenbei macht.
+
+
+Quelle: `@schafe-vorm-fenster/audiences#actors`, Feld „Context" — die
+eigene Aufzählung des Audience-Records, keine neue Erfindung.
+
+Ton (TS-WEB-0021 D9): Dieser Absatz weist niemandem die Aufgabe zu. Er nennt,
+wer es üblicherweise ist, und überlässt der Leserin, sich
+wiederzuerkennen.
+
+Ein dokumentierter Fall: In der Gemeinde Lehre (Landkreis Helmstedt,
+Niedersachsen) hat die Stiftung Lebendiges Lehre den Anfang gemacht — 17
+Orte unter einem eigenen Kalendernamen. Beim Abend der
+Engagierten am 27. August 2026 standen 17 ortsindividuelle Flyer mit QR-Code auf den
+Tischen von rund 70 Ehrenamtlichen (`lehre-lelender`, Freigabe steht noch
+aus).
+
+## Slot 5 — Ortssuche (erneut)
+
+<!-- id: dein-ort-starten-5-search; content_type: section; provenance: sourced; derived_from: [ia]; status: approved -->
+
+**Frage:** Falsch getippt? Nochmal suchen
+
+**Sucheingabe (Placeholder):** Dein Ort
+
+**Hinweistext unter dem Feld:** Tipp den Ortsnamen ein — Vorschläge kommen ab dem zweiten Buchstaben.
+
+Dieselbe Komponente wie auf `/` und `/dein-ort` (TS-WEB-0008 D7) — kein
+eigenes Verhalten. Der Hinweistext steht jetzt hier statt nur im Code
+(state/open.md Zeile 94), damit die englische Seite nicht die deutsche
+Vorgabe der Komponente erbt. Das erste Feld heißt `Frage`, nicht
+`Überschrift`: die Seite setzt es als leise Zeile unter den
+Abschluss-CTA (`<p>` in `app/[lang]/dein-ort/starten/page.tsx`), nie als
+Abschnittstitel — die Frage an die Leserin ist hier erlaubt (CG-006), und
+der Wortlaut ist der des Polish-Briefs (plan/polish-brief.md, Seite 3,
+Fix 3).
+
+## Weiterleitung zur Registrierung
+
+<!-- id: dein-ort-starten-6-cta; content_type: closing-cta; provenance: sourced; derived_from: [ia]; status: approved -->
+
+**CTA-Label (primär):** {ort} eintragen → `/mitmachen/registrieren?ort={ort}`
+
+**CTA-Label (ohne Ort, Fallback):** Deinen Ort eintragen → `/mitmachen/registrieren`
+
+**Abschluss-Überschrift:** Ein Flyer reicht, um {ort} auf die Karte zu bringen.
+
+**Zusicherungstext:** Kostenlos, ohne Anmeldegebühr, dauerhaft.
+
+Der Wert wandert unverändert und URL-codiert weiter (TS-WEB-0021 D8) — kein
+App-Link, kein vorausgefülltes Konto, keine Behauptung, {ort} sei bereits
+registriert (Ehrlichkeitsregel, TS-WEB-0021 D8). Ohne Ortsnamen steht das
+zweite Label da: Es nennt keinen Ort, weil keiner feststeht, und
+verspricht dadurch auch keinen (state/open.md Zeile 94).
+
+## Kontextband (3 Nicht-Fokus-Jobs)
+
+<!-- source_note: Angebotsformulierung statt Menü aus gtm:concept/website-communication-principles.concept.md Prinzip 2; die drei Jobs und ihre Formulierung aus der Job-Tabelle in Prinzip 1. Beantwortet state/open.md Zeile 95 für diese Seite. -->
+<!-- id: dein-ort-starten-7-context-band; content_type: context-band; provenance: sourced; derived_from: [ia]; status: approved -->
+
+**Kicker:** Erfahre mehr über unsere Kalenderplattform
+
+- **Sehen, was los ist:** Was in deinem Ort als Nächstes ansteht → `/dein-ort`
+- **Eigenen Kalender betreiben:** Unter eigenem Namen, auf eurer Website → `/dein-kalender`
+- **Wer dahintersteckt:** Wer den Dorfkalender macht → `/ueber-uns`
+
+Fokusjob dieser Seite ist „publish our dates". Wer hier landet, hat nach
+einem Ort gesucht — das Band hält die drei anderen Anliegen erreichbar,
+ohne sie anzupreisen.

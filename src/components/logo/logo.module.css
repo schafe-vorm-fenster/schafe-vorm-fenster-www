@@ -1,0 +1,65 @@
+.logo {
+  align-items: center;
+  color: var(--color-neutral-ink);
+  display: inline-flex;
+  gap: var(--space-3);
+  text-decoration: none;
+}
+
+/*
+ * Radius 999 — the same radius as every control (SRC-0014 §Logo).
+ *
+ * Over a hero photograph the mark is one of the shapes the header's blur
+ * primitive is defined on (DEC-0105 §4: "the control's own shape — 44 px
+ * well, 40 px logo mark"). The header publishes the treatment as two custom
+ * properties — `--header-well` (the tint, `scrim-38` or the solid `ink`
+ * fallback) and `--header-blur` (the filter, or `none`) — and the mark reads
+ * them here, so the logo module never has to know which state the header is
+ * in. Outside the header both fall back to nothing.
+ */
+.mark {
+  backdrop-filter: var(--header-blur, none);
+  background: var(--header-well, transparent);
+  border-radius: var(--radius-pill);
+  flex: none;
+  height: 40px;
+  width: 40px;
+}
+
+.wordmark {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--type-meta-size);
+  font-weight: 800;
+  letter-spacing: var(--tracking-tight);
+  line-height: 1.05;
+}
+
+.line {
+  display: block;
+}
+
+.url {
+  font-family: var(--font-mono);
+  font-size: var(--type-meta-size);
+  font-weight: 700;
+  letter-spacing: var(--tracking-mono);
+}
+
+/*
+ * The mark alone below `md` — Jan's round-3 point 3.
+ *
+ * Mobile-first (TS-WEB-0017 D2(a)): the base rule is the phone's, and the `md`
+ * query below brings the wordmark back. The wordmark is never removed from
+ * the markup, and the link's accessible name comes from `aria-label` in both
+ * cases, so the accessibility tree reads the same at every width.
+ */
+.logo[data-compact="phone"] .wordmark {
+  display: none;
+}
+
+@media (min-width: 40rem) {
+  .logo[data-compact="phone"] .wordmark {
+    display: flex;
+  }
+}

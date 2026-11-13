@@ -1,0 +1,1033 @@
+/**
+ * The UI-string dictionary — TS-WEB-0001 D7.
+ *
+ * System texts (navigation, buttons, form labels, error pages) exist per
+ * language, **keyed, not inline**. The keys are the `Dictionary` interface,
+ * so a missing or misspelled key is a type error rather than a blank label,
+ * and adding a language is one more object — no code change at a call site.
+ *
+ * No i18n library. The stack-harmony rule (plan/guardrails.md) was run
+ * first: no sibling repository under `~/Projects/` carries `next-intl`,
+ * `i18next` or `react-intl`; the only i18n in the family is Paraglide inside
+ * an Astro app, which does not transfer. What this website needs at M2 —
+ * a typed key set and a localized path table — is a record type and a lookup.
+ * See ADR-073.
+ *
+ * **Page copy is not here.** Titles below are working placeholders for the
+ * routing skeleton; from M3 `seo.title` and `seo.description` come from the
+ * page's content frontmatter (TS-WEB-0011 D5, FUN-WEB-0089) and this block shrinks
+ * to the chrome strings.
+ */
+
+import { ERROR_COPY } from "@/src/lib/i18n/error-copy";
+import { LOCALES } from "@/src/lib/i18n/locales";
+
+import type { ErrorCopy } from "@/src/lib/i18n/error-copy";
+import type { Locale } from "@/src/lib/i18n/locales";
+import type { RouteId } from "@/src/lib/routes/routes";
+
+export interface Dictionary {
+  /** The site name, as it appears in the title template and `og:site_name`. */
+  siteName: string;
+  skipToContent: string;
+  /**
+   * The text alternative of the mark on a photograph edited with an AI tool
+   * (DEC-0165, SRC-0014 §Photo surface) — the mark's `aria-label` and
+   * `title`, and the sentence an `ai-edited` image's `alt` ends with
+   * (`check:frontmatter` holds the content to it).
+   */
+  aiEditedMark: string;
+  /** Header and context-band labels — the four jobs (TS-WEB-0004 D4). */
+  nav: {
+    home: string;
+    knowWhatIsOn: string;
+    publishDates: string;
+    yourCalendar: string;
+    /**
+     * The fourth job's label — "Über uns" / "About us" since DEC-0120 (review
+     * R-home-33, R-ueber-1: "Warum wir" was rejected in the band and on the
+     * page; the slug is `ueber-uns` and the label says what the page is).
+     */
+    whyUs: string;
+    /**
+     * The breadcrumb `nav`'s own accessible name — distinct from the header
+     * `nav`'s (`home`), so the two landmarks of the same role are
+     * distinguishable by name on every second-level page (F-2-3).
+     */
+    breadcrumb: string;
+    /**
+     * The logo link's accessible name. Hard-coded German before F-2-33, so
+     * an English visitor met "Schafe vorm Fenster — zur Startseite" in the
+     * accessibility tree on every `/en` page.
+     */
+    logoHome: string;
+    /**
+     * The phone header's disclosure (Jan's round-3 decision, state/open.md
+     * rows 35 and 201): the burger's accessible name in both states, the
+     * overlay's own name, and the close control.
+     */
+    menuOpen: string;
+    menuClose: string;
+    menuLabel: string;
+  };
+  footer: {
+    contact: string;
+    newsletter: string;
+    imprint: string;
+    privacy: string;
+    accessibility: string;
+    /** The footer's one link to the press page, `/ueber-uns/archiv` (DEC-0166). */
+    press: string;
+    language: string;
+  };
+  /**
+   * The newsletter block's own words — heading, field, submit, consent and
+   * the confirmation (TS-WEB-0016 S5, D10).
+   *
+   * German-only before F-2-33, in the footer of **every** `/en` route. The
+   * note that named the open question behind the mock in visitor copy is
+   * gone (F-2-35); so is the badge beside it — the marking lives in
+   * `data-mock`, never in the page (Jan, 2026-09-18).
+   */
+  newsletter: {
+    /**
+     * Names what arrives, not "news" (CG-029: at least two concrete things;
+     * review R-home-35). **Placeholder** — the two things are the review's
+     * own list, the sentence is nobody's (DEC-0120, state/open.md row 233).
+     * **Rendered today**: the block stands in the footer of every route
+     * (`app/[lang]/layout.tsx`) inside `data-mock` — the non-sending form's
+     * marking, Q-0020 — so the heading element marks itself
+     * `data-demo="true"` while this word stands. Nothing withholds the block
+     * yet; that is T-10's default (a null constant) and T-10's record.
+     */
+    heading: string;
+    emailLabel: string;
+    emailPlaceholder: string;
+    submit: string;
+    /** `%s` is the privacy-policy link text. */
+    consent: string;
+    consentLinkLabel: string;
+    /**
+     * The confirmation the block swaps itself for (F-3-11). It replaces a
+     * native GET submit that threw the whole page's state away. It reads
+     * like a finished confirmation; what the mock does and does not do is
+     * recorded in `state/open.md`, not in the page.
+     */
+    successHeadline: string;
+    successBody: string;
+  };
+  /** The M2 scaffolding strings — every one of them disappears with the page. */
+  notFound: {
+    title: string;
+    body: string;
+    backHome: string;
+    /** The heading over the four jobs on the 404 (TS-WEB-0004-A4's jobs band). */
+    jobsHeading: string;
+  };
+  /** Its own module, so `app/global-error.tsx` ships without this file (issue 214). */
+  error: ErrorCopy;
+  /**
+   * The words the live-data shells put on themselves. They live here rather
+   * than in each component's default, because a component that hard-codes a
+   * German default renders that German on `/en` — which is exactly what
+   * happened (`state/open.md` row 101). Every self-badging module takes a
+   * `locale` and reads these.
+   */
+  live: {
+    /** Tier 2's prefix — "Stand: <time>". */
+    stale: string;
+    /**
+     * What a heading calls the county when the live layer has only geo-api's
+     * identifier for it — "deiner Region" / "your region". Never the
+     * identifier itself (F-2-73), and never an asserted county name, which
+     * TS-WEB-0026 D4 forbids without an anchor.
+     */
+    genericCounty: string;
+    /** The counter band's three units (TS-WEB-0008 D8). */
+    /**
+     * The nearby module's heading once its list reaches past this week
+     * (TS-WEB-0008 D3 as amended 2026-10-27, issue #83): the page's own
+     * "this week" heading stands while every row is inside the week, and this
+     * one replaces it when the list is filled up with the dates after it — a
+     * heading never claims a week its rows leave.
+     */
+    nearbyUpcoming: string;
+    /** The one sentence under the nearby module's heading (issue 152) — the same on every page that carries it. */
+    nearbyLead: string;
+    dates: string;
+    places: string;
+    updatesToday: string;
+    /**
+     * The handover a live list carries instead of more rows. A list on a
+     * marketing page is an example — three rows on a phone, five on a
+     * desktop — and everything past that is in the calendar itself.
+     */
+    allDates: string;
+  };
+  /**
+   * The stage's place photograph (DEC-0167): the credit line over a place's
+   * own photograph, and the honest label over the page's own photograph when
+   * the place has none (Q-0089). System strings, not page copy; the wording
+   * is a placeholder for the content phase.
+   */
+  placePhoto: {
+    /** "via Wikimedia Commons" — the source the credit names. */
+    via: string;
+    /** `{place}` — the fallback's label: this is not a photograph of the place. */
+    fallback: string;
+    /** The label over the page's own photograph while the place's is still loading (DEC-0168). */
+    pending: string;
+  };
+  /** Every photograph's credit, behind the © control (`photo-credit`, DEC-0168, issues #78, 101). */
+  photoCredit: {
+    /** The control's accessible name — "Bildnachweis". */
+    label: string;
+    /** The credit's lead word — "Foto". */
+    lead: string;
+  };
+  /**
+   * The section kickers — the site's vocabulary from polish brief G-3.
+   *
+   * A kicker is **optional** (DEC-0206, TS-WEB-0006 D12): a section sets one
+   * only where it says what the heading does not — a question, a problem
+   * framing, a role — and never with a word stem the heading or the intro
+   * repeats. Where a section does set one, it picks it here rather than
+   * writing its own. That is why they live here and not in
+   * `content/pages/**` — they are not the page's argument, they are the
+   * site's own signposting, and a page that invented its own would put two
+   * names on the same joint.
+   *
+   * A role is not always one phrase, though (DEC-0148). "Benefit" (CG-019)
+   * used to be a single shared string, `whyItMatters`, on every section that
+   * played the role — five of them, across three pages, all asking the exact
+   * same question. `yourSettings`, `everydaySupply`, `communityLife`,
+   * `cultureAndTourism` and `whatAVillageNeeds` are that role's five
+   * instantiations, each naming what its own section is actually about.
+   */
+  kickers: {
+    /** The live answer — this week's dates. */
+    liveAnswer: string;
+    /** Benefit (CG-019): control over what the embedded calendar shows. */
+    yourSettings: string;
+    /** Benefit (CG-019): the `/dein-ort` bread-van story — supply, not an event. */
+    everydaySupply: string;
+    /** Benefit (CG-019): the `/dein-ort` council-meeting story. */
+    communityLife: string;
+    /** Benefit (CG-019): the `/dein-ort` culture story. */
+    cultureAndTourism: string;
+    /** Benefit (CG-019): `/ueber-uns`'s village argument. */
+    whatAVillageNeeds: string;
+    /** How the mechanism works. */
+    howItWorks: string;
+    /** The objection: why it snags today. */
+    objection: string;
+    /** Price and scope. */
+    price: string;
+    /** Trust: how we work. */
+    trust: string;
+    /** Origin — "Die Geschichte" (review R-ueber-3; "Wo das herkommt" is on the avoid list). */
+    origin: string;
+    /** The people behind it — `/ueber-uns`'s team block. */
+    team: string;
+    /**
+     * The newsletter block, where a page carries one inline (TS-WEB-0027 D8) —
+     * the same label the footer's own block already uses, so the site names
+     * the thing once. The block's own heading is the page's authored one
+     * ("Auf dem Laufenden bleiben"), which is why the kicker does not repeat
+     * that sentence.
+     */
+    newsletter: string;
+    /** The context band's other concerns. */
+    otherConcerns: string;
+  };
+  /**
+   * The head of the proof section, one for every page that shows proof —
+   * customers, press and the award alike (owner, issue 160, DEC-0209). Kicker
+   * and heading, no intro sentence: the relevance engine mixes the elements per
+   * page and build, so a sentence naming what they are would be untrue for some
+   * selection. Pages read it through `proofIntro` in `app/[lang]/_proof.ts`.
+   */
+  proofSection: {
+    kicker: string;
+    heading: string;
+  };
+  /**
+   * The context band's registry fallback — one blurb per job, the sentence
+   * the band shows under a job label where the page's own `context-band`
+   * slot carries none (TS-WEB-0006 D5 with CG-030, DEC-0120). A page's slot
+   * wins; this is what the pages without a slot render. A blurb that is not
+   * yet a CG-030 statement (a question, or over 80 characters) renders
+   * `data-demo="true"` — see `src/lib/content/context-band.ts`.
+   */
+  contextBand: {
+    /**
+     * The band's mono kicker beside (desktop, tablet) or under (phone) its
+     * heading — "Auch interessant" in the owner's design of 2026-10-12
+     * (SRC-0014 §Page chrome revised → Context band, DEC-0156).
+     */
+    kicker: string;
+    blurbs: {
+      knowWhatIsOn: string;
+      publishDates: string;
+      yourCalendar: string;
+      whyUs: string;
+    };
+  };
+  /**
+   * The form controls' own words — the strings a component renders when the
+   * page supplied none. `choice-group`'s empty state was a German literal in
+   * the component body and rendered on `/en` too (F-2-33).
+   */
+  forms: {
+    /** The step cannot be answered because the vocabulary is empty. */
+    noOptions: string;
+  };
+  /**
+   * The two price states that are words rather than figures (TS-WEB-0006 D10).
+   *
+   * They lived as German literal defaults inside `price-tag`, so
+   * `/en/your-calendar` priced its free tier "Dauerhaft kostenfrei" and its
+   * enterprise tier "Auf Anfrage" — the F-2-33 failure mode, on the page
+   * that asks for money.
+   */
+  price: {
+    /** The free tier's permanence statement — not a price. */
+    permanent: string;
+    /** No figure, no range, no "from". */
+    onRequest: string;
+    /** The line under the free tier's "0 €" (DEC-0205). */
+    permanentNote: string;
+    /** The line under the on-request tier's statement (DEC-0205). */
+    onRequestNote: string;
+    /** The interval phrase under a priced tier's figure, before the net qualifier. */
+    perYear: string;
+  };
+  /**
+   * The flow progress row's sentence — the accessible name of the dot row
+   * and the line beside it.
+   *
+   * It lived as a German literal default in `step-indicator`, and the order
+   * flow passes no label of its own, so `/en/your-calendar/order` counted
+   * "SCHRITT 3 VON 4" at an English visitor in the middle of a paid
+   * conversion path (the F-2-33 failure mode).
+   */
+  steps: {
+    of: (step: number, total: number) => string;
+  };
+  /**
+   * `archive-filter`'s own chrome (TS-WEB-0028 D4). Same failure class as
+   * `forms.noOptions`: the component's defaults were hard-coded German and
+   * rendered on `/en/about/archive` too (F-2-33 residue).
+   */
+  archiveFilter: {
+    all: string;
+    label: string;
+    /** `{visible}` of `{total}` entries — both slots are filled by the component. */
+    count: string;
+    /** TS-WEB-0028 D4's defensive line, shown only if a selection matches no row; `{all}` is the reset's label. */
+    empty: string;
+  };
+  /**
+   * `archive-row`'s own link label. It was a German literal in the component
+   * body, so all 31 rows of `/en/about/archive` offered "Original ansehen"
+   * — the same failure class as `archiveFilter` above (F-2-33).
+   */
+  archiveRow: {
+    /** The outbound link to the outlet's own page. */
+    original: string;
+    /**
+     * The hub's media-echo type ids, localized (TS-WEB-0028 D4: labels are
+     * localized, identifiers are not). The words are content slot
+     * `archiv-4-type-filter`'s; an id missing here renders as the id.
+     */
+    types: Readonly<Record<string, string>>;
+  };
+  /**
+   * `place-search`'s own words (TS-WEB-0008 D7). A page usually supplies its
+   * own copy from content, but the component's default — used wherever a
+   * page does not — hard-coded German and rendered it on `/en` too (F-2-4),
+   * the same failure `live` and `media` above exist to prevent.
+   *
+   * None of them names a postcode, in either language: the search takes a
+   * place name and offers nothing else (DEC-0079 §1, TS-WEB-0008-A16 —
+   * `pnpm check:search-wording` reads these keys).
+   */
+  search: {
+    label: string;
+    placeholder: string;
+    hint: string;
+    /** The submit control's label — "Suchen" on `/en` before F-2-33. */
+    submit: string;
+    /** The typeahead listbox's accessible name. */
+    suggestionsLabel: string;
+    /** What the typeahead says when the index knows no such place. */
+    noSuggestions: string;
+    /**
+     * The "use my location" control beside the field (TS-WEB-0010 D5,
+     * TS-WEB-0008 D7's coordinates row). **Placeholder wording** — nobody has
+     * written it (DEC-0119): rendered with `data-demo="true"`, listed in
+     * `state/open.md`, replaced by the owner.
+     */
+    locate: string;
+    /** What activating the control will do — D5: the control "states what will happen". Placeholder, see `locate`. */
+    locateExplains: string;
+  };
+  /**
+   * The home page's "Dein digitaler Dorfkalender." module (issue issue 143,
+   * DEC-0194): the explanation, the controls and the drawn phone's fixed
+   * fall-back rows. The German text is the owner's, verbatim; the English is a
+   * translation that waits for the owner's review.
+   */
+  dorfkalender: {
+    titleLead: string;
+    titleAccent: string;
+    sentence: string;
+    placeholder: string;
+    searchLabel: string;
+    locate: string;
+    submit: string;
+    /** `{place}` — the link to the place's own calendar, opened in a new tab. */
+    linkTemplate: string;
+    /** `{place}` — the text alternative of the whole drawing. */
+    imageLabelTemplate: string;
+    /** `{name}` — the phone's second header line, where the municipality is known. */
+    municipalityTemplate: string;
+    legendPlace: string;
+    legendNeighbours: string;
+    /** The five fixed rows a slot falls back to, in legend order (neutral on purpose: no firm, no place). */
+    defaults: readonly {
+      readonly weekday: string;
+      readonly day: number;
+      readonly time: string;
+      readonly place: string;
+      readonly title: string;
+    }[];
+  };
+  /**
+   * `outbound-link`'s own announcements — hard-coded German regardless of
+   * `locale` before F-2-4, on every page that links off-site.
+   */
+  outboundLink: {
+    /** "öffnet neuen Tab" — the marking under the control, never in its name (A23). */
+    newTab: string;
+    /** "Daten gehen an <recipient>" — the recipient follows this phrase. */
+    dataGoesTo: string;
+  };
+  /**
+   * `lead-fallback` — TS-WEB-0016 D6's static fallback. The three lines were
+   * German literals in the component, so the English quote route degraded
+   * into German (the same root cause as `outboundLink` above, F-2-4). They are
+   * UI strings, not page copy, so they are the dictionary's (working rule 4).
+   */
+  leadFallback: {
+    /** The link to `/start`, the contact route of last resort (D6). */
+    formLink: string;
+    /** "oder per E-Mail:" — the address follows as a `mailto:` link. */
+    byMail: string;
+    /** The consult line, where the surface offers one — an in-page link to the page's contact section. */
+    consult: string;
+  };
+  /**
+   * `/rechtliches` (EN `/legal`) — the one string of this dictionary that
+   * exists in English only.
+   *
+   * TS-WEB-0029 open point #2 and `state/open.md` row 53: `import.yaml` carries
+   * no locale dimension, so the five imported documents plus the generated
+   * accessibility statement exist in German, and DEC-0027's English versions
+   * arrive later through the same import. Row 53's mitigation is that the EN
+   * page frame "states explicitly, in English, that the six legal sections
+   * themselves are provided in German only — no machine translation, no
+   * invented English legal text". It never shipped; the Customer met six
+   * unannounced German bodies under English section labels at gate 2
+   * (F-2-74, TS-WEB-0007-A11 / TS-WEB-0029).
+   *
+   * A German reader needs no such notice — the page is in her language — so
+   * `de` is `null` and the German page renders nothing at all. `null`, not
+   * an empty string, so the dictionary's own "no string is empty" check
+   * keeps meaning what it says.
+   */
+  legal: {
+    /** The section-nav heading on `/rechtliches`, where the artifact has none. */
+    sectionsLabel: string;
+    germanOnlyNotice: string | null;
+  };
+  /**
+   * `contact-section`'s own words (TS-WEB-0016 D13, DEC-0081, CG-031). The
+   * values — number, address, who answers — are not here: they resolve from
+   * the hub record through `src/lib/contact/contact-channels.ts`.
+   *
+   * Provenance, per key (DEC-0113): `rows.*` is the owner's wording from
+   * `concept/website-copy-guide.md` CG-031 ("Videotermin buchen · per
+   * WhatsApp schreiben · anrufen · Mail schreiben"); `portraitAlt` is the
+   * cleared alt of `content/pages/ueber-uns/{de,en}.md` (image
+   * `ueber-uns-team-jan-henrik-hempel`). `heading`, `lead` and
+   * `outboundNote` exist only as design-draft text and are placeholders:
+   * the section carries `data-demo="true"` and `state/open.md` carries one
+   * row per string.
+   */
+  contactSection: {
+    heading: string;
+    lead: string;
+    portraitAlt: string;
+    /** The four row titles, D13 order, ≤ 24 characters each (CG-031). */
+    rows: {
+      appointment: string;
+      whatsapp: string;
+      phone: string;
+      mail: string;
+    };
+    /**
+     * The D16 outbound marking under row 1: what activating the control
+     * does and who receives what follows. A separate `meta` line, never in
+     * the label.
+     */
+    outboundNote: string;
+  };
+  /**
+   * The three event statuses of SRC-0014 §Event-status badge, as words —
+   * `event-status-badge` reads them, so a status is never colour alone.
+   * The German words are the design system's own ids capitalised; the
+   * English ones nobody wrote (`generated: true`, DEC-0115), so the badge
+   * marks itself `data-demo` in that language until the owner replaces them.
+   */
+  eventStatus: {
+    neu: string;
+    verschoben: string;
+    abgesagt: string;
+    generated: boolean;
+  };
+  /**
+   * The words inside the explain module's stage graphics (`explain-stage`,
+   * DEC-0115). All three German strings are taken verbatim from the owner's
+   * design drafts (`plan/reviews/2026-09-23/Design - 3-Schritte-erklären …`);
+   * the English translation is nobody's wording yet (`generated: true`).
+   */
+  explainStage: {
+    /** The registration card's field label. */
+    addressLabel: string;
+    /** The registration card's lime pill — an illustration, never a control. */
+    submit: string;
+    generated: boolean;
+    /** The explain module's stage arrows below `lg` — accessible names (issue #27). */
+    previousStep: string;
+    nextStep: string;
+    /** The stage's accessible name — the scroll container is focusable below `lg`. */
+    stageLabel: string;
+  };
+  /**
+   * Page titles, keyed by route id — the fallback for a route whose artifact
+   * carries no `seo.title` (TS-WEB-0011 D5; the artifact is the source, F-2-72).
+   */
+  pages: Record<RouteId, string>;
+  /**
+   * `/start`, the registration surface (TS-WEB-0016 D15/D17, DEC-0108,
+   * DEC-0121). The route is German-only and outside `app/[lang]`, so only
+   * `de` ever renders; `en` exists because the key set is one per language.
+   *
+   * The notice's three facts and its link target are the determination's
+   * (D17); its **wording is not** — nobody has written it (DEC-0108 §2, "The
+   * words"). `notice`, `noticeLink` and `frameTitle` are therefore
+   * placeholders in the repository's convention: rendered with
+   * `data-demo="true"` on the element and listed in `state/open.md`
+   * (rows 223 and 224), for the owner to replace.
+   *
+   * Since DEC-0176 `/mitmachen/registrieren` embeds the same form in both
+   * languages and reads the same keys, so `en` renders there; `openForm` is
+   * that page's fallback link, a placeholder of the same kind.
+   */
+  start: {
+    /** The two facts before the link: whose form it is, and that loading it contacts them. */
+    notice: string;
+    /** The link's text — the third fact, where the detail is (`/rechtliches#datenschutz`). */
+    noticeLink: string;
+    /** The `iframe`'s accessible name. */
+    frameTitle: string;
+    /** Before the e-mail address — `lead-fallback.tsx`'s own line, verbatim. */
+    emailLead: string;
+    /** The link that opens the framed form on its own, in a new tab (DEC-0176 §3). */
+    openForm: string;
+  };
+}
+
+const de: Dictionary = {
+  siteName: "Schafe vorm Fenster",
+  skipToContent: "Zum Inhalt springen",
+  aiEditedMark: "Mit KI bearbeitet",
+  nav: {
+    home: "Startseite",
+    knowWhatIsOn: "Was ist los",
+    publishDates: "Termine veröffentlichen",
+    yourCalendar: "Dein Kalender",
+    whyUs: "Über uns",
+    breadcrumb: "Seitenpfad",
+    logoHome: "Schafe vorm Fenster — zur Startseite",
+    menuOpen: "Menü öffnen",
+    menuClose: "Menü schließen",
+    menuLabel: "Menü",
+  },
+  footer: {
+    contact: "Kontakt",
+    newsletter: "Newsletter",
+    imprint: "Impressum",
+    privacy: "Datenschutz",
+    accessibility: "Barrierefreiheit",
+    press: "Presse",
+    language: "Sprache",
+  },
+  newsletter: {
+    heading: "Neue Funktionen und aktuelle Angebote",
+    emailLabel: "E-Mail-Adresse",
+    emailPlaceholder: "name@verein.de",
+    submit: "Anmelden",
+    consent: "Double-Opt-in, keine Cookies. Mit der Anmeldung stimmst du unserer %s zu.",
+    consentLinkLabel: "Datenschutzerklärung",
+    successHeadline: "Danke — notiert.",
+    successBody:
+      "Wir schicken dir gleich eine E-Mail zur Bestätigung. Erst nach deinem Klick darin bist du dabei.",
+  },
+  notFound: {
+    title: "Seite nicht gefunden",
+    body: "Diese Adresse gibt es nicht.",
+    backHome: "Zur Startseite",
+    jobsHeading: "Oder du bist mit einem anderen Anliegen hier:",
+  },
+  error: ERROR_COPY.de,
+  live: {
+    stale: "Stand",
+    genericCounty: "deiner Region",
+    nearbyUpcoming: "Demnächst in der Nähe",
+    nearbyLead: "Was zwei Dörfer weiter läuft, gehört genauso in deinen Kalender.",
+    dates: "Termine",
+    places: "Orte",
+    updatesToday: "Aktualisierungen heute",
+    allDates: "Alle Termine im Kalender",
+  },
+  placePhoto: {
+    via: "über Wikimedia Commons",
+    fallback: "Beispielfoto · von {place} haben wir noch kein Foto",
+    pending: "Beispielfoto",
+  },
+  photoCredit: {
+    label: "Bildnachweis",
+    lead: "Foto",
+  },
+  kickers: {
+    liveAnswer: "Was gerade ansteht",
+    yourSettings: "Euer Kalender auf eurer Website",
+    everydaySupply: "Versorgung",
+    communityLife: "Gemeindeleben",
+    cultureAndTourism: "Kultur & Tourismus",
+    whatAVillageNeeds: "Was ein Dorf braucht",
+    howItWorks: "So funktioniert es",
+    objection: "Warum es heute hakt",
+    price: "Was es kostet",
+    trust: "Wie wir arbeiten",
+    origin: "Die Geschichte",
+    team: "Wer dahintersteckt",
+    newsletter: "Newsletter",
+    otherConcerns: "Anderes Anliegen?",
+  },
+  proofSection: {
+    kicker: "Was andere über uns sagen",
+    heading: "Stimmen aus der Praxis",
+  },
+  contextBand: {
+    kicker: "Auch interessant",
+    blurbs: {
+      // The owner's card lines from the design of 2026-10-12 (issue #39,
+      // DEC-0156) — statements, so CG-030 holds and no card is demo-marked.
+      // The publish blurb is the owner's, shortened by the owner (DEC-0184).
+      knowWhatIsOn: "Was in deinem Ort als Nächstes ansteht",
+      publishDates: "Per WhatsApp oder über deinen Kalender",
+      yourCalendar: "Unter eigenem Namen, auf eurer Website",
+      whyUs: "Wer den Dorfkalender macht",
+    },
+  },
+  forms: {
+    noOptions: "Keine Auswahl verfügbar.",
+  },
+  price: {
+    permanent: "Dauerhaft kostenfrei",
+    onRequest: "Auf Anfrage",
+    permanentNote: "dauerhaft kostenfrei",
+    onRequestNote: "je nach Gebiet und Umfang",
+    perYear: "pro Jahr",
+  },
+  steps: {
+    of: (step, total) => `Schritt ${step} von ${total}`,
+  },
+  archiveFilter: {
+    all: "Alle",
+    label: "Nach Typ filtern",
+    count: "{visible} von {total} Einträgen",
+    empty: "Zu dieser Auswahl gibt es keinen Eintrag. „{all}“ zeigt wieder alles.",
+  },
+  archiveRow: {
+    original: "Original ansehen",
+    types: {
+      press: "Presse",
+      award: "Auszeichnung",
+      conference: "Konferenz",
+      podcast: "Podcast",
+      portrait: "Porträt",
+      recognition: "Anerkennung",
+      "social-media": "Social Media",
+      testimonial: "Stimme",
+    },
+  },
+  search: {
+    // "Dein Ort": the owner's own label for this field (content/pages/deine-region/de.md:166);
+    // "Ortsname": the noun the copy guide names in place of the postcode (concept/website-copy-guide.md:510).
+    label: "Dein Ort",
+    placeholder: "Ortsname",
+    hint: "Tipp den Ortsnamen ein — Vorschläge kommen ab dem zweiten Buchstaben.",
+    submit: "Suchen",
+    suggestionsLabel: "Vorschläge",
+    noSuggestions: "Kein Ort gefunden.",
+    locate: "Meinen Standort verwenden",
+    locateExplains: "Fragt den Browser einmal nach deinem Standort und öffnet den nächsten Ort. Gespeichert wird nichts.",
+  },
+  dorfkalender: {
+    titleLead: "Dein digitaler",
+    titleAccent: "Dorfkalender.",
+    sentence:
+      "Erfahre, was in deinem Ort los ist: vom Bäckerauto bis zum Vereinsabend. Und trag deine eigenen Termine ein, damit alle davon wissen.",
+    placeholder: "Dein Ort",
+    searchLabel: "Ort suchen",
+    locate: "Meinen Standort verwenden",
+    submit: "Suchen",
+    linkTemplate: "Kalender von {place} öffnen",
+    imageLabelTemplate: "Smartphone mit den aktuellen Terminen von {place}, daneben eine Legende der Termin-Arten",
+    municipalityTemplate: "Gemeinde {name}",
+    legendPlace: "Dein Ort",
+    legendNeighbours: "In den Nachbarorten",
+    defaults: [
+      { weekday: "Fr", day: 13, time: "07:30", place: "Dorfstraße", title: "Bäckerauto" },
+      { weekday: "Sa", day: 14, time: "10:00", place: "Feuerwehrhaus", title: "Übung der Feuerwehr" },
+      { weekday: "Di", day: 17, time: "14:00", place: "Dorfplatz", title: "Bücherbus des Landkreises" },
+      { weekday: "Fr", day: 20, time: "19:00", place: "Festscheune", title: "Filmabend im Dorf" },
+      { weekday: "Sa", day: 21, time: "19:30", place: "Gutshaus", title: "Lesung im Kaminzimmer" },
+    ],
+  },
+  outboundLink: {
+    newTab: "öffnet neuen Tab",
+    dataGoesTo: "Daten gehen an",
+  },
+  leadFallback: {
+    // The string the component carried as a German literal.
+    formLink: "Formular öffnen",
+    byMail: "oder per E-Mail:",
+    consult: "Termin für ein Kennenlerngespräch buchen",
+  },
+  legal: {
+    sectionsLabel: "Abschnitte",
+    // The German page carries no notice: its six sections are German (F-2-74).
+    germanOnlyNotice: null,
+  },
+  contactSection: {
+    // Placeholder — design draft (plan/reviews/2026-09-23/Design - Kontakt Section.png), state/open.md.
+    heading: "Direkter Kontakt",
+    // Final 2026-10-28 (state/open.md row 216): the four channels of
+    // @schafe-vorm-fenster/goals contact-channels.md, in their order.
+    lead: "Per Video, WhatsApp, Telefon oder Mail.",
+    // content/pages/ueber-uns/de.md, image `ueber-uns-team-jan-henrik-hempel`.
+    portraitAlt: "Jan-Henrik Hempel erklärt etwas mit beiden Händen, hinter ihm Holzbalken.",
+    // concept/website-copy-guide.md CG-031, the owner's four row titles.
+    rows: {
+      appointment: "Videotermin buchen",
+      whatsapp: "Per WhatsApp schreiben",
+      phone: "Anrufen",
+      mail: "Mail schreiben",
+    },
+    // Final 2026-10-28 (state/open.md row 218): row 1's address is a Google
+    // appointment calendar (goals contact-channels.md row 1), and the line says
+    // what the control opens and whose it is.
+    outboundNote: "Öffnet den Buchungskalender bei Google.",
+  },
+  eventStatus: {
+    neu: "Neu",
+    verschoben: "Verschoben",
+    abgesagt: "Abgesagt",
+    generated: false,
+  },
+  explainStage: {
+    addressLabel: "Kalender-Adresse",
+    submit: "Anmelden",
+    generated: false,
+    previousStep: "Vorheriger Schritt",
+    nextStep: "Nächster Schritt",
+    stageLabel: "Die drei Schritte als Bilder",
+  },
+  pages: {
+    home: "Schafe vorm Fenster",
+    place: "Dein Ort",
+    placeStart: "Kalender in deinem Ort starten",
+    takePart: "Mitmachen",
+    register: "Registrieren",
+    calendar: "Dein Kalender",
+    order: "Bestellen",
+    region: "Deine Region",
+    regionQuote: "Angebot anfordern",
+    about: "Über uns",
+    archive: "Presse und Auszeichnungen",
+    legal: "Rechtliches",
+  },
+  start: {
+    // DEC-0176 amendment 2026-10-28: final wording, no longer a placeholder.
+    notice:
+      "Google stellt das Formular bereit und bekommt beim Laden der Seite deine IP-Adresse und Angaben zu deinem Browser.",
+    noticeLink: "Zur Datenschutzerklärung.",
+    frameTitle: "Anmeldeformular bei Google Forms",
+    emailLead: "oder per E-Mail:",
+    openForm: "Formular direkt öffnen",
+  },
+};
+
+const en: Dictionary = {
+  siteName: "Schafe vorm Fenster",
+  skipToContent: "Skip to content",
+  aiEditedMark: "Edited with AI",
+  nav: {
+    home: "Home",
+    knowWhatIsOn: "What is on",
+    publishDates: "Publish dates",
+    yourCalendar: "Your calendar",
+    whyUs: "About us",
+    breadcrumb: "Page path",
+    logoHome: "Schafe vorm Fenster — to the home page",
+    menuOpen: "Open menu",
+    menuClose: "Close menu",
+    menuLabel: "Menu",
+  },
+  footer: {
+    contact: "Contact",
+    newsletter: "Newsletter",
+    imprint: "Imprint",
+    privacy: "Privacy",
+    accessibility: "Accessibility",
+    press: "Press",
+    language: "Language",
+  },
+  newsletter: {
+    heading: "New features and current offers",
+    emailLabel: "Email address",
+    emailPlaceholder: "name@yourgroup.org",
+    submit: "Sign up",
+    consent: "Double opt-in, no cookies. By signing up you agree to our %s.",
+    consentLinkLabel: "privacy policy",
+    successHeadline: "Thank you — noted.",
+    successBody:
+      "We are sending you a confirmation email. You are on the list once you have clicked the link in it.",
+  },
+  notFound: {
+    title: "Page not found",
+    body: "This address does not exist.",
+    backHome: "To the home page",
+    jobsHeading: "Or you are here for something else:",
+  },
+  error: ERROR_COPY.en,
+  live: {
+    stale: "As of",
+    genericCounty: "your region",
+    nearbyUpcoming: "Coming up nearby",
+    nearbyLead: "What's on two villages over belongs in your calendar just as much.",
+    dates: "dates",
+    places: "places",
+    updatesToday: "updates today",
+    allDates: "All dates in the calendar",
+  },
+  placePhoto: {
+    via: "via Wikimedia Commons",
+    fallback: "Example photo · we have no photo of {place} yet",
+    pending: "Example photo",
+  },
+  photoCredit: {
+    label: "Photo credit",
+    lead: "Photo",
+  },
+  kickers: {
+    liveAnswer: "What's on now",
+    yourSettings: "Your calendar on your website",
+    everydaySupply: "Everyday supply",
+    communityLife: "Community life",
+    cultureAndTourism: "Culture & tourism",
+    whatAVillageNeeds: "What a village needs",
+    howItWorks: "How it works",
+    objection: "Why it snags today",
+    price: "What it costs",
+    trust: "How we work",
+    origin: "The story",
+    team: "Who is behind it",
+    newsletter: "Newsletter",
+    otherConcerns: "Something else today?",
+  },
+  proofSection: {
+    kicker: "What others say about us",
+    heading: "Voices from the field",
+  },
+  contextBand: {
+    kicker: "Also of interest",
+    blurbs: {
+      // The English twins of the owner's German card lines (DEC-0156).
+      knowWhatIsOn: "What's coming up next where you live",
+      publishDates: "By WhatsApp or from your calendar",
+      yourCalendar: "Under your own name, on your own website",
+      whyUs: "Who makes the village calendar",
+    },
+  },
+  forms: {
+    noOptions: "Nothing to choose from yet.",
+  },
+  price: {
+    permanent: "Free, permanently",
+    onRequest: "On request",
+    permanentNote: "free, permanently",
+    onRequestNote: "depending on area and scope",
+    perYear: "per year",
+  },
+  steps: {
+    of: (step, total) => `Step ${step} of ${total}`,
+  },
+  archiveFilter: {
+    all: "All",
+    label: "Filter by type",
+    count: "{visible} of {total} entries",
+    empty: "No entry matches this selection. “{all}” shows everything again.",
+  },
+  archiveRow: {
+    original: "View the original",
+    types: {
+      press: "Press",
+      award: "Award",
+      conference: "Conference",
+      podcast: "Podcast",
+      portrait: "Portrait",
+      recognition: "Recognition",
+      "social-media": "Social media",
+      testimonial: "Voice",
+    },
+  },
+  search: {
+    // "Your place": the owner's own label for this field (content/pages/deine-region/en.md:167);
+    // "place name": the copy guide's noun for the postcode (concept/website-copy-guide.md:533).
+    label: "Your place",
+    placeholder: "Place name",
+    hint: "Type the place name — suggestions start at the second letter.",
+    submit: "Search",
+    suggestionsLabel: "Suggestions",
+    noSuggestions: "No place found.",
+    locate: "Use my location",
+    locateExplains: "Asks your browser once for your location and opens the nearest place. Nothing is stored.",
+  },
+  dorfkalender: {
+    titleLead: "Your digital",
+    titleAccent: "village calendar.",
+    sentence:
+      "Find out what is on in your place: from the bakery van to the club evening. And add your own dates so everyone knows about them.",
+    placeholder: "Your place",
+    searchLabel: "Search for a place",
+    locate: "Use my location",
+    submit: "Search",
+    linkTemplate: "Open the calendar of {place}",
+    imageLabelTemplate: "Smartphone with the current dates of {place}, beside it a legend of the kinds of date",
+    municipalityTemplate: "Municipality of {name}",
+    legendPlace: "Your place",
+    legendNeighbours: "In neighbouring places",
+    defaults: [
+      { weekday: "Fr", day: 13, time: "07:30", place: "Village street", title: "Bakery van" },
+      { weekday: "Sa", day: 14, time: "10:00", place: "Fire station", title: "Fire brigade drill" },
+      { weekday: "Tu", day: 17, time: "14:00", place: "Village square", title: "District library bus" },
+      { weekday: "Fr", day: 20, time: "19:00", place: "Festival barn", title: "Film night in the village" },
+      { weekday: "Sa", day: 21, time: "19:30", place: "Manor house", title: "Reading in the fireplace room" },
+    ],
+  },
+  outboundLink: {
+    newTab: "opens new tab",
+    dataGoesTo: "Data goes to",
+  },
+  leadFallback: {
+    formLink: "Open the form",
+    byMail: "or by e-mail:",
+    // content/pages/deine-region/en.md:127 — the owner's own English label.
+    consult: "Book an intro call",
+  },
+  legal: {
+    sectionsLabel: "Sections",
+    germanOnlyNotice:
+      "The six legal sections below are available in German only. We do not machine-translate legal text and do not write an English substitute for it. The English documents follow once they exist.",
+  },
+  contactSection: {
+    // Placeholder — design draft, state/open.md.
+    heading: "Direct contact",
+    // Placeholder — design draft, state/open.md.
+    lead: "By video, WhatsApp, phone or mail.",
+    // content/pages/ueber-uns/en.md, image `ueber-uns-team-jan-henrik-hempel`.
+    portraitAlt: "Jan-Henrik Hempel explaining something with both hands raised, timber beams behind him.",
+    // The CG-031 titles in English; "Book a video call" is the hub's own label
+    // for the schedule link (@schafe-vorm-fenster/people, jan-henrik-hempel).
+    rows: {
+      appointment: "Book a video call",
+      whatsapp: "Write on WhatsApp",
+      phone: "Call",
+      mail: "Write an e-mail",
+    },
+    // Placeholder — design draft, state/open.md.
+    // Placeholder — the D16 sentence is copy nobody wrote yet, state/open.md.
+    outboundNote: "Opens the booking calendar at Google.",
+  },
+  // Nobody wrote these three words yet — state/open.md row 235.
+  eventStatus: {
+    neu: "New",
+    verschoben: "Postponed",
+    abgesagt: "Cancelled",
+    generated: true,
+  },
+  // The file name stays; the two labels are a translation nobody wrote —
+  // state/open.md row 220.
+  explainStage: {
+    addressLabel: "Calendar address",
+    submit: "Register",
+    generated: true,
+    previousStep: "Previous step",
+    nextStep: "Next step",
+    stageLabel: "The three steps as pictures",
+  },
+  pages: {
+    home: "Schafe vorm Fenster",
+    place: "Your place",
+    placeStart: "Start the calendar in your place",
+    takePart: "Take part",
+    register: "Register",
+    calendar: "Your calendar",
+    order: "Order",
+    region: "Your region",
+    regionQuote: "Request a quote",
+    about: "About us",
+    archive: "Press and awards",
+    legal: "Legal",
+  },
+  start: {
+    notice:
+      "Google provides the form and receives your IP address and details about your browser when the page loads.",
+    noticeLink: "Read the privacy policy.",
+    frameTitle: "Registration form on Google Forms",
+    emailLead: "or by e-mail:",
+    openForm: "Open the form directly",
+  },
+};
+
+const DICTIONARIES: Readonly<Record<Locale, Dictionary>> = { de, en };
+
+/** The dictionary of a language. The only way to reach a UI string. */
+export function dictionary(locale: Locale): Dictionary {
+  return DICTIONARIES[locale];
+}
+
+/** Keys of one dictionary group — lets a data table name a label safely. */
+export type DictionaryKeyOf<Group extends keyof Dictionary> =
+  Dictionary[Group] extends Record<string, string>
+    ? keyof Dictionary[Group] & string
+    : never;
+
+/** Every language that has a dictionary — used by the key-parity test. */
+export const DICTIONARY_LOCALES = LOCALES;

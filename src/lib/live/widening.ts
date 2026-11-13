@@ -1,0 +1,251 @@
+/**
+ * The widening chain — TS-WEB-0008 D3, as a resolution procedure.
+ *
+ * The chain turns an **anchor** (a community, a county from IP geolocation,
+ * or nothing at all) into which of the four module positions may render and
+ * at which radius each of them stands. Two things it deliberately is not:
+ *
+ *  - It is **not a relevance ranking.** Which elements a widened module picks
+ *    and in which order is TS-WEB-0005. This file decides the candidate set.
+ *  - It is **not a distance query.** events-api takes administrative id lists
+ *    and no radius (TS-WEB-0008 D2.1), so a step is "which id list is sent". The
+ *    ~15 km of step 2 is cut here, on the `geo` positions geo-api returns,
+ *    because upstream searches a fixed 20 km and caps the result count
+ *    (TS-WEB-0008 D2.2, D3 rule 2) — the approximation is ours and is labelled.
+ */
+
+import type { Place } from "./types";
+
+export const CHAIN_STEPS = [1, 2, 3, 4] as const;
+export type ChainStep = (typeof CHAIN_STEPS)[number];
+
+/**
+ * Step 2's radius: the events-api's own `region` scope, 20 km (DEC-0185; SRC-0002's
+ * "~15 km" was never a number the service had). Used for the committed ring and
+ * the cache key; the token path leaves the cut to the service.
+ */
+export const NEARBY_RADIUS_KM = 20;
+
+/** What the resolver handed the chain (TS-WEB-0009 D2 reads it; this file only uses it). */
+export type ChainAnchor =
+  | { readonly kind: "community"; readonly place: Place }
+  | { readonly kind: "county"; readonly countyId: string; readonly countyName?: string }
+  | { readonly kind: "none" };
+
+/** What a position renders. `absent` means: not in the DOM at all. */
+export type PositionState = "dates" | "invitation" | "examples" | "counters" | "absent";
+
+export interface ChainPlan {
+  /** Where the chain starts: community → 1, county → 3, stage-0 → 4 (TS-WEB-0008 D3). */
+  readonly startStep: ChainStep;
+  readonly position1: PositionState;
+  readonly position2: PositionState;
+  readonly position3: PositionState;
+  readonly position4: PositionState;
+  /** `true` for the empty state of TS-WEB-0008 D4 — a covered place with no dates. */
+  readonly publishInvitation: boolean;
+}
+
+/** Step 1/3/4 per anchor precision. Stage-0 has no anchor and no chain. */
+export function chainStart(anchor: ChainAnchor): ChainStep {
+  switch (anchor.kind) {
+    case "community":
+      return 1;
+    case "county":
+      return 3;
+    case "none":
+      return 4;
+  }
+}
+
+export interface ChainCounts {
+  /** Dates found in the anchor community's window (step 1). */
+  readonly placeEvents: number;
+  /** Dates found within the ~15 km cut (step 2). */
+  readonly nearbyEvents: number;
+  /** Active example places found in the county (step 3). */
+  readonly countyExamples: number;
+}
+
+/**
+ * Which positions render, given the anchor and what each step returned.
+ *
+ * The chain never skips silently: a filled position 2 beside an empty
+ * position 1 is exactly the widened case, and `live-module-frame`'s title
+ * names its own radius, so a widened module never presents itself as the
+ * narrower one (TS-WEB-0008 D1).
+ */
+export function planChain(anchor: ChainAnchor, counts: ChainCounts): ChainPlan {
+  const startStep = chainStart(anchor);
+  const covered = anchor.kind === "community";
+  const publishInvitation = covered && counts.placeEvents === 0;
+
+  return {
+    startStep,
+    // Position 1 is never left blank: with no dates its slot carries the
+    // publish offer (TS-WEB-0008 D4, "Position 1 is not left blank").
+    position1: !covered ? "absent" : counts.placeEvents > 0 ? "dates" : "invitation",
+    // Step 2 needs coordinates, so it needs a community anchor.
+    position2: covered && counts.nearbyEvents > 0 ? "dates" : "absent",
+    // Step 3 fires from a community's county as well as from an IP county.
+    position3:
+      anchor.kind === "none" || counts.countyExamples === 0 ? "absent" : "examples",
+    // Position 4 renders at every stage, including stage 0 (TS-WEB-0005 D8).
+    position4: "counters",
+    publishInvitation,
+  };
+}
+
+const EARTH_RADIUS_KM = 6371;
+
+const toRadians = (degrees: number): number => (degrees * Math.PI) / 180;
+
+/** Great-circle distance in kilometres — the step-2 cut's only arithmetic. */
+export function haversineKm(
+  from: { readonly lat: number; readonly lng: number },
+  to: { readonly lat: number; readonly lng: number },
+): number {
+  const dLat = toRadians(to.lat - from.lat);
+  const dLng = toRadians(to.lng - from.lng);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRadians(from.lat)) * Math.cos(toRadians(to.lat)) * Math.sin(dLng / 2) ** 2;
+  return 2 * EARTH_RADIUS_KM * Math.asin(Math.min(1, Math.sqrt(a)));
+}
+
+export interface NearbySelection {
+  readonly places: readonly Place[];
+  /**
+   * `true` when the upstream result cap, not the radius, ended the list —
+   * every returned candidate was inside the radius, so there may be more
+   * places within 15 km that upstream never sent. The module then shows what
+   * it has and claims no completeness (TS-WEB-0008 D3 rule 2).
+   */
+  readonly truncated: boolean;
+}
+
+/**
+ * The ~15 km cut of step 2, applied to what geo-api returned.
+ *
+ * `maxResults` is what the caller asked upstream for; when the response is
+ * that long *and* nothing was cut, the cap truncated before the radius did.
+ */
+export function selectNearby(
+  anchor: { readonly lat: number; readonly lng: number },
+  candidates: readonly Place[],
+  { radiusKm = NEARBY_RADIUS_KM, maxResults }: { readonly radiusKm?: number; readonly maxResults?: number } = {},
+): NearbySelection {
+  const withinRadius = candidates.filter((place) => haversineKm(anchor, place) <= radiusKm);
+  const truncated =
+    maxResults !== undefined && candidates.length >= maxResults && withinRadius.length === candidates.length;
+  return { places: withinRadius, truncated };
+}
+
+/**
+ * The windows of TS-WEB-0008 D3, in `Europe/Berlin`: position 1 asks `after=now`,
+ * position 2 `after=now&before=7d`. "Today" is the local calendar day, not a
+ * rolling 24 h — expressed with the upstream's own relative words, so the two
+ * systems cut the day the same way.
+ *
+ * All four tokens are the **events-api contract's own** vocabulary, verified
+ * against `FlexibleTimeSchema` (`~/Projects/events-api`,
+ * `src/rest/helpers/time/time-schemas.ts`): `now`, `today`, `tomorrow`,
+ * `yesterday`, `<n><s|m|h|d|w>` and `week-start`/`week-end`. The service
+ * resolves them in its own timezone, which is why the website never sends a
+ * hand-built midnight.
+ */
+export const EVENT_WINDOWS = {
+  today: { after: "now", before: "tomorrow" },
+  week: { after: "now", before: "7d" },
+  upcoming: { after: "now", before: undefined },
+} as const;
+
+export type EventWindow = keyof typeof EVENT_WINDOWS;
+
+export const EVENT_WINDOW_IDS = ["today", "week", "upcoming"] as const;
+
+export function isEventWindow(value: string): value is EventWindow {
+  return (EVENT_WINDOW_IDS as readonly string[]).includes(value);
+}
+
+const BERLIN = "Europe/Berlin";
+
+/**
+ * The same window as two real instants, for the source that cannot take a
+ * relative word: the public village-calendar page serves whatever the
+ * calendar holds and the cut happens here. Both halves are computed **in
+ * `Europe/Berlin`**, so "today" ends at local midnight and not at the
+ * server's.
+ */
+export function windowBounds(
+  window: EventWindow,
+  now: Date = new Date(),
+): { readonly from: Date; readonly to?: Date } {
+  switch (window) {
+    case "today":
+      return { from: now, to: berlinStartOfDay(addDays(now, 1)) };
+    case "week":
+      return { from: now, to: addDays(now, 7) };
+    case "upcoming":
+      return { from: now };
+  }
+}
+
+function addDays(date: Date, days: number): Date {
+  return new Date(date.getTime() + days * 24 * 60 * 60 * 1000);
+}
+
+/**
+ * Midnight of `date`'s **Berlin** calendar day, as a real instant. Built from
+ * `Intl` rather than from a fixed offset, because Germany changes offset
+ * twice a year and a hard-coded `+01:00` is wrong for half of it.
+ */
+export function berlinStartOfDay(date: Date): Date {
+  const day = new Intl.DateTimeFormat("en-CA", { timeZone: BERLIN }).format(date);
+  const offset =
+    new Intl.DateTimeFormat("en-US", { timeZone: BERLIN, timeZoneName: "longOffset" })
+      .formatToParts(date)
+      .find((part) => part.type === "timeZoneName")?.value ?? "GMT+01:00";
+  return new Date(`${day}T00:00:00${offset.replace("GMT", "") || "+01:00"}`);
+}
+
+/** The window applied to a list the source did not filter itself. */
+export function withinWindow<T extends { readonly startsAt: string }>(
+  events: readonly T[],
+  window: EventWindow,
+  now: Date = new Date(),
+): T[] {
+  const { from, to } = windowBounds(window, now);
+  return events.filter((event) => {
+    const starts = new Date(event.startsAt).getTime();
+    if (Number.isNaN(starts)) return false;
+    if (starts < from.getTime()) return false;
+    return to === undefined || starts < to.getTime();
+  });
+}
+
+/**
+ * Which window a nearby list actually spans (TS-WEB-0008 D3, amended
+ * 2026-10-27, issue #83). Position 2 asks for the next dates within ~15 km
+ * from now, **this week first**: chronological order puts the week's dates at
+ * the top, and only where the week holds fewer than the list's rows do the
+ * dates after it fill the rest. Lehre, measured on 2026-10-27 against the
+ * public village calendar: 2 dates within 7 days, 8 within 14, 24 upcoming —
+ * the week alone left three of five rows empty.
+ *
+ * `week` while every row starts inside the seven days, `upcoming` otherwise,
+ * so the module's heading never claims a week its rows leave (D1).
+ */
+export function nearbyWindow(
+  events: readonly { readonly startsAt: string }[],
+  now: Date = new Date(),
+): "week" | "upcoming" {
+  const { to } = windowBounds("week", now);
+  const end = to?.getTime() ?? Number.POSITIVE_INFINITY;
+  return events.every((event) => new Date(event.startsAt).getTime() < end) ? "week" : "upcoming";
+}
+
+/** Chronological, so a list the source returned in its own order still reads. */
+export function byStart<T extends { readonly startsAt: string }>(events: readonly T[]): T[] {
+  return [...events].sort((a, b) => a.startsAt.localeCompare(b.startsAt));
+}

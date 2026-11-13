@@ -1,0 +1,329 @@
+---
+id: deine-region-de
+page_id: TS-WEB-0026
+route: "/deine-region"
+seo:
+  "/deine-region":
+    title: "A calendar for your whole area"
+    description: "Your whole district in one calendar, under your name and in your design — without a portal project of your own. Ask us for a quote."
+    provenance: generated
+  "/deine-region/angebot":
+    title: "Request a quote for your region"
+    description: "Tell us which territory the calendar should cover and who is responsible on your side — we come back to you with a fitting quote."
+    provenance: generated
+content_type: section
+status: approved
+reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
+reviewed_at: "2026-11-13"
+locale: en
+sources:
+  - "@schafe-vorm-fenster/messaging@0.1.0#counties--portalize-enterprise"
+  - "@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise"
+  - "@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar"
+  - "@schafe-vorm-fenster/offerings@0.3.5#custom-data-integration"
+  - "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"
+  - "@schafe-vorm-fenster/proof@0.3.5#leader-foerderung-2022"
+  - "@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei"
+  - "@schafe-vorm-fenster/partners@0.2.7#stiftung-lebendiges-lehre"
+  - "ia"
+derived_from:
+  - "@schafe-vorm-fenster/messaging@0.1.0#counties--portalize-enterprise"
+  - "@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise"
+  - "@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar"
+  - "@schafe-vorm-fenster/offerings@0.3.5#custom-data-integration"
+  - "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"
+  - "@schafe-vorm-fenster/proof@0.3.5#leader-foerderung-2022"
+  - "@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei"
+  - "@schafe-vorm-fenster/partners@0.2.7#stiftung-lebendiges-lehre"
+  - "ia"
+generated_by: "playbook-content-production@1.0.0"
+generated_at: "2026-09-11"
+tone_profile: "du-everywhere"
+provenance: "mixed — 6 sourced (slot 6 now carries three real proof elements, all three clearance-pending), 1 withheld (slot 7 response-time promise, no named handling process, TS-WEB-0026 D5), 0 generated demo additions; EN translation of content/pages/deine-region/de.md, same source ids per slot"
+compliance_check: "state/content-map.md#compliance-checks — TS-WEB-0026"
+schema_note: "see content/pages/home/de.md — same TS-WEB-0007/schema gap, state/open.md #37"
+open_points:
+  - "state/open.md #20 — the two-working-day response promise is withheld entirely (constant null), no named process/owner yet (Q-0022/C11). Re-checked 2026-09-12 against go-to-market-os: no handling process with a named owner exists anywhere in the hub, so the slot stays withheld"
+  - "Clearance pending — slot 6 uses `lehre-lelender`, `leader-foerderung-2022` and `kurzweg-baeckerei`, all three `usage_rights: unverified` (Q-0014). Protected preview only; go-live needs written clearance per element. This page carries no `cleared` proof element any more: `impftermine-landkreis` (`cleared`) and `eichler-wasserschloss-quilow` left the pool on 2026-09-26 so that no two pages carry the same sentence (DEC-0143 §6). Registered in state/open.md rows 160 and 179"
+  - "Pool extension — TS-WEB-0026 row 6 in state/content-map.md named only `portalize-enterprise.proof[]` (eichler-wasserschloss-quilow, partner-network). `partner-network` has no named partner list and no cleared logos, so it is replaced here by three real elements from the full proof set (lehre-lelender, leader-foerderung-2022, kurzweg-baeckerei). None of them is a delivered `portalize-enterprise` territory and the slot says so"
+images:
+  - id: deine-region-hero
+    slot: deine-region-1-focus
+    ratio: hero
+    provenance: real
+    source: >-
+      Wikimedia Commons, File:Güterberg, Ausblick.jpg —
+      https://commons.wikimedia.org/wiki/File:G%C3%BCterberg,_Ausblick.jpg — Eigenaufnahme von
+      Schafe vorm Fenster (Commons-Konto „Schafevormfenster", own work), Mai 2025, 3563×2231.
+      Nachweis hinter dem ©-Zeichen am Bild.
+    alt: >-
+      A view across fields near Güterberg to the horizon, with lines of trees, rooftops and wind
+      turbines.
+    licence: CC0 1.0
+    credit: "Schafe vorm Fenster, CC0 1.0, via Wikimedia Commons"
+    credit_title: "Güterberg, Ausblick"
+    credit_url: "https://commons.wikimedia.org/wiki/File:G%C3%BCterberg,_Ausblick.jpg"
+    status: real
+    file: /images/real/deine-region-hero.webp
+    width: 800
+    height: 900
+    wide_file: /images/real/deine-region-hero-wide.webp
+    wide_width: 1400
+    wide_height: 600
+  - id: deine-region-gebietsschnitt
+    slot: deine-region-5-was-dazukommt
+    ratio: feature
+    provenance: real
+    source: >-
+      Wikimedia Commons, File:Carolinenthal, Ortseingang.jpg —
+      https://commons.wikimedia.org/wiki/File:Carolinenthal,_Ortseingang.jpg — Eigenaufnahme von
+      Schafe vorm Fenster (Commons-Konto „Schafevormfenster", own work), Mai 2025, 4032×3024.
+      Nachweis hinter dem ©-Zeichen am Bild.
+    alt: >-
+      A cobbled road at the entrance to the village of Carolinenthal, the yellow place-name sign
+      beneath a row of trees.
+    licence: CC0 1.0
+    credit: "Schafe vorm Fenster, CC0 1.0, via Wikimedia Commons"
+    credit_title: "Carolinenthal, Ortseingang"
+    credit_url: "https://commons.wikimedia.org/wiki/File:Carolinenthal,_Ortseingang.jpg"
+    status: real
+    file: /images/real/deine-region-gebietsschnitt.webp
+    width: 1400
+    height: 1000
+  - id: deine-region-angebot-hero
+    slot: deine-region-angebot-1-form
+    ratio: hero
+    provenance: real
+    source: >-
+      @schafe-vorm-fenster/brand-identity@0.1.4#imagery/office/2020-07-loft-office-02.jpeg —
+      Eigenaufnahme (Jan-Henrik Hempel), unbeschränkte Nutzung, kein Credit nötig. Binärdatei liegt
+      im go-to-market-os-Repository, das npm-Paket liefert nur den .asset.md-Deskriptor.
+    alt: >-
+      Two desks in an attic office with historic timber beams, a pale plank floor and windows along
+      the side.
+    licence: Eigenaufnahme, unbeschränkte Nutzung
+    credit: "Jan-Henrik Hempel"
+    status: real
+    file: /images/real/deine-region-angebot-hero.webp
+    width: 800
+    height: 900
+    wide_file: /images/real/deine-region-angebot-hero-wide.webp
+    wide_width: 1400
+    wide_height: 600
+---
+
+# Your region (`/deine-region`)
+
+For counties, state authorities, networks, and large cities that want
+a calendar for a **whole territory** (TS-WEB-0026 D1). No map module and no
+map promise on this page: TS-WEB-0026-A17 requires an unconfirmed feature to
+be removed rather than qualified, and no owner confirmation exists for
+the map (DEC-0061). Until then, an
+interim module carries the page (DEC-0034). No distance stated as a
+module, filter, or result label — only ever as the visitor's own
+question (TS-WEB-0026 D3).
+
+## Slot 1 — Focus block (mechanism: embed)
+
+<!-- id: deine-region-1-focus; content_type: hero; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/messaging@0.1.0#counties--portalize-enterprise"]; status: approved -->
+
+**Aha question:** Your whole county in one calendar, with no portal project of your own?
+
+**Text:** That's exactly the point. An embedded system shows your whole territory, under your own name and in your own design.
+
+**CTA label (primary):** Request a quote → `/deine-region/angebot`
+
+**Secondary CTA (quiet):** Rather talk first? Book an intro call
+
+**Closing question:** Shall we put a quote together for you?
+
+The secondary CTA stands quietly under the primary one, never beside it
+and never as a second button: a page carries exactly one primary action
+per screenful. Since DEC-0081 §3 it resolves **inside the page** to the
+contact section (`#kontakt`) rather than off-site, so the former "note on
+the secondary CTA" is gone: the outbound marking (TS-WEB-0016 D16)
+belongs to that section's first action row — the one element on the route
+that leaves the site. The closing question repeats the same conversion as
+the hero — same goal, same label (TS-WEB-0006 D6). No time promise while
+C11 is open. The field is called `Closing question`, not `Closing
+heading`: the closing CTA sets it as a paragraph above the button and the
+quiet link (`<p className={styles.heading}>` in
+`src/components/closing-cta/closing-cta.tsx:155`), never as a section
+title — the question to the reader is allowed here (CG-006), and the
+wording is the polish brief's own (plan/polish-brief.md, page 8, item 7).
+
+Source: `headline` from `counties--portalize-enterprise` — "The whole
+district on one map, without a portal project." The map half of that
+headline is not used here: TS-WEB-0026-A17 makes the offering owner's
+confirmation a precondition and prescribes removing the feature rather
+than qualifying it (F-2-57). The headline is used in full again once the
+confirmation exists.
+
+## Slot 2 — The territory question
+
+<!-- id: deine-region-2-territory; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#counties--portalize-enterprise"]; status: approved -->
+
+**Heading:** At county scale, that's not a question for a list
+
+**Text:** Covering forty or eighty places editorially isn't a bigger version of covering one place. It simply isn't feasible. And the administrative boundary isn't the boundary people organize their lives around: what's happening thirty kilometres away matters just as much as what's happening right next door.
+
+**Kicker:** What's near me?
+
+Source: `pains[]` from `counties--portalize-enterprise`. "Thirty
+kilometres" stays the visitor's own question here, never a module's
+label (TS-WEB-0026 D3). The visitor's question sat in the heading until
+2026-09-26, i.e. in a field where CG-005 allows no question mark. It now
+stands in the kicker above the title — the split CG-005 itself prescribes
+(concept/website-copy-guide.md, CG-005: the kicker carries the question,
+the title the statement). No word is new, and the title keeps its
+referent: without the question above it, "that's" had none.
+
+## Slot 3 — Interim module: examples, counter, search
+
+<!-- id: deine-region-3-interim; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: approved -->
+
+**Heading:** Here's what that already looks like today: places in {county}
+
+**Counter label (only when backed by data):** {n} places in the county are on board
+
+**Search input (placeholder):** Your place
+
+**Heading (no county known):** This is what it already looks like: places that are already on board
+
+The former transition ("And this isn't a statement of intent — it's
+already running:") is gone, and so is the section's kicker (DEC-0206): it
+repeated the heading's "already" and is no level of its own any more.
+
+While no county is known, the heading names none: the fallback read
+"the county of your region" until here, which is not a county
+(TS-WEB-0026-A10). At most 6 places, as a designed set — never "the most
+active places" and never a complete list (TS-WEB-0026 D4). The counter only
+renders when `/api/stats` actually supplies the value (Q-0037) —
+otherwise it stays off, no estimate.
+
+## Slot 4 — Embedding demo
+
+<!-- id: deine-region-4-embed-demo; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: approved -->
+
+**Heading:** Here's what the embedding looks like
+
+The same component as on `/dein-kalender` slot 3 (TS-WEB-0008 position 1′).
+
+## Slot 5 — What it adds
+
+<!-- id: deine-region-5-was-dazukommt; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise", "@schafe-vorm-fenster/offerings@0.3.5#custom-data-integration"]; status: approved -->
+
+**Heading:** What the county tier adds on top
+
+**Text:** On top of everything the calendar tier offers ({calendar-price}): your own white-label-capable registration, embedded on your website.
+
+**Mention (no CTA):** Anyone with their own date databases — a course programme, a church service schedule, the county administration's waste-collection calendar data — can have them connected once via the data integration.
+
+`{calendar-price}` is a placeholder, not a number: the page puts the price
+component there, and that component reads `portalize-calendar` from the
+offering package (TS-WEB-0026 D6, TS-WEB-0026-A4/A5). No price is written in
+this file, so no typo can invent one.
+
+The map view is not in this list. TS-WEB-0026-A17: until the offering owner
+confirms it is shippable to a buyer, the feature is removed rather than
+qualified with a date (F-2-57, `state/open.md`).
+`custom-data-integration` is mentioned,
+never priced, with no CTA of its own (`promotion: on-request-only`).
+
+## Slot 6 — Proof (3 elements)
+
+<!-- id: deine-region-6-proof; content_type: proof-card; provenance: sourced-empty-by-design; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise"]; status: approved -->
+
+Pool: `eichler-wasserschloss-quilow`, `partner-network` — both
+`unverified` today (Q-0014). No reference case for an already delivered
+`portalize-enterprise` territory exists; none is simulated. The slot
+below instead shows three real, named proof elements from the full set,
+and says what they do and do not prove.
+
+<!-- id: deine-region-6-proof-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#leader-foerderung-2022", "@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei", "@schafe-vorm-fenster/partners@0.2.7#stiftung-lebendiges-lehre"]; status: approved -->
+
+**Proof cards (real, clearance pending):** Three elements
+from the proof set — cards 2 and 3 in the wording of their records
+(card 3 the quotation the record holds), card 1 authored:
+
+1. The foundation runs the village calendar for 17 places under its own name: LeLender. — Stiftung Lebendiges Lehre, Lehre (Lower Saxony), 2026
+2. The undertaking is recognised by EU regional funding (LEADER) as worth funding for rural development. — LEADER / LAG Vorpommern-Greifswald, 2022
+3. "With the digital dates list for the villages in Vorpommern-Greifswald, the routes of other businesses become more transparent." — Elisabeth Kurzweg, Bäckerei Kurzweg
+
+**Link:** View in the archive
+
+None of the three is a delivered `portalize-enterprise` territory, and
+this page does not say otherwise.
+
+Card 1 names the **foundation**, not the municipality: "Die 'Stiftung
+Lebendiges Lehre' verantwortet das Lebender Kalenderprojekt. Nicht die
+Gemeinde … Es sind aber 17 Ort in und um die Gemeinde Lehre" (review of
+2026-09-22, line 103). The line is **authored, not quoted**, and since
+#160 (DEC-0209) it is the same sentence as on `/` and `/mitmachen`: one
+line per record, not per page. Deviation:
+`@schafe-vorm-fenster/proof/lehre-lelender.proof.md#L8` names a
+municipality as the operator. DEM-0080. Card 2 is the
+EU regional funding in the wording of its `claim:`
+(`leader-foerderung-2022`, `unverified`; `source:` LEADER / LAG
+Vorpommern-Greifswald, June 2022). Card 3 is Elisabeth Kurzweg's
+quotation from the `## Evidence` section of `kurzweg-baeckerei`
+(`unverified`), translated. Until #160 the card put the record's `claim:`
+in quotation marks, a summary passed off as a quote; the real quotation
+needs no deviation.
+
+The types are mixed on purpose — success on the ground, success in
+funding, a voice from the region (review, line 111). None of the three
+stands on **any other page**: `impftermine-landkreis` carries
+`/ueber-uns` and `eichler-wasserschloss-quilow` carries `/dein-kalender`,
+both there in the same wording, and two pages with the same sentence are
+not a second proof (DEC-0143 §6). All three are `unverified` and
+therefore stand in the protected preview; before go-live there is a
+written clearance per element, or the card goes. `partner-network` is not
+among them: that record names no partner and has no cleared logo rights.
+
+## Slot 7 — Response promise
+
+<!-- id: deine-region-7-response-promise; content_type: closing-cta; provenance: withheld; derived_from: []; status: approved -->
+
+*No text — the constant stays `null` as long as no named handling
+process with a named owner exists (Q-0022/C11, TS-WEB-0026 D5,
+`state/open.md` #20).* Once C11 is answered, the same sentence appears
+unchanged in three places: at the CTA on this page, in the form on
+`/deine-region/angebot`, and in the confirmation afterwards — never
+differing from one place to the next.
+
+No demo placeholder here. TS-WEB-0016-A13 makes the named, signed-off
+handling process a precondition for any time promise and prescribes that
+the sentence is **absent** otherwise — example text included, because an
+example sentence about our own response time sets the same expectation as
+a promise (F-2-57). The area stays empty until C11 is answered.
+
+## Slot 8 — Price display
+
+<!-- id: deine-region-8-price; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise"]; status: approved -->
+
+**Text:** Price on request.
+
+`price_status: on-request` — no number, no range, no "from", no
+comparison to an order of magnitude. The comparison price from
+`portalize-calendar` may appear elsewhere, but always read from the
+price component, never typed — not here either, which is why this line
+carries no figure any more (TS-WEB-0026-A4, DEC-0143 §4).
+
+---
+
+## `/deine-region/angebot` — Quote request form
+
+<!-- id: deine-region-angebot-1-form; content_type: form; provenance: sourced; derived_from: [ia]; status: approved -->
+
+**Heading:** Request a quote for {county-or-organization}
+
+**Intro:** Tell us which territory this is about — we'll sort the rest out in conversation.
+
+An envoy instance (TS-WEB-0016 S2) — field set and success behaviour are
+not yet specified (Q-0022). This page carries no argument text of its
+own; the argument lives on `/deine-region`.
+
+**Confirmation text after submitting:** Your request has reached us. {Response promise, if C11 is answered — otherwise no time promise.}
+
+**Exit to a briefing (if the form fails to load):** Form not loading right now? Write to us, or book a slot directly.

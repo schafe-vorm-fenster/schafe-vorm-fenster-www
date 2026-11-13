@@ -1,0 +1,318 @@
+import { expect, test } from "@playwright/test";
+
+import { everyRoute, href } from "../src/lib/routes/routes";
+import { d1Inventory } from "../src/lib/routes/url-inventory";
+
+/**
+ * The route walk — the browser half of TS-WEB-0004-A1, against the **served**
+ * site.
+ *
+ * F-2-55: this file used to walk `everyRoute()`, the page registry. The
+ * registry cannot be missing a row it defines, so `/start` and `/llms.txt`
+ * were absent from the site while this suite was green. It now walks
+ * `d1Inventory()` — TS-WEB-0004 D1's table — and every row is requested over
+ * HTTP, with the status D1 gives it.
+ *
+ * `<html lang>`, the hreflang set and the URL tables are integration tests in
+ * Vitest (`src/lib/routes/routing.integration.test.ts`); what needs a real
+ * browser is that every public URL actually renders and that no page scrolls
+ * sideways on a phone (TS-WEB-0017-A9, the 360 px reference viewport of DEC-0067).
+ */
+
+const ROUTES = everyRoute().map(({ route, locale }) => ({
+  path: href(route, locale),
+  locale,
+  route,
+}));
+
+/** The rows the registry does not define: the three machine surfaces and `/start`. */
+const NON_REGISTRY_ROWS = d1Inventory().filter((row) => row.routeId === undefined);
+
+test("TS-WEB-0004-A1: the inventory has both languages of every page", () => {
+  expect(ROUTES).toHaveLength(24);
+});
+
+test("TS-WEB-0004-A1: D1 has four rows outside the registry, and they are walked too", () => {
+  expect(NON_REGISTRY_ROWS.map((row) => row.path)).toEqual([
+    "/sitemap.xml",
+    "/robots.txt",
+    "/llms.txt",
+    "/start",
+  ]);
+});
+
+for (const row of NON_REGISTRY_ROWS.filter((candidate) => candidate.kind === "machine")) {
+  test(`TS-WEB-0004-A5: ${row.path} answers 200 as a machine surface`, async ({ request }) => {
+    const response = await request.get(row.path);
+    expect(response.status(), `status of ${row.path}`).toBe(200);
+    expect((await response.text()).length).toBeGreaterThan(0);
+  });
+}
+
+test("TS-WEB-0004-A5: /llms.txt lists this domain's D1 pages, and only this domain", async ({
+  request,
+  baseURL,
+}) => {
+  const body = await (await request.get("/llms.txt")).text();
+  expect(body.startsWith("# ")).toBe(true);
+  // The origin the body names is the site's own canonical host, never
+  // another domain of the matrix.
+  expect(body).toContain("/mitmachen");
+  expect(body).toContain("/en/take-part");
+  expect(body).not.toContain("owcezaoknem.pl");
+  expect(body).not.toContain("sheepoutside.com");
+  expect(baseURL).toBeTruthy();
+});
+
+test("TS-WEB-0004-A1/TS-WEB-0016 D15: /start is a page — 200, German, noindex, in no page's flow", async ({
+  page,
+  request,
+}) => {
+  // A 302 to the form until 2026-09-25; since D15 (DEC-0108) the route
+  // renders the form itself. The embed's own assertions are
+  // `e2e/start.spec.ts` (TS-WEB-0016-A22); this is the D1 walk's row.
+  const response = await request.get("/start", { maxRedirects: 0 });
+  expect(response.status()).toBe(200);
+  expect(response.headers()["content-type"]).toContain("text/html");
+
+  await page.setViewportSize({ width: 360, height: 640 });
+  await page.goto("/start");
+  await expect(page.locator("html")).toHaveAttribute("lang", "de");
+  // D1: the row carries `noindex` — in the page's own metadata, in every
+  // environment, not only through the non-production `X-Robots-Tag`.
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+  // TS-WEB-0017-A9, as for every page row: nothing scrolls sideways at 360.
+  const overflow = await page.evaluate(
+    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+  );
+  expect(overflow).toBeLessThanOrEqual(0);
+});
+
+test("TS-WEB-0004-A5: /start is absent from the sitemap", async ({ request }) => {
+  const sitemap = await (await request.get("/sitemap.xml")).text();
+  expect(sitemap).not.toContain("<loc>https://www.schafe-vorm-fenster.de/start</loc>");
+});
+
+for (const { path, locale, route } of ROUTES) {
+  test(`TS-WEB-0004-A1: ${path} (${route}/${locale}) renders and stays within the viewport`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 360, height: 640 });
+    const response = await page.goto(path);
+
+    expect(response?.status(), `status of ${path}`).toBe(200);
+    await expect(page.locator("html")).toHaveAttribute("lang", locale);
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    await expect(page.getByRole("banner")).toBeVisible();
+    await expect(page.getByRole("main")).toBeVisible();
+    await expect(page.getByRole("contentinfo")).toBeVisible();
+
+    const overflows = await page.evaluate(
+      () => document.documentElement.scrollWidth > window.innerWidth + 1,
+    );
+    expect(overflows, `horizontal scroll at 360px on ${path}`).toBe(false);
+  });
+}
+
+/**
+ * TS-WEB-0011-A4 — "the context band is an `aside` on **every** page" — and
+ * TS-WEB-0006-A6 — "every page renders exactly one context band" — over the whole
+ * route table, in both languages.
+ *
+ * The two documented exceptions are `/mitmachen/registrieren` and
+ * `/dein-kalender/bestellen`: TS-WEB-0023 D7 suppresses the band mid-flow because
+ * "a mid-flow exit offer costs the conversion the page exists for", TS-WEB-0025
+ * does the same for the order flow, and the deviation from TS-WEB-0006 D5/A6 is
+ * the decided one — `plan/component-inventory.md` D-5, `state/open.md` row
+ * 24, finding F-2-10. Both land on their first step by default, where the
+ * band is suppressed; no other page may opt out (F-2-41).
+ */
+const FLOW_ROUTES_WITHOUT_BAND: readonly string[] = ["register", "order"];
+
+/** `/ueber-uns` (DEC-0186) and `/` (DEC-0195) have no closing CTA: the contact section follows the band. */
+const ROUTES_WITHOUT_CLOSING_CTA: readonly string[] = ["about", "home"];
+
+for (const { path, route } of ROUTES) {
+  const midFlow = FLOW_ROUTES_WITHOUT_BAND.includes(route);
+
+  test(`TS-WEB-0011-A4/TS-WEB-0006-A6: ${path} — ${
+    midFlow ? "the F-2-10 flow exception" : "one aside#context-band, one #closing-cta"
+  }`, async ({ page }) => {
+    await page.goto(path);
+    const band = page.locator("#context-band");
+
+    if (midFlow) {
+      // The two flow routes compose their chrome themselves, step by step,
+      // and never through `PageFrame`. Where each renders a band it is an
+      // `aside` like everywhere else (TS-WEB-0011-A4, F-2-41) — TS-WEB-0023 D7 puts
+      // the register flow's on step 1, TS-WEB-0025 puts the order flow's after
+      // step 4, and the suppression in between is F-2-10's decided
+      // deviation, walked step by step in the two page specs. Asserted here
+      // as the named exception so a third page cannot join it unnoticed.
+      const bandOnLanding = route === "register";
+      await expect(band, `#context-band on ${path}`).toHaveCount(bandOnLanding ? 1 : 0);
+      if (bandOnLanding) {
+        expect(await band.evaluate((element) => element.tagName)).toBe("ASIDE");
+        await expect(band).toHaveAttribute("aria-label", /\S/);
+      }
+      return;
+    }
+
+    await expect(band, `#context-band on ${path}`).toHaveCount(1);
+    // The closing block stands on every `PageFrame` page (TS-WEB-0006 D2/A7); on
+    // the merged pages it is the anchor **inside** the band, so it is
+    // counted on its own rather than as one element with it.
+    await expect(page.locator("#closing-cta"), `#closing-cta on ${path}`).toHaveCount(
+      ROUTES_WITHOUT_CLOSING_CTA.includes(route) ? 0 : 1,
+    );
+    // TS-WEB-0011 D3: "every `nav` and every `aside` carries an accessible name."
+    expect(await band.evaluate((element) => element.tagName)).toBe("ASIDE");
+    await expect(band).toHaveAttribute("aria-label", /\S/);
+    // TS-WEB-0006 D5: exactly the three non-focus jobs, once — the merged pages
+    // must not render the same list twice (TS-WEB-0027-A10).
+    await expect(band.getByRole("link")).toHaveCount(3);
+  });
+}
+
+/**
+ * TS-WEB-0004-A4 / TS-WEB-0004 D6 — the 404 that renders, in the language of the URL
+ * that was asked for (F-2-70).
+ *
+ * Every unknown URL is rewritten by `proxy.ts` onto the prerendered 404 of
+ * its language (DEC-0164), before it can reach `app/[lang]`, where the page's
+ * own `notFound()` arrives one render too late and produces a 404 with an
+ * empty body. The language is chosen by the path the proxy rewrites onto; the
+ * document is static and its status 404 is set at build time.
+ */
+const NOT_FOUND_CASES = [
+  { path: "/gibt-es-nicht", heading: "Seite nicht gefunden", lang: "de" },
+  { path: "/uk/mitmachen", heading: "Seite nicht gefunden", lang: "de" },
+  { path: "/irgendwas/irgendwo", heading: "Seite nicht gefunden", lang: "de" },
+  { path: "/en/does-not-exist", heading: "Page not found", lang: "en" },
+  { path: "/en/anything", heading: "Page not found", lang: "en" },
+  // F-3-13 — the door F-2-70's fix was left open on. `isUnservablePath()`
+  // exempted **anything** ending in an asset extension, whether or not a file
+  // existed, so these never reached the 404 rewrite and rendered
+  // the empty `<html id="__next_error__">` shell instead. (`/favicon.ico` is
+  // no longer one of them: it redirects to the generated icon, issue 216.)
+  { path: "/does-not-exist.js", heading: "Seite nicht gefunden", lang: "de" },
+  { path: "/nope.css", heading: "Seite nicht gefunden", lang: "de" },
+  { path: "/robots.txt.map", heading: "Seite nicht gefunden", lang: "de" },
+] as const;
+
+/**
+ * The 404 *status* is set at build time (`svf-csp-hashes`, "404 status set on
+ * /variants/not-found/…"), so `next dev` answers these rewrites with 200. That
+ * is a dev-server artefact, not a defect: the status is asserted wherever a
+ * production build is served (`CI`, which runs `next start`, or an
+ * `E2E_BASE_URL` pointing at one); the rendered document is asserted everywhere.
+ */
+const SERVES_BUILD_TIME_STATUS = Boolean(process.env.CI || process.env.E2E_BASE_URL);
+
+for (const { path, heading, lang } of NOT_FOUND_CASES) {
+  test(`TS-WEB-0004-A4: ${path} answers a rendered 404 in ${lang}`, async ({ page }) => {
+    const response = await page.goto(path);
+    if (SERVES_BUILD_TIME_STATUS) expect(response?.status()).toBe(404);
+    await expect(page.getByRole("heading", { level: 1 })).toContainText(heading);
+    await expect(page.locator("html")).toHaveAttribute("lang", lang);
+    // Next.js emits its own `noindex` for a 404 response; the page adds the
+    // `follow` half of DEC-0032. Assert the page's tag is present rather than
+    // that it is the only one.
+    await expect(
+      page.locator('meta[name="robots"][content="noindex, follow"]'),
+    ).toHaveCount(1);
+  });
+
+  test(`TS-WEB-0004-A4/D6: ${path} is a complete document without JavaScript`, async ({
+    browser,
+  }) => {
+    // The half F-2-70 was filed for. D6 calls the 404 a "static shell +
+    // streamed place search", and a static shell is server-rendered by
+    // definition — before this fix the German surface measured **zero**
+    // rendered characters here while the English one measured 327.
+    const context = await browser.newContext({ javaScriptEnabled: false });
+    const page = await context.newPage();
+    const response = await page.goto(path);
+
+    if (SERVES_BUILD_TIME_STATUS) expect(response?.status()).toBe(404);
+    const text = await page.locator("body").innerText();
+    expect(text.length).toBeGreaterThan(100);
+    expect(text).toContain(heading);
+
+    // A4 names both modules by name: the place search is the dominant
+    // element, the jobs band carries the four jobs.
+    await expect(page.locator("#place-search input")).toHaveCount(1);
+    await expect(page.locator("#context-band a")).not.toHaveCount(0);
+
+    await context.close();
+  });
+}
+
+test("TS-WEB-0001-A3: the redundant /de prefix redirects to the bare path", async ({
+  page,
+}) => {
+  const response = await page.goto("/de/mitmachen");
+  expect(response?.status()).toBe(200);
+  expect(new URL(page.url()).pathname).toBe("/mitmachen");
+});
+
+/**
+ * F-3-13 — every page carries the brand icon, so no browser has to guess.
+ *
+ * The tree shipped no `public/favicon.ico` and no `app/icon.*` at all. The
+ * icon is the brand package's own logo, reached through the subpath import
+ * TS-WEB-0017-A6 requires (no logo file is committed here), and Next emits it
+ * under `/_next/static/`.
+ */
+test("F-3-13: every page links the brand icon, and it resolves", async ({ page, request }) => {
+  for (const path of ["/", "/en", "/dein-ort", "/ueber-uns"]) {
+    await page.goto(path);
+    // The SVG mark is the primary icon; the PNG raster fallback beside it
+    // is TS-WEB-0011-A16's.
+    const icon = page.locator('link[rel="icon"][type="image/svg+xml"]');
+    await expect(icon, `icon link on ${path}`).toHaveCount(1);
+    const href = await icon.getAttribute("href");
+    // The round mark (Q-0095, FUN-WEB-0209) is drawn from the brand package's
+    // SVG at build time and served by `/api/icon/svg`.
+    expect(href, `icon href on ${path}`).toBe("/api/icon/svg");
+    const asset = await request.get(href ?? "");
+    expect(asset.status(), `the icon asset linked from ${path}`).toBe(200);
+    expect(await asset.text()).toContain("clipPath");
+  }
+});
+
+/** Issue 216 — `/favicon.ico` answers with the generated brand icon, not a 404. */
+test("issue 216: /favicon.ico resolves to the brand icon", async ({ request }) => {
+  const response = await request.get("/favicon.ico");
+  expect(response.status()).toBe(200);
+  expect(response.headers()["content-type"]).toMatch(/^image\//);
+});
+
+/**
+ * F-3-16 — the true 404 opens with the skip link, like every routed page.
+ *
+ * The 404 document (`app/_not-found/body.tsx`) renders its own `<html><body>`
+ * and bypasses `SiteChrome` on purpose, so it inherited none of the layout's chrome:
+ * pressing Tab landed straight on the postcode input (C3-K-2). The link is
+ * the only piece taken — the surface still has no header and no navigation,
+ * which is what keeps it a complete document.
+ */
+test("F-3-16: the true 404's first tab stop is the skip link", async ({ page }) => {
+  for (const [path, label] of [
+    ["/dies-gibt-es-nicht-xyz", "Zum Inhalt springen"],
+    ["/en/does-not-exist", "Skip to content"],
+  ] as const) {
+    await page.goto(path);
+    await page.keyboard.press("Tab");
+
+    const focused = await page.evaluate(() => ({
+      tag: document.activeElement?.tagName ?? "",
+      text: document.activeElement?.textContent?.trim() ?? "",
+      href: document.activeElement?.getAttribute("href") ?? "",
+    }));
+
+    expect(focused.tag, `first tab stop on ${path}`).toBe("A");
+    expect(focused.text).toBe(label);
+    expect(focused.href).toBe("#main");
+  }
+});

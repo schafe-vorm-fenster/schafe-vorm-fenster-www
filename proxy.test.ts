@@ -1,0 +1,557 @@
+import { NextRequest } from "next/server";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+import { proxy } from "@/proxy";
+import { ENTRY_CONTEXT_HEADER } from "@/src/lib/personalization/entry-handover";
+import { notFoundVariantPath } from "@/src/lib/routes/static-variants";
+import { primeScriptHashCache, resetScriptHashCache } from "@/src/lib/security/csp-hashes";
+
+import type { NextResponse } from "next/server";
+
+/** Every per-language 404 lives under this prefix (DEC-0164). */
+const NOT_FOUND_PATH = "/variants/not-found/";
+
+// F-3-9 needs `placeHop` to throw, which nothing in the tree could make it do
+// — `resolvePlace` swallows its own errors and `searchPlaces` has a tier-3
+// snapshot. The module is mocked and its real implementation restored per
+// call, so every other test in this file still exercises the real hop.
+vi.mock("@/src/lib/routes/place-hop", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/src/lib/routes/place-hop")>();
+  return { ...actual, placeHop: vi.fn(actual.placeHop) };
+});
+
+/**
+ * `proxy.ts` had no test of its own (F-2-36). These are the guarantees it
+ * makes for *every* request on the site — the canonical-host redirect
+ * (TS-WEB-0001 D2), the CSP and HSTS headers (TS-WEB-0014 D4/D5), `X-Robots-Tag`
+ * (TS-WEB-0015 D3) — plus the one a security finding put on it: a request that
+ * chooses its own `Host` must not be able to aim the deployment's
+ * secret-bearing self-fetch at an origin of its choosing.
+ */
+
+interface Call {
+  readonly url: string;
+  readonly bypass: string | undefined;
+}
+
+let calls: Call[] = [];
+
+function stubFetch(): void {
+  vi.stubGlobal("fetch", (input: URL | string, init?: RequestInit) => {
+    const headers = new Headers(init?.headers);
+    calls.push({
+      url: String(input),
+      bypass: headers.get("x-vercel-protection-bypass") ?? undefined,
+    });
+    return Promise.resolve({
+      ok: true,
+      json: () => Promise.resolve({ hashes: [] }),
+    } as Response);
+  });
+}
+
+function request(url: string, headers: Record<string, string> = {}): NextRequest {
+  const parsed = new URL(url);
+  return new NextRequest(url, {
+    headers: { host: parsed.host, ...headers },
+  });
+}
+
+beforeEach(() => {
+  calls = [];
+  resetScriptHashCache();
+  stubFetch();
+  vi.stubEnv("VERCEL_ENV", "");
+  vi.stubEnv("VERCEL_URL", "");
+  vi.stubEnv("VERCEL_PROJECT_PRODUCTION_URL", "");
+  vi.stubEnv("VERCEL_DEPLOYMENT_ID", "");
+  vi.stubEnv("VERCEL_AUTOMATION_BYPASS_SECRET", "s3cret");
+  vi.spyOn(console, "error").mockImplementation(() => undefined);
+  vi.spyOn(console, "warn").mockImplementation(() => undefined);
+});
+
+afterEach(() => {
+  vi.unstubAllEnvs();
+  vi.unstubAllGlobals();
+  vi.restoreAllMocks();
+  resetScriptHashCache();
+});
+
+const PAGE_HASH = `sha256-${"P".repeat(43)}=`;
+const HOME_HASH = `sha256-${"H".repeat(43)}=`;
+const COMMON_HASH = `sha256-${"C".repeat(43)}=`;
+const NOT_FOUND_HASH = `sha256-${"N".repeat(43)}=`;
+
+function scriptSrc(response: NextResponse): string {
+  const csp = response.headers.get("Content-Security-Policy") ?? "";
+  return csp.split("; ").find((directive) => directive.startsWith("script-src ")) ?? "";
+}
+
+describe("F-2-36: no request value selects where the hashes come from", () => {
+  it("makes no network call at all — for any Host, on Vercel or off it", async () => {
+    vi.stubEnv("VERCEL_ENV", "preview");
+    vi.stubEnv("VERCEL_URL", "sheep-abc123.vercel.app");
+
+    for (const host of [
+      "attacker.example",
+      "169.254.169.254",
+      "internal.corp",
+      "www.schafe-vorm-fenster.de.attacker.example",
+      "sheep-abc123.vercel.app",
+    ]) {
+      await proxy(request(`https://${host}/mitmachen`));
+    }
+    vi.stubEnv("VERCEL_ENV", "");
+    vi.stubEnv("VERCEL_URL", "");
+    await proxy(request("http://localhost:3100/mitmachen"));
+
+    expect(calls).toHaveLength(0);
+  });
+});
+
+describe("TS-WEB-0014 D3 / DEC-0163: the policy carries the requested page's own hashes", () => {
+  beforeEach(() => {
+    primeScriptHashCache({
+      common: [COMMON_HASH],
+      pages: {
+        "/en/ueber-uns": [COMMON_HASH, PAGE_HASH],
+        "/de": [COMMON_HASH, HOME_HASH],
+        [notFoundVariantPath("de")]: [COMMON_HASH, NOT_FOUND_HASH],
+      },
+    });
+  });
+
+  it("maps the public path through the locale rewrite onto the page's build key", async () => {
+    const about = scriptSrc(await proxy(request("http://localhost:3100/en/about")));
+    expect(about).toContain(`'${PAGE_HASH}'`);
+    expect(about).toContain(`'${COMMON_HASH}'`);
+    expect(about).not.toContain(HOME_HASH);
+
+    const home = scriptSrc(await proxy(request("http://localhost:3100/")));
+    expect(home).toContain(`'${HOME_HASH}'`);
+    expect(home).not.toContain(PAGE_HASH);
+  });
+
+  it("answers a path no page claims with the common set only", async () => {
+    const asset = scriptSrc(await proxy(request("http://localhost:3100/_next/static/chunks/app.js")));
+    expect(asset).toContain(`'${COMMON_HASH}'`);
+    expect(asset).not.toContain(PAGE_HASH);
+    expect(asset).not.toContain(HOME_HASH);
+  });
+
+  it("TS-WEB-0014-A14: gives the 404 surface the hashes of the language variant it is rewritten onto", async () => {
+    const missing = scriptSrc(await proxy(request("http://localhost:3100/gibt-es-nicht")));
+    expect(missing).toContain(`'${NOT_FOUND_HASH}'`);
+    // The English 404 is a different prerendered file; it has no entry in
+    // this map, so it falls back to the common set and never borrows the
+    // German page's hashes.
+    const english = scriptSrc(await proxy(request("http://localhost:3100/en/gibt-es-nicht")));
+    expect(english).toContain(`'${COMMON_HASH}'`);
+    expect(english).not.toContain(NOT_FOUND_HASH);
+  });
+});
+
+describe("TS-WEB-0014 D4/D5: every response carries the policy", () => {
+  it("sets a Content-Security-Policy on an ordinary request", async () => {
+    const response = await proxy(request("http://localhost:3100/mitmachen"));
+    const csp = response.headers.get("Content-Security-Policy");
+    expect(csp).toContain("default-src 'self'");
+    expect(csp).toContain("frame-ancestors 'none'");
+  });
+
+  it("grades HSTS by environment and omits it locally", async () => {
+    expect(
+      (await proxy(request("http://localhost:3100/"))).headers.get(
+        "Strict-Transport-Security",
+      ),
+    ).toBeNull();
+
+    vi.stubEnv("VERCEL_ENV", "production");
+    expect(
+      (await proxy(request("https://www.schafe-vorm-fenster.de/"))).headers.get(
+        "Strict-Transport-Security",
+      ),
+    ).toBe("max-age=63072000; includeSubDomains");
+  });
+});
+
+describe("TS-WEB-0015 D3: X-Robots-Tag on everything that is not the production site", () => {
+  it("marks a preview noindex", async () => {
+    vi.stubEnv("VERCEL_ENV", "preview");
+    const response = await proxy(request("https://sheep-abc123.vercel.app/"));
+    expect(response.headers.get("X-Robots-Tag")).toBe("noindex, nofollow");
+  });
+
+  it("leaves the canonical production host indexable", async () => {
+    vi.stubEnv("VERCEL_ENV", "production");
+    const response = await proxy(request("https://www.schafe-vorm-fenster.de/"));
+    expect(response.headers.get("X-Robots-Tag")).toBeNull();
+  });
+});
+
+describe("TS-WEB-0001 D2: the canonical-host redirect", () => {
+  it("redirects the bare apex to www with a 301, path and query intact", async () => {
+    const response = await proxy(
+      request("https://schafe-vorm-fenster.de/mitmachen?ort=beispieldorf"),
+    );
+    expect(response.status).toBe(301);
+    expect(response.headers.get("location")).toBe(
+      "https://www.schafe-vorm-fenster.de/mitmachen?ort=beispieldorf",
+    );
+  });
+
+  it("never redirects a host outside the D1 matrix", async () => {
+    const response = await proxy(request("https://sheep-abc123.vercel.app/"));
+    expect(response.status).toBe(200);
+  });
+});
+
+describe("TS-WEB-0004-A3 (F-2-45): the landing-only domain rule", () => {
+  it("404s every path outside the landing set on a landing-only domain", async () => {
+    for (const host of [
+      "www.schafvormfenster.at",
+      "www.owcezaoknem.pl",
+      "www.sheepoutside.com",
+    ]) {
+      for (const path of ["/mitmachen", "/en/take-part", "/dein-ort", "/start"]) {
+        const response = await proxy(request(`https://${host}${path}`));
+        // The proxy rewrites onto the prerendered 404 of the language
+        // (DEC-0164); the variant's own `notFound()` makes the status 404.
+        expect(
+          response.headers.get("x-middleware-rewrite"),
+          `${host}${path}`,
+        ).toContain(NOT_FOUND_PATH);
+      }
+    }
+  });
+
+  it("serves `/`, the legal route and the machine surfaces there", async () => {
+    for (const path of ["/", "/en", "/rechtliches", "/en/legal", "/sitemap.xml"]) {
+      const response = await proxy(request(`https://www.schafvormfenster.at${path}`));
+      expect(response.headers.get("x-middleware-rewrite"), path).toBeNull();
+      expect(response.headers.get("Content-Security-Policy"), path).toBeTruthy();
+    }
+    // The two host-dependent machine surfaces are served too — from their
+    // build-time variant, never from the 404 (DEC-0164).
+    for (const path of ["/robots.txt", "/llms.txt"]) {
+      const response = await proxy(request(`https://www.schafvormfenster.at${path}`));
+      const rewrite = response.headers.get("x-middleware-rewrite") ?? "";
+      expect(rewrite, path).toContain("/variants/");
+      expect(rewrite, path).not.toContain(NOT_FOUND_PATH);
+    }
+  });
+
+  it("still carries the full header set on a blocked request", async () => {
+    vi.stubEnv("VERCEL_ENV", "production");
+    const response = await proxy(
+      request("https://www.schafvormfenster.at/mitmachen"),
+    );
+    expect(response.headers.get("Content-Security-Policy")).toContain(
+      "default-src 'self'",
+    );
+    expect(response.headers.get("Strict-Transport-Security")).toBe(
+      "max-age=63072000; includeSubDomains",
+    );
+    // Not a canonical production host in `CANONICAL_PUBLIC_HOSTS`? It is —
+    // so the 404 is indexable-by-host but 404 by status; the point of the
+    // assertion is that the header logic ran at all.
+    expect(response.headers.get("x-middleware-rewrite")).toContain(NOT_FOUND_PATH);
+  });
+
+  it("lets the landing page's own assets through", async () => {
+    // `/_next/**` is the framework's own output and is what the landing page
+    // actually loads. `public/` does not exist in this repository, so there
+    // is no second kind of asset to let through.
+    for (const path of ["/_next/static/chunks/main.js", "/_next/static/media/logo.svg"]) {
+      const response = await proxy(request(`https://www.schafvormfenster.at${path}`));
+      expect(response.headers.get("x-middleware-rewrite"), path).toBeNull();
+    }
+  });
+
+  it("sends an asset-shaped path with no file behind it to the 404 surface (F-3-13)", async () => {
+    // Before F-3-13 the extension alone exempted these, on every domain, and
+    // they rendered the empty `__next_error__` shell instead of the 404 page.
+    for (const path of ["/favicon.ico", "/logo.svg", "/nope.css"]) {
+      const response = await proxy(request(`https://www.schafvormfenster.at${path}`));
+      expect(response.headers.get("x-middleware-rewrite"), path).toContain(NOT_FOUND_PATH);
+    }
+  });
+
+  it("changes nothing on the full-site domain", async () => {
+    for (const path of ["/mitmachen", "/dein-ort", "/start"]) {
+      const response = await proxy(
+        request(`https://www.schafe-vorm-fenster.de${path}`),
+      );
+      expect(response.headers.get("x-middleware-rewrite"), path).toBeNull();
+    }
+  });
+
+  it("redirects the bare landing apex to www before it judges the path", async () => {
+    const response = await proxy(request("https://schafvormfenster.at/mitmachen"));
+    expect(response.status).toBe(301);
+    expect(response.headers.get("location")).toBe(
+      "https://www.schafvormfenster.at/mitmachen",
+    );
+  });
+});
+
+describe("TS-WEB-0004-A4 (F-2-70): an unknown URL reaches a 404 that renders", () => {
+  it.each(["/dies-gibt-es-nicht", "/uk/mitmachen", "/irgendwas/irgendwo"])(
+    "rewrites %s onto the 404 surface before the route renders",
+    async (path) => {
+      const response = await proxy(
+        request(`https://www.schafe-vorm-fenster.de${path}`),
+      );
+      // Without this the request lands in `app/[lang]` with a `lang` that is
+      // not a language, the page calls `notFound()` one render too late, and
+      // the visitor gets a 404 with zero rendered characters.
+      expect(response.headers.get("x-middleware-rewrite")).toContain(
+        NOT_FOUND_PATH,
+      );
+    },
+  );
+
+  it.each(["/", "/dein-ort", "/en/your-place", "/en/dein-ort", "/start", "/dev/components", "/api/stats"])(
+    "leaves %s alone",
+    async (path) => {
+      const response = await proxy(
+        request(`https://www.schafe-vorm-fenster.de${path}`),
+      );
+      expect(response.headers.get("x-middleware-rewrite"), path).toBeNull();
+    },
+  );
+
+  it.each([
+    ["www.schafe-vorm-fenster.de", "/dies-gibt-es-nicht", "de"],
+    ["www.schafe-vorm-fenster.de", "/en/anything", "en"],
+    ["www.schafe-vorm-fenster.de", "/en/does-not-exist", "en"],
+    ["www.schafe-vorm-fenster.de", "/variants/robots/noindex", "de"],
+    ["www.sheepoutside.com", "/mitmachen", "en"],
+    ["www.owcezaoknem.pl", "/mitmachen", "de"],
+    ["localhost:3100", "/uk/mitmachen", "de"],
+  ])(
+    "TS-WEB-0004-A4: %s%s is rewritten onto the prerendered 404 in %s (DEC-0164)",
+    async (host, path, locale) => {
+      const response = await proxy(request(`https://${host}${path}`));
+      expect(new URL(response.headers.get("x-middleware-rewrite") ?? "").pathname).toBe(
+        notFoundVariantPath(locale as "de" | "en"),
+      );
+      // The language travels in the path now, never on a request header the
+      // 404 would have to read per request.
+      expect(response.headers.get("x-middleware-override-headers") ?? "").not.toContain(
+        "not-found-locale",
+      );
+    },
+  );
+
+  it("still carries the full header set on an unknown URL", async () => {
+    const response = await proxy(
+      request("https://www.schafe-vorm-fenster.de/dies-gibt-es-nicht"),
+    );
+    expect(response.headers.get("Content-Security-Policy")).toContain(
+      "default-src 'self'",
+    );
+  });
+});
+
+describe("TS-WEB-0004-A12 (DEC-0164): the proxy picks a prerendered variant and renders nothing", () => {
+  function rewriteOf(response: NextResponse): string {
+    return new URL(response.headers.get("x-middleware-rewrite") ?? "http://x/").pathname;
+  }
+
+  it.each([
+    ["www.schafe-vorm-fenster.de", "www-schafe-vorm-fenster-de"],
+    ["www.schafvormfenster.at", "www-schafvormfenster-at"],
+    ["www.owcezaoknem.pl", "www-owcezaoknem-pl"],
+    ["www.sheepoutside.com", "www-sheepoutside-com"],
+    ["localhost:3100", "www-schafe-vorm-fenster-de"],
+    ["sheep-abc123.vercel.app", "www-schafe-vorm-fenster-de"],
+  ])("TS-WEB-0004-A5: /llms.txt on %s is the %s variant", async (host, variant) => {
+    const response = await proxy(request(`https://${host}/llms.txt`));
+    expect(rewriteOf(response)).toBe(`/variants/llms/${variant}`);
+  });
+
+  it.each([
+    ["production", "www.schafe-vorm-fenster.de", "www-schafe-vorm-fenster-de"],
+    ["production", "www.sheepoutside.com", "www-sheepoutside-com"],
+    ["production", "sheep-abc123.vercel.app", "noindex"],
+    ["preview", "www.schafe-vorm-fenster.de", "noindex"],
+    ["preview", "next.schafe-vorm-fenster.de", "noindex"],
+    ["", "localhost:3100", "noindex"],
+  ])("TS-WEB-0015-A13: /robots.txt on %s %s is the %s variant", async (env, host, variant) => {
+    vi.stubEnv("VERCEL_ENV", env);
+    const response = await proxy(request(`https://${host}/robots.txt`));
+    expect(rewriteOf(response)).toBe(`/variants/robots/${variant}`);
+    // The header half of the same predicate stays on the same response.
+    expect(response.headers.get("X-Robots-Tag")).toBe(variant === "noindex" ? "noindex, nofollow" : null);
+  });
+});
+
+describe("TS-WEB-0021-A7 (F-2-49): the re-resolution hop is an HTTP redirect", () => {
+  it("307s a now-covered value off `/dein-ort/starten`", async () => {
+    const response = await proxy(
+      request("https://www.schafe-vorm-fenster.de/dein-ort/starten?ort=quilow"),
+    );
+    expect(response.status).toBe(307);
+    expect(response.headers.get("location")).toBe(
+      "https://www.schafe-vorm-fenster.de/dein-ort?ort=quilow",
+    );
+  });
+
+  it("307s an uncovered value off `/dein-ort`", async () => {
+    const response = await proxy(
+      request("https://www.schafe-vorm-fenster.de/dein-ort?ort=99999"),
+    );
+    expect(response.status).toBe(307);
+    expect(response.headers.get("location")).toBe(
+      "https://www.schafe-vorm-fenster.de/dein-ort/starten?ort=99999",
+    );
+  });
+
+  it("keeps the language prefix", async () => {
+    const response = await proxy(
+      request("https://www.schafe-vorm-fenster.de/en/your-place/start?ort=quilow"),
+    );
+    expect(response.headers.get("location")).toBe(
+      "https://www.schafe-vorm-fenster.de/en/your-place?ort=quilow",
+    );
+  });
+
+  it("does not hop a value that belongs where it is", async () => {
+    for (const url of [
+      "https://www.schafe-vorm-fenster.de/dein-ort?ort=quilow",
+      "https://www.schafe-vorm-fenster.de/dein-ort/starten?ort=99999",
+      "https://www.schafe-vorm-fenster.de/dein-ort",
+      "https://www.schafe-vorm-fenster.de/mitmachen?ort=quilow",
+    ]) {
+      const response = await proxy(request(url));
+      expect(response.status, url).not.toBe(307);
+    }
+  });
+});
+
+/**
+ * F-3-9 — the place hop's failure arm leaves a trace.
+ *
+ * `proxy.ts` catches a `placeHop` throw and falls through to the render, on
+ * purpose: an upstream that cannot answer must never cost a visitor her page.
+ * The arm was empty, and its failure mode is the defect it exists to fix —
+ * the render's own `redirect()` produces a 200 with an empty document on a
+ * production build (F-2-49). No test made `placeHop` throw, so neither the
+ * fall-through nor the silence had ever been exercised.
+ */
+describe("F-3-9: a failing place hop is logged, and still costs no page", () => {
+  it("logs the pathname and the error, and serves the request anyway", async () => {
+    const placeHop = vi.mocked(await import("@/src/lib/routes/place-hop")).placeHop;
+    const logged: unknown[][] = [];
+    const error = vi.spyOn(console, "error").mockImplementation((...args: unknown[]) => {
+      logged.push(args);
+    });
+
+    placeHop.mockRejectedValueOnce(new Error("geo-api unreachable"));
+
+    const response = await proxy(
+      request("https://www.schafe-vorm-fenster.de/dein-ort?ort=07743"),
+    );
+
+    // The visitor still gets her page: no redirect, no 404 rewrite.
+    expect(response.status).toBe(200);
+    expect(response.headers.get("x-middleware-rewrite") ?? "").not.toContain(
+      NOT_FOUND_PATH,
+    );
+
+    expect(logged, "the arm is no longer silent").toHaveLength(1);
+    expect(String(logged[0]?.[0])).toContain("placeHop failed");
+    expect(logged[0]?.[1]).toMatchObject({
+      pathname: "/dein-ort",
+      error: "geo-api unreachable",
+    });
+    // `?ort=` is attacker-controlled text and is not echoed into the log.
+    expect(JSON.stringify(logged[0])).not.toContain("07743");
+
+    error.mockRestore();
+  });
+});
+
+describe("TS-WEB-0010 D2 step 2 — the entry-context handover (DEC-0140)", () => {
+  /**
+   * `NextResponse.next({ request: { headers } })` travels as
+   * `x-middleware-request-<name>` on the response, which is what the render
+   * layer reads back as a request header.
+   */
+  function handedDown(response: NextResponse): string | null {
+    return response.headers.get(`x-middleware-request-${ENTRY_CONTEXT_HEADER}`);
+  }
+
+  it("hands the referrer's host down, without its path", async () => {
+    const response = await proxy(
+      request("https://www.schafe-vorm-fenster.de/", {
+        referer: "https://www.linkedin.com/in/someone?utm=x",
+      }),
+    );
+
+    expect(handedDown(response)).toBe("ref=linkedin.com");
+  });
+
+  it("hands a recognised campaign medium down and drops an unrecognised one", async () => {
+    const withMedium = await proxy(
+      request("https://www.schafe-vorm-fenster.de/?etcc_med=print"),
+    );
+    expect(handedDown(withMedium)).toBe("med=print");
+
+    const withoutMedium = await proxy(
+      request("https://www.schafe-vorm-fenster.de/?etcc_med=cpc&ort=lassan"),
+    );
+    expect(handedDown(withoutMedium)).toBe("");
+  });
+
+  it("sets the header on every request, so a client cannot choose its own segment", async () => {
+    const spoofed = await proxy(
+      request("https://www.schafe-vorm-fenster.de/", {
+        [ENTRY_CONTEXT_HEADER]: "ref=linkedin.com",
+      }),
+    );
+
+    // No referrer arrived, so the handover is empty — the client's own value is
+    // overwritten, not merged.
+    expect(handedDown(spoofed)).toBe("");
+  });
+
+  // Deliberately carries no criterion id. TS-WEB-0010's `static` no-IP-value
+  // criterion is about which modules of the whole tree may read the request
+  // geo/IP headers, which no unit test of this file can see; the assertion here
+  // is the narrower one this task owns — the handover header carries neither.
+  // DEC-0140 §1 and §4 name the missing instrument.
+  it("carries no geo, IP or place value in the handover", async () => {
+    const response = await proxy(
+      request("https://www.schafe-vorm-fenster.de/?ort=lassan&etcc_med=newsletter", {
+        referer: "https://www.nordkurier.de/artikel/x",
+        "x-forwarded-for": "203.0.113.7",
+        "x-vercel-ip-country": "DE",
+        "x-vercel-ip-city": "Greifswald",
+      }),
+    );
+
+    const value = handedDown(response) ?? "";
+    expect([...new URLSearchParams(value).keys()].toSorted()).toEqual(["med", "ref"]);
+    for (const leak of ["203.0.113.7", "Greifswald", "lassan"]) {
+      expect(value, leak).not.toContain(leak);
+    }
+  });
+
+  // Deliberately carries no criterion id either. This is one clause of
+  // TS-WEB-0010's cacheability criterion (no `Vary`, no `Set-Cookie`); that
+  // criterion also asks for two byte-identical shells across `Accept-Language`
+  // and IP country, and its persistence sibling is an `e2e` walk of what a
+  // visit stores. Neither is observable from a proxy unit test.
+  it("adds no `Vary` and no `Set-Cookie` to the response", async () => {
+    const response = await proxy(
+      request("https://www.schafe-vorm-fenster.de/", {
+        referer: "https://www.linkedin.com/",
+      }),
+    );
+
+    expect(response.headers.get("Vary")).toBeNull();
+    expect(response.headers.get("Set-Cookie")).toBeNull();
+  });
+});

@@ -1,0 +1,27 @@
+/*
+ * The section shell's own block padding is handed to the band and the rows:
+ * the band is flush with the section's top edge (it is the section's ground
+ * there), and the rows carry the section's own space (DEC-0205).
+ */
+.section {
+  padding-block: 0;
+}
+
+/* Phone: one column, 32 px above and 16 px below the offers on top of the
+   rows' own spacing (the issue's 32 / 40 / 16 reads as band gap · rows ·
+   foot). Desktop (xl): three equal columns, 40 px apart, five shared tracks. */
+.rows {
+  display: flex;
+  flex-direction: column;
+  padding-block: var(--space-8) var(--space-4);
+}
+
+@media (min-width: 64rem) {
+  .rows {
+    column-gap: var(--space-12);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: auto;
+    padding-block: var(--space-16) var(--space-12);
+  }
+}

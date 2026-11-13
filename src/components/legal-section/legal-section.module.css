@@ -1,0 +1,94 @@
+.reserved {
+  scroll-margin-top: calc(var(--site-header-height) + var(--section-padding-block));
+}
+
+.section {
+  border-top: 1px solid var(--color-neutral-line);
+  padding-top: var(--section-padding-block);
+  scroll-margin-top: calc(var(--site-header-height) + var(--section-padding-block));
+}
+
+.heading {
+  font-size: var(--type-subhead-size);
+  font-weight: 800;
+  letter-spacing: var(--type-subhead-tracking);
+  margin: 0 0 var(--space-4);
+}
+
+.body {
+  font-size: var(--type-body-size);
+  line-height: var(--leading-relaxed);
+  max-width: var(--measure-reading);
+}
+
+.body :global(*) {
+  max-width: var(--measure-reading-max);
+}
+
+/*
+ * Long-form typography (polish brief page 12). Six imported documents, 50
+ * phone screens, and until here the only thing separating a section heading
+ * from the paragraph above it was that heading's own weight: the base
+ * heading rule sets a bottom margin and no top one, and `h5`/`h6` had no
+ * rule at all, so three consecutive levels rendered smaller than the body
+ * text they introduced. Each level now has its own size and its own air
+ * above it, so a reader can see the structure while scrolling past it.
+ */
+.body :global(h3) {
+  font-size: var(--type-card-size);
+  font-weight: 800;
+  margin: var(--space-8) 0 var(--space-3);
+}
+
+.body :global(h4) {
+  font-size: var(--type-body-size);
+  font-weight: 800;
+  margin: var(--space-6) 0 var(--space-2);
+}
+
+.body :global(h5) {
+  font-size: var(--type-body-size);
+  font-weight: 700;
+  line-height: var(--leading-tight);
+  /* The scale has no `5`: 4 is 1rem, 6 is 1.5rem, and 1.25rem is deliberately
+   * not a step. `h5` takes the next step down from `h4`, which leaves it level
+   * with `h6` — defensible, because `h6` is separated by its own treatment
+   * (mono, uppercase, muted) rather than by air. */
+  margin: var(--space-4) 0 var(--space-2);
+}
+
+.body :global(h6) {
+  color: var(--color-neutral-muted);
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  font-weight: 700;
+  letter-spacing: var(--type-label-tracking);
+  margin: var(--space-4) 0 var(--space-1);
+  text-transform: uppercase;
+}
+
+/* The section's `h2` already carries the air above the first block. */
+.body > :global(*:first-child) {
+  margin-top: 0;
+}
+
+.body :global(ul),
+.body :global(ol) {
+  margin: 0 0 var(--space-4);
+  padding-inline-start: var(--space-6);
+}
+
+.body :global(li) {
+  margin-bottom: var(--space-2);
+}
+
+/* Legal text quotes long URLs; none of them may push the page sideways. */
+.body :global(a) {
+  overflow-wrap: anywhere;
+}
+
+.pointer {
+  color: var(--color-neutral-text2);
+  font-size: var(--type-body-size);
+  margin: 0;
+}

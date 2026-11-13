@@ -1,0 +1,568 @@
+/**
+ * Brand and layout-law guard — the static half of TS-WEB-0017 D2 and D3.
+ *
+ *  TS-WEB-0017-A4  No `@media (max-width: …)` anywhere, and every `min-width`
+ *      value is one of the six `breakpoint.*` token values of brand-design. A
+ *      literal px breakpoint at a call site fails.
+ *  TS-WEB-0017-A5  No colour literal and no `font-family` literal outside the
+ *      single brand-token import file (app/styles/brand.css).
+ *  TS-WEB-0017-A6  No logo, mark or font file is committed in this repository.
+ *  TS-WEB-0017-A19 Every `var(--x)` without a fallback names a custom property
+ *      something declares.
+ *  TS-WEB-0017-A28 `ink` is neutral black: the effective `--color-neutral-ink`
+ *      (the brand token sheet, then `app/styles/brand.css` on top) has equal
+ *      red, green and blue, and the retired ink (the lime hue at 3 % chroma, dark
+ *      green across a section) is written nowhere: not in authored sources, not in a board
+ *      (DEC-0155).
+ *  TS-WEB-0017-A30 No dark-green fill: no `background`, `background-color` or
+ *      `fill` in a stylesheet under `app/` or `src/` names `lime-700` to
+ *      `lime-950` — as the token, as a custom property that carries it, or as
+ *      its hex — and no design board paints one as a background. Dark green is
+ *      for text, links and icons, never a fill (DEC-0155, DEC-0160).
+ *  TS-WEB-0017-A32 No outer margin handed in through `className` (DEC-0171): a
+ *      class a `.tsx` under `app/` or `src/` passes as `className` to a
+ *      component (a capitalised JSX tag) declares no vertical margin in its
+ *      CSS module. The space between blocks is the content stack's; a margin
+ *      handed to another component's root competes with that component's own
+ *      root rule at equal weight, and the production build's stylesheet order
+ *      decides — which is how the story cards on `/ueber-uns` lost their gap
+ *      (issue 108).
+ *  TS-WEB-0017-A22 No tinted scrim: no gradient carries `ink` or `violet`
+ *      (as the alpha form of `ink` 23·29·13 or `violet` 83·27·222, a `color-mix()` or a
+ *      `var(--color-neutral-ink|violet-*)`), in authored sources **and** in the
+ *      design boards `concept/v2.0/*.dc.html`. The scrim is neutral black and
+ *      nothing else (SRC-0014 §The scrim, DEC-0151).
+ *
+ * Scans **authored** sources only — `app/**`, `src/**`, `e2e/**`,
+ * `scripts/**` — never build output. `.next/`, `node_modules/` and
+ * `.vercel/` are excluded from the walk itself (not just filtered
+ * afterwards), so a build artefact can never reach either regex.
+ *
+ * Round 1, row 42: the previous version additionally walked
+ * `.next/static` to catch "generated CSS" — a build artefact scan bolted
+ * onto a pre-commit-speed check. Minified output has no whitespace, so the
+ * `min-width` regex's value capture ran past the end of a `min-width:0}`
+ * *property* looking for the next `)` and picked up unrelated minified
+ * text as its "value" — a false positive on every built tree, exactly the
+ * state `pnpm build && pnpm check` leaves the repo in. Two independent
+ * fixes: the walk no longer reaches build output at all, and the
+ * `min-width` regex now requires the same `@media (...)` context test the
+ * `max-width` half already used, so a `min-width` *property* (build output
+ * or not) can never be mistaken for a media feature again.
+ *
+ * ── Why the full identifiers ──────────────────────────────────────────────
+ *
+ * Every message carries the whole criterion id. Until 2026-09-26 the prefixes
+ * were bare (`A4`, `A19`) and the report line pasted `TS-017-` in front of
+ * them, which is not an identifier this repository defines — so
+ * `check:coverage` could attribute the meter to nothing and TS-WEB-0017-A19
+ * read as MISSING although this script has enforced it since it was written
+ * (`state/coverage.md`). A `static` criterion is closed by a
+ * `scripts/check-*.ts` in the `check` chain that **names it**: a meter has no
+ * test title to carry the link, so the identifier in its failure message *is*
+ * the link (`scripts/check-coverage.ts`, verdict METERED).
+ *
+ * Exit code of `main()`: number of errors (0 = green).
+ */
+
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { dirname, join, relative } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
+
+/** The five criteria this meter is the instrument for, spelled out once. */
+const A4 = "TS-WEB-0017-A4";
+const A5 = "TS-WEB-0017-A5";
+const A6 = "TS-WEB-0017-A6";
+const A19 = "TS-WEB-0017-A19";
+const A22 = "TS-WEB-0017-A22";
+const A28 = "TS-WEB-0017-A28";
+const A30 = "TS-WEB-0017-A30";
+const A32 = "TS-WEB-0017-A32";
+const A34 = "TS-WEB-0017-A34";
+
+/** The single file brand values are allowed to enter through (TS-WEB-0017 D3). */
+const TOKEN_FILE = "app/styles/brand.css";
+
+/** brand-design `breakpoint.*` — the only legal `min-width` values (DEC-0067). */
+const BREAKPOINTS = new Map<string, string>([
+  ["22.5rem", "xs"],
+  ["26.75rem", "sm"],
+  ["40rem", "md"],
+  ["48rem", "lg"],
+  ["64rem", "xl"],
+  ["80rem", "2xl"],
+]);
+
+/**
+ * The only legal `@container` `min-width` values. A container threshold is not
+ * a viewport switch point, so it is not a breakpoint token — it is a width a
+ * component measured for itself and the design system names (TS-WEB-0017-A4).
+ * Each entry says where the guide writes it down.
+ */
+const CONTAINER_THRESHOLDS = new Map<string, string>([
+  ["30rem", "event-row: badge plus a complete meta line (SRC-0014 §Event row)"],
+  // dorfkalender-intro (issue 143, DEC-0194): the section switches layout on its
+  // own width, 760 px by the owner's design, and scales its 500 px drawing in
+  // steps so it fits the gutters.
+  ["22rem", "dorfkalender-intro: drawing at 0.62 — a section 352 px wide (issue 143)"],
+  ["23.75rem", "dorfkalender-intro: drawing at 0.71 — a section 380 px wide (issue 143)"],
+  ["47.5625rem", "dorfkalender-intro: two columns from 761 px (container query at 760, issue 143)"],
+  ["56.25rem", "dorfkalender-intro: drawing at 0.75 from 900 px (issue 143)"],
+  ["68.75rem", "dorfkalender-intro: drawing at full size from 1100 px (issue 143)"],
+]);
+
+/** The authored-source universe. Nothing outside these is ever scanned. */
+const SOURCE_DIRS = ["app", "src", "e2e", "scripts"];
+const SOURCE_EXTENSIONS = /\.(css|ts|tsx)$/;
+const ASSET_DIRS = ["app", "src", "public"];
+const FONT_FILES = /\.(woff2?|ttf|otf|eot)$/i;
+const LOGO_FILES = /(logo|wordmark|brandmark)[^/]*\.(svg|png|jpg|jpeg|webp)$/i;
+/** Generated placeholder imagery (DEC-0068) is not brand asset material. */
+const ASSET_EXCEPTIONS = [join("src", "generated", "placeholders")];
+
+/** Never descended into, from any starting point — build output, not source. */
+const EXCLUDED_DIR_NAMES = new Set([
+  "node_modules",
+  ".next",
+  ".vercel",
+  ".git",
+]);
+
+/**
+ * A test file's fixture data legitimately contains literal CSS text — this
+ * very suite's `.next` and colour-literal fixtures are exactly that. A5/A6
+ * hold against application code, not against a string a test compares
+ * against; excluded here rather than by narrowing `SOURCE_DIRS`, so a real
+ * violation in `e2e/**` or `scripts/**` (a component demo, a generator) is
+ * still caught.
+ */
+function isTestFile(path: string): boolean {
+  return /\.(test|integration\.test)\.tsx?$/.test(path);
+}
+
+const COLOUR_LITERAL =
+  /(#[0-9a-fA-F]{3,8}\b|\b(?:rgba?|hsla?|oklch|oklab|lab|lch)\s*\()/;
+const FONT_FAMILY_LITERAL = /font-?[Ff]amily\s*[:=]\s*(.+)/;
+const FONT_FAMILY_ALLOWED =
+  /^(var\(|inherit|initial|unset|revert|"?\s*var\(|'?\s*var\()/;
+
+/** `before` is the text immediately preceding a match — is it inside `@media (...)`? */
+function inMediaQueryContext(before: string): boolean {
+  return (
+    /@media[^{]*\(\s*$/.test(before) || /@media[^{]*and\s*\(\s*$/.test(before)
+  );
+}
+
+function inContainerQueryContext(before: string): boolean {
+  return (
+    /@container[^{]*\(\s*$/.test(before) || /@container[^{]*and\s*\(\s*$/.test(before)
+  );
+}
+
+function walk(dir: string): string[] {
+  let entries: string[];
+  try {
+    entries = readdirSync(dir);
+  } catch {
+    return [];
+  }
+  return entries.flatMap((name) => {
+    if (EXCLUDED_DIR_NAMES.has(name)) return [];
+    const full = join(dir, name);
+    return statSync(full).isDirectory() ? walk(full) : [full];
+  });
+}
+
+/**
+ * `lime-700` … `lime-950` of brand-design 2.9.0, as a board writes them. Built
+ * from halves: this file is itself scanned, and A5 forbids a colour literal.
+ */
+const DARK_LIME_HEX = [["65", "8805"], ["48", "6202"], ["2D", "3F01"], ["14", "1F00"]].map((h) => h.join(""));
+
+/** The design boards — a generator reads them, so they are held to the scrim rule too. */
+const BOARD_DIR = join("concept", "v2.0");
+
+/** `ink` and `violet`, as a board writes them and as a stylesheet names them. */
+const TINT =
+  /rgba\(\s*23\s*,\s*29\s*,\s*13\s*,|rgba\(\s*83\s*,\s*27\s*,\s*222\s*,|[#]171d0d[0-9a-f]{2}\b|color-mix\([^;]*(?:ink|violet)|var\(\s*--color-(?:neutral-ink|ink|violet-[0-9]+)\s*\)/i;
+
+/** Every `linear-gradient(…)` / `radial-gradient(…)` in `text`, balanced, with its line. */
+export function gradients(text: string): { body: string; line: number }[] {
+  const found: { body: string; line: number }[] = [];
+  for (const match of text.matchAll(/(?:repeating-)?(?:linear|radial)-gradient\(/g)) {
+    let depth = 0;
+    let end = match.index;
+    for (; end < text.length; end++) {
+      if (text[end] === "(") depth++;
+      else if (text[end] === ")" && --depth === 0) break;
+    }
+    found.push({
+      body: text.slice(match.index, end + 1),
+      line: text.slice(0, match.index).split("\n").length,
+    });
+  }
+  return found;
+}
+
+export interface BrandCheckResult {
+  readonly errors: string[];
+  readonly cssFileCount: number;
+  readonly sourceFileCount: number;
+}
+
+/**
+ * Runs the four checks rooted at `root` (the repository root in production; a
+ * fixture directory of the same shape in tests) and returns every violation
+ * found, each prefixed with the full identifier of the criterion it belongs
+ * to. Pure — no console output, no `process.exit` — so a test can assert on
+ * the result directly.
+ */
+export function checkBrand(root: string): BrandCheckResult {
+  const errors: string[] = [];
+  const fail = (criterion: string, file: string, message: string) =>
+    errors.push(`${criterion} ${file}: ${message}`);
+  const rel = (file: string) => relative(root, file);
+
+  // ── TS-WEB-0017-A4: the direction of the layout law ───────────────────────────────────
+
+  const cssFiles = SOURCE_DIRS.flatMap((dir) => walk(join(root, dir))).filter(
+    (f) => f.endsWith(".css"),
+  );
+
+  for (const file of cssFiles) {
+    const source = readFileSync(file, "utf8");
+    for (const match of source.matchAll(/max-width\s*:\s*[^)\s;]+/g)) {
+      // A `max-width` *property* is fine (the container uses one); only a
+      // `max-width` media feature reverses the direction of the law.
+      const before = source.slice(Math.max(0, match.index - 40), match.index);
+      if (inMediaQueryContext(before))
+        fail(A4, rel(file), `max-width media query: ${match[0]}`);
+    }
+    for (const match of source.matchAll(
+      /min-width\s*:\s*([^)\s;}]+)\s*\)/g,
+    )) {
+      // Mirrors the `max-width` context test: a `min-width` *property*
+      // (e.g. minified `min-width:0}`) is not a media feature and is none
+      // of A4's business — only a value inside `@media (...)` is checked
+      // against the breakpoint token set.
+      const before = source.slice(Math.max(0, match.index - 40), match.index);
+      const value = (match[1] ?? "").trim();
+      if (inContainerQueryContext(before)) {
+        if (!CONTAINER_THRESHOLDS.has(value))
+          fail(
+            A4,
+            rel(file),
+            `@container min-width ${value} is not a named container threshold (${[...CONTAINER_THRESHOLDS.keys()].join(", ")})`,
+          );
+        continue;
+      }
+      if (!inMediaQueryContext(before)) continue;
+      if (!BREAKPOINTS.has(value))
+        fail(
+          A4,
+          rel(file),
+          `min-width ${value} is not a breakpoint token (${[...BREAKPOINTS.keys()].join(", ")})`,
+        );
+    }
+  }
+
+  // ── TS-WEB-0017-A5: no literal outside the token file ─────────────────────────────────
+
+  const sourceFiles = SOURCE_DIRS.flatMap((dir) =>
+    walk(join(root, dir)),
+  ).filter((f) => SOURCE_EXTENSIONS.test(f));
+
+  for (const file of sourceFiles) {
+    const relative_ = rel(file);
+    if (relative_ === TOKEN_FILE) continue;
+    if (isTestFile(relative_)) continue;
+    const lines = readFileSync(file, "utf8").split("\n");
+    lines.forEach((line, index) => {
+      const at = `${relative_}:${index + 1}`;
+      const colour = COLOUR_LITERAL.exec(line);
+      if (colour) fail(A5, at, `colour literal: ${colour[0]}`);
+      const family = FONT_FAMILY_LITERAL.exec(line);
+      if (family) {
+        const value = (family[1] ?? "").trim();
+        if (!FONT_FAMILY_ALLOWED.test(value))
+          fail(A5, at, `font-family literal: ${value}`);
+      }
+    });
+  }
+
+  // ── TS-WEB-0017-A6: no brand asset committed here ─────────────────────────────────────
+
+  for (const dir of ASSET_DIRS) {
+    for (const file of walk(join(root, dir))) {
+      const relative_ = rel(file);
+      if (ASSET_EXCEPTIONS.some((prefix) => relative_.startsWith(prefix)))
+        continue;
+      if (FONT_FILES.test(relative_))
+        fail(A6, relative_, "font file committed — fonts are package subpaths");
+      if (LOGO_FILES.test(relative_))
+        fail(A6, relative_, "logo file committed — logos are package subpaths");
+    }
+  }
+
+  // --- TS-WEB-0017-A19: a `var()` whose custom property nothing declares -----------------
+  //
+  // An undeclared custom property does not fall back to something sensible: it
+  // makes the whole declaration invalid, so the browser drops it. `--space-5`
+  // and `--color-focus-ring` each sat in the tree for weeks doing exactly that
+  // — one heading lost the air the rule above it promised, two components lost
+  // their brand focus ring to the browser default. Neither showed up anywhere,
+  // because a missing outline looks like a different outline.
+  //
+  // Declarations are collected from every stylesheet including the package
+  // token sheet, and from TS/TSX, where a component may set one through an
+  // inline style. A property used but never declared is the error.
+  const declared = new Set<string>();
+  const tokenSheet = join(
+    root,
+    "node_modules/@schafe-vorm-fenster/brand-design/tokens/svf-tokens.css",
+  );
+  const declarationSources = [...cssFiles, ...sourceFiles];
+  if (existsSync(tokenSheet)) declarationSources.push(tokenSheet);
+  for (const file of declarationSources) {
+    const text = readFileSync(file, "utf8");
+    // `--x:` in CSS, and `"--x":` / `'--x':` in an inline style object.
+    for (const match of text.matchAll(/(?:^|[;{\s"'(,])(--[a-zA-Z0-9-]+)\s*"?'?\s*:/g))
+      declared.add(match[1]);
+  }
+  for (const file of cssFiles) {
+    const relative_ = rel(file);
+    const raw = readFileSync(file, "utf8");
+    // Blank comments rather than dropping them, so line numbers stay true. A
+    // comment may name a property in prose without using it.
+    const text = raw.replace(/\/\*[\s\S]*?\*\//g, (block) =>
+      block.replace(/[^\n]/g, " "),
+    );
+    const reported = new Set<string>();
+    // `var(--x)` only, never `var(--x, fallback)`: with a fallback an
+    // undeclared property is a deliberate default, not a dropped declaration.
+    for (const match of text.matchAll(/var\(\s*(--[a-zA-Z0-9-]+)\s*\)/g)) {
+      const name = match[1];
+      if (declared.has(name) || reported.has(name)) continue;
+      reported.add(name);
+      const line = text.slice(0, match.index).split("\n").length;
+      fail(
+        A19,
+        `${relative_}:${line}`,
+        `\`var(${name})\` — nothing declares it, so the whole declaration is dropped`,
+      );
+    }
+  }
+
+  // --- TS-WEB-0017-A22: the scrim is neutral black, everywhere -------------------------
+  //
+  // Decision 5 retired the dark-green, `ink`-tinted scrim on 2026-09-23 and the
+  // component followed with DEC-0116 — yet three boards a generator reads still
+  // drew it, and a design input arrived with it again on 2026-10-07. A tinted
+  // gradient over a photograph is never right, so any gradient naming `ink` or
+  // `violet` fails, in code and in the boards alike (DEC-0151).
+  const boardFiles = walk(join(root, BOARD_DIR)).filter((f) => f.endsWith(".dc.html"));
+  for (const file of [...sourceFiles, ...boardFiles]) {
+    const relative_ = rel(file);
+    if (isTestFile(relative_)) continue;
+    const text = readFileSync(file, "utf8").replace(/\/\*[\s\S]*?\*\//g, (block) =>
+      block.replace(/[^\n]/g, " "),
+    );
+    for (const { body, line } of gradients(text)) {
+      const tint = TINT.exec(body);
+      if (tint)
+        fail(
+          A22,
+          `${relative_}:${line}`,
+          `tinted scrim \`${tint[0]}\` — the scrim is neutral black (\`color.scrim.*\`), never \`ink\` or \`violet\``,
+        );
+    }
+  }
+
+  // --- TS-WEB-0017-A28: ink is neutral black, and the old ink is written nowhere -------
+  //
+  // The owner's review of 2026-10-12 (issue #19, which had been "decided" once
+  // already by the scrim): the *ground* `ink` was still the lime hue at 3 %
+  // chroma, which across a section reads as dark green. Contrast ratios
+  // cannot see a hue, so `check:contrast` passed it. This reads the hue.
+  const inkSources = [
+    join(root, "node_modules", "@schafe-vorm-fenster", "brand-design", "tokens", "svf-tokens.css"),
+    join(root, TOKEN_FILE),
+  ];
+  let ink: string | undefined;
+  for (const file of inkSources) {
+    if (!existsSync(file)) continue;
+    for (const match of readFileSync(file, "utf8").matchAll(/--color-neutral-ink\s*:\s*(#[0-9a-fA-F]{6})\b/g))
+      ink = match[1]; // the last declaration wins, the way the cascade reads it
+  }
+  if (ink !== undefined) {
+    const [r, g, b] = [1, 3, 5].map((i) => Number.parseInt(ink!.slice(i, i + 2), 16));
+    if (r !== g || g !== b)
+      fail(A28, "--color-neutral-ink", `${ink} is not neutral (R ${r}, G ${g}, B ${b}) — ink is black, never a tint`);
+  }
+  const boardTexts = boardFiles.map((file) => ({ file, text: readFileSync(file, "utf8") }));
+  // Built from two halves: this file is itself scanned, and A5 forbids the literal.
+  const retiredInk = new RegExp(["#", "171", "d0d"].join(""), "i");
+  for (const { file, text } of [
+    ...sourceFiles.filter((f) => !isTestFile(rel(f)) && rel(f) !== "scripts/check-brand.ts").map((file) => ({ file, text: readFileSync(file, "utf8") })),
+    ...boardTexts,
+  ]) {
+    const line = text.split("\n").findIndex((l) => retiredInk.test(l));
+    if (line >= 0) fail(A28, `${rel(file)}:${line + 1}`, "the retired ink (dark green) is written here — ink is neutral black");
+  }
+
+  // --- TS-WEB-0017-A30: no dark-green fill ------------------------------------------
+  //
+  // The owner's review of 2026-10-12 (issue #57): `lime-700` to `lime-950` as a
+  // background reads as the dark green that DEC-0155 took out of the design —
+  // hover states on `ink`, the "Amtlich" badge, a chip. A contrast ratio cannot
+  // see a hue, so this reads the declaration. A custom property that carries one
+  // of the four (`--x: var(--color-lime-900)`) counts as the token itself, so a
+  // ground that publishes a dark green for a component to fill with is caught
+  // where the fill is declared.
+  const darkLime = new RegExp(
+    String.raw`var\(\s*--color-lime-(?:700|800|900|950)\s*\)|#(?:${DARK_LIME_HEX.join("|")})\b`,
+    "i",
+  );
+  const stylesheets = cssFiles.filter((f) => /^(app|src)\//.test(rel(f).split("\\").join("/")));
+  const stripped = stylesheets.map((file) => ({
+    file,
+    text: readFileSync(file, "utf8").replace(/\/\*[\s\S]*?\*\//g, (block) => block.replace(/[^\n]/g, " ")),
+  }));
+  // Custom properties that resolve to a dark lime, to a fixed point (a chain of
+  // aliases is followed as far as it goes).
+  const carriers = new Set<string>();
+  for (let grew = true; grew; ) {
+    grew = false;
+    for (const { text } of stripped)
+      for (const match of text.matchAll(/(--[a-zA-Z0-9-]+)\s*:\s*([^;{}]+)/g)) {
+        const [, name, value] = match;
+        if (carriers.has(name)) continue;
+        const viaCarrier = [...value.matchAll(/var\(\s*(--[a-zA-Z0-9-]+)/g)].some((v) => carriers.has(v[1]));
+        if (darkLime.test(value) || viaCarrier) {
+          carriers.add(name);
+          grew = true;
+        }
+      }
+  }
+  for (const { file, text } of stripped) {
+    for (const match of text.matchAll(/(?:^|[;{\s])(background(?:-color)?|fill)\s*:\s*([^;{}]+)/g)) {
+      const [, property, value] = match;
+      const direct = darkLime.exec(value);
+      const carrier = [...value.matchAll(/var\(\s*(--[a-zA-Z0-9-]+)/g)].find((v) => carriers.has(v[1]));
+      if (!direct && !carrier) continue;
+      const line = text.slice(0, match.index).split("\n").length + (match[0].startsWith("\n") ? 1 : 0);
+      fail(
+        A30,
+        `${rel(file)}:${line}`,
+        `dark-green fill \`${property}: ${value.trim()}\`${carrier ? ` (\`${carrier[1]}\` carries \`lime-700\`…\`950\`)` : ""} — dark green is for text, links and icons, never a fill; hover on \`ink\` is \`text-2\``,
+      );
+    }
+  }
+  for (const { file, text } of boardTexts) {
+    for (const match of text.matchAll(/background(?:-color)?\s*:\s*([^;"'}]+)/gi)) {
+      const direct = darkLime.exec(match[1]);
+      if (!direct) continue;
+      const line = text.slice(0, match.index).split("\n").length;
+      fail(A30, `${rel(file)}:${line}`, `dark-green fill \`${direct[0]}\` in a design board — never a fill`);
+    }
+  }
+
+  // --- TS-WEB-0017-A32: no outer margin through `className` ---------------------------
+  //
+  // DEC-0171: the content stack owns the space between blocks, a block owns
+  // nothing outside its own box. A page that wants space above a component and
+  // writes `<StoryDisclosure className={styles.stories} />` with
+  // `.stories { margin-top: … }` puts two single-class rules on one element —
+  // its own and the component's root rule — and whichever stylesheet the build
+  // ships later wins. In production that was the component's `margin: 0` (issue 108).
+  const VERTICAL_MARGIN =
+    /(?:^|[;{\s])(margin-(?:top|bottom|block(?:-start|-end)?)|margin)\s*:\s*([^;{}]+)/g;
+  const nonZero = (value: string) => value.trim().split(/\s+/).some((part) => !/^(0|0px|auto|0rem)$/.test(part));
+  const verticalOf = (property: string, value: string): string[] => {
+    const parts = value.trim().split(/\s+/);
+    if (property !== "margin") return [value];
+    // margin: a | a b | a b c | a b c d → top and bottom
+    return [parts[0], parts[2] ?? parts[0]];
+  };
+  // The seven hand-ins A32 found when it was written (2026-10-27) were each
+  // inside one component; DEC-0178 §4 resolved all seven (2026-10-28) with a
+  // wrapper the component owns, so the list is empty. It stays as the
+  // mechanism: an entry may only be removed, never added (DEC-0171 §4).
+  const KNOWN_A32 = new Set<string>([]);
+  const seenA32 = new Set<string>();
+  const tsxFiles = sourceFiles.filter((f) => /^(app|src)\//.test(rel(f).split("\\").join("/")) && f.endsWith(".tsx"));
+  for (const file of tsxFiles) {
+    const relative_ = rel(file);
+    if (isTestFile(relative_)) continue;
+    const source = readFileSync(file, "utf8");
+    const imports = new Map<string, string>();
+    for (const match of source.matchAll(/import\s+(\w+)\s+from\s+["'](\.{1,2}\/[^"']+\.module\.css)["']/g))
+      imports.set(match[1], join(dirname(file), match[2]));
+    if (imports.size === 0) continue;
+    for (const tag of source.matchAll(/<([A-Z][\w.]*)\b([^>]*?)className=\{([^}]*)\}/g)) {
+      for (const ref of tag[3].matchAll(/\b(\w+)\.(\w+)\b/g)) {
+        const sheet = imports.get(ref[1]);
+        if (!sheet || !existsSync(sheet)) continue;
+        const css = readFileSync(sheet, "utf8").replace(/\/\*[\s\S]*?\*\//g, (block) => block.replace(/[^\n]/g, " "));
+        const rule = new RegExp(String.raw`(?:^|[}\s,])\.${ref[2]}\s*\{([^}]*)\}`, "g");
+        for (const body of css.matchAll(rule)) {
+          for (const declaration of body[1].matchAll(VERTICAL_MARGIN)) {
+            const [, property, value] = declaration;
+            if (!verticalOf(property, value).some((part) => part && nonZero(part))) continue;
+            const key = `${relative_.split("\\").join("/")} ${tag[1]} ${ref[1]}.${ref[2]}`;
+            if (KNOWN_A32.has(key)) {
+              seenA32.add(key);
+              continue;
+            }
+            const line = source.slice(0, tag.index).split("\n").length;
+            fail(
+              A32,
+              `${relative_}:${line}`,
+              `<${tag[1]} className={${ref[1]}.${ref[2]}}> hands the component an outer margin (\`${property}: ${value.trim()}\` in ${rel(sheet)}) — the space between blocks is the content stack's (\`data-stack\`, DEC-0171)`,
+            );
+          }
+        }
+      }
+    }
+  }
+
+  // --- TS-WEB-0017-A34: the spacing scale per level is set in one file ------------------
+  //
+  // DEC-0178: every level of vertical space has one token, and every value per
+  // breakpoint tier is assigned in `app/styles/components.css`. A second
+  // stylesheet assigning `--block-gap` (a component, a page, a media query in
+  // `base.css`) would be a second owner of the same space.
+  const SPACING_HOME = join("app", "styles", "components.css");
+  const SPACING_TOKEN = /(?:^|[;{\s])(--(?:block-gap|block-gap-bound|section-padding-block|section-padding-block-tight|control-gap))\s*:/g;
+  for (const file of stylesheets) {
+    if (rel(file) === SPACING_HOME) continue;
+    const text = readFileSync(file, "utf8").replace(/\/\*[\s\S]*?\*\//g, (block) => block.replace(/[^\n]/g, " "));
+    for (const match of text.matchAll(SPACING_TOKEN)) {
+      const line = text.slice(0, match.index).split("\n").length;
+      fail(A34, `${rel(file)}:${line}`, `assigns ${match[1]} — the spacing scale per level is set in ${SPACING_HOME} only (DEC-0178)`);
+    }
+  }
+
+  // Only against the real tree: a fixture root carries none of the listed files.
+  if (existsSync(join(root, "src", "components", "section-shell")))
+    for (const key of KNOWN_A32)
+      if (!seenA32.has(key))
+        fail(A32, "scripts/check-brand.ts", `known hand-in \`${key}\` no longer occurs — take it off KNOWN_A32`);
+
+  return { errors, cssFileCount: cssFiles.length, sourceFileCount: sourceFiles.length };
+}
+
+function main() {
+  const { errors, cssFileCount, sourceFileCount } = checkBrand(ROOT);
+  console.log(
+    `brand check: ${cssFileCount} stylesheet(s) · ${sourceFileCount} source file(s) · token file ${TOKEN_FILE}`,
+  );
+  for (const message of errors) console.error(`  ERROR ${message}`);
+  console.log(errors.length ? `${errors.length} error(s)` : "no errors");
+  process.exit(errors.length);
+}
+
+const isMain = process.argv[1] === fileURLToPath(import.meta.url);
+if (isMain) main();

@@ -1,0 +1,194 @@
+---
+artefact: contract
+id: SRC-0018
+status: DRAFT
+date: 2026-09-23
+updated: 2026-10-27
+decisions: [DEC-0066, DEC-0080, DEC-0104, DEC-0175]
+---
+
+# Copy Contract
+
+What the website's machinery owes the copy guide. Written as a binding
+between `concept/website-copy-guide.md` (SRC-0017) and the mechanisms that
+already exist — the Zod schema, `pnpm check:content`, the e2e suite and the
+editorial gate — so that a rule in the guide is either enforced somewhere or
+is recorded as human review.
+
+It is the copy counterpart of the design-system contract (SRC-0013) and reads
+the same way: the guide says what is right, the contract says who catches it
+being wrong.
+
+**The guide it binds is specification, not input** (DEC-0104 §3). SRC-0017 is
+prescriptive — forty-one numbered rules with measures — so a spec that
+contradicts one is a defect in the spec. That is the direction DEC-0080 §3
+already took when it replaced `TS-WEB-0006 D7`, and DEC-0104 §5 re-bases its
+reason: not "a concept document wins over a spec", which is the rule DEC-0104
+inverted, but that the guide is specification-side and this contract makes
+every one of its rules checkable. The guide keeps `status: draft` and keeps its
+place in `concept/`.
+
+## The rule of this contract
+
+**Every rule of SRC-0017 carries exactly one owning mechanism.** A rule with no
+mechanism is not a rule; it is advice, and advice does not survive forty
+content files. Where the owning mechanism is `review`, that is a
+determination, not a gap — some things a linter cannot see — and it is
+written down so nobody later assumes a check exists.
+
+| Mechanism | What it is | Where it runs |
+| --- | --- | --- |
+| `schema` | a `max()` or a `describe()` on a field in `src/domain/content/` | TS-WEB-0007 D5, checked by TS-WEB-0007-A1 |
+| `lint` | a row of `pnpm check:content` — exits non-zero, names file, field and term | TS-WEB-0007 D12, checked by TS-WEB-0007-A13 |
+| `e2e` | an assertion against rendered copy at a stated viewport | the page specs' own acceptance criteria |
+| `review` | the editorial decision point; a person, at the gate | TS-WEB-0007 D11, TS-WEB-0006-A16 |
+
+A `lint` row never warns (TS-WEB-0007 D12). A `schema` budget is the number the
+generator writes against, not a limit discovered afterwards.
+
+## The rules
+
+`CG-###` ids are stable and citable: a spec row, an acceptance criterion or a
+content `describe()` names the rule rather than restating it.
+
+### Register
+
+| Rule | Mechanism | The check |
+| --- | --- | --- |
+| CG-001 `du` to a person, `ihr` to an organisation | `schema` · `review` | Each field's `describe()` names the page's default address (SRC-0017 §1); which number a given block takes is judgement. |
+| CG-002 one address per page, a block departs whole | `lint` · `review` | Lint: one field containing both a `du`/`dein`/`dich` form and an `ihr`/`euer`/`euch` form fails. Whether a whole block may depart is review. |
+| CG-003 no `Sie` | `lint` | A capitalised `Sie`, `Ihnen`, `Ihre*` mid-sentence, or an imperative `<Verb> Sie`, fails. This is the register check DEC-0066 asks TS-WEB-0007 D12 for. **One exemption, as a path allowlist of exactly one route**: `/rechtliches` and its localised sibling, whole — decision 14, 2026-09-23 (TS-WEB-0029 D6a, DEC-0012, DEC-0027). It is a route list in the lint row, never a per-field opt-out and never a flag in a content file, so the exemption is auditable in one place. Nothing inherits it: a legal sentence quoted elsewhere, a footer link, a consent line and an error message are all `du`. |
+
+### Structure
+
+| Rule | Mechanism | The check |
+| --- | --- | --- |
+| CG-004 sections are self-contained | `lint` · `review` | Lint: the back-reference phrases of the avoid list (`Beides gibt es`, `Dieselben Termine`, `Der Name der Firma`). The general rule is review. |
+| CG-005 a section title is a positive statement | `lint` · `e2e` · `review` | Lint: a `?` in a section-title field fails. E2e: no `h2` of a rendered page ends in `?`. "States what works" is review. |
+| CG-006 a question only to the reader, answered next | `review` | Reader-directedness and the answering sentence are meaning, not pattern. |
+| CG-007 one idea per section | `schema` · `review` | Schema: a scene block declares exactly one `mechanism` (TS-WEB-0006 D7, A8). A second argument in one section is review. |
+| CG-008 every section hands off | `review` | — |
+| CG-045 the context band is the only hand-off to another job | `e2e` · `review` | E2e: `TS-WEB-0006-A20` — no block in `main` outside the band, without a heading of its own, whose links all point at a job the band offers. Whether a CTA is a step of the page's own argument is review (DEC-0174 §3). |
+
+### Concreteness
+
+| Rule | Mechanism | The check |
+| --- | --- | --- |
+| CG-009 real people with roles, never "die Leute" | `lint` | Avoid-list row. |
+| CG-010 the benefit, not the concept | `review` | — |
+| CG-011 one example per claim | `schema` · `review` | Schema: the claim-carrying types declare an `example` field [PROPOSED — the field does not exist yet]. Whether the example is picturable is review. |
+| CG-012 address whoever acts | `review` | No page-scoped carve-out exists or is needed. `TS-WEB-0021 D9`'s "never direct" on `/dein-ort/starten` and the `DEC-0071 §4` exception are **retired** (decision 15, 2026-09-23); direct address holds everywhere, so this rule and CG-008 need no exception list. A spec row still citing "never direct" cites a retired determination. |
+
+### Economy
+
+| Rule | Mechanism | The check |
+| --- | --- | --- |
+| CG-013 short words | `review` | — |
+| CG-014 short sentences | `schema` · `review` | The field's `max()` does the structural work; splitting versus subordinating is review. |
+| CG-015 no word doubling | `lint` | The same stem (first five characters, case-insensitive, words of six characters or more) twice in one field fails. |
+| CG-016 no padding | `review` | — |
+
+### Headings
+
+| Rule | Mechanism | The check |
+| --- | --- | --- |
+| CG-017 casual, never flat | `lint` · `review` | Lint: the four rejected headings are avoid-list rows. Flatness in a new heading is review. The proof section's one head ("Was andere über uns sagen" over "Stimmen aus der Praxis", DEC-0209) is `dictionary.ts` `proofSection`, asserted by `app/[lang]/_proof.test.ts` and the page specs. |
+| CG-018 no abstraction heading | `lint` · `review` | Same shape — the rejected headings are avoid-list rows, flatness is review. CG-018's *use* examples are **question forms and are legal only as kickers**; the CG-005 lint (a `?` in a section-title field fails) is unchanged by them and is what keeps the two apart. A generator that reads CG-018 as permission to title a section *"Was hilft euch das?"* fails that row, which is the intended outcome. |
+| CG-019 kicker vocabulary per section role | `review` · `e2e` | The role table has one deliberately empty row, provenance (SRC-0017 §5; the proof row was filled by the owner, DEC-0209); a lint over it would enforce a gap. The section-head cap DEC-0206 added — at most three text levels, kicker optional, no word stem shared between kicker, title and intro — is read off the rendered page by `TS-WEB-0006-A21` (`e2e/section-heads.spec.ts`), as a warning until the page PRs of issue #163 land; a repeated *statement* in other words stays `review`. |
+
+### Block budgets
+
+All thirteen were `schema` — one `max()` per field, the number from SRC-0017 §6. CG-027 is no longer: its budget is withdrawn (DEC-0154, DEC-0209 §5).
+**Five of them carry something a `max()` cannot express**, and each has its
+own row below; the other eight share the first row and are listed there once.
+(This table used to announce "three exceptions" over four rows and to name
+CG-027 both in the shared row and in its own. Both are fixed: the count is
+five and every rule appears exactly once.)
+
+| Rule | Mechanism | The check |
+| --- | --- | --- |
+| CG-020 – CG-024, CG-029, CG-031, CG-032 | `schema` | `max()` per field; over budget fails the parse (TS-WEB-0007-A1) and the `check:content` run (TS-WEB-0007 D12 row 2). Eight rules. |
+| CG-025 explain-module step line | `schema` · `e2e` | `max()` per line, **plus** an e2e assertion that neither line wraps at 390 px and that the module with its three lines fits one viewport height (SRC-0014 "Explain module"). The e2e half is now written: **`TS-WEB-0022-A18`** is the 390 px single-line assertion and **`TS-WEB-0022-A19`** the one-viewport-below-`lg` assertion. Until 2026-09-25 this row delegated to a page criterion that did not exist, while `TS-WEB-0022 D4` left the step count and the render form `[FREE]` (audit A6). From the tablet breakpoint the three steps stand side by side and the one-viewport constraint does not apply — A19 asserts the side-by-side row instead. |
+| CG-026 CTA label | `schema` · `e2e` | `max()`, plus an e2e assertion that no button label wraps at 390 px. |
+| CG-027 proof card states the win | `review` | DEC-0154 withdrew the 70-character budget and no new number exists (`Q-0086`), so `check:content` measures nothing here any more (DEC-0209 §5). "A whole sentence with a verb" and "a persuasion, not a report" are review. |
+| CG-028 quote card | `schema` · `lint` · `review` **[PROPOSED — none of these fields exists yet]** | Schema: `quote`, `quote_author`, role, organisation and `source_url` all required on a quote card. Lint: a quote card whose `source_url` does not resolve fails. Verbatimness is review. **No schema carries `quote`, `quote_author`, `quote_date` or `source_url` today** — on the website's content types or on the hub's proof records — so both mechanisms are proposed, not live. The fields are a hub change request (proof schema) plus a website content type; until they land, a quote card cannot be authored at all, which is the honest state and better than a lint that silently passes over absent fields. |
+| CG-030 context-band entry | `schema` **[PROPOSED — the field does not exist yet]** | `max(80)` on a `blurb` field that `TS-WEB-0006 D5`'s entry and `TS-WEB-0007 D5`'s hierarchy do not have. SRC-0017 §6 names what must be added: a required per-entry `blurb`, sourced from the job registry so the three non-focus entries cannot drift from the fourth page's own description. Until then the budget governs nothing. |
+
+### Truth
+
+| Rule | Mechanism | The check |
+| --- | --- | --- |
+| CG-033 nothing literally untrue | `review` | The single most expensive rule to get wrong, and the only mechanism for it is a person who knows the facts. |
+| CG-034 no volatile numbers | `lint` | A numeral of three digits or more, or a bare year, in a claim field of `hero`, `value-story`, `trust-block` or `proof-card` fails unless the field is read from an offering or a live module (FUN-WEB-0041; TS-WEB-0008-A10 asserts the rendered side). |
+| CG-035 no internal meta lines | `lint` | Avoid-list row. |
+| CG-036 "im Amt" is never the only addressee | `lint` | A field containing `im Amt` must also name one of `Verein`, `Stiftung`, `Kulturgesellschaft`, `Volkshochschule`, `Akteur` — otherwise it fails (BUS-WEB-0012). |
+| CG-037 no promise without a process | `lint` | `pnpm check:terms` already is this row for the two-working-day wording (TS-WEB-0026-A8, TS-WEB-0006 D11); a further promise extends the same list. |
+| CG-046 a claim appears once per page | `review` | No lint can tell a fact from its paraphrase. The editorial gate reads each page for a fact said twice — in a text and again as a proof line, a pull quote or a teaser (DEC-0175 §6, owner's review 2026-10-27). `/ueber-uns` chapter 02 carries the one structural assertion: no inline proof element beside its text (TS-WEB-0027-A3). |
+| CG-047 a source names outlet, date and link, or is omitted | `review` | Review for source lines in general; for quotes the link half is CG-028's. A source line made of an outlet and years ("Nordkurier, 2019 und 2022") is removed, not completed by guessing the article (DEC-0175 §6). |
+| CG-048 the solution first, then the problem, in every pair | `review` | Whether a problem is named before the solution is a reading, not a measurement. The editorial gate reads each comparison section for a problem named before the solution or apart from its pair (DEC-0203 §3, DEC-0213). |
+
+### Naming
+
+| Rule | Mechanism | The check |
+| --- | --- | --- |
+| CG-038 the product name appears exactly once | `lint` | `Portalize` occurs in exactly one content field across all locales, and that field belongs to the `/dein-kalender` tier slot. The existing navigation-label row (TS-WEB-0007 D12 row 11) stays as it is. |
+| CG-039 "das Produkt" is not a name | `lint` | Avoid-list row. |
+
+### Words
+
+| Rule | Mechanism | The check |
+| --- | --- | --- |
+| CG-040 the avoid list fails the build | `lint` | The list is `specs/glossary/glossary.md`'s **avoid** column plus SRC-0017 §9; a hit reports file, field and term. This is TS-WEB-0007 D12 row 11 widened from one term to a register. |
+| CG-041 EN mirrors DE | `lint` | TS-WEB-0007 D12 rows 7 and 8 already carry it — locale completeness and harmonisation (TS-WEB-0007-A9). Nothing new is needed; it is listed so the guide's §9 has an owner. |
+| CG-044 one job, one module, one heading | `e2e` | `e2e/module-rules.spec.ts` on every route in both languages: the homescreen instructions render at most once, no proof quote stands after the last live row of a section, and no section that ends on a quote is followed by one with a quote (TS-WEB-0006-A19, TS-WEB-0019-A23, TS-WEB-0020-A23); `/dein-ort`'s one homescreen module is asserted by TS-WEB-0020-A26 (DEC-0170). Which of two headings stays is review. |
+
+## Counts
+
+43 rules, counted from the tables above rather than estimated: **17** carry a
+`lint` row, **17** a `schema` obligation, **5** an `e2e` assertion, and **20**
+name `review` as an owning or co-owning mechanism. Most rules carry two.
+CG-046 and CG-047 (DEC-0175, 2026-10-27) and CG-048 (DEC-0213, 2026-11-12)
+come on top, all review-only, and are not in the counts of this paragraph.
+
+**Eight are review-only** — no machine sees them at all: CG-006, CG-008,
+CG-010, CG-012, CG-013, CG-016, CG-019, CG-033. Three more are half-manual,
+where a mechanism holds the measurable part and a person holds the judgement:
+CG-001 (which number a block takes), CG-011 (whether the example is
+picturable), CG-027 (whether the card states a win).
+
+**Three are `[PROPOSED]`** — the mechanism is named and the field it would
+run over does not exist yet: CG-011 (`example`), CG-028 (`quote`,
+`quote_author`, `quote_date`, `source_url`) and CG-030 (`blurb`). They are
+counted above because the obligation is real and citable; they are marked
+here because a rule whose mechanism cannot run yet must not be mistaken for
+one that passes. The counts do not change when the fields land — only the
+markers go.
+
+## The interface to TS-WEB-0006 and TS-WEB-0007
+
+**TS-WEB-0006 — page composition.** Owns the rules that are true of a page's
+*structure*: D7 (scenes — statement openers, one mechanism, self-contained
+blocks, the avoid list) and A8 (the static side of it) and A16 (the reviewed
+side). The block-order, conversion and pricing rules of TS-WEB-0006 are untouched
+by this contract.
+
+**TS-WEB-0007 — content pipeline.** Owns the rules that are true of a *file*:
+
+| What TS-WEB-0007 owes | Where |
+| --- | --- |
+| a `describe()` per field naming its governing `CG-###` | D5 |
+| a `max()` per field carrying its SRC-0017 §6 budget | D5 |
+| the glossary's use and avoid columns as a production input | D9 |
+| the lint rows of this contract as `check:content` rows | D12 |
+| the human rules of this contract at the editorial gate | D11 |
+
+**What this contract does not own.** Which copy is written, and when — that is
+the content phase (CON-WEB-0087). Which claims may be made at all — SRC-0001 and
+the offering records. How copy is laid out — SRC-0014.
+
+## Consequence for the specs
+
+A spec row cites a `CG-###` instead of restating a wording rule, the same way
+it cites a `DEC-####` instead of restating a decision. When a rule changes, the
+guide changes and every citing row still resolves — which is the whole reason
+the ids exist.

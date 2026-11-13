@@ -1,0 +1,20 @@
+.skip {
+  background: var(--color-neutral-paper);
+  border-radius: var(--radius-pill);
+  color: var(--color-neutral-ink);
+  font-weight: 700;
+  left: var(--space-2);
+  /* Out of sight, in the tab order, and taking no layout space. */
+  position: absolute;
+  top: calc(var(--space-2) * -10);
+  z-index: 20;
+  align-items: center;
+  display: inline-flex;
+  min-height: var(--height-control);
+  padding: 0 var(--space-6);
+  text-decoration: none;
+}
+
+.skip:focus-visible {
+  top: var(--space-2);
+}

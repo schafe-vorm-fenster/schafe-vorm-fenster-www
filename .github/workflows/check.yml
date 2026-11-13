@@ -1,0 +1,123 @@
+name: Check
+
+# M4 — minimal CI (DEC-0031 stage 2, prototype subset; TS-WEB-0015).
+#
+# This is not the full D4 job graph of specs/tactical/TS-WEB-0015--delivery-pipeline.tactical.md
+# (no Quality/knip/jscpd/security job, no Preview-Deployment job, no Budgets
+# job, no branch-protection wiring) — the work package that shipped this file
+# (M4) explicitly scopes it to: install · `pnpm check` · `pnpm build` ·
+# `pnpm e2e` against the local production build. It does not gate merges yet
+# (TS-WEB-0015-A3/A4/A5/A10/A12 stay "not yet" — see README.md's CI section for
+# the per-AC status). The full graph, auto-merge and rolling production
+# promotion are stage-2 follow-up work, not part of this run.
+#
+# The `@schafe-vorm-fenster` scope on npm.pkg.github.com is private and
+# published from `go-to-market-os`. The built-in `secrets.GITHUB_TOKEN` gets
+# 403 there (the packages grant this repo no Actions access), so installs read
+# the repo secret `PACKAGES_READ_TOKEN` — a `read:packages`-only token, the
+# same kind the Vercel build uses — and `LEAFCUTTER_REGISTRY_TOKEN` for the
+# STRICT registry (DEC-0112). Without both secrets, install fails.
+
+on:
+  push:
+    branches: [next-2026]
+  # `main` too (issue #206, DEC-0222): a PR into the production branch runs
+  # the same gate, so a merge to `main` can never drop what `next-2026` shows.
+  pull_request:
+    branches: [next-2026, main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  packages: read
+
+env:
+  # A read:packages-only token for the private `@schafe-vorm-fenster` scope.
+  # The built-in GITHUB_TOKEN gets 403 from npm.pkg.github.com: the packages
+  # are published from `go-to-market-os` and grant this repo no Actions access.
+  # The fallback keeps a fork or a fresh clone failing with the same 403 rather
+  # than with an empty token.
+  GITHUB_TOKEN: ${{ secrets.PACKAGES_READ_TOKEN || secrets.GITHUB_TOKEN }}
+  # The `@leafcutter-strict` scope is a private registry (DEC-0112). Without
+  # this, pnpm discards the whole `.npmrc` and resolves every scope against
+  # npmjs.org, so the failure is a 404 on a package that was never public.
+  LEAFCUTTER_REGISTRY_TOKEN: ${{ secrets.LEAFCUTTER_REGISTRY_TOKEN }}
+
+jobs:
+  check:
+    name: Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: ".nvmrc"
+          cache: pnpm
+
+      - name: Registry credentials (user-level config; pnpm ignores ${VAR} in the committed .npmrc, DEC-0221)
+        run: sh scripts/registry-auth.sh
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Issue #206, DEC-0222: production renders what preview renders. The
+      # content lifecycle (TS-WEB-0007 D11) drops every page and slot whose
+      # status is not `approved`/`imported` from a production build; this step
+      # judges the tree for production and fails on any such page or slot.
+      # `pnpm check` runs the same command again — this step is its own line in
+      # the PR's check list, so the reason for a red run is visible at once.
+      - name: Production renders what preview renders (check:content --target production, DEC-0222)
+        run: pnpm check:content:production
+
+      - name: pnpm check (the single gate — frontmatter · content · specs · stack · brand · typecheck · lint · tests)
+        run: pnpm check
+
+      - name: Build
+        run: pnpm build
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v6
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-chromium-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - name: Install Playwright Chromium (with OS deps)
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Install Playwright OS deps only (browser cache hit)
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: pnpm exec playwright install-deps chromium
+
+      # The CI job is the instrument for the `tool`-level criteria this suite
+      # measures with a real browser rather than with an external tool of its
+      # own: TS-WEB-0003-A7 (CLS < 0.1 with the live modules streaming in) is
+      # measured by the `layout-shift` PerformanceObserver in
+      # `e2e/layout-stability.spec.ts`, per route, against the production build.
+      # DEC-0180: per push and PR only the technical selection (`pnpm
+      # e2e:technical` — smoke, CSP + hydration, routes, external links, layout
+      # stability, axe, third-party requests). The full suite (page journeys and
+      # the design/rule guards) runs on demand: `.github/workflows/full-e2e.yml`.
+      - name: E2E — technical selection against the local production build (TS-WEB-0003-A7, DEC-0180)
+        run: pnpm e2e:technical
+        env:
+          CI: true
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+          if-no-files-found: ignore

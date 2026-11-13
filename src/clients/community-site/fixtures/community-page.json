@@ -1,0 +1,170 @@
+{
+  "props": {
+    "pageProps": {
+      "community": {
+        "_id": "geoname.2838887",
+        "name": "Schlatkow",
+        "slug": "schlatkow",
+        "geoLocation": {
+          "identifiers": {
+            "geonamesId": 2838887,
+            "googlePlaceId": null,
+            "wikidataId": "Q15923993"
+          },
+          "point": {
+            "lat": 53.92153,
+            "lng": 13.58116
+          }
+        },
+        "municipality": {
+          "_id": "geoname.6548320",
+          "name": "Schmatzin",
+          "slug": "",
+          "geoLocation": {
+            "identifiers": {
+              "geonamesId": 6548320,
+              "googlePlaceId": null
+            }
+          }
+        },
+        "wikimediaCommonsImages": [
+          "https://assets.api.schafe-vorm-fenster.de/api/image?wikimediaCommonsId=Melkerschule%20Schlatkow.jpg"
+        ]
+      },
+      "events": [
+        {
+          "_id": "ef81a89a-c8c7-51cb-b889-6f28c2ccf3b3",
+          "summary": "Altpapier (EGVG mbH)",
+          "location": "Schlatkow",
+          "placeName": "Schlatkow",
+          "start": "2026-09-18T03:00:00.000Z",
+          "end": "2026-09-18T04:00:00.000Z",
+          "allday": false,
+          "categories": [
+            "everyday-supply"
+          ],
+          "community": {
+            "_id": "geoname.2838887",
+            "name": "Schlatkow",
+            "slug": "",
+            "municipality": {
+              "_id": "geoname.6548320",
+              "name": "Schmatzin"
+            }
+          },
+          "scope": "community"
+        },
+        {
+          "_id": "841aa03d-0ade-5d97-a6d0-9e82ea1d6a4c",
+          "summary": "Gelber Sack",
+          "location": "Schlatkow",
+          "placeName": "Schlatkow",
+          "start": "2026-09-21T03:00:00.000Z",
+          "end": "2026-09-21T04:00:00.000Z",
+          "allday": false,
+          "categories": [
+            "everyday-supply"
+          ],
+          "community": {
+            "_id": "geoname.2838887",
+            "name": "Schlatkow",
+            "slug": "",
+            "municipality": {
+              "_id": "geoname.6548320",
+              "name": "Schmatzin"
+            }
+          },
+          "scope": "community"
+        },
+        {
+          "_id": "4d47eb53-2169-55b4-844a-23fec27a8ff9",
+          "summary": "Volleyball",
+          "location": "Sporthalle",
+          "placeName": "Sporthalle",
+          "start": "2026-09-21T17:00:00.000Z",
+          "end": "2026-09-21T19:00:00.000Z",
+          "allday": false,
+          "categories": [
+            "community-life"
+          ],
+          "community": {
+            "_id": "geoname.2838887",
+            "name": "Schlatkow",
+            "slug": "",
+            "municipality": {
+              "_id": "geoname.6548320",
+              "name": "Schmatzin"
+            }
+          },
+          "scope": "nearby"
+        },
+        {
+          "_id": "e525a006-5710-5320-8326-35c3db98a7c1",
+          "summary": "vhs Kurs: Blätter und Blüten in Aquarell: Mal-Workshop im Botanischen Garten",
+          "location": "Anklam",
+          "placeName": "Anklam",
+          "start": "2026-09-19T11:00:00.000Z",
+          "end": "2026-09-19T15:00:00.000Z",
+          "allday": false,
+          "categories": [
+            "education-health"
+          ],
+          "community": {
+            "_id": "geoname.2956018",
+            "name": "Anklam",
+            "slug": "",
+            "municipality": {
+              "_id": "geoname.6550720",
+              "name": "Anklam"
+            }
+          },
+          "scope": "region"
+        },
+        {
+          "_id": "88de251a-fc18-5000-97a2-601401413a9e",
+          "summary": "Landtagswahl MV",
+          "location": "Feuerwehr Wolgast -",
+          "placeName": "Feuerwehr Wolgast -",
+          "start": "2026-09-20T06:00:00.000Z",
+          "end": "2026-09-20T16:00:00.000Z",
+          "allday": false,
+          "categories": [
+            "community-life"
+          ],
+          "community": {
+            "_id": "geoname.2942095",
+            "name": "Buddenhagen",
+            "slug": "",
+            "municipality": {
+              "_id": "geoname.6550723",
+              "name": "Wolgast"
+            }
+          },
+          "scope": "region"
+        },
+        {
+          "_id": "886b24c2-fec4-5287-90b0-087bae2d5163",
+          "summary": "Klingende Kirche",
+          "location": "St. Nikolai zu Bauer - Ev. Kirchengemeinde Lassan St. Johannis",
+          "placeName": "St. Nikolai zu Bauer - Ev. Kirchengemeinde Lassan St. Johannis",
+          "start": "2026-09-21T07:30:00.000Z",
+          "end": "2026-09-21T08:30:00.000Z",
+          "allday": false,
+          "categories": [
+            "culture-tourism"
+          ],
+          "community": {
+            "_id": "geoname.2952167",
+            "name": "Bauer",
+            "slug": "",
+            "municipality": {
+              "_id": "geoname.6548331",
+              "name": "Zemitz"
+            }
+          },
+          "scope": "region"
+        }
+      ]
+    }
+  }
+}

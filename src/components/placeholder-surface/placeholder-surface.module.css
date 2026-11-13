@@ -1,0 +1,20 @@
+/*
+ * A flat brand-colour ground, not a hatch (Jan, 2026-09-18). The surface a
+ * photograph will occupy reads as a designed panel until the photograph
+ * lands — never as a marked gap.
+ */
+.surface {
+  aspect-ratio: var(--placeholder-ratio, var(--ratio-feature));
+  background: var(--color-neutral-surface2);
+  display: block;
+  max-width: 100%;
+  width: 100%;
+}
+
+/* The inline form: a thin rule of the same ground, where a row has no box. */
+.row {
+  background: var(--color-neutral-surface2);
+  display: block;
+  height: var(--space-4);
+  width: 100%;
+}

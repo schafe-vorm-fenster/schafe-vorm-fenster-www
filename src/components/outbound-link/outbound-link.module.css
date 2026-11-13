@@ -1,0 +1,120 @@
+.link {
+  align-items: center;
+  display: inline-flex;
+  gap: var(--space-2);
+}
+
+.text {
+  min-width: 0;
+}
+
+.glyph {
+  flex: none;
+}
+
+.inline {
+  color: var(--ground-link);
+  font-weight: 700;
+  text-underline-offset: 0.15em;
+}
+
+.inline:hover {
+  text-decoration-thickness: 2px;
+}
+
+/*
+ * `.link.secondary` (both classes already sit on the same anchor — see
+ * outbound-link.tsx) rather than `.secondary` alone: the pill paints its own
+ * `paper` background and needs `ink` text on it regardless of the section it
+ * stands in. `section-shell`'s `.ink a, .violet500 a` rule (one class + one
+ * type selector, specificity 0,1,1) recolours *any* plain anchor to
+ * `lime-400` for legibility on a dark ground — correct for `.inline`/
+ * `.quiet`, which paint no surface of their own and rely on that ambient
+ * rule, but wrong here: it beat this rule's own single-class specificity and
+ * put lime-400 text on this pill's near-white background (1.47:1, F-2-28).
+ * Two classes (0,2,0) outrank the ambient rule regardless of CSS import
+ * order, without touching `section-shell` and the components that still
+ * depend on it.
+ */
+.link.secondary {
+  /* The ground's secondary pair, as `button` reads it (DEC-0160). */
+  background: var(--ground-secondary-fill);
+  border: 2px solid var(--ground-secondary-border);
+  border-radius: var(--radius-pill);
+  color: var(--ground-secondary-text);
+  font-weight: 700;
+  min-height: var(--height-control);
+  padding: 0 var(--space-6);
+  text-decoration: none;
+}
+
+.link.secondary:hover {
+  background: var(--ground-secondary-fill-hover);
+  color: var(--ground-secondary-text-hover);
+}
+
+.quiet {
+  color: var(--ground-link);
+  font-weight: 700;
+  min-height: var(--height-control);
+  padding: 0 var(--space-2);
+  text-decoration: none;
+}
+
+.quiet:hover {
+  color: var(--ground-link-hover);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+
+/*
+ * The marking of TS-WEB-0016 D16, G-5: out of the control, after it.
+ *
+ * Out of the pill (it made `/deine-region`'s secondary three lines tall and
+ * full width, directly above the page's own primary) **and** out of the
+ * accessible name: the words used to stay inside the `<a>` behind a
+ * `clip-path`, which is exactly what TS-WEB-0016-A23 forbids. The association
+ * is `aria-describedby` now, so a screen-reader user still hears the
+ * recipient with the link, once.
+ */
+.control {
+  align-items: flex-start;
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/*
+ * The same stacked form for an `inline` control that D16's Position row reaches
+ * — the lead fallback's `/start` link (`markingOwnLine`). The class is its own
+ * name rather than `control`, because the link is not a control there: what the
+ * two share is only that the recipient stands on its own line.
+ */
+.stacked {
+  composes: control;
+}
+
+/* The `inline` variant everywhere D16 does not reach — a link inside a
+   sentence: the marking follows it in the line and wraps under it where the
+   line runs out. */
+.marked {
+  align-items: baseline;
+  column-gap: var(--space-2);
+  display: inline-flex;
+  flex-wrap: wrap;
+}
+
+.meta {
+  color: var(--color-neutral-muted);
+  font-size: var(--type-meta-size);
+  line-height: var(--leading-normal);
+}
+
+/* On a dark or photo ground `muted` is unreadable; the ground's own
+   secondary text colour is what the design system pairs there. */
+.ink .meta,
+[data-surface="ink"] .meta,
+[data-surface="violet-500"] .meta,
+[data-hero="true"] .meta {
+  color: var(--color-lime-300);
+}

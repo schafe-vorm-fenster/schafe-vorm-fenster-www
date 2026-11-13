@@ -1,0 +1,47 @@
+---
+artefact: requirement
+id: BUS-WEB-0015
+class: BUS
+form: B1
+domain: WEB
+status: DRAFT
+version: 0.1.0
+area: pages
+needs: [NEED-WEB-0015]
+source:
+  source_id: SRC-0003
+  loc: "UNKNOWN"
+  excerpt: "UNKNOWN"
+evidence_sufficiency: S3
+fit_criterion:
+  scale: "acceptance criteria of BUS-WEB-0015 that pass"
+  operator: "="
+  value: 5
+  unit: criteria
+  meter: "TS-WEB-0006-A12, TS-WEB-0024-A10, TS-WEB-0024-A11, TS-WEB-0024-A18, TS-WEB-0024-A8 — 5 of 5 referenced by a test"
+ai_provenance:
+  prompt_id: UNKNOWN
+  prompt_version: UNKNOWN
+  model: "Claude Opus 5 (1M context)"
+  generated_at: "2026-09-24T17:40:00+02:00"
+---
+
+# BUS-WEB-0015
+
+For a village-calendar licence, the billable unit is the organisation and not the place, the municipality or the region, and the number of places is unlimited.
+
+## Source
+
+SRC-0003, DEC-0060, DEC-0052
+
+Unlocatable: SRC-0003 names the 480 €/year tier and the region tier but never states the billable unit (organisation vs place/municipality/region) nor an unlimited number of places; no occurrence of "organisation"/"unlimited" in the file.
+
+Finding: Claim originates in DEC-0060/DEC-0052, not in SRC-0003.
+
+## Rationale
+
+DEC-0060. It is true of the licence whoever sells it, quotes it or invoices it; no system applies it. Burying it inside a display requirement hid it from the order flow, the invoice and every quotation.
+
+## Notes
+
+Applied on the website by FUN-WEB-0202.

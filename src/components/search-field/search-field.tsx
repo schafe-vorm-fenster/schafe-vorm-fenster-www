@@ -1,0 +1,168 @@
+import { Icon } from "../icon/icon";
+import { linkHref, type LinkOptions } from "../route-link/href";
+
+import { SearchForm } from "./search-form";
+
+import { dictionary } from "@/src/lib/i18n/dictionary";
+import { MAX_PLACE_LENGTH } from "@/src/lib/pages/place-parameter";
+
+import type { RouteId } from "@/src/lib/routes/routes";
+import type { ReactNode } from "react";
+
+import styles from "./search-field.module.css";
+
+export interface SearchFieldProps extends Omit<LinkOptions, "hash"> {
+  /** Where the search goes — a route id, never a literal path. */
+  readonly to: RouteId;
+  /** The visible-to-assistive-tech label. Required: a placeholder is no label. */
+  readonly label: string;
+  readonly placeholder?: string;
+  readonly submitLabel?: string;
+  /**
+   * Adds the `arrow-right` to the submit, where this control *is* a flow's
+   * step forward rather than a search on a page (polish brief, page 5: "an
+   * unmistakable Weiter per step"). Off everywhere the field searches.
+   */
+  readonly submitOnward?: boolean;
+  readonly name?: string;
+  readonly defaultValue?: string;
+  readonly id?: string;
+  /**
+   * The conversion marker on the submit control. Where the focus job is
+   * "know what is on", the primary conversion **is** this submit and not a
+   * link to another page (TS-WEB-0006 D4, TS-WEB-0019-A2) — so the marker has to be
+   * reachable from the page that owns it. Absent by default: only one
+   * element per page carries it (TS-WEB-0006 D3).
+   */
+  readonly submitDataCta?: string;
+  /**
+   * Native validation, where an empty submit is not a page state (F-3-14).
+   *
+   * Off by default, and deliberately: on `/` and `/dein-ort` an empty search
+   * is TS-WEB-0020-A9's own row — the value is dropped and stage 0 renders at 200,
+   * which is a designed answer. Step 1 of the registration flow has no such
+   * state, so there the field asks the browser to insist.
+   */
+  readonly required?: boolean;
+  /**
+   * The submit control, where the page needs to own it — DEC-0078.
+   *
+   * `/` is the one page whose *primary conversion marker* moves with a
+   * request value: in S1 it is this submit, in S2/S3 it is the hero's own
+   * CTA (TS-WEB-0019 D2). A `data-cta` attribute cannot be streamed, so the page
+   * puts a `<Suspense>` boundary around the button itself and keeps the
+   * `<form>`, the label and the **input** in the prerendered shell, where
+   * nothing can replace them. Everywhere else this stays unset and the
+   * default submit below renders.
+   */
+  readonly submit?: ReactNode;
+  readonly className?: string;
+}
+
+export interface SearchSubmitProps {
+  readonly label: string;
+  /** TS-WEB-0006 D3's one-per-page marker, where this submit is the page's primary. */
+  readonly dataCta?: string;
+  /** The `arrow-right` of a flow step (brief, page 5). */
+  readonly onward?: boolean;
+}
+
+/**
+ * The 44 px submit pill nested in the field — its own component so a page
+ * that streams the `data-cta` marker (DEC-0078) renders the identical button
+ * in both branches of its boundary.
+ */
+export function SearchSubmit({ label, dataCta, onward = false }: SearchSubmitProps) {
+  return (
+    <button className={styles.submit} data-cta={dataCta} type="submit">
+      {label}
+      {onward ? <Icon name="arrow-right" size={18} /> : null}
+    </button>
+  );
+}
+
+/**
+ * 2 `search-field` [FIXED] — SRC-0014 §Search field.
+ *
+ * Structure: one 56 px `paper` pill holding the `map-pin`, the input with its
+ * placeholder in `muted`, and the submit button as a 44 px pill nested inside
+ * with a 6 px inset. A plain GET form: it works with no JavaScript at all.
+ * States: the control itself has none — it is never disabled, never spinning.
+ * The module around it (`place-search`, §2.4) owns the result states.
+ * Inherits: radius 999 on both pills; `paper` on a photo and on a colour
+ * surface alike.
+ * Space: 56 px reserved everywhere it stands, including the 404 page.
+ * A11y: a real `<label>` bound by `htmlFor`; the icon is decorative;
+ * `:focus-within` lifts the whole pill so the compound control shows focus.
+ * Bounds: the input carries the server's own `MAX_PLACE_LENGTH`, so the
+ * client and `place-parameter.ts` agree on what a place value may be.
+ */
+export function SearchField({
+  to,
+  locale = "de",
+  query,
+  label,
+  placeholder,
+  submitLabel,
+  submitOnward = false,
+  name = "ort",
+  defaultValue,
+  id = "ort-suche",
+  submitDataCta,
+  required = false,
+  submit,
+  className,
+}: SearchFieldProps) {
+  // F-2-33: the two defaults were German literals, so the submit control of
+  // the register flow's step 1 read "Suchen" on `/en/take-part/register` —
+  // the first control of an English flow, in German.
+  const words = dictionary(locale).search;
+  const resolvedPlaceholder = placeholder ?? words.placeholder;
+  const resolvedSubmitLabel = submitLabel ?? words.submit;
+
+  return (
+    // F-3-12: the `<form>` is a client component now — the markup and the
+    // GET are unchanged, and it refuses a *second* submit of the same
+    // document, which is how an impatient double click arrived at
+    // `/dein-ort?ort=` with the typed value gone.
+    <SearchForm
+      action={linkHref(to, { locale })}
+      className={[styles.form, className].filter(Boolean).join(" ")}
+    >
+      <label className={styles.label} htmlFor={id}>
+        {label}
+      </label>
+      {Object.entries(query ?? {}).map(([key, value]) =>
+        value === undefined ? null : (
+          <input key={key} name={key} type="hidden" value={String(value)} />
+        ),
+      )}
+      <div className={styles.field}>
+        <Icon className={styles.pin} name="map-pin" size={24} />
+        <input
+          autoComplete="off"
+          className={styles.input}
+          defaultValue={defaultValue}
+          enterKeyHint="search"
+          id={id}
+          // The same bound the server applies (`place-parameter.ts` D4), so a
+          // value the page would drop cannot be typed in the first place —
+          // an answer, not a silent rejection (F-2-38).
+          maxLength={MAX_PLACE_LENGTH}
+          name={name}
+          placeholder={resolvedPlaceholder}
+          required={required}
+          spellCheck={false}
+          type="search"
+        />
+        {submit ?? (
+          <SearchSubmit
+            dataCta={submitDataCta}
+            label={resolvedSubmitLabel}
+            onward={submitOnward}
+          />
+        )}
+      </div>
+    </SearchForm>
+  );
+}

@@ -1,0 +1,156 @@
+import { describe, expect, it } from "vitest";
+
+import { checkCsp, checkPolicyDirectives, checkPreviewUnsafeInlineFence } from "./check-csp";
+
+/**
+ * TS-WEB-0014-A1 / D7 (F-1-2). Negative tests with fixture policies: each one
+ * hands `checkPolicyDirectives` a directive record shaped like a real
+ * mistake — a wildcard, a bare scheme, a foreign host, a production
+ * `'unsafe-inline'` — and asserts the guard actually flags it, not just
+ * that the real `csp.ts` happens to pass today. The last block runs the
+ * real module through `checkCsp()`/`checkPreviewUnsafeInlineFence()` to
+ * pin the positive case too.
+ */
+describe("TS-WEB-0014-A1: checkPolicyDirectives — fixture policies", () => {
+  it("passes a clean, minimal policy", () => {
+    const errors = checkPolicyDirectives("production", {
+      "default-src": ["'self'"],
+      "script-src": ["'self'", "https://code.etracker.com"],
+    });
+    expect(errors).toEqual([]);
+  });
+
+  it("flags a wildcard source, wherever it appears", () => {
+    const errors = checkPolicyDirectives("production", {
+      "script-src": ["'self'", "https://*.example.com"],
+    });
+    expect(errors.some((e) => e.includes("wildcard"))).toBe(true);
+  });
+
+  it("flags a bare '*' the same way", () => {
+    const errors = checkPolicyDirectives("preview", {
+      "connect-src": ["'self'", "*"],
+    });
+    expect(errors.some((e) => e.includes("wildcard"))).toBe(true);
+  });
+
+  it("flags a bare scheme in script-src", () => {
+    const errors = checkPolicyDirectives("production", {
+      "script-src": ["'self'", "https:"],
+    });
+    expect(errors.some((e) => e.includes("bare scheme"))).toBe(true);
+  });
+
+  it("flags a bare scheme in connect-src", () => {
+    const errors = checkPolicyDirectives("production", {
+      "connect-src": ["'self'", "http:"],
+    });
+    expect(errors.some((e) => e.includes("bare scheme"))).toBe(true);
+  });
+
+  it("does not flag a bare scheme outside script-src/connect-src", () => {
+    // img-src's own concessions (data:, a host) are not this rule's business.
+    const errors = checkPolicyDirectives("production", {
+      "img-src": ["'self'", "data:"],
+    });
+    expect(errors).toEqual([]);
+  });
+
+  it("flags a host with no row in D1", () => {
+    const errors = checkPolicyDirectives("production", {
+      "script-src": ["'self'", "https://evil.example.com"],
+    });
+    expect(errors.some((e) => e.includes("no row in D1"))).toBe(true);
+  });
+
+  it("accepts every real D1 host", () => {
+    const errors = checkPolicyDirectives("production", {
+      "script-src": [
+        "'self'",
+        "https://code.etracker.com",
+        "https://www.etracker.de",
+        "https://portalize.schafe-vorm-fenster.de",
+        "https://envoy-api.api.schafe-vorm-fenster.de",
+      ],
+      // The fifth row (DEC-0121): the registration form's host, `frame-src`.
+      "frame-src": ["https://docs.google.com"],
+    });
+    expect(errors).toEqual([]);
+  });
+
+  it("flags a frame-src host with no row in D1 — a second framed origin needs its own row first", () => {
+    const errors = checkPolicyDirectives("production", {
+      "frame-src": ["https://docs.google.com", "https://forms.example"],
+    });
+    expect(errors).toEqual([
+      'A1 production/frame-src: host "https://forms.example" has no row in D1 (ALLOWLIST)',
+    ]);
+  });
+
+  it("flags 'unsafe-inline' in a production script-src", () => {
+    const errors = checkPolicyDirectives("production", {
+      "script-src": ["'self'", "'unsafe-inline'"],
+    });
+    expect(errors.some((e) => e.includes("'unsafe-inline'"))).toBe(true);
+  });
+
+  it("flags 'unsafe-eval' in a production script-src", () => {
+    const errors = checkPolicyDirectives("production", {
+      "script-src": ["'self'", "'unsafe-eval'"],
+    });
+    expect(errors.some((e) => e.includes("'unsafe-eval'"))).toBe(true);
+  });
+
+  it("does not flag 'unsafe-inline' in style-src — D2's bounded concession, any environment", () => {
+    const errors = checkPolicyDirectives("production", {
+      "style-src": ["'self'", "'unsafe-inline'"],
+    });
+    expect(errors).toEqual([]);
+  });
+
+  it("does not flag 'unsafe-inline'/'unsafe-eval' in a non-production script-src", () => {
+    const errors = checkPolicyDirectives("preview", {
+      "script-src": ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+    });
+    expect(errors).toEqual([]);
+  });
+
+  it("reports every violation found, not just the first", () => {
+    const errors = checkPolicyDirectives("production", {
+      "script-src": ["'self'", "*", "https:", "https://evil.example.com", "'unsafe-inline'"],
+    });
+    expect(errors.length).toBeGreaterThanOrEqual(4);
+  });
+});
+
+describe("F-2-27 / DEC-0163: no 'unsafe-inline' in any deployed script policy", () => {
+  it("holds for the real csp.ts today", () => {
+    expect(checkPreviewUnsafeInlineFence()).toEqual([]);
+  });
+
+  it("flags preview's old hashless fallback", () => {
+    const oldFallback = (input: { environment: string; scriptHashes?: readonly string[] }) => ({
+      "script-src":
+        input.environment === "preview" && !(input.scriptHashes ?? []).length
+          ? ["'self'", "'unsafe-inline'"]
+          : ["'self'"],
+    });
+    const errors = checkPreviewUnsafeInlineFence(oldFallback);
+    expect(errors).toHaveLength(1);
+    expect(errors[0]).toContain("preview/script-src (no hashes)");
+  });
+
+  it("flags a fence that leaks 'unsafe-inline' into production, with or without hashes", () => {
+    const leaky = () => ({ "script-src": ["'self'", "'unsafe-inline'"] });
+    const errors = checkPreviewUnsafeInlineFence(leaky);
+    expect(errors.filter((e) => e.startsWith("F-2-27 production")).length).toBe(2);
+  });
+});
+
+describe("TS-WEB-0014-A1: checkCsp — the real module, all four cases", () => {
+  it("is green: no wildcard, every host in D1, no unsafe-inline/unsafe-eval in production, no unsafe-inline in a deployed policy", () => {
+    const { errors, casesChecked } = checkCsp();
+    expect(errors).toEqual([]);
+    expect(casesChecked).toBe(4);
+  });
+});

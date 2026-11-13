@@ -1,0 +1,105 @@
+import { Badge } from "../badge/badge";
+import { isMocked, isPending, type DataStateProps } from "../data-state";
+
+import { dictionary } from "@/src/lib/i18n/dictionary";
+import { OG_LOCALE } from "@/src/lib/i18n/locales";
+
+import type { Locale } from "@/src/lib/i18n/locales";
+
+import styles from "./live-counters.module.css";
+
+export interface LiveCountersProps extends DataStateProps {
+  /** No field in `/api/stats` today (Q-0037) — omitted until it exists. */
+  readonly places?: number;
+  readonly dates?: number;
+  /** No field in `/api/stats` today (Q-0037) — omitted until it exists. */
+  readonly updatesToday?: number;
+  readonly placesLabel?: string;
+  readonly datesLabel?: string;
+  readonly updatesLabel?: string;
+  /** The page's language — the unit labels read it. */
+  readonly locale?: Locale;
+  readonly className?: string;
+  /**
+   * How many pills the loading state reserves — the number of figures the
+   * surface may show (DEC-0163: the band loads after paint, and a band that
+   * will hold one figure must not reserve three).
+   */
+  readonly loadingSlots?: number;
+}
+
+/**
+ * 44 `live-counters` [PROPOSED] — TS-WEB-0008 pos 4, D8.
+ *
+ * Structure: one band, up to three figure slots (places · dates · updates
+ * today), each a fixed-height `badge` whose text is the figure and its label
+ * in one readable string.
+ * States (D-9, all four):
+ *   loading  → three `skeleton` pills;
+ *   empty    → nothing — a missing field is never a substitute or an
+ *              estimate (FUN-WEB-0041); cold cache hides the whole module,
+ *              never a tier-3 snapshot;
+ *   degraded → the same figures, tier labelled by the surrounding
+ *              `live-module-frame`;
+ *   mocked   → the figures plus `demo-data-badge` (Q-0037, `state/open.md`
+ *              row 6).
+ * Inherits: mono type for the numbers; no static traction figure anywhere.
+ * Space: the badge's fixed height means one digit → two digits never
+ * reflows the row.
+ * A11y: the figure and its label are one readable string, never colour-only.
+ */
+export function LiveCounters({
+  places,
+  dates,
+  updatesToday,
+  placesLabel,
+  datesLabel,
+  updatesLabel,
+  locale = "de",
+  state = "ready",
+  className,
+  loadingSlots = 3,
+}: LiveCountersProps) {
+  const classes = [styles.band, className].filter(Boolean).join(" ");
+  // The three units are UI strings, so they come from the dictionary unless
+  // the caller names one (`state/open.md` row 101).
+  const words = dictionary(locale).live;
+  const placesWord = placesLabel ?? words.places;
+  const datesWord = datesLabel ?? words.dates;
+  const updatesWord = updatesLabel ?? words.updatesToday;
+
+  if (isPending(state)) {
+    return (
+      <div className={classes}>
+        {/* Pills at the badge's own height — a figure arriving must not
+            change the band's height (DEC-0163). */}
+        {Array.from({ length: loadingSlots }, (_, index) => (
+          <span aria-hidden="true" className={styles.pending} key={index}>
+            <Badge icon="calendar-days" tone="neutral">
+              {"\u00a0".repeat(12)}
+            </Badge>
+          </span>
+        ))}
+      </div>
+    );
+  }
+
+  const figures: readonly { readonly value: number; readonly label: string }[] = [
+    places !== undefined ? { value: places, label: placesWord } : undefined,
+    dates !== undefined ? { value: dates, label: datesWord } : undefined,
+    updatesToday !== undefined ? { value: updatesToday, label: updatesWord } : undefined,
+  ].filter((figure) => figure !== undefined);
+
+  // Cold cache / nothing counted: hide the module entirely, never tier 3.
+  if (figures.length === 0) return null;
+
+  return (
+    <div className={classes} data-demo={isMocked(state) ? "true" : undefined}>
+      {figures.map((figure) => (
+        <Badge icon="calendar-days" key={figure.label} tone="neutral">
+          {figure.value.toLocaleString(OG_LOCALE[locale].replace("_", "-"))} {figure.label}
+        </Badge>
+      ))}
+    </div>
+  );
+}

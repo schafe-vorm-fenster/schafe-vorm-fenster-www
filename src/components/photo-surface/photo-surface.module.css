@@ -1,0 +1,394 @@
+/*
+ * The photograph and the scrim are one declaration, so the scrim scales with
+ * the image (SRC-0014 §Photo surface). The scrim is the design system's fixed
+ * ladder — DEC-0105 §1, the 2026-09-23 draft "Neutral · transparent" (1b):
+ *
+ *   - **neutral black**, from the `color.scrim.*` alpha ladder of
+ *     `@schafe-vorm-fenster/brand-design` 2.8.1 — never `ink`, never
+ *     `violet-500`, never a `color-mix()` of either: a tinted scrim dyes the
+ *     photograph. The ink and violet tone variants are retired, one treatment
+ *     for every hero on the site;
+ *   - **two gradients, exactly the draft's stops**: the top band that carries
+ *     the header (`scrim-35 → scrim-0` over the first 16 %), and the reading
+ *     band under the headline, the search field and the CTAs
+ *     (`scrim-0` at 38 % → `scrim-38` at 58 % → `scrim-72` at 100 %);
+ *   - **0.72 is the ceiling.** The retired 0.96 step put the text on a black
+ *     band. `pnpm check:contrast` reads this file and fails a stop above it
+ *     (TS-WEB-0002-A3, hero row; NFR-WEB-0058/0059).
+ *
+ * What is gone with it: the content-anchored second scrim (`.content::before`,
+ * 0.82 → 0.96) that F-2-2 added for long headlines. The reading band replaces
+ * it; a hero whose text stack outgrows the band takes shorter copy or a
+ * different crop, never a darker scrim (DEC-0105 §2, DEC-0116).
+ *
+ * No colour literal exists here: the ladder is read as tokens, so the guard in
+ * `scripts/check-brand.ts` cannot see a value it should not, and the one in
+ * `scripts/check-contrast.ts` can see the ceiling.
+ */
+.surface {
+  /* The ground's link colour and primary pair, the same roles
+     `section-shell` publishes — a photo section is a dark section. */
+  --ground-meta: var(--color-lime-300);
+  --ground-link: var(--color-lime-400);
+  --ground-link-hover: var(--color-lime-300);
+  --link: var(--color-lime-400);
+  --link-hover: var(--color-lime-300);
+  --ground-primary-fill: var(--color-lime-500);
+  --ground-primary-text: var(--color-neutral-ink);
+  --ground-primary-fill-hover: var(--color-lime-400);
+  /* DEC-0160: the secondary is the `paper` pill on a dark ground, and the
+     "Amtlich" badge, `ink` on light, takes the `paper` pill here too. */
+  --ground-secondary-fill: var(--color-neutral-paper);
+  --ground-secondary-text: var(--color-neutral-ink);
+  --ground-secondary-border: var(--color-neutral-paper);
+  --ground-secondary-fill-hover: var(--color-neutral-surface);
+  --ground-secondary-text-hover: var(--color-neutral-ink);
+  --category-official-fill: var(--color-neutral-paper);
+  --category-official-text: var(--color-neutral-ink);
+  /*
+   * The two gradients are variables so the `lg` rule below can swap the
+   * landscape rendition in without restating the stops a second time. The
+   * stops are the draft's, verbatim, and are the only stops in this file.
+   */
+  --photo-gradient-top: linear-gradient(
+    180deg,
+    var(--color-scrim-35) 0,
+    var(--color-scrim-0) 16%
+  );
+  --photo-gradient-reading: linear-gradient(
+    180deg,
+    var(--color-scrim-0) 38%,
+    var(--color-scrim-38) 58%,
+    var(--color-scrim-72) 100%
+  );
+  align-items: flex-end;
+  aspect-ratio: var(--photo-ratio, var(--ratio-hero));
+  background-image: var(--photo-gradient-top), var(--photo-gradient-reading), var(--photo-image);
+  /*
+   * The crop follows the motif's declared focal point, never `center` by
+   * default (DEC-0105 §2): village photographs are sky-heavy, and a centred
+   * crop parks the motif in the bottom third, exactly where the reading band
+   * is densest. `--photo-focal` is set per image from the inventory's
+   * `focal: {x, y}`; without one the frame sits at 50 % 40 %, which crops the
+   * sky away and lands the motif above the band's opaque end.
+   */
+  background-position: var(--photo-focal, 50% 40%);
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 0;
+  color: var(--color-neutral-paper);
+  display: flex;
+  /* The containing block for the marks in the photograph's own top corner. */
+  position: relative;
+  /*
+   * The soft text shadow is part of the treatment, not an extra: every piece
+   * of type on a photo surface with no fill of its own carries it — display,
+   * lead, the `quiet` button's label (SRC-0014 §The scrim). `text-shadow`
+   * inherits, so one declaration on the surface reaches all of them; type on
+   * a flat ground carries none, which is why it is declared here and nowhere
+   * else.
+   */
+  text-shadow: var(--shadow-text-on-photo);
+  width: 100%;
+}
+
+/*
+ * Form controls do not inherit `text-shadow` — the user-agent sheet resets it
+ * to `none` on `button`, `input`, `select` and `textarea` — so the surface's
+ * shadow is given back explicitly. `:where()` keeps the specificity at zero:
+ * a control that declares its own shadow wins over it, which is exactly what
+ * `button.module.css`'s four filled variants and `search-field.module.css`'s
+ * `.input`/`.input::placeholder` do (DEC-0147) — an opaque fill, the
+ * control's own or (for the search input) its containing `.field` pill's,
+ * already gives the type its contrast, and the shadow would only blur it.
+ * Only `quiet` (no fill anywhere) still reads this.
+ */
+.surface :where(button, input, select, textarea),
+.surface :where(input, textarea)::placeholder {
+  text-shadow: inherit;
+}
+
+/*
+ * An overlay that opens from the surface — the place-search listbox — paints
+ * its own flat paper ground out of flow. Type on a flat ground carries no
+ * shadow, whatever it descends from.
+ */
+.surface :where([role="listbox"], [role="dialog"]) {
+  text-shadow: none;
+}
+
+/*
+ * Art direction, not a second image for its own sake: `--ratio-hero` is 8:9
+ * on the phone and 21:9 from 48rem (`app/styles/components.css`), and a
+ * landscape frame cropped into the phone's upright box loses most of its
+ * motif. The generator renders both (`scripts/generate-images.mjs`);
+ * mobile-first, so the upright one is the base and this swaps the wide one in
+ * at the same width the ratio changes. A surface with no wide rendition keeps
+ * the base image, so nothing here depends on both existing.
+ */
+@media (min-width: 48rem) {
+  .surface {
+    background-image:
+      var(--photo-gradient-top),
+      var(--photo-gradient-reading),
+      var(--photo-image-wide, var(--photo-image));
+  }
+}
+
+/*
+ * Image mode (`imageSizes`, issue 164): the photograph is a responsive
+ * `<img>` in its own layer, the scrim a layer of its own above it, both from
+ * the variables above, so the ladder and its 0.72 ceiling are the same stops.
+ * Stack: picture 0 · scrim 1 · text stack 1 (later in the DOM) · marks above.
+ */
+.surface[data-picture] {
+  background-image: none;
+}
+
+.picture {
+  inset: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: 0;
+}
+
+.pictureImage {
+  object-fit: cover;
+  object-position: var(--photo-focal, 50% 40%);
+}
+
+.scrim {
+  background-image: var(--photo-gradient-top), var(--photo-gradient-reading);
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+  z-index: 1;
+}
+
+.surface[data-picture] .content {
+  z-index: 1;
+}
+
+.content {
+  /* A badge is inline-flex; as a stretched flex child it would fill the row. */
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  /* Inline padding and width come from `.container` (DEC-0150): the stack
+     shares the header's and the sections' left edge at every width. */
+  padding-block: var(--section-padding-block);
+  position: relative;
+  width: 100%;
+}
+
+/*
+ * **The reserved photograph band** — Jan's round-3 point 1, the part the
+ * gradient alone cannot buy, re-measured against the polish brief's G-1.
+ *
+ * A hero whose copy is long (`/mitmachen`: four headline lines and a
+ * five-line lead at 390 px) fills its own 8:9 box completely, and then no
+ * stop in any gradient can show a photograph that has no uncovered pixels
+ * left. So the hero reserves a band at the top of its surface that the text
+ * stack cannot enter, as a flex spacer.
+ *
+ * Round 3 made that band a **ratio of the width** — 5/2, which is 156 px at
+ * 390 px. The site header lies transparent over its top 64 px, so what a
+ * visitor actually saw of the photograph was ~92 px: 11 % of the first
+ * screen, on every phone page. Worse, the band being width-derived meant it
+ * could not grow with the copy below it — `/ueber-uns` rendered 156 px of
+ * picture inside a 1256 px hero box (12 %), `/deine-region` 156 of 693,
+ * `/mitmachen` 156 of 610 (polish brief finding 2).
+ *
+ * The band is now a share of the **viewport**, which is the thing the rule
+ * is about: 55 svh, of which the header covers its own height and the rest —
+ * about 400 px at 844 px tall, 47 % of the first screen — is uncovered
+ * photograph. `svh` rather than `vh` so a mobile browser's collapsing URL bar
+ * cannot change it after paint; the band is pure CSS and resolves before the
+ * first paint, so it shifts nothing.
+ *
+ * The text stack still sits inside the same box, on the reading band's dark
+ * end: the photograph is `cover`, so a hero whose copy grows past the band
+ * simply shows more of the picture through the scrim rather than running out
+ * of image.
+ *
+ * From `lg` the hero ratio turns 21:9 and the desktop heroes were already
+ * right; there the band stays the width ratio it was.
+ */
+.surface[data-hero="true"] {
+  /* DEC-0165: the AI-edited mark clears the transparent header, like `.marks`. */
+  --ai-edited-mark-top: calc(var(--site-header-height) + var(--space-3));
+  align-items: stretch;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.surface[data-hero="true"]::before {
+  content: "";
+  flex: none;
+  /* `vh` first for a browser that does not know `svh`; the real value wins. */
+  min-height: 55vh;
+  min-height: var(--photo-band, 55svh);
+  width: 100%;
+}
+
+/*
+ * On a short phone the band gives way before the page's call to action does.
+ *
+ * 55 svh is 352 px on a 640 px-tall viewport — an older device, or a browser
+ * showing two toolbars — and the hero's own stack (five display lines plus
+ * two controls on `/dein-kalender`) then ends below the fold, which puts the
+ * page's primary conversion where nobody scrolling the first screen sees it.
+ * G-1's rule is "at least 200 px of photograph, unobstructed, below the
+ * header", not "55 % whatever the screen": 42 svh of 640 px is 269 px, of
+ * which 205 px is clear of the 64 px header, so the rule still holds and the
+ * buttons come back onto the screen. Above 44 rem tall — the 844 px the brief
+ * measured — nothing changes.
+ */
+@media (max-height: 44rem) {
+  .surface[data-hero="true"]::before {
+    min-height: 42vh;
+    min-height: 42svh;
+  }
+}
+
+@media (min-width: 48rem) {
+  .surface[data-hero="true"] {
+    --photo-headroom: 20 / 3;
+  }
+
+  .surface[data-hero="true"]::before {
+    aspect-ratio: var(--photo-headroom, 5 / 2);
+    min-height: 0;
+  }
+}
+
+/*
+ * xl — the desktop hero (SRC-0014 §Layout Grid, DEC-0150). The height is a
+ * capped share of the viewport instead of the band-plus-ratio below:
+ * `min(80vh, 680px)` on `/`, `min(70vh, 560px)` on every other page. 21:9
+ * made a 1440px hero 617px and a 1920px one 823px — deeper than the screen.
+ * The band becomes the flexible part, so the text stack sits at the bottom of
+ * the box; it never shrinks below the header's height, and a stack taller
+ * than the box grows it rather than being clipped. Declared in CSS before
+ * paint, so the box is reserved exactly like a ratio.
+ */
+@media (min-width: 64rem) {
+  .surface[data-hero="true"] {
+    /* The capped height replaces `ratio-hero` here; with the ratio left on,
+       21:9 would still win at 1440px and above. */
+    aspect-ratio: auto;
+    min-height: min(70vh, 560px);
+  }
+
+  .surface[data-hero-size="home"] {
+    min-height: min(80vh, 680px);
+  }
+
+  .surface[data-hero="true"]::before {
+    aspect-ratio: auto;
+    flex: 1 1 auto;
+    min-height: var(--site-header-height);
+  }
+
+  .surface[data-hero="true"] .content {
+    padding-block-end: var(--space-12);
+  }
+
+  .surface[data-hero-size="home"] .content {
+    padding-block-end: var(--space-16);
+  }
+}
+
+/*
+ * Retained for a future mark on the photograph. Jan's decision of
+ * 2026-09-18 removed every visible one; provenance now travels in
+ * `data-placeholder`, `data-provenance` and `data-mock` on the section.
+ */
+.marks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  left: var(--space-4);
+  position: absolute;
+  right: var(--space-4);
+  top: var(--space-4);
+  z-index: 1;
+}
+
+/* On the page's hero the header may lie over the picture — clear its height. */
+.surface[data-hero="true"] .marks {
+  top: calc(var(--site-header-height) + var(--space-3));
+}
+
+/*
+ * The swap layer — DEC-0167 (`photo-layer.tsx`). A place's own photograph,
+ * known only after hydration, laid over the surface's prerendered one: the
+ * same two gradients (inherited from `.surface`), `cover`, out of flow, so
+ * nothing moves when it lands. The crop is the surface's default `50% 40%`
+ * written out rather than read from `--photo-focal`, because that variable
+ * belongs to the photograph underneath and would crop this one by another
+ * picture's motif.
+ */
+.layer {
+  background-image: var(--photo-gradient-top), var(--photo-gradient-reading), var(--layer-image);
+  background-position: 50% 40%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .layer {
+    animation: layer-in var(--motion-reveal-duration) var(--motion-reveal-easing) both;
+  }
+}
+
+@keyframes layer-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/*
+ * DEC-0167/DEC-0168: the AI-edited mark marks the surface's **own** picture.
+ * While a place photograph covers it, the mark would mark a picture that is
+ * not shown, and the place photograph's © control takes that corner.
+ */
+.surface:has([data-place-photo]) [data-ai-edited-mark] {
+  display: none;
+}
+
+/*
+ * The photograph's credit line, or the fallback's honest label (DEC-0167,
+ * Q-0089). It sits in the picture's top corner, below the header's height,
+ * in the band the text stack may not enter (`data-hero`'s reserved band), so
+ * it can wrap without touching the copy. Out of flow: it shifts nothing.
+ */
+.note {
+  font-size: var(--type-meta-size);
+  line-height: var(--leading-normal);
+  margin: 0;
+  max-width: min(32rem, calc(100% - 2 * var(--space-4)));
+  position: absolute;
+  right: var(--space-4);
+  text-align: right;
+  top: var(--space-3);
+  z-index: 1;
+}
+
+.surface[data-hero="true"] .note {
+  top: calc(var(--site-header-height) + var(--space-2));
+}
+
+.note a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.note a:hover {
+  color: var(--ground-link-hover);
+}

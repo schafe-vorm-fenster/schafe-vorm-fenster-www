@@ -1,0 +1,457 @@
+---
+artefact: tactical-spec
+id: TS-WEB-0014
+kind: rule
+status: DRAFT
+version: 0.1.0
+implements: [CON-WEB-0030, CON-WEB-0031, CON-WEB-0032, FUN-WEB-0127, CON-WEB-0038, CON-WEB-0034, CON-WEB-0039, NFR-WEB-0065, CON-WEB-0040, CON-WEB-0041]
+sources: [SRC-0006, SRC-0010, SRC-0011, SRC-0012]
+decisions: [DEC-0009, DEC-0013, DEC-0014, DEC-0015, DEC-0017, DEC-0025, DEC-0030, DEC-0031, DEC-0035, DEC-0163]
+ai_provenance:
+  prompt_id: UNKNOWN
+  prompt_version: UNKNOWN
+  model: "Claude Opus 5 (1M context)"
+  generated_at: "2026-09-10T14:39:53+02:00"
+---
+
+# TS-WEB-0014 — Security Baseline
+
+## Purpose
+
+The security baseline that is binding from the **first** deployment, not
+retrofitted: the literal CSP directive set, the literal header values,
+what runs in CI, and how forms and BFF routes are protected. DEC-0013
+(no third-party embeds) is what keeps the allowlist short enough to write
+out in full — so this spec writes it out in full. Transport and routing
+belong to TS-WEB-0004; this spec only adds the rules that constrain them.
+
+## Determinations
+
+### D1 — The allowlist: every external host, named [FIXED: CON-WEB-0030, DEC-0015, DEC-0013; hosts PROPOSED]
+
+The complete set. Four external origins and, since 2026-09-25, a fifth —
+the registration form's host, admitted for one directive on one route
+(TS-WEB-0016 D15, DEC-0121) — and no sixth. **Four again since 2026-10-28:**
+DEC-0177 removed the reserved `https://app.schafe-vorm-fenster.de` row. It
+was active in no directive, the host has no DNS record, and every link "to
+the app" now goes to `APP_URL` on our own apex (`src/lib/live/app-handover.ts`)
+— a navigation, which CSP does not govern. Hosts marked [PROPOSED] are read
+off the sibling repositories, not confirmed by their owners.
+
+| Origin | Why it exists | Active directives | Provenance |
+| --- | --- | --- | --- |
+| `'self'` | the website, its own bundles, its BFF routes (D10), Vercel Speed Insights and Web Analytics (served first-party under `/_vercel/…`) | all | DEC-0002, TS-WEB-0003 D7 |
+| `https://code.etracker.com` | eTracker loader `e.js` and its beacon; legacy config `data-secure-code="i9strK"`, `data-block-cookies="true"` | `script-src`, `connect-src`, `img-src` | SRC-0010 `legacy-content/app/layout.tsx`, DEC-0004/DEC-0028 |
+| `https://www.etracker.de` | eTracker's collector, measured 2026-11-13 on a production build with the real secure code: `e.js` loads `/cntcc?…` and `/api/v6/tracking/webEvents?…` as scripts and falls back to `fetch` for the latter; no image request observed | `script-src`, `connect-src` — not `img-src` | Playwright against `next start`; CSP violations of the failed Preview E2E Smoke run |
+| `https://portalize.schafe-vorm-fenster.de` | Portalize loader `/api/{organizerId}/load.js`, web-component mode — the embed demo (FUN-WEB-0043) | `script-src`, `connect-src` | DEC-0030, `portalize/DEPLOYMENT.md` |
+| `https://envoy-api.api.schafe-vorm-fenster.de` [PROPOSED] | envoy lead widget: its web-component script and its own submission endpoint | `script-src`, `connect-src` | DEC-0009; host read from `envoy-api`, widget host unconfirmed (Q-0022) |
+| `https://docs.google.com` | the registration form `/start` embeds visibly (TS-WEB-0016 D15, FUN-WEB-0205, DEC-0108), and since DEC-0176 `/mitmachen/registrieren` too (`TS-WEB-0023` D10) — the one framed document on the site; the origin, not the form's path, because this is a table of origins and the form URL is `src/lib/routes/lead-fallback.ts`'s | `frame-src` — and no other: no script, no connection, no image of it is loaded by our document | DEC-0121 (row written 2026-09-25); lapses with the embed (D15 "It lapses") |
+
+**Deliberate non-entries.** Each is an origin someone will otherwise add
+by reflex:
+
+| Not in the list | Why not |
+| --- | --- |
+| `events.api.`, `geo.api.`, `calendar.api.`, `classify.api.` (SRC-0011) | the browser never talks to them — the website is its own BFF (DEC-0025, TS-WEB-0004 D5) |
+| `assets.api.schafe-vorm-fenster.de` | images pass through the Next image optimizer and are served from `'self'` |
+| any font CDN | fonts are self-hosted (FUN-WEB-0109, FUN-WEB-0110, FUN-WEB-0111, TS-WEB-0003 D3) |
+| any player, social or embed host | DEC-0013 — own preview plus outbound link, never an embed |
+| any error/APM SDK host | DEC-0017 (D13) |
+| any captcha or challenge host | DEC-0014 (D9) |
+
+### D2 — The Content-Security-Policy, written out [FIXED: enforcement DEC-0015; directive values PROPOSED]
+
+Production policy. `{NONCE}` per D3.
+
+```text
+default-src 'self';
+base-uri 'self';
+script-src 'self' 'nonce-{NONCE}' 'strict-dynamic' https://code.etracker.com https://www.etracker.de https://portalize.schafe-vorm-fenster.de https://envoy-api.api.schafe-vorm-fenster.de;
+style-src 'self' 'unsafe-inline';
+img-src 'self' data: https://code.etracker.com;
+font-src 'self';
+connect-src 'self' https://code.etracker.com https://www.etracker.de https://portalize.schafe-vorm-fenster.de https://envoy-api.api.schafe-vorm-fenster.de;
+media-src 'self';
+manifest-src 'self';
+worker-src 'self';
+object-src 'none';
+frame-src https://docs.google.com;
+child-src 'none';
+form-action 'self';
+frame-ancestors 'none';
+upgrade-insecure-requests;
+report-to csp;
+report-uri /api/csp-report
+```
+
+Four choices in there are not obvious and a generator gets them wrong by
+default:
+
+| Choice | Reason |
+| --- | --- |
+| `default-src 'self'`, not `'none'` | `'none'` reads stricter but also governs every directive that has no name of its own — prefetch first. Next.js route prefetching is the first casualty, and the failure is silent. Every directive that matters is named explicitly anyway. |
+| `'strict-dynamic'` **and** a host allowlist in `script-src` | CSP3 browsers ignore the host list once `'strict-dynamic'` is present — enforcement runs on the nonce, and the three third-party loaders are trusted because *we* render their `<script src>` tags **with the nonce**, which then propagates to what they load. The host list stays as the CSP2 fallback and as the written allowlist CON-WEB-0030 asks for. Both halves are required; dropping either breaks a browser class. |
+| `style-src 'unsafe-inline'` | the one bounded concession. Next.js inlines critical CSS and both web components style their shadow roots inline. Script injection stays fully locked; CSS-based exfiltration is the residual risk, accepted and flagged. Tightening path: a style nonce, once D3 resolves nonce delivery. |
+| `frame-src` names one host, the registration form's | `'none'` until 2026-09-25, which pinned Portalize to web-component mode — DEC-0030 chose it, and the pin made the iframe fallback fail loudly instead of quietly loading a second document. The pin holds: the Portalize host is still no source here. The one source is the form host D1's fifth row names, for `/start` and, since DEC-0176, `/mitmachen/registrieren` (TS-WEB-0016 D15, DEC-0121, `TS-WEB-0023` D10); `child-src 'none'` stays as the floor beneath the two directives that name their own sources. |
+
+### D3 — Per-build hashes, not a nonce [FIXED: DEC-0045]
+
+**Decided 2026-09-10:** variant A. `script-src` carries `'self'` plus
+per-build `'sha256-…'` hashes; no per-request nonce, so the prerendered
+shell of TS-WEB-0004 D6 is preserved. The build extracts and hashes every
+inline script — a new inline block that skips that step breaks the policy
+loudly instead of silently weakening it. `'strict-dynamic'` still applies.
+The nonce variant below is recorded as the rejected alternative and its
+cost is why.
+
+**Amended by DEC-0163 (2026-10-13, #59).** Three corrections, all measured:
+
+1. **Every page is static, and stays byte-identical for the life of a
+   deployment.** A hash covers exactly one script, and Next's flight payload
+   (`self.__next_f.push(…)`) is page content: a page whose HTML regenerated
+   (live data under a five-minute `cacheLife`) or was rendered per request
+   (`?ort=`, a flow step, a request header) carried a payload no build-time
+   hash could know, and did not hydrate. Live data therefore loads in the
+   browser from this site's own `/api/*` routes, query-dependent states are
+   read in the browser, and the build **fails** for any page whose prerender
+   revalidates (`scripts/csp-adapter.mjs`). The only `ƒ` routes left are the
+   API handlers, `robots.txt`, `llms.txt` and the 404 surface. *(DEC-0164: those three are now prerendered variants, and the 404 in each
+   language carries its own hashes; only the API handlers remain `ƒ`.)*
+2. **Hashes are per page.** The extraction writes one map — internal page
+   path → that page's hashes, plus the set every page shares — and the proxy
+   sends a response only its own page's set (`csp-hashes.ts`), ~2.4 KB of
+   header instead of the ~24 KB a site-wide set measured. A page over the cap
+   (`MAX_PAGE_HASHES`, 128) **fails the build**; nothing is truncated any
+   more (a silent cap of 128 against ~430 site-wide hashes was #59's first
+   cause).
+3. **The map reaches the proxy inside the build.** The extraction runs in a
+   Next adapter's `onBuildComplete` (`adapterPath` in `next.config.ts`) that
+   wraps the platform's own adapter and adds the map to the proxy function's
+   assets; the proxy reads it from disk. No network fetch, no bypass secret,
+   no request-derived origin (state/open.md rows 31/173).
+
+`'strict-dynamic'` does **not** apply (correction recorded in state/open.md
+row 31).
+
+#### The conflict, for the record [superseded by DEC-0045]
+
+Next.js emits inline bootstrap scripts (flight payload). Under D2 they
+need a nonce or a hash. A per-request nonce cannot live in a body served
+from the full-route cache — and TS-WEB-0004 D6 renders every content page
+static + ISR (1 h). The two cannot both be true. Two variants; **Variant
+A is proposed**:
+
+| | Variant A — nonce | Variant B — static + hashes |
+| --- | --- | --- |
+| `script-src` | `'self' 'nonce-{NONCE}' 'strict-dynamic' <D1 hosts>` | `'self' 'sha256-…' … <D1 hosts>` (no `'strict-dynamic'`) |
+| Nonce origin | generated in `proxy.ts` per request, passed as `x-nonce`, read by the root layout | none |
+| Cost | the HTML shell leaves the full-route cache and renders per request; data and segment caching (TS-WEB-0003 D5) are untouched | the hash set must be regenerated at every build and differs per page — brittle, and a missed hash is a blank page |
+| Risk to | TS-WEB-0003 D1 (Lighthouse 100 / TTFB) | release reliability |
+
+`proxy.ts` staying "a pure function of hostname + path" (TS-WEB-0004 D3) is a
+statement about *routing* state. A nonce is derived per request and
+stored nowhere; it does not make the proxy stateful. Variant A does not
+violate that rule.
+
+### D4 — Security headers, header by header [FIXED: CON-WEB-0032; values PROPOSED]
+
+| Header | Value | Note |
+| --- | --- | --- |
+| `Strict-Transport-Security` | `max-age=63072000; includeSubDomains` | **no `preload` at launch** — see Open points; production only |
+| `X-Content-Type-Options` | `nosniff` | |
+| `Referrer-Policy` | `strict-origin-when-cross-origin` | the app handover carries its slugs in the URL (DEC-0029), so origin-only referrer costs nothing |
+| `Permissions-Policy` | `accelerometer=(), autoplay=(), browsing-topics=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self), geolocation=(self), gyroscope=(), idle-detection=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), serial=(), usb=(), xr-spatial-tracking=()` | `geolocation=(self)` is needed by "this week nearby" (TS-WEB-0004 D5 `/api/nearby`); `browsing-topics=()` keeps the no-identifier promise (NFR-WEB-0061, NFR-WEB-0062) true at the browser level |
+| `X-Frame-Options` | `DENY` | legacy companion to `frame-ancestors 'none'`; the two must never disagree |
+| `Cross-Origin-Opener-Policy` | `same-origin` | |
+| `Cross-Origin-Resource-Policy` | `same-origin` | |
+| `Reporting-Endpoints` | `csp="/api/csp-report"` | pairs with `report-to` in D2 |
+| `X-Robots-Tag` | `noindex, nofollow` | preview deployments (CON-WEB-0023) and all BFF routes only — never production pages |
+| `Cache-Control` | `no-store` | BFF error and 429 responses only |
+
+**Headers deliberately not set**, so nobody adds them back as an
+improvement: `Cross-Origin-Embedder-Policy` (would break both embedded
+web components), `X-XSS-Protection` (the legacy auditor is itself an
+attack surface; modern browsers ignore it — a deliberate divergence from
+the `portalize` prior art), `Expect-CT` (deprecated),
+`require-trusted-types-for` (Next.js does not survive it today).
+
+`frame-ancestors` exception: `'none'` until a concrete app-embed need is
+named. If one appears, the value becomes `frame-ancestors 'self'` plus the
+app's own origin — which does not exist yet (DEC-0177: the app has no domain
+of its own; `app.schafe-vorm-fenster.de` has no DNS record) — and
+`X-Frame-Options` is dropped — a reviewed change under D7, not a config
+tweak.
+
+Where they are set: the static set in `next.config.ts` `headers()`,
+applied to all routes; the CSP in `proxy.ts` (per-request nonce and
+per-environment variance). **A `vercel.json` `headers` block would
+silently take precedence over both and is therefore forbidden** — one
+source per header, no exceptions.
+
+### D5 — Three environments [FIXED: DEC-0070]
+
+| | Production | Preview (`next.*`, branch previews) | Local dev |
+| --- | --- | --- | --- |
+| CSP | enforced, D2 verbatim | enforced, D2 verbatim | enforced, plus `'unsafe-eval'` in `script-src` and `ws: http://localhost:*` in `connect-src` for HMR |
+| HSTS | `max-age=63072000; includeSubDomains` | `max-age=86400; includeSubDomains` | off |
+| `X-Robots-Tag` | absent on pages | `noindex, nofollow` (NFR-WEB-0061, NFR-WEB-0062, FUN-WEB-0125, CON-WEB-0033) | — |
+| `upgrade-insecure-requests` | on | on | off |
+
+CON-WEB-0030 says *enforced*, so report-only is never a substitute. A
+`Content-Security-Policy-Report-Only` header may run **alongside** the
+enforced one to trial a tightening (e.g. removing
+`style-src 'unsafe-inline'`); it never replaces it.
+
+### D6 — Violation reporting stays inside Vercel [PROPOSED — follows DEC-0017]
+
+`POST /api/csp-report` accepts `application/csp-report` and
+`application/reports+json`, and does exactly one thing: emit a structured
+log line that lands in Vercel Runtime Logs (D13). No storage, no
+forwarding, no third-party collector — a collector would be the
+additional service DEC-0017 refuses.
+
+Rules: always answers `204`; body cap 8 KB; `Cache-Control: no-store`;
+rate-limited per D10; logs only `violated-directive`, `blocked-uri`,
+`effective-directive` and the **path** of `document-uri` — the query
+string is stripped, because a place search sits in it (NFR-WEB-0061, NFR-WEB-0062).
+
+### D7 — Allowlist change control [FIXED: CON-WEB-0031]
+
+- The policy is one typed structure in one module, `lib/security/csp.ts`
+  — never a string spread across config files. D1's table and that
+  module are the same list; a host in one and not the other is a defect.
+- **No wildcard, ever.** Forbidden in a production `script-src` or
+  `connect-src`: `*`, any bare scheme (`https:`, `data:`, `blob:`),
+  `'unsafe-inline'`, `'unsafe-eval'`. `data:` is permitted in `img-src`
+  only. A1 asserts this statically, so the rule fails in CI rather than
+  in review.
+- Every addition is a PR that touches that module and names the
+  requirement or decision that justifies the host. CODEOWNERS review.
+- Adding an origin means adding a row to D1 in the same PR, including
+  the "why it exists" cell. An entry nobody can explain is removed.
+
+### D8 — HTTPS everywhere [FIXED: CON-WEB-0034]
+
+- Vercel terminates TLS and answers plain HTTP with a `308` — a
+  permanent redirect; the platform default satisfies CON-WEB-0034 and the
+  website adds no redirect of its own.
+- All hosts are covered: `www` and apex on `schafe-vorm-fenster.de`,
+  `app.`, `next.`, plus `owcezaoknem.pl`, `schafvormfenster.at` and
+  `sheepoutside.com` once wired (DEC-0035, DEC-0003).
+- `upgrade-insecure-requests` (D2) catches whatever slips through.
+- **Every URL the website emits is an absolute `https://` URL** — links,
+  canonicals, hreflang, sitemap entries, OG tags, third-party script
+  sources. No protocol-relative `//host/…`. The legacy eTracker snippet
+  used `//code.etracker.com/code/e.js` (SRC-0010); the relaunch writes the
+  scheme. A7 is the gate.
+
+### D9 — Form abuse protection: three layers, no captcha [FIXED: DEC-0014, CON-WEB-0039, NFR-WEB-0065; parameters PROPOSED]
+
+**No captcha of any kind** — not reCAPTCHA, hCaptcha, Turnstile, an
+"invisible" challenge, or a proof-of-work interstitial. This is
+structural, not a preference; three separate rules already forbid it:
+
+1. a captcha breaks TS-WEB-0002 D1 (WCAG 2.2 AA — 1.1.1, 3.3.7) and its
+   AAA plain-language stance (TS-WEB-0002 D2) for exactly the audience this
+   site is for;
+2. it loads a third-party script and sets identifiers, which
+   contradicts NFR-WEB-0061, NFR-WEB-0062, FUN-WEB-0125, CON-WEB-0033 and DEC-0004;
+3. its host is not in D1 and would have to be argued through D7 first.
+
+The three layers that replace it:
+
+| Layer | Rule | Parameter |
+| --- | --- | --- |
+| Honeypot | a field no human is offered: `aria-hidden="true"`, `tabindex="-1"`, `autocomplete="off"`, hidden by CSS (`position:absolute; left:-10000px`), **never** `type="hidden"` — bots fill what is in the DOM, and a hidden input is the one they skip. Filled → the submission is discarded and the **normal success response** is returned. Never a visible error, never a hint. | field name from a plausible pool (`website`, `company_url`, `fax`) [PROPOSED] |
+| Timing | the rendered form carries a server-signed timestamp (HMAC, server-side secret) in a hidden field; the client cannot forge it. Too fast or too old → discarded, same silent success. | floor 3 s, ceiling 60 min [PROPOSED] |
+| Rate limit | server-side, per D10 | — |
+
+**Ownership.** All lead forms are the envoy widget and the website ships
+no form backend (DEC-0009, FUN-WEB-0092) — so layers 1 and 2 are implemented
+by envoy, not here, and the website must not bolt on a competing layer of
+its own. What binds the website: DEC-0014 travels with the widget demand
+(Q-0022), and the website's acceptance still tests it from the outside
+(A8, A9) — the same arrangement TS-WEB-0002 A6 uses for the widget's
+accessibility.
+
+### D10 — Rate limiting on the BFF routes [FIXED: CON-WEB-0044, CON-WEB-0045, DEC-0025; limits PROPOSED]
+
+Per client IP, sliding window, on the TS-WEB-0004 D5 inventory:
+
+| Route | Limit | Beyond |
+| --- | --- | --- |
+| `GET /api/places/search` | 30 / min | `429` + `Retry-After: 60` |
+| `GET /api/places/{slug}/events` | 60 / min | `429` + `Retry-After: 60` |
+| `GET /api/nearby` | 30 / min | `429` + `Retry-After: 60` |
+| `GET /api/region/{county}/examples` | 30 / min | `429` + `Retry-After: 60` |
+| `GET /api/stats` | 60 / min | `429` + `Retry-After: 60` |
+| `POST /api/csp-report` | 100 / min | `429`, body discarded |
+| any route not listed | 60 / min | `429` |
+
+Mechanism: Vercel Firewall rate-limit rules as the primary control —
+platform-native, counts at the edge before the function bills, and adds
+no runtime dependency (see Open points for the plan question). Client
+identity is the leftmost entry of the Vercel-trusted `x-forwarded-for`.
+
+**Limits sit deliberately high.** Rural connections sit behind carrier
+NAT; one IP can be a whole village, or a school class opening
+`/dein-ort` together. A limit tuned against a single browser would block
+the exact audience this site is built for.
+
+A `429` renders as a component state ("gleich nochmal versuchen"), never
+as an error page — the 404/500 surfaces of DEC-0032 do not apply here.
+
+### D11 — Origin checks, and what they are actually worth [FIXED: CON-WEB-0044, CON-WEB-0045; rule PROPOSED]
+
+DEC-0025 already says it: for public read data a client token is theatre,
+and quota is the real control. The origin check is a **quota-protection
+measure against casual hotlinking from foreign pages**, not a security
+boundary. Stated plainly so nobody later mistakes it for one.
+
+| Signal | Rule |
+| --- | --- |
+| `Sec-Fetch-Site: same-origin` / `same-site` | pass |
+| `Sec-Fetch-Site: none` (address bar, curl, crawler) | pass — the data is public; no elevation follows |
+| `Sec-Fetch-Site: cross-site` with a foreign `Origin` | `403`, `Cache-Control: no-store` |
+| `Origin` in the allowed set: the production hosts (D8), this project's `*.vercel.app` previews, `http://localhost:3000` in dev | pass |
+
+**No CORS headers.** BFF routes send no `Access-Control-Allow-Origin` at
+all — that, not the `Origin` check, is what stops a foreign page from
+reading the responses. A10 asserts the header's absence.
+
+The website has no state-changing client endpoint today (forms belong to
+envoy, DEC-0009). If one ever appears it requires a same-origin `Origin`
+header with no `Sec-Fetch-Site: none` exemption.
+
+### D12 — Dependency scanning in CI [FIXED: FUN-WEB-0127, CON-WEB-0038; shape PROPOSED — SRC-0012, DEC-0031]
+
+Lives in the `Quality` job of the pipeline modelled on
+`classification-api` (CON-WEB-0021), in the same shape: scan, write to
+`reports/security/`, upload as an artifact (14 days).
+
+| Gate | Tool | When | Blocks |
+| --- | --- | --- | --- |
+| Lockfile audit | `pnpm audit --audit-level=high` | every PR | **yes** — high + critical |
+| Dependency / secret scan | `trivy fs --scanners vuln,secret --severity HIGH,CRITICAL --exit-code 1 .` | every PR + push to `main` | **yes** |
+| Static analysis | semgrep | every PR | no — advisory, `continue-on-error: true` as in SRC-0012 |
+| Header + CSP regression | own static test (A1, A2) | every PR | **yes** |
+| Dependency updates | Dependabot, ecosystems `npm` + `github-actions`, weekly | continuous | — |
+| Secret scanning | GitHub secret scanning with push protection | continuous | push rejected |
+
+"Critical findings block release" (FUN-WEB-0127, CON-WEB-0038) is realised twice: the
+`Quality` job is a required check for merge, and the rolling production
+promotion (CON-WEB-0022) does not start when it failed.
+
+A finding that cannot be fixed is suppressed only through a
+`.trivyignore` entry carrying a justification and an **expiry date**;
+an expired entry fails the job. Never a silent dismissal.
+
+### D13 — Production error observation [FIXED: DEC-0017, CON-WEB-0040, CON-WEB-0041]
+
+| Signal | Vercel-native means |
+| --- | --- |
+| Unhandled exceptions (functions, RSC, BFF) | Vercel Runtime Logs + Observability → Runtime Errors |
+| 4xx / 5xx rate per route | Vercel Observability, with an alert on 5xx |
+| Availability | the **existing** external uptime monitoring, unchanged |
+| CSP violations | `/api/csp-report` → structured log → Runtime Logs (D6) |
+| Web Vitals / p75 regression | Vercel Speed Insights (TS-WEB-0003 D7) |
+
+Rules:
+
+- **No error SDK.** No Sentry, Datadog, LogRocket or equivalent: its
+  script would need a D1 allowlist entry and a privacy review
+  (NFR-WEB-0063, FUN-WEB-0126), and DEC-0017 refuses both.
+- **Log discipline.** One structured JSON line per event, through a
+  single logging facade. It carries route, status, error name, message
+  and a request id. It never carries a request body, a query string, an
+  IP address, or an e-mail address — the place someone searched for is
+  exactly the identifier NFR-WEB-0061, NFR-WEB-0062 promises not to keep. A13 is the gate.
+- `global-error.tsx` (TS-WEB-0004 D2) reports nothing outbound; the 500 page
+  stays free of data dependencies.
+
+## Free for the generator
+
+- [FREE] Module layout under `lib/security/`, as long as D7's
+  single-source rule holds for the policy itself.
+- [FREE] Honeypot field name and the CSS technique that hides it, within
+  D9's accessibility guard.
+- [FREE] Rate-limiter implementation detail (edge rule vs. route
+  handler), as long as D10's limits are observable from outside.
+- [FREE] Field names in the D13 log schema, as long as the forbidden
+  fields stay out.
+
+## Acceptance criteria
+
+| ID | Level | Check |
+| --- | --- | --- |
+| TS-WEB-0014-A1 | static | `lib/security/csp.ts` contains no `*`, no bare scheme in `script-src`/`connect-src`, no `'unsafe-inline'`/`'unsafe-eval'` in a production script directive; every host in it has a row in D1 and vice versa. |
+| TS-WEB-0014-A2 | integration | Every production response carries the D2 CSP and all D4 headers with exactly the specified values; no `vercel.json` header block exists; `next.*` carries the D5 preview variant plus `X-Robots-Tag: noindex, nofollow`. |
+| TS-WEB-0014-A3 | e2e | With CSP enforced, every page of the TS-WEB-0004 D1 inventory loads with zero CSP violations — including the Portalize embed demo and the envoy widget, in all three TS-WEB-0002 D4 themes. |
+| TS-WEB-0014-A4 | e2e | A script injected from a host outside D1 (test fixture) is blocked and produces exactly one report at `/api/csp-report`; the logged `document-uri` carries no query string. |
+| TS-WEB-0014-A5 | tool | securityheaders.com grade A and Mozilla Observatory ≥ 90 on the production origin [PROPOSED thresholds]; csp-evaluator reports no high-severity finding beyond the known `style-src` concession (D2). |
+| TS-WEB-0014-A6 | integration | `http://` on every production host answers `308` to its `https://` equivalent; HSTS present with the D4 `max-age` and without `preload`. |
+| TS-WEB-0014-A7 | static | No `http://` and no protocol-relative `//host/…` resource URL in source, content frontmatter, or config (prose links inside legal texts excluded). |
+| TS-WEB-0014-A8 | e2e | envoy widget: a submission with the honeypot filled, and one submitted faster than D9's floor, both return the normal success state and produce no lead in envoy (verified with the envoy side, Q-0022). |
+| TS-WEB-0014-A9 | e2e | No captcha, challenge iframe, or third-party challenge script is present on any page or inside the widget — asserted on both the DOM and the network trace. |
+| TS-WEB-0014-A10 | integration | Each D10 route answers `200` below its limit and `429` with `Retry-After` beyond it; a cross-site `Origin` gets `403`; no BFF response carries an `Access-Control-Allow-Origin` header. |
+| TS-WEB-0014-A11 | tool | CI: a dependency with a known HIGH CVE, injected into the lockfile, fails the `Quality` job, and the production promotion does not start. An expired `.trivyignore` entry fails the job too. |
+| TS-WEB-0014-A12 | manual | Release check: Vercel Runtime Errors, the Observability 5xx panel and the uptime monitor all show the current deployment; no third-party error SDK appears in the bundle or in A3's network trace. |
+| TS-WEB-0014-A13 | static | No call site emits a request body, query string, IP address or e-mail through the logging facade (lint rule over the facade's typed signature). |
+| TS-WEB-0014-A14 | e2e | Against the production build, every route of the TS-WEB-0004 D1 registry in both languages loads with **zero** CSP violations (`securitypolicyviolation` events and console reports) and hydrates: the site header's and every other `[data-hydrated]` reaches `"true"`; a flow route reached with a query hydrates the same way (DEC-0163). |
+
+## Coverage
+
+| Requirement | Discharged by |
+| --- | --- |
+| CON-WEB-0030 (serve an enforced Content-Security-Policy with an explicit allowlist from …) | D1, D2, D3, D5 · A1, A2, A3, A5, A14 |
+| CON-WEB-0031 (admit a Content-Security-Policy allowlist entry only as an explicit …) | D1, D7 · A1 |
+| CON-WEB-0032 (set the security headers of TS-WEB-0014 D4 on every …) | D4, D5 · A2, A5 |
+| FUN-WEB-0127 (run a dependency scan) | D12 · A11 |
+| CON-WEB-0038 (never be released while a dependency scan reports a …) | D12 · A11 |
+| CON-WEB-0034 (serve every request over HTTPS and answer an http:// …) | D8 · A6, A7 |
+| CON-WEB-0039 (protect every form submission with a honeypot field) | D9, D10 · A8, A9 |
+| NFR-WEB-0065 (Captchas, challenge iframes and third-party challenge scripts = 0) | D9, D10 · A8, A9 |
+| CON-WEB-0040 (observe production errors and availability through Vercel-native means) | D6, D13 · A4, A12, A13 |
+| CON-WEB-0041 (never add a third-party error or monitoring SDK) | D6, D13 · A4, A12, A13 |
+
+## Open points
+
+- ~~**D3 — nonce or hashes?**~~ Settled by DEC-0045 (hashes) and DEC-0163
+  (per page, every page static, delivered through the build adapter).
+- **D1 — the envoy widget host (Q-0022).** The widget is not built.
+  Unconfirmed: its script origin (`envoy-api.api.schafe-vorm-fenster.de`
+  is read from the repository, not stated by its owner), what it calls at
+  runtime, and whether it styles its shadow root inline — the last would
+  fix `style-src 'unsafe-inline'` in place. To be answered with the
+  DEC-0014 conformance question already in Q-0022.
+- **D1 — Portalize's runtime origins (Q-0026).** The loader host is known;
+  whether the web component then fetches from `assets.api.` or
+  `calendar.api.` is not. Either would add a `connect-src` entry. Same
+  question round as the cookie-freedom check.
+- **D1 — eTracker's real request surface — measured 2026-11-13.** With the
+  real secure code the loader `code.etracker.com/code/e.js` pulls scripts
+  from `https://www.etracker.de` (`/cntcc`, `/api/v6/tracking/webEvents`);
+  that host is now in `script-src` and `connect-src`. Still open: confirm
+  against eTracker's own CSP documentation.
+- **D4 — HSTS `preload`.** `includeSubDomains` plus `preload` commits
+  *every* `schafe-vorm-fenster.de` subdomain — `events.api.`, `geo.api.`,
+  `classify.api.`, `assets.api.`, `portalize.`, `app.`, `next.` — to
+  HTTPS permanently, and removal from the preload list takes months. Does
+  every service owner accept that, and who submits the entry? Until
+  answered, D4 ships without `preload`.
+- **D10 — which rate limiter?** Vercel Firewall rate-limit rules are
+  plan-dependent. If the team's plan does not carry them, the fallback is
+  a KV-backed sliding window — a new runtime dependency. Does a KV store
+  count as "an additional service" under DEC-0017, or only a *tracking*
+  service does?
+- **D13 — runtime log retention.** Vercel keeps runtime logs for a short,
+  plan-dependent window; an error nobody reads inside it is gone. Is that
+  acceptable for launch, or does CON-WEB-0040, CON-WEB-0041 need a log drain — and would a
+  drain target itself be the additional service DEC-0017 refuses?
+- **D4 — the `frame-ancestors` app-embed exception.** CON-WEB-0032
+  anticipates "app-embed needs"; none is known today. Does the app, once it
+  has a domain of its own (DEC-0177), ever embed a website page in an iframe?
+  Question to the product side; until answered, `'none'`.
+- **D10 — the `429` surface.** DEC-0032 defines 404 and 500; a
+  rate-limited place search has no defined state. Does the place-search
+  component own it, and does that copy belong to TS-WEB-0004 or here?

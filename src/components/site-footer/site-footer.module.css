@@ -1,0 +1,141 @@
+/*
+ * The footer of SRC-0014 §Site footer (review 2026-10-12, issue #42,
+ * DEC-0158): neutral-black `ink` ground, `paper` type, one hairline.
+ *
+ * Mobile-first (TS-WEB-0017 D2(a)): the base rules are the phone's — logo,
+ * switch, hairline, links, copyright, all stacked. From `md` the logo and the
+ * switch share row one; from `xl` the links and the copyright share the base
+ * line. The container is the shared one (DEC-0150), so the footer starts on
+ * the same left edge as every section above it.
+ */
+.footer {
+  background: var(--color-neutral-ink);
+  color: var(--color-neutral-paper);
+  /* Every focus ring in here is on `ink`: the light-ground ring (violet)
+     would measure under 3:1, so the footer's scope takes the dark one. */
+  --focus: var(--color-roles-focus-dark);
+  width: 100%;
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding-block: var(--space-8);
+}
+
+/* Row one: the logo, then the switch under it on the phone. */
+.top {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.brand {
+  display: block;
+}
+
+/* The logo writes its own `ink` colour for light grounds; on this one the
+   wordmark is `paper`. Two classes, so the order of the module sheets cannot
+   decide it. */
+.brand :global(a),
+.brand > span {
+  color: var(--color-neutral-paper);
+}
+
+.newsletter {
+  min-width: 0;
+}
+
+/* ── The base line ────────────────────────────────────────────────────── */
+
+/*
+ * A hairline, then the legal links and the copyright. The hairline is
+ * `paper` at a low share over `ink` — the same construction the header's
+ * dark menu uses — because `line` is a light-ground divider and
+ * reads as a rule of its own on black.
+ */
+.base {
+  border-top: 1px solid color-mix(in srgb, var(--color-neutral-paper) 22%, transparent);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-top: var(--space-4);
+}
+
+.legal {
+  min-width: 0;
+}
+
+.list {
+  column-gap: var(--space-4);
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  row-gap: 0;
+}
+
+/* The legal links: `paper`, bold — a link here is told by weight and by
+   standing in the link row, not by an underline alone, and it gains the
+   underline on hover. `min-height` makes each a 44 px target
+   (SRC-0014 §Touch targets) without spreading the words. */
+.list .link {
+  align-items: center;
+  color: var(--color-neutral-paper);
+  display: inline-flex;
+  font-size: var(--type-meta-size);
+  font-weight: 700;
+  min-height: var(--target-min);
+  text-decoration: none;
+}
+
+.list .link:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+
+.list .link:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-roles-focus-dark);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* The copyright: Meta size, `line` on `ink` — `muted` measures 3.54:1 here
+   and is no option (DEC-0158 §2). It wraps rather than truncates. */
+.copyright {
+  color: var(--color-neutral-line);
+  font-size: var(--type-meta-size);
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+/* md — 40rem / 640 px: the logo and the switch share row one. */
+@media (min-width: 40rem) {
+  .list {
+    column-gap: var(--space-8);
+  }
+
+  .list .link {
+    font-size: var(--type-body-size);
+  }
+
+  .top {
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+/* xl — 64rem / 1024 px: links left, copyright right, on one base line. */
+@media (min-width: 64rem) {
+  .base {
+    align-items: center;
+    column-gap: var(--space-8);
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+}

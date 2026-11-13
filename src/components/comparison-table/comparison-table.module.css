@@ -1,0 +1,211 @@
+/*
+ * The comparison module "Heute → Mit eurem Kalender", version 1a (issue 159,
+ * DEC-0203, SRC-0014 §Comparison). Every measure below is the owner's design;
+ * every colour is a token. Where the design names a value the system has no
+ * token or no permission for, the nearest legal value stands and DEC-0203
+ * §4 lists the difference.
+ *
+ * Phone first: the halves of a pair stack, today on top.
+ */
+
+/* The section the module stands in, handed to `section-shell` as its
+   `className`: the design's own padding, 32 / 40 px on the phone and 64 / 72 px
+   from `lg`, in place of the standard section edge (DEC-0203 §2). Element plus
+   class, so it outranks the shell's single-class `.standard` whatever order the
+   build emits the two stylesheets in. The sides stay the container's. */
+section.section {
+  padding-block: 32px 40px;
+}
+
+/* The heading, then the pairs: 22 px from the heading to the first icon
+   circle on the phone, 32 px to the first pair from `lg`. */
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* 32 px on the phone, 44 px from `lg`; 800, 1.02, −0.035em. */
+.headline {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: var(--type-section-tracking);
+  line-height: 1.02;
+  margin: 0;
+}
+
+/* The icon circle stands 26 px over its block's top edge, so the list keeps
+   that much room above the first pair and 44 px between pairs. */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 44px;
+  list-style: none;
+  margin: 0;
+  padding: 26px 0 0;
+}
+
+.pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.half {
+  position: relative;
+}
+
+/* Today: `surface`, the radius on the outside only. */
+.today {
+  background: var(--color-neutral-surface);
+  border-radius: 24px 24px 0 0;
+  color: var(--color-neutral-text2);
+  padding: 40px 20px 32px;
+}
+
+/* With your calendar: `lime-500`, `ink` text, bold. */
+.with {
+  background: var(--color-lime-500);
+  border-radius: 0 0 24px 24px;
+  color: var(--color-neutral-ink);
+  padding: 32px 20px 22px;
+}
+
+.cell {
+  font-size: 1rem;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.with .cell {
+  font-weight: 700;
+}
+
+.label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  font-weight: 700;
+  letter-spacing: var(--type-label-tracking);
+  line-height: 1.2;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.today .label {
+  color: var(--color-neutral-muted);
+}
+
+.with .label {
+  color: var(--color-lime-900);
+}
+
+/* The two circles: `ink` with a `paper` glyph. Decoration only. */
+.iconCircle,
+.arrowCircle {
+  align-items: center;
+  background: var(--color-neutral-ink);
+  border-radius: 50%;
+  color: var(--color-neutral-paper);
+  display: flex;
+  justify-content: center;
+}
+
+/* The topic circle, 52 px: centred, half over the block's top edge. */
+.iconCircle {
+  height: 52px;
+  left: 50%;
+  position: absolute;
+  top: -26px;
+  transform: translateX(-50%);
+  width: 52px;
+}
+
+/* The arrow circle, 44 px: centred on the seam between the halves, pointing
+   down while they stack. */
+.arrowCircle {
+  height: 44px;
+  left: 50%;
+  position: absolute;
+  top: 0;
+  transform: translate(-50%, -50%);
+  width: 44px;
+  z-index: 1;
+}
+
+.arrowGlyph {
+  transform: rotate(90deg);
+}
+
+/* The colon is for assistive technology only: read aloud, the label and its
+   sentence stay one statement; on screen the label stands above it. */
+.hidden {
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+/* lg — 48rem: the halves stand 50/50 in one row. The design's switch is
+   760 px; 768 px is the nearest breakpoint token (DEC-0203 §4). */
+@media (min-width: 48rem) {
+  section.section {
+    padding-block: 64px 72px;
+  }
+
+  .block {
+    gap: 32px;
+  }
+
+  .headline {
+    font-size: 2.75rem;
+  }
+
+  .list {
+    gap: 12px;
+    padding-top: 0;
+  }
+
+  .pair {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* The icon stands in front of the text, 16 px apart, vertically centred in
+     the block; the text starts at the top, level with the other half's. */
+  .today {
+    align-items: start;
+    border-radius: 28px 0 0 28px;
+    column-gap: 16px;
+    display: grid;
+    grid-template-columns: 52px minmax(0, 1fr);
+    padding: 26px 44px 26px 28px;
+  }
+
+  .iconCircle {
+    align-self: center;
+    left: auto;
+    position: static;
+    top: auto;
+    transform: none;
+  }
+
+  .with {
+    border-radius: 0 28px 28px 0;
+    padding: 26px 28px 26px 44px;
+  }
+
+  /* On the middle edge, vertically centred, pointing right. */
+  .arrowCircle {
+    left: 0;
+    top: 50%;
+  }
+
+  .arrowGlyph {
+    transform: none;
+  }
+
+  .cell {
+    font-size: 1.0625rem;
+  }
+}

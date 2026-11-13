@@ -1,0 +1,181 @@
+import { Button, type ButtonVariant } from "../button/button";
+import { JobLinks, otherJobs } from "../context-band/job-links";
+
+import type { LinkOptions } from "../route-link/href";
+import type { RouteId } from "@/src/lib/routes/routes";
+import type { NavEntry } from "@/src/lib/routes/navigation";
+import type { Locale } from "@/src/lib/i18n/locales";
+import type { ReactNode } from "react";
+
+import styles from "./closing-cta.module.css";
+
+/** Every variant but `pulse` — `/dein-kalender` repeats its goal here, never Pulse (TS-WEB-0006 D6). */
+export type ClosingCtaButtonVariant = Exclude<ButtonVariant, "pulse">;
+
+export interface ClosingCtaRepeatProps extends LinkOptions {
+  readonly variant?: "repeat";
+  readonly to: RouteId;
+  readonly label: string;
+  readonly buttonVariant?: ClosingCtaButtonVariant;
+  /**
+   * The `data-cta` value the button carries. `repeat` (the default) is the
+   * repeat rung, and the value is a **test hook** rather than a rung of the
+   * ladder — see the note at the render below (DEC-0122 §6).
+   *
+   * `primary` belongs to `/ueber-uns` and to no other route: DEC-0082
+   * amendment C makes that page's closing CTA its one primary conversion —
+   * "exactly one per page, or none where the primary is itself the closing
+   * CTA" — and empties its repeat rung. Every other page keeps its primary in
+   * block 1 (TS-WEB-0006 D3).
+   */
+  readonly marker?: "primary" | "repeat";
+  /**
+   * The promise the page ends on, above the button. Without it the last
+   * thing a visitor sees is a control with no sentence around it (polish
+   * brief G-6); the sentence itself is the page's, written in Part B.
+   */
+  readonly heading?: string;
+  readonly reassurance?: string;
+  /**
+   * One quiet line under the button, where the page's focus job carries a
+   * second, equal-weight way forward — `/dein-kalender` ends on "order" with
+   * "rather talk first?" beneath it (brief, page 6, item 8). Never a second
+   * button: G-5 allows one primary treatment per screenful.
+   */
+  readonly footer?: ReactNode;
+  readonly className?: string;
+}
+
+export interface ClosingCtaMergedProps {
+  readonly variant: "merged";
+  /** The page's focus job — `primaryConversion: null` pages merge the band and the closing block into the same three-job offer (TS-WEB-0006 D6). */
+  readonly currentJob: NavEntry["label"];
+  readonly heading?: string;
+  readonly locale?: Locale;
+  /**
+   * Block 4's anchor, where the merged block is rendered inside the band's
+   * own `aside#context-band` — the merged shape is one block carrying both
+   * ids, so a page keeps exactly one `#context-band` and one `#closing-cta`
+   * (TS-WEB-0006 D6 + TS-WEB-0011-A4, F-2-41).
+   */
+  readonly id?: string;
+  readonly className?: string;
+}
+
+export type ClosingCtaProps = ClosingCtaRepeatProps | ClosingCtaMergedProps;
+
+export interface ClosingCtaModuleProps {
+  /** The promise the page ends on, above the control (polish brief G-6). */
+  readonly heading?: string;
+  readonly reassurance?: string;
+  /** A quiet line under the block — "Anderer Ort?", "Falsch getippt?". */
+  readonly footer?: ReactNode;
+  /** The block-1 primary, repeated as the module it is (the place search, the app handover). */
+  readonly children: ReactNode;
+  readonly className?: string;
+}
+
+/**
+ * The third shape of block 4: the primary conversion repeated as a **module**
+ * rather than as a link — the place search on a "know what is on" page, the
+ * calendar handover once a place is known.
+ *
+ * It exists so that shape gets the same frame as the other two: a heading
+ * above the control and the reassurance under it, at the same rhythm. Before
+ * the polish pass the module variant was the bare control, and `/dein-ort`
+ * ended on an input with the permanence promise wedged under the field's own
+ * helper text with no gap between them.
+ */
+export function ClosingCtaModule({
+  heading,
+  reassurance,
+  footer,
+  children,
+  className,
+}: ClosingCtaModuleProps) {
+  return (
+    <div className={[styles.repeat, className].filter(Boolean).join(" ")}>
+      {heading ? <p className={styles.heading}>{heading}</p> : null}
+      {children}
+      {reassurance ? <p className={styles.reassurance}>{reassurance}</p> : null}
+      {footer}
+    </div>
+  );
+}
+
+/**
+ * 48 `closing-cta` [PROPOSED] — content type 22, TS-WEB-0006 D6.
+ *
+ * Structure: the last block. `repeat` mode is identical to the primary
+ * conversion — same goal, same target, same label — plus its reassurance.
+ * `merged` mode is the three-job offer, on `primaryConversion: null` pages
+ * (27, 28), rendered once, sharing `context-band`'s job list so the two can
+ * never disagree.
+ * States: none of its own.
+ * Inherits: `button` primary in `repeat` mode, **never pulse** (Pulse occurs
+ * exactly once, in the focus block). Reassurance in Meta, only where a
+ * cleared backing exists — otherwise omitted, not softened.
+ * Space: fixed height.
+ * A11y: `data-cta="repeat"` — the `primary` marker belongs to block 1, with the
+ * single exception `/ueber-uns` takes through `marker` (DEC-0082 amendment C).
+ */
+export function ClosingCta(props: ClosingCtaProps) {
+  if (props.variant === "merged") {
+    const {
+      currentJob,
+      heading = "Was suchst du sonst noch?",
+      locale = "de",
+      id,
+      className,
+    } = props;
+    return (
+      <div className={[styles.merged, className].filter(Boolean).join(" ")} id={id}>
+        <p className={styles.heading}>{heading}</p>
+        <JobLinks jobs={otherJobs(currentJob)} locale={locale} />
+      </div>
+    );
+  }
+
+  const {
+    to,
+    label,
+    buttonVariant = "primary-light",
+    marker = "repeat",
+    heading,
+    reassurance,
+    footer,
+    locale,
+    query,
+    hash,
+    className,
+  } = props;
+
+  return (
+    <div className={[styles.repeat, className].filter(Boolean).join(" ")}>
+      {heading ? <p className={styles.heading}>{heading}</p> : null}
+      {/* `data-cta="repeat"` by default — the marker block 1 keeps is
+          `"primary"` (TS-WEB-0006 D6), and `/ueber-uns` is the one route that
+          passes it here instead, because there the closing CTA *is* the page's
+          primary (DEC-0082 amendment C).
+
+          `repeat` itself is a **test hook, not a rung**: DEC-0082 D3 lists the
+          repeat rung with "Marker: none", and the attribute is here anyway so
+          the label is inside the contrast sweep that walks `[data-cta]` on
+          every route (`e2e/cta-contrast.spec.ts`) — this button computed ink on
+          ink in a production build and nothing measured it. No criterion counts
+          `repeat` and no ladder rule reads it (DEC-0122 §6). */}
+      <Button
+        dataCta={marker}
+        hash={hash}
+        locale={locale}
+        query={query}
+        to={to}
+        variant={buttonVariant}
+      >
+        {label}
+      </Button>
+      {reassurance ? <p className={styles.reassurance}>{reassurance}</p> : null}
+      {footer ? <div className={styles.footer}>{footer}</div> : null}
+    </div>
+  );
+}

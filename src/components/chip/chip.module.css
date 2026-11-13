@@ -1,0 +1,67 @@
+.chip {
+  align-items: center;
+  border: 0;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-label);
+  font-weight: 700;
+  gap: var(--space-2);
+  letter-spacing: var(--tracking-mono);
+  line-height: var(--leading-tight);
+  /* ≥ 40 px specified, 44 px shipped — the 2.5.5 AAA floor. */
+  min-height: var(--height-chip);
+  padding: var(--space-2) var(--space-4);
+  text-decoration: none;
+  /*
+   * A long label wraps inside the pill rather than pushing the page sideways.
+   * The order flow's county affordance ("+ Landkreis Vorpommern-Greifswald")
+   * made the document 451 px wide at a 390 px viewport, which is a horizontal
+   * scrollbar on a conversion step. `nowrap` is right for a place name and
+   * wrong for a phrase; `balance` keeps the two lines even.
+   */
+  text-wrap: balance;
+}
+
+/*
+ * F-3-R2 (row 193's class, `state/open.md` row 133's pattern): `section-shell`
+ * recolours every `a` on its dark grounds — `.ink a { color: lime-400 }` —
+ * and a chip is an `a` that brings its own fill/text pair with it. At
+ * specificity (0,1,1) the ambient rule beat the pair at (0,1,0), so a light
+ * chip inside an ink section rendered `lime-400` text on its own
+ * `neutral-surface` ground: **1.35:1**, on every one of `/deine-region`'s
+ * place chips. Each pair now re-asserts itself at (0,2,0), which is above the
+ * ambient rule without needing `!important` or a tone prop the caller would
+ * have to remember.
+ */
+.chip.light {
+  background: var(--color-neutral-surface);
+  color: var(--color-neutral-ink);
+}
+
+.chip.light:hover {
+  background: var(--color-neutral-surface2);
+}
+
+/* On an ink, lime-500 or photo ground. */
+.chip.dark {
+  /* A neutral dark grey (`ink` + 18 % `paper`) — never a dark green, and not
+     `text-2`, which reads as one (DEC-0160 amendment): `paper` on it 13.24:1. */
+  background: var(--fill-ink-hover);
+  color: var(--color-neutral-paper);
+}
+
+.chip.dark:hover {
+  background: var(--color-neutral-ink);
+}
+
+/* Selected: fill *and* the check glyph the component renders — two signals. */
+.chip.selected {
+  background: var(--color-neutral-ink);
+  color: var(--color-neutral-paper);
+}
+
+.chip.selected:hover {
+  background: var(--fill-ink-hover); /* DEC-0160 */
+}

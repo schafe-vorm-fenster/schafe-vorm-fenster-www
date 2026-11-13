@@ -1,0 +1,768 @@
+/*
+ * The header — TS-WEB-0004 D4, and Jan's round-3 points 2 and 3, re-cut by his
+ * round-4 change request (state/open.md row 200).
+ *
+ * Mobile-first (TS-WEB-0017 D2(a)): everything above the first `@media` line is
+ * the phone. The two `min-width` queries are `md` (40rem) and `lg` (48rem),
+ * both `breakpoint.*` token values (D2(b)).
+ *
+ * Two grounds, one element:
+ *   solid       — paper, in the flow. Every page without a hero photograph,
+ *                 and every page once the hero has scrolled past.
+ *   over a hero — **completely transparent**: no scrim, no hairline, no
+ *                 ground of any kind. Logo, burger, labels and calendar pill
+ *                 lie on the photograph itself. Swapping between the two
+ *                 changes colours only, never geometry, so CLS stays 0.
+ *
+ * ### Where the contrast comes from now (Jan's round-4 change request)
+ *
+ * Round 3 gave the header its own ink top scrim and read paper text off it.
+ * Jan's finding on that preview: the scrim is a grey bar over the
+ * photograph, and the photograph is what the page is for. So the scrim is
+ * gone and every item that is not already a filled control carries its own
+ * **44 px control well** instead — the one ground SRC-0014 §Icons sanctions
+ * ("never in a coloured circle unless that circle is a 44 px control well"),
+ * at radius 999, with no border and no shadow (§Shape and Space: "Borders
+ * and shadows: none").
+ *
+ * The well is one custom property, `--header-well`, so the three places that
+ * paint it (the burger, the desktop label row, and nothing else) stay in
+ * step and the JavaScript-less branch at the bottom can retire all of them
+ * with one declaration.
+ *
+ * **Why ink and not paper** — measured, both viewports, all six hero pages,
+ * pixel-sampled against the generated renditions actually in use with the
+ * header's own foreground hidden (`state/open.md` row 200 carries the
+ * table): paper on an ink well and ink on a paper well are the same
+ * 20.17:1, so the identifying contrast is a tie; the tie-break is the well's
+ * own edge against the photograph, and there ink clears 3:1 at the local
+ * mean on 23 of 30 measured positions against paper's 11 of 30 (median 8.2:1
+ * against 2.2:1). Hero photographs open on sky far more often than on
+ * anything dark, and sky is exactly where a paper well disappears.
+ *
+ * ### The blur primitive (DEC-0105 §4, SRC-0014 §The blur primitive)
+ *
+ * The solid ink well is now the **declared fallback**, not the treatment. A
+ * solid disc solves contrast by hiding the picture behind it; the design
+ * system's answer is a backdrop blur on the control's own shape — the 44 px
+ * wells and the 40 px mark, never a bar — with `scrim-38` above the blurred
+ * area so the paper glyph reads against a measured ground rather than
+ * whatever the photograph happens to be. `backdrop-filter` is the only blur
+ * in the system and this is the only component that may declare it.
+ *
+ * The treatment is two custom properties the items read — `--header-well`
+ * (the tint) and `--header-blur` (the filter) — and three conditions select
+ * the fallback, each a real one: no `@supports` match; `prefers-reduced-
+ * transparency: reduce` (a blur is a transparency effect and this is the
+ * preference that asks for it to stop; TS-WEB-0002 D4); and the performance
+ * budget — `backdrop-filter` forces a compositor layer over a sticky element
+ * above the page's LCP image, so the treatment is legal only while the route
+ * stays inside TS-WEB-0003 D1 with it applied. That third condition is a
+ * measured-run judgement, not a media query: a route that falls out takes
+ * the fallback by declaration (DEC-0116).
+ */
+
+.header {
+  background: var(--color-neutral-paper);
+  color: var(--color-neutral-ink);
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 10;
+
+  /*
+   * The solid ground's values. Every item rule below reads these, and the
+   * transparent ground re-declares them — one switch, no rule that only one
+   * of the two states knows about. The calendar pill's pair repeats
+   * `button.primaryLight`/`primaryDark` (SRC-0014 §Button) rather than
+   * overriding it in one direction only, because a one-way override cannot
+   * be taken back in the `scripting: none` branch.
+   */
+  --header-well: transparent;
+  --header-blur: none;
+  --header-label: var(--color-neutral-text2);
+  --header-label-hover: var(--color-neutral-surface);
+  --header-current-fill: var(--color-neutral-surface2);
+  --header-current-ink: var(--color-neutral-ink);
+  --header-wordmark: visible;
+}
+
+/*
+ * Over a hero photograph the header takes no space in the flow — the
+ * photograph starts at the top of the document, which is what the design
+ * boards draw (`concept/v2.0/UI Varianten.dc.html`, turn 6 "Editorial mit
+ * Fotoflächen": the bar lies on the hero, mark and wordmark in paper, the
+ * calendar pill in lime). `fixed`, not `sticky`, at every scroll position, so
+ * swapping between the two grounds moves nothing.
+ */
+.header[data-over-hero="true"] {
+  /*
+   * Nothing. No colour, no image, no hairline — the photograph is the
+   * header's ground, which is the whole of Jan's round-4 request.
+   *
+   * The scrim this replaces was not only decoration: axe-core resolves a
+   * text node's ground by walking the element and its ancestors, so over a
+   * transparent header it used to resolve paper text against `body`'s paper
+   * and report seven `color-contrast` violations. That is answered better by
+   * the wells than it was by the scrim: every text node in the transparent
+   * bar now sits inside an element with an **opaque** background of its own
+   * (the label row's well, the calendar pill's lime), so the walk finds a
+   * real colour, the ratio it computes is the ratio a visitor sees, and the
+   * hidden wordmark is out of the tree entirely. Nothing is left resolving
+   * against a photograph.
+   *
+   * The two grounds swap without a transition: the solid one arrives as a
+   * background-colour change, and a fade would leave a window in which the
+   * header is neither.
+   */
+  background-color: transparent;
+  background-image: none;
+  color: var(--color-neutral-paper);
+  left: 0;
+  position: fixed;
+  right: 0;
+}
+
+/*
+ * The transparent ground's values — the 44 px control well and the pairs
+ * that sit on it. `[data-solid="false"]` is the state the server renders and
+ * the scroll measure confirms; `[data-solid="true"]` never reaches here, so
+ * turning solid restores the block above without a second override.
+ */
+.header[data-over-hero="true"][data-solid="false"] {
+  /* The floor: the solid ink well, paper glyph, 20.17:1 (DEC-0105 §4). */
+  --header-well: var(--color-neutral-ink);
+  --header-blur: none;
+  --header-label: var(--color-neutral-paper);
+  --header-label-hover: color-mix(in srgb, var(--color-neutral-paper) 16%, transparent);
+  --header-current-fill: var(--color-neutral-paper);
+  --header-current-ink: var(--color-neutral-ink);
+  /*
+   * The wordmark is paper *text*, and paper text on a bare hero photograph
+   * measures 1.09–5.01:1 against a 4.5:1 floor — it fails on five of the six
+   * heroes at 1280. Its own well would put a third dark shape next to the
+   * mark's white ground and the pill's lime. So over the photograph the logo
+   * is the mark alone, which is what Jan chose for the phone already; the
+   * wordmark keeps its box (`visibility`, not `display`), so the header does
+   * not move when it comes back on the solid ground.
+   */
+  --header-wordmark: hidden;
+}
+
+/*
+ * The blur primitive, selected by capability and never by user agent: the
+ * `scrim-38` tint over `blur(12px) saturate(120%)`, on the 44 px wells and
+ * the 40 px mark (`logo.module.css` reads the same two properties). The
+ * declaration order is the fallback order — the solid well above is what a
+ * browser without `backdrop-filter` keeps, and the reduced-transparency
+ * query inside puts it back for a visitor who asked for no transparency
+ * effects.
+ */
+@supports (backdrop-filter: blur(12px)) {
+  .header[data-over-hero="true"][data-solid="false"] {
+    --header-well: var(--color-scrim-38);
+    --header-blur: blur(12px) saturate(120%);
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .header[data-over-hero="true"][data-solid="false"] {
+      --header-well: var(--color-neutral-ink);
+      --header-blur: none;
+    }
+  }
+}
+
+.header[data-over-hero="true"][data-solid="true"] {
+  background-color: var(--color-neutral-paper);
+  color: var(--color-neutral-ink);
+}
+
+/*
+ * Without JavaScript nothing can observe the hero leaving, so the transparent
+ * ground would stay over whatever scrolled under it. The `scripting` media
+ * feature is the one place that case can be answered in CSS: the header falls
+ * back to the solid, in-flow form it has everywhere else.
+ */
+@media (scripting: none) {
+  .header[data-over-hero="true"] {
+    background-color: var(--color-neutral-paper);
+    color: var(--color-neutral-ink);
+    position: sticky;
+  }
+
+  /*
+   * And the items with it. Round 3 reset the *ground* here and left the item
+   * pairs alone, so a visitor without JavaScript got a solid paper bar whose
+   * four job labels were still paper — paper on paper, measured 1:1, four
+   * invisible links on every hero page. One reset of the same custom
+   * properties the state above declares puts the whole bar back on the solid
+   * pair, labels included.
+   */
+  .header[data-over-hero="true"][data-solid="false"] {
+    --header-well: transparent;
+    --header-blur: none;
+    --header-label: var(--color-neutral-text2);
+    --header-label-hover: var(--color-neutral-surface);
+    --header-current-fill: var(--color-neutral-surface2);
+    --header-current-ink: var(--color-neutral-ink);
+    --header-wordmark: visible;
+  }
+}
+
+.inner {
+  align-items: center;
+  display: flex;
+  gap: var(--space-3);
+  /* Declared before paint — the same value `--site-header-height` publishes. */
+  min-height: var(--site-header-height);
+  padding-block: var(--space-2);
+}
+
+.header .logo {
+  color: inherit;
+  flex: none;
+  margin-inline-end: auto;
+}
+
+/*
+ * The mark alone while the header is on the photograph — see the
+ * `--header-wordmark` note above. `visibility` keeps the box, so the
+ * wordmark returning on the solid ground moves nothing. Scoped to the bar:
+ * the overlay's own brand stands on the ink dialog and keeps its wordmark.
+ */
+.inner [data-wordmark] {
+  visibility: var(--header-wordmark);
+}
+
+/*
+ * The four job labels. Below `md` they live in the overlay instead — the same
+ * links, the same order, disclosed rather than scrolled sideways (Jan's
+ * round-3 point 3; state/open.md rows 35 and 201).
+ */
+.nav {
+  display: none;
+  min-width: 0;
+}
+
+/*
+ * The label row is **one** well, not four.
+ *
+ * (Every rule in this block is written `.header .x` rather than `.x`. The
+ * items are `route-link`s and `button`s, whose own modules carry
+ * single-class rules — `.bare { color: inherit }` among them — and two
+ * single-class rules from different CSS modules are decided by sheet order,
+ * which differs between `next dev` and the production build. Measured: with
+ * `.job` alone the four labels came out ink instead of `--header-label` in
+ * the production build only. The descendant selector settles it by
+ * specificity instead of by luck.)
+ *
+ * Over the photograph the four labels need a ground of their own — paper
+ * text on a bare hero measures 1.03–2.53:1 at 1280 against a 4.5:1 floor, so
+ * it fails on every one of the six heroes. A well per label would put four
+ * dark pills in a row beside the mark's white ground and the lime pill;
+ * one well behind the row is a single 44 px-high control well at radius 999
+ * (the label's own `min-height` is the well's height, and its own
+ * `padding-inline` is the well's inset, so the well adds no geometry and
+ * the row does not move when the header turns solid).
+ */
+.header .list {
+  backdrop-filter: var(--header-blur);
+  background: var(--header-well);
+  border-radius: var(--radius-pill);
+  display: flex;
+  gap: var(--space-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  /* The `ul` is a block inside `nav { flex: 1 }`, so without this the well
+     would be painted across the whole free width instead of behind the row. */
+  width: fit-content;
+}
+
+.header .job {
+  align-items: center;
+  border-radius: var(--radius-pill);
+  color: var(--header-label);
+  display: inline-flex;
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  font-weight: 700;
+  letter-spacing: var(--type-label-tracking);
+  min-height: var(--target-min);
+  padding: 0 var(--space-3);
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.header .job:hover {
+  background: var(--header-label-hover);
+}
+
+/*
+ * Current page: fill and ink weight, not colour alone — on the solid ground
+ * `surface-2` behind ink, inside the well a paper chip behind ink. The chip
+ * is the only mark a visitor needs to read at a glance, and paper on the ink
+ * well is 20.17:1 either way round, so `aria-current` survives the state
+ * change as a *fill*, not as a colour.
+ */
+.header .job[data-current="true"] {
+  background: var(--header-current-fill);
+  color: var(--header-current-ink);
+}
+
+/* ── The disclosure control ─────────────────────────────────────────────── */
+
+.burger {
+  flex: none;
+}
+
+/*
+ * The burger's 44 px control well — SRC-0014 §Icons is explicit that this is
+ * the one ground an icon may have ("never in a coloured circle unless that
+ * circle is a 44 px control well"), and the button was already exactly that
+ * square at radius 999, so the well costs no geometry: on the solid ground
+ * `--header-well` is `transparent` and the control is what it always was.
+ *
+ * Measured, stripes on the ink well are 20.17:1 against a 3:1 floor on every
+ * hero page at 360 — the number does not depend on the photograph at all,
+ * which is the point of a well.
+ */
+.header .toggle {
+  align-items: center;
+  backdrop-filter: var(--header-blur);
+  background: var(--header-well);
+  border: 0;
+  border-radius: var(--radius-pill);
+  color: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  height: var(--target-min);
+  justify-content: center;
+  padding: 0;
+  width: var(--target-min);
+}
+
+/* Lightens the well rather than replacing it — `transparent` on the solid
+   ground leaves the original 12 % currentcolor wash untouched. */
+.header .toggle:hover {
+  background: color-mix(in srgb, currentcolor 12%, var(--header-well));
+}
+
+/*
+ * The phone bar's track (owner, 2026-10-29, DEC-0190). Below `md` the burger
+ * of a page that belongs to a job grows into a track that fills the bar
+ * beside the mark: the header's well (blurred `scrim-38` over a photograph,
+ * nothing on paper), the job as a pill in the desktop row's current-page pair
+ * on its left, the stripes on its right. The pill steps along the track by
+ * the job's position in the menu, as the current chip sits at its own place
+ * in the desktop row. The whole track is the one control that opens the
+ * menu. From `md` the track is the round burger again.
+ */
+.header .toggle[data-track="true"] {
+  flex: 1;
+  height: var(--space-12);
+  justify-content: space-between;
+  min-width: 0;
+  padding-inline-end: var(--space-3);
+  width: auto;
+}
+
+.trackLabel {
+  align-items: center;
+  background: var(--header-current-fill);
+  border-radius: var(--radius-pill);
+  color: var(--header-current-ink);
+  display: inline-flex;
+  font-family: var(--font-mono);
+  /* Fluid down from the label size: "TERMINE VERÖFFENTLICHEN" has to fit the
+     track at 360 px, which it does at ~12 px and not at 15 (measured with the real face). The
+     owner's reference draws the pill at ~12 px; this deviation from the
+     15 px label floor is recorded in DEC-0190. */
+  font-size: clamp(0.75rem, 3.4vw, var(--type-label-size));
+  font-weight: 700;
+  height: 100%;
+  letter-spacing: 0.04em;
+  min-width: 0;
+  overflow: hidden;
+  /* 10 px, not space-3: the three steps of ghost room cost the longest label 3 px. */
+  padding-inline: calc(var(--space-3) - 2px);
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/*
+ * The other three jobs, hinted (issue 139, DEC-0191). The track is a flex row:
+ * a slot before the pill, the pill, a slot after it, the stripes. The slots
+ * grow in the ratio index : (3 - index) and the pill takes its own width, so
+ * the free width of the track is shared in thirds and the pill sits `index`
+ * thirds from the start — it walks along the track at every width. Jobs before
+ * the current one are layers inside the first slot, jobs after it layers inside
+ * the second: layer k reaches k thirds out from the pill (a percentage of its
+ * slot) and runs on under the pill, which is opaque and hides its end.
+ * Translucent, fully rounded, so layers that overlap darken each other, the
+ * nearer ones most. The layer colour is ink at 24 %: not a design-system token,
+ * an assumed value (recorded in DEC-0190 and DEC-0191).
+ */
+.trackLabel {
+  position: relative;
+  z-index: 1;
+}
+
+.trackSlot {
+  align-self: stretch;
+  flex-basis: 0;
+  flex-shrink: 1;
+  min-width: 0;
+  position: relative;
+}
+
+.trackSlot[data-count="1"] {
+  flex-grow: 1;
+}
+
+.trackSlot[data-count="2"] {
+  flex-grow: 2;
+}
+
+.trackSlot[data-count="3"] {
+  flex-grow: 3;
+}
+
+.trackGhost {
+  background: color-mix(in srgb, var(--color-neutral-ink) 24%, transparent);
+  border-radius: var(--radius-pill);
+  inset-block: 0;
+  position: absolute;
+  width: calc(var(--track-layer-k) / var(--track-layer-n) * 100% + var(--space-12));
+}
+
+.trackSlot[data-side="before"] .trackGhost {
+  right: calc(-1 * var(--space-12));
+}
+
+.trackSlot[data-side="after"] .trackGhost {
+  left: calc(-1 * var(--space-12));
+}
+
+.toggle[data-track="true"] .stripes {
+  flex: none;
+  margin-inline-start: var(--space-2);
+}
+
+/* The mark matches the track's height on the phone. */
+.inner .logo img {
+  height: var(--space-12);
+  width: var(--space-12);
+}
+
+.stripes {
+  display: block;
+  height: 16px;
+  position: relative;
+  width: 22px;
+}
+
+.stripe {
+  background: currentcolor;
+  border-radius: var(--radius-pill);
+  display: block;
+  height: 2px;
+  left: 0;
+  position: absolute;
+  width: 100%;
+}
+
+.stripe:nth-child(1) {
+  top: 0;
+}
+
+.stripe:nth-child(2) {
+  top: 7px;
+}
+
+.stripe:nth-child(3) {
+  top: 14px;
+}
+
+/*
+ * Burger → X. A second movement beside SRC-0014 §Motion's one, on Jan's
+ * instruction (state/open.md row 202). It plays when the overlay's own
+ * instance mounts, and `prefers-reduced-motion` removes it in `base.css`.
+ */
+.toggle[data-shape="close"] .stripe:nth-child(1) {
+  animation: toggle-top var(--motion-control-duration) var(--motion-reveal-easing) forwards;
+}
+
+.toggle[data-shape="close"] .stripe:nth-child(2) {
+  animation: toggle-middle var(--motion-control-duration) var(--motion-reveal-easing) forwards;
+}
+
+.toggle[data-shape="close"] .stripe:nth-child(3) {
+  animation: toggle-bottom var(--motion-control-duration) var(--motion-reveal-easing) forwards;
+}
+
+/* `transform` and `opacity` only — both compositor-friendly; animating `top`
+   would lay the header out again on every frame. */
+@keyframes toggle-top {
+  to {
+    transform: translateY(7px) rotate(45deg);
+  }
+}
+
+@keyframes toggle-middle {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes toggle-bottom {
+  to {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+}
+
+/* ── The overlay ───────────────────────────────────────────────────────── */
+
+/*
+ * The phone menu (owner, 2026-10-29, DEC-0189): the page itself, blurred and
+ * darkened under `scrim-72` — the blur primitive's tint ceiling — rather than
+ * a flat ink sheet. The page underneath stays recognisable; the paper type
+ * on it reads against the scrim, not against whatever the page was showing
+ * (paper over `scrim-72` on a paper page is at least 8:1). Where the blur is
+ * not available, or the visitor asked for reduced transparency, the overlay
+ * is the solid ink sheet it was.
+ */
+.dialog {
+  --header-blur: none;
+  --header-wordmark: visible;
+  /* The close control's well: a translucent paper lift, as the menu rows. */
+  --header-well: color-mix(in srgb, var(--color-neutral-paper) 14%, transparent);
+  --menu-fill: color-mix(in srgb, var(--color-neutral-paper) 14%, transparent);
+  --menu-hover: color-mix(in srgb, var(--color-neutral-paper) 8%, transparent);
+  background: var(--color-neutral-ink);
+  /* The overlay scrolls on its own; a scroll that reaches its end must not
+     continue in the page behind it. */
+  overscroll-behavior: contain;
+  border: 0;
+  border-radius: 0;
+  color: var(--color-neutral-paper);
+  height: 100%;
+  margin: 0;
+  max-height: 100%;
+  max-width: 100%;
+  overflow-y: auto;
+  padding: 0;
+  width: 100%;
+}
+
+.dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog::backdrop {
+  background: var(--color-neutral-ink);
+}
+
+@supports (backdrop-filter: blur(24px)) {
+  .dialog {
+    backdrop-filter: blur(24px) saturate(120%);
+    background: var(--color-scrim-72);
+  }
+
+  /* The blur must see the page, so nothing may be painted between them. */
+  .dialog::backdrop {
+    background: transparent;
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .dialog {
+      backdrop-filter: none;
+      background: var(--color-neutral-ink);
+    }
+
+    .dialog::backdrop {
+      background: var(--color-neutral-ink);
+    }
+  }
+}
+
+.dialogClose {
+  flex: none;
+}
+
+.dialogBar {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  min-height: var(--site-header-height);
+  padding-block: var(--space-2);
+}
+
+.dialogBody {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-8);
+  margin-inline: auto;
+  max-width: var(--measure-page);
+  padding: var(--space-6) var(--gutter) var(--space-8);
+  width: 100%;
+}
+
+.menuNav {
+  width: 100%;
+}
+
+.menuList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* The rows speak the desktop label row's language — Label-mono, upper case,
+   tracked — one size up, each a full-width pill target. */
+.menuLink {
+  align-items: center;
+  border-radius: var(--radius-pill);
+  color: var(--color-neutral-paper);
+  display: flex;
+  font-family: var(--font-mono);
+  font-size: calc(var(--type-label-size) * 1.2);
+  font-weight: 700;
+  letter-spacing: var(--type-label-tracking);
+  min-height: var(--target-comfortable);
+  padding: var(--space-2) calc(var(--space-4) + var(--space-1));
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+/* The colour is restated: the global `a:hover` (`--link-hover`, violet on
+   paper) outranks a single class and turned the hovered row violet on the
+   dark glass. */
+.menuLink:hover {
+  background: var(--menu-hover);
+  color: var(--color-neutral-paper);
+}
+
+/* Current page: a fill, never colour alone (`aria-current` rides with it). */
+.menuLink[data-current="true"] {
+  background: var(--menu-fill);
+}
+
+.menuLink:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-roles-focus-dark);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* The space is this component's own (DEC-0178 §4): a wrapper it owns pads it,
+   so no margin rides on another component's root through `className` (A32).
+   The switch stands at the foot of the overlay, centred. */
+.menuLanguageRow {
+  display: flex;
+  justify-content: center;
+  margin-top: auto;
+  padding-top: var(--space-2);
+}
+
+/* xs — 22.5rem / 360 px up: room between the mark and the track (owner,
+   2026-11-12, DEC-0191). Below it the track needs the room, so the longest
+   label still fits. The inline row from `xl` sets its own. */
+@media (min-width: 22.5rem) {
+  .inner {
+    gap: var(--space-6);
+  }
+
+  /* More air between the last layer's rounding and the stripes (owner,
+     2026-11-12, DEC-0191): space-3 here, space-4 from `md`. space-4 at 360 px
+     cuts "TERMINE VERÖFFENTLICHEN" by 3 px (measured). */
+  .toggle[data-track="true"] .stripes {
+    margin-inline-start: var(--space-3);
+  }
+}
+
+/* ── md — 40rem / 640 px up: the wordmark comes back beside the mark. ───── */
+
+@media (min-width: 40rem) {
+  .logo {
+    margin-inline-end: var(--space-2);
+  }
+
+  .toggle[data-track="true"] .stripes {
+    margin-inline-start: var(--space-4);
+  }
+}
+
+/* ── xl — 64rem / 1024px: the four labels are inline and the burger goes. ──
+ *
+ * Jan's round-3 point 3 names `md` as the switch point for the inline labels.
+ * Measured, they do not fit there: at 640 px the four German labels are 277 px
+ * of a 576 px content box **after** the logo and the calendar pill, and the
+ * header's own container scrolls sideways by 262 px — the exact anti-pattern
+ * the decision exists to remove. At 768 px it still scrolls by 126 px and the
+ * document itself overflows by 6 px. The first breakpoint token at which the
+ * row fits without scrolling is `xl`; `lg` does not. So the **disclosure**
+ * switch is `xl` and the wordmark's is `md`, and the deviation from Jan's
+ * wording is recorded rather than silently rounded (state/open.md row 201).
+ */
+
+@media (min-width: 64rem) {
+  .nav {
+    display: block;
+    flex: 1;
+  }
+
+  /* `.header .toggle` above carries the display, so the switch-off has to
+     match its specificity — a bare `.burger` loses to it. */
+  .header .burger {
+    display: none;
+  }
+
+  .logo {
+    margin-inline-end: 0;
+  }
+
+  .inner {
+    gap: var(--space-3);
+  }
+
+  /* The inline row has no track beside the mark, so the mark is the small one. */
+  .inner .logo img {
+    height: 40px;
+    width: 40px;
+  }
+}
+
+/* ── 80rem / 1280px up — owner's review 2026-10-29: the row sat hard against the
+ * wordmark, so it is centred between the mark and the pill, and
+ * the wordmark hangs beside the mark out of flow — the bar's geometry is the
+ * same with and without it, and the free space either side of the row is wider
+ * than the wordmark (measured at 1280: 172 px against 102 px). ──────────── */
+
+@media (min-width: 80rem) {
+  .nav {
+    padding-inline-start: 0;
+  }
+
+  .inner .logo {
+    position: relative;
+    width: 40px;
+  }
+
+  .inner .logo [data-wordmark] {
+    inset-block-start: 50%;
+    inset-inline-start: calc(40px + var(--space-3));
+    position: absolute;
+    transform: translateY(-50%);
+    white-space: nowrap;
+  }
+
+  .header .list {
+    margin-inline: auto;
+  }
+}

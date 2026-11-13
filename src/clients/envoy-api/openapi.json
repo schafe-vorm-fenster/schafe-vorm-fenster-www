@@ -1,0 +1,1053 @@
+{
+  "openapi": "3.0.2",
+  "paths": {
+    "/api/health": {
+      "get": {
+        "description": "Returns the health status of the API and its dependent services.",
+        "summary": "Health Check",
+        "tags": [
+          "health"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "enum": [
+                        200
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "version": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "services": {
+                      "type": "array",
+                      "items": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "status": {
+                                "type": "number",
+                                "enum": [
+                                  200
+                                ]
+                              },
+                              "message": {
+                                "type": "string",
+                                "enum": [
+                                  "healthy"
+                                ]
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "version": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "status",
+                              "message",
+                              "name"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "status": {
+                                "type": "number",
+                                "enum": [
+                                  202
+                                ]
+                              },
+                              "message": {
+                                "type": "string",
+                                "enum": [
+                                  "degraded"
+                                ]
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "version": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "status",
+                              "message",
+                              "name"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "status": {
+                                "type": "number",
+                                "minimum": 400,
+                                "maximum": 599
+                              },
+                              "error": {
+                                "type": "string"
+                              },
+                              "trace": {
+                                "nullable": true
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "version": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "status",
+                              "error",
+                              "name"
+                            ],
+                            "additionalProperties": false
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "name",
+                    "version",
+                    "services"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "503",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "version": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "services": {
+                      "type": "array",
+                      "items": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "status": {
+                                "type": "number",
+                                "enum": [
+                                  200
+                                ]
+                              },
+                              "message": {
+                                "type": "string",
+                                "enum": [
+                                  "healthy"
+                                ]
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "version": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "status",
+                              "message",
+                              "name"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "status": {
+                                "type": "number",
+                                "enum": [
+                                  202
+                                ]
+                              },
+                              "message": {
+                                "type": "string",
+                                "enum": [
+                                  "degraded"
+                                ]
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "version": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "status",
+                              "message",
+                              "name"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "status": {
+                                "type": "number",
+                                "minimum": 400,
+                                "maximum": 599
+                              },
+                              "error": {
+                                "type": "string"
+                              },
+                              "trace": {
+                                "nullable": true
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "version": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "status",
+                              "error",
+                              "name"
+                            ],
+                            "additionalProperties": false
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error",
+                    "name",
+                    "version",
+                    "services"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/openapi": {
+      "get": {
+        "tags": [
+          "Documentation"
+        ],
+        "summary": "Get OpenAPI Specification",
+        "description": "Returns the complete OpenAPI/Swagger specification for this API in JSON format.",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "OpenAPI specification",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "openapi": {
+                      "type": "string",
+                      "description": "OpenAPI version"
+                    },
+                    "info": {
+                      "type": "object",
+                      "properties": {
+                        "title": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "version": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "paths": {
+                      "type": "object",
+                      "description": "API paths and operations"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error generating specification",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/conversation": {
+      "post": {
+        "description": "Send a message to the AI chatbot and receive an intelligent response. Requires Bearer token in Authorization header.",
+        "summary": "Chat Conversation",
+        "tags": [
+          "conversation"
+        ],
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 10000
+                  },
+                  "systemInstruction": {
+                    "type": "string"
+                  },
+                  "model": {
+                    "type": "string"
+                  },
+                  "temperature": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  }
+                },
+                "required": [
+                  "message"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "type": "string"
+                    },
+                    "model": {
+                      "type": "string"
+                    },
+                    "usage": {
+                      "type": "object",
+                      "properties": {
+                        "promptTokens": {
+                          "type": "number"
+                        },
+                        "completionTokens": {
+                          "type": "number"
+                        },
+                        "totalTokens": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "promptTokens",
+                        "completionTokens",
+                        "totalTokens"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "timestamp": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "response",
+                    "model",
+                    "timestamp"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "400",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/registration": {
+      "post": {
+        "description": "Registers an organizer in the CRM and sends a welcome message. Returns 201 when a new contact was created as a prospect, and 200 when the submission matched an existing contact — either enriching a contact that had never registered, or leaving an already registered one untouched and recording the differences as an internal note. Repeated submissions are therefore safe. Requires a write token in the Authorization header.",
+        "summary": "Register an organizer",
+        "tags": [
+          "registration"
+        ],
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "firstName": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 100,
+                    "description": "Given name of the contact person"
+                  },
+                  "lastName": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 100,
+                    "description": "Family name of the contact person"
+                  },
+                  "organizationName": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200,
+                    "description": "Formal name of the organization, e.g. 'Kulturverein Beispielstadt e.V.'"
+                  },
+                  "organizationType": {
+                    "description": "Type or segment, e.g. 'Verein', 'Gemeinde', 'Betrieb'",
+                    "type": "string",
+                    "maxLength": 100
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "maxLength": 254,
+                    "description": "Primary email address"
+                  },
+                  "phone": {
+                    "description": "Phone or mobile number, required: every registration is verified by a call",
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 50
+                  },
+                  "whatsapp": {
+                    "description": "Messenger number, when it differs from the phone number",
+                    "type": "string",
+                    "maxLength": 50
+                  },
+                  "street": {
+                    "description": "Street and house number",
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "zipcode": {
+                    "description": "Postal code — drives the community assignment when present",
+                    "type": "string",
+                    "pattern": "^\\d{5}$"
+                  },
+                  "city": {
+                    "description": "City or municipality",
+                    "type": "string",
+                    "maxLength": 100
+                  },
+                  "country": {
+                    "default": "DE",
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 2,
+                    "description": "ISO 3166-1 alpha-2 country code"
+                  },
+                  "website": {
+                    "description": "Website of the organization",
+                    "type": "string",
+                    "format": "uri",
+                    "maxLength": 500
+                  },
+                  "googleCalendarId": {
+                    "description": "Public Google Calendar ID",
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "icsCalendarUrl": {
+                    "description": "Public ICS feed URL",
+                    "type": "string",
+                    "format": "uri",
+                    "maxLength": 500
+                  },
+                  "onlineCalendarUrl": {
+                    "description": "Where the events can be found — a link or a description",
+                    "type": "string",
+                    "maxLength": 500
+                  },
+                  "tarif": {
+                    "default": "Starter",
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 50,
+                    "description": "Tariff to record. Known values: Starter (entry level), Professional, Negotiated (individually agreed). Defaults to Starter, because a form registration says nothing about the plan. Deliberately a free string rather than an enum: tariff names are a commercial decision that changes without an API release, and a new one must not make registrations fail."
+                  },
+                  "tarifStatus": {
+                    "default": "prospect",
+                    "type": "string",
+                    "enum": [
+                      "active",
+                      "cancelled",
+                      "expired",
+                      "prospect"
+                    ],
+                    "description": "Tariff status to record. prospect: registered but unverified, and not yet published — this is what a registration produces. active: verified and live, which publishes the organizer, so it is normally set by a person after the verification call. cancelled: relationship ended. expired: tariff ran out. Defaults to prospect."
+                  },
+                  "note": {
+                    "description": "Recorded as a comment after the contact is written, e.g. the terms the registrant agreed to",
+                    "type": "string",
+                    "maxLength": 2000
+                  },
+                  "channel": {
+                    "default": "web",
+                    "type": "string",
+                    "enum": [
+                      "web",
+                      "embed"
+                    ],
+                    "description": "Where the registration was submitted from"
+                  },
+                  "consent": {
+                    "type": "object",
+                    "properties": {
+                      "termsAccepted": {
+                        "type": "boolean",
+                        "enum": [
+                          true
+                        ],
+                        "description": "Terms of service acceptance — registration requires it"
+                      },
+                      "termsVersion": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "Version of the terms that were accepted, e.g. '2026-08'"
+                      },
+                      "acceptedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "ISO 8601 timestamp of when consent was given"
+                      },
+                      "marketingOptIn": {
+                        "default": {},
+                        "type": "object",
+                        "properties": {
+                          "email": {
+                            "default": false,
+                            "type": "boolean",
+                            "description": "Marketing by email"
+                          },
+                          "sms": {
+                            "default": false,
+                            "type": "boolean",
+                            "description": "Marketing by SMS"
+                          },
+                          "whatsapp": {
+                            "default": false,
+                            "type": "boolean",
+                            "description": "Marketing by WhatsApp"
+                          },
+                          "postal": {
+                            "default": true,
+                            "type": "boolean",
+                            "description": "Marketing by post"
+                          }
+                        },
+                        "additionalProperties": false,
+                        "description": "Per-channel marketing permission"
+                      },
+                      "transactionalOptIn": {
+                        "default": {},
+                        "type": "object",
+                        "properties": {
+                          "email": {
+                            "default": "contract_fulfillment",
+                            "type": "string",
+                            "enum": [
+                              "consent_granted",
+                              "legitimate_interest",
+                              "contract_fulfillment"
+                            ]
+                          },
+                          "sms": {
+                            "default": "contract_fulfillment",
+                            "type": "string",
+                            "enum": [
+                              "consent_granted",
+                              "legitimate_interest",
+                              "contract_fulfillment"
+                            ]
+                          },
+                          "whatsapp": {
+                            "default": "contract_fulfillment",
+                            "type": "string",
+                            "enum": [
+                              "consent_granted",
+                              "legitimate_interest",
+                              "contract_fulfillment"
+                            ]
+                          },
+                          "postal": {
+                            "default": "contract_fulfillment",
+                            "type": "string",
+                            "enum": [
+                              "consent_granted",
+                              "legitimate_interest",
+                              "contract_fulfillment"
+                            ]
+                          }
+                        },
+                        "additionalProperties": false,
+                        "description": "Per-channel lawful basis for contacting the registrant about the service"
+                      }
+                    },
+                    "required": [
+                      "termsAccepted",
+                      "termsVersion",
+                      "acceptedAt"
+                    ],
+                    "additionalProperties": false,
+                    "description": "Consent given at registration time"
+                  }
+                },
+                "required": [
+                  "firstName",
+                  "lastName",
+                  "organizationName",
+                  "email",
+                  "phone",
+                  "consent"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "contactId": {
+                      "type": "string",
+                      "description": "Identifier of the registered contact"
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "created",
+                        "updated",
+                        "already_registered"
+                      ],
+                      "description": "created: a new contact; updated: an existing unregistered contact was enriched; already_registered: the contact is on a tariff and was left untouched"
+                    },
+                    "displayName": {
+                      "type": "string",
+                      "description": "Name the organizer is registered under"
+                    }
+                  },
+                  "required": [
+                    "contactId",
+                    "status",
+                    "displayName"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "201",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "contactId": {
+                      "type": "string",
+                      "description": "Identifier of the registered contact"
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "created",
+                        "updated",
+                        "already_registered"
+                      ],
+                      "description": "created: a new contact; updated: an existing unregistered contact was enriched; already_registered: the contact is on a tariff and was left untouched"
+                    },
+                    "displayName": {
+                      "type": "string",
+                      "description": "Name the organizer is registered under"
+                    }
+                  },
+                  "required": [
+                    "contactId",
+                    "status",
+                    "displayName"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "400",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "403",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "429",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "503",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "info": {
+    "title": "@schafevormfenster/envoy-api",
+    "description": "API-first communication engine designed to unify the entire user lifecycle. From seamless onboarding and AI-powered chat to secure document exchange and custom configurations.",
+    "version": "0.3.12",
+    "contact": {
+      "name": "Jan-Henrik Hempel",
+      "email": "jan@schafe-vorm-fenster.de"
+    },
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://envoy-8zpy1hhqf-schafe-vorm-fenster.vercel.app",
+      "description": "Production"
+    }
+  ],
+  "security": [
+    {
+      "SheepToken": []
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "SheepToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Sheep-Token",
+        "description": "API authentication token"
+      }
+    }
+  }
+}

@@ -1,0 +1,95 @@
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.headline {
+  font-size: var(--type-section-size);
+  font-weight: 800;
+  letter-spacing: var(--type-section-tracking);
+  margin: 0;
+}
+
+.layout {
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/*
+ * The upper part: a `surface` box on the section ground — the sober grey
+ * that a "who does not hear about it" list takes (SRC-0014 §"Section grounds
+ * carry rhythm"). The box is the one padding box; the rows carry no padding
+ * of their own beyond the hairline.
+ */
+.reach {
+  background: var(--color-neutral-surface);
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0 var(--space-4);
+}
+
+.reachItem {
+  align-items: flex-start;
+  display: flex;
+  gap: var(--space-3);
+  padding-block: var(--space-4);
+}
+
+.reachItem + .reachItem {
+  border-top: 1px solid var(--color-neutral-line);
+}
+
+/*
+ * The 40 px icon well — decoration, not a target (SRC-0014 §Wells):
+ * `lime-100` on a light ground with a `lime-800` glyph (5.94:1). Never
+ * `lime-500` on light: that fill means *active state* and nothing else,
+ * which is where the 2026-09-23 design and the guide part (DEC-0117).
+ */
+.well {
+  align-items: center;
+  background: var(--color-lime-100);
+  border-radius: var(--radius-pill);
+  color: var(--color-lime-800);
+  display: inline-flex;
+  flex: none;
+  height: var(--height-icon-well);
+  justify-content: center;
+  width: var(--height-icon-well);
+}
+
+.reachText {
+  min-width: 0;
+}
+
+.reachTitle {
+  color: var(--color-neutral-ink);
+  font-size: var(--type-card-size);
+  font-weight: 700;
+  letter-spacing: var(--type-card-tracking);
+  line-height: var(--type-card-leading);
+  margin: 0;
+}
+
+.reachDetail {
+  color: var(--color-neutral-text2);
+  font-size: var(--type-body-size);
+  line-height: var(--leading-relaxed);
+  margin: var(--space-1) 0 0;
+}
+
+.proof {
+  min-width: 0;
+}
+
+/* lg — 48rem / 768px: list and proof stand side by side. */
+/* xl — 64rem: side by side only from the desktop tier (SRC-0014 §Layout Grid, DEC-0150). */
+@media (min-width: 64rem) {
+  .layout {
+    column-gap: var(--grid-gap);
+    grid-template-columns: var(--span-8) minmax(0, 1fr);
+  }
+}

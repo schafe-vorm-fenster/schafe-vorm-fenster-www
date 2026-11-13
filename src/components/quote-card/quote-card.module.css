@@ -1,0 +1,108 @@
+/*
+ * One flat block on the section ground — SRC-0014 §Quote card: one ground
+ * (the section's), one padding box, 8 px between the three parts, and a
+ * hairline above and below the whole. No fill, no radius, no shadow.
+ */
+.card {
+  border-block: var(--border-hairline);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding-block: var(--space-4);
+}
+
+/* `line` measures 1.27:1 on `lime-100`; the token for that ground is the
+   hairline the pin ships for it (design-system contract, 2.8.1). */
+[data-surface="lime-100"] .card {
+  border-block: var(--border-hairline-on-lime);
+}
+
+.quote {
+  margin: 0;
+}
+
+/* Lead 20/400 in the ground's own text colour — verbatim, so no italics and
+   no quotation marks the copy did not carry. */
+.text {
+  font-size: var(--type-lead-size);
+  font-weight: 400;
+  line-height: var(--leading-relaxed);
+  margin: 0;
+  max-width: var(--measure-reading);
+}
+
+.caption {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.name {
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  font-weight: 700;
+  line-height: var(--leading-normal);
+}
+
+.role {
+  color: var(--color-neutral-muted);
+  font-size: var(--type-label-size);
+  line-height: var(--leading-normal);
+}
+
+/* On a dark ground `muted` is unreadable; the ground's own secondary text
+   colour is what the design system pairs there (as `outbound-link` does). */
+[data-surface="ink"] .role,
+[data-surface="violet-500"] .role {
+  color: var(--color-lime-300);
+}
+
+/* The source: mono 15 on the ground's link colour, 18 px `external-link`
+   glyph and the outbound treatment come from `outbound-link`. */
+.link {
+  align-self: flex-start;
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+}
+
+/* The space is this component's own (DEC-0178 §4): a wrapper it owns pads it,
+   so no margin rides on another component's root through `className` (A32). */
+.linkRow {
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--space-1);
+}
+
+/*
+ * On a photo surface (DEC-0162 §1): the story stage's quote treatment
+ * (SRC-0014 §Story stage, "a `lime-500` quotation mark, the quote in 22–34 px /
+ * 700"). The mark is decoration and carries no text for assistive technology.
+ * No hairlines: a `line` rule on a photograph is not a boundary, and the
+ * reading band is the quote's one ground.
+ */
+.photo {
+  border-block: 0;
+  padding-block: 0;
+}
+
+.photo .text {
+  font-size: var(--type-subhead-size);
+  font-weight: 700;
+  letter-spacing: var(--type-subhead-tracking);
+  line-height: var(--leading-tight);
+  max-width: var(--span-7);
+}
+
+.photo .quote::before {
+  color: var(--color-lime-500);
+  content: "\201C" / "";
+  display: block;
+  font-size: var(--type-display-size);
+  font-weight: 800;
+  line-height: 0.8;
+}
+
+.photo .role {
+  color: var(--color-lime-300);
+}

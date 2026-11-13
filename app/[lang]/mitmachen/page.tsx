@@ -1,0 +1,566 @@
+import { imageCredit } from "@/src/components/photo-surface/image-credit";
+import { Button } from "@/src/components/button/button";
+import {
+  COMPARISON_SECTION_CLASS,
+  ComparisonTable,
+} from "@/src/components/comparison-table/comparison-table";
+import { ExplainModule } from "@/src/components/explain-module/explain-module";
+import {
+  StageCalendarEntry,
+  StageChat,
+  StageFlyerPhoto,
+  StageRegistration,
+  StageWebsiteDates,
+} from "@/src/components/explain-stage/explain-stage";
+import { HeroBlock } from "@/src/components/hero-block/hero-block";
+import { HintBanner } from "@/src/components/hint-banner/hint-banner";
+import { ProofCard } from "@/src/components/proof-card/proof-card";
+import { ProofStream } from "@/src/components/proof-stream/proof-stream";
+import { SectionShell } from "@/src/components/section-shell/section-shell";
+import { StatusBadge } from "@/src/components/status-badge/status-badge";
+import { contactHref, withChannelTokens } from "@/src/lib/contact/contact-channels";
+import { dictionary } from "@/src/lib/i18n/dictionary";
+import { fieldAt } from "@/src/lib/content/blocks";
+import { pageImage } from "@/src/lib/content/images";
+import { partnerLogo } from "@/src/lib/content/partner-logos";
+import { HERO_IMAGE_ID } from "@/src/lib/pages/hero-images";
+import { slot } from "@/src/lib/content/loader";
+import { isDemoSlot, slotState } from "@/src/lib/content/provenance";
+import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
+import { STAGE_ZERO_ANCHOR } from "@/src/lib/pages/live-anchor";
+import { SHOWCASE_COMMUNITY } from "@/src/lib/live/showcase";
+import { standardSources } from "@/src/lib/pricing/standard-sources";
+
+import { buildDay } from "../_build-day";
+import { comparisonPairs } from "../_comparison";
+import { proofIntro, selectProof } from "../_proof";
+import { proofCardLink, proofDeeplink } from "../_proof-links";
+import { PageJsonLd } from "../_structured-data";
+import { pageContent } from "../_content";
+import { localeFrom, pageMetadataFor } from "../_locale";
+import { PageFrame } from "../_page-frame";
+
+import { pageMeta } from "./page.meta";
+import { listAt, threeSampleRows, threeSteps, withStepLinks } from "./paths";
+import { LiveStageCalendar, SampleStageCalendar } from "./stage-islands";
+
+import type { ExplainModuleProps } from "@/src/components/explain-module/explain-module";
+import type { IconName } from "@/src/components/icon/icon";
+import type { ContentBlock } from "@/src/lib/content/types";
+import type { Locale } from "@/src/lib/i18n/locales";
+import type { Metadata } from "next";
+
+/**
+ * TS-WEB-0022 — `/mitmachen`, the publishing entry.
+ *
+ * Own blocks, in D2 order: hero (the page's one scene) → objections (the comparison module of issue 159, DEC-0203) → the
+ * `wege` slot, which is the three **bare** explain modules plus the price
+ * boundary → proof. The context band and the closing CTA are block 3/4 of
+ * TS-WEB-0006 D2 and are rendered by `PageFrame` from `page.meta.ts` — this
+ * page never renders them itself.
+ *
+ * Since DEC-0196 (owner, issue 154) the closing CTA stands **directly after
+ * the third path**, on `ink` — the page's single dark section (D10) — and the
+ * proof block follows it, handed to the frame as `closing.followedBy`. The
+ * live example "So sieht das in {Ort} aus" is gone: after three paths that
+ * each end in the calendar, the reader is to act, not to look at another
+ * calendar.
+ *
+ * Three things changed with DEC-0124 and are worth saying here, because each
+ * of them looks like a mistake from the outside:
+ *
+ *  - **The path blocks are `explain-module`s and carry no scene.** On `/` the
+ *    scene wraps the module because the module *is* the job introduction;
+ *    here the hero is, so wrapping them would mint three openers and three
+ *    instances (DEC-0110 §3, D4 "One appearance", A4).
+ *  - **One `wege` slot, three sections.** D2 counts one slot and A17 wants
+ *    the banner "inside the publishing-path slot"; G-4 caps a section at 1.5
+ *    phone screens and `e2e/section-budget.spec.ts` holds it. Three grounds
+ *    carry one slot: the kicker, the heading and the sub-line stand once, on
+ *    the first, and all three sections are `data-block="wege"`.
+ *  - **The step lines are marked `data-demo`.** They are the design drafts'
+ *    wording, not the owner's (`*-steps-demo` slots, DEC-0068, state/open.md).
+ *    The marking sits on a wrapper around the module rather than on its `ol`,
+ *    because the component exposes no hook for it and it is not this task's
+ *    file.
+ */
+
+const ROUTE = "takePart" as const;
+
+/**
+ * The three pairs' topic glyphs, in the artifact's row order (issue 159):
+ * flyers, the paper's deadline, the own channels. The archive block's neutral
+ * glyphs of the channel itself (SRC-0014 §Archive block), carried over.
+ * Decorative, so the order is the only thing that binds a glyph to its pair.
+ */
+const OBJECTION_ICONS: readonly IconName[] = ["megaphone", "clock", "users"];
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  return pageMetadataFor(ROUTE, params);
+}
+
+function listItems(blocks: readonly ContentBlock[]): string[] {
+  return blocks.flatMap((block) => (block.kind === "list" ? block.items : []));
+}
+
+/**
+ * `mitmachen-7-proof-demo` is `provenance: sourced` (state/open.md row 49,
+ * row 162), not `generated` — three real institutions that publish
+ * themselves. `demo` and every displayed label are read off the slot
+ * (`isDemoSlot`), never hard-coded; `PROOF_CONTEXT_FALLBACK` is used only
+ * where a quote's own attribution has no organisation name to show instead
+ * (`parseDemoProofElement`).
+ */
+const PROOF_CONTEXT_FALLBACK: Record<"demo" | "sourced", Record<Locale, string>> = {
+  demo: { de: "Rückmeldung", en: "Feedback" },
+  sourced: { de: "Rückmeldung", en: "Feedback" },
+};
+
+const GEO_SNAPSHOT_LABEL: Record<"demo" | "sourced", Record<Locale, string>> = {
+  demo: { de: "Beleg", en: "Reference" },
+  sourced: { de: "Beleg", en: "Reference" },
+};
+
+/**
+ * The module, with its step lines marked as what they are.
+ *
+ * `data-demo="true"` on the wrapper, not on a word: the title and the CTA
+ * label are the review's own wording, the three step lines are the drafts'
+ * (`state/open.md`). Marking the wrapper over-reaches by two strings and is
+ * the honest direction to over-reach in — a reviewer enumerating
+ * `[data-demo]` finds the module that holds the placeholder.
+ */
+function PathModule({ demo, ...module }: ExplainModuleProps & { readonly demo: boolean }) {
+  return (
+    <div data-demo={demo ? "true" : undefined} data-path-module="">
+      <ExplainModule {...module} />
+    </div>
+  );
+}
+
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}) {
+  const locale = await localeFrom(params);
+  const page = await pageContent(ROUTE, locale);
+
+  const hero = slot(page, "mitmachen-1-hero");
+  const objections = slot(page, "mitmachen-2-objections");
+  const pathWhatsapp = slot(page, "mitmachen-3-path-whatsapp");
+  const whatsappSteps = slot(page, "mitmachen-3a-path-whatsapp-steps-demo");
+  const pathCalendar = slot(page, "mitmachen-4-path-calendar");
+  const calendarSteps = slot(page, "mitmachen-4a-path-calendar-steps-demo");
+  const pathWebsite = slot(page, "mitmachen-5-path-website");
+  const websiteSteps = slot(page, "mitmachen-5a-path-website-steps-demo");
+  // D11's own half of the banner: the boundary of BUS-WEB-0017. The owner's
+  // review sentence in slot 5 states the *reach* of path 3 ("geht bisher nur
+  // für einige Webseiten"), which is a different fact; FUN-WEB-0204 asks for
+  // the price boundary, and D11:210 forbids folding it into the alpha badge.
+  // Nobody wrote the German sentence, so it is a marked demo slot (DEC-0124).
+  const bannerBoundary = slot(page, "mitmachen-5b-path-website-banner-demo");
+  const proofDemo = slot(page, "mitmachen-7-proof-demo");
+  const closing = slot(page, "mitmachen-8-closing");
+  // The band's own kicker (state/open.md row 95, row 161), not home's.
+  const contextBand = slot(page, "mitmachen-9-context-band");
+
+  /** The build's day — what the sample panels are dated from in the static HTML (DEC-0163). */
+  const referenceDate = await buildDay();
+  /**
+   * The place path 1's third stage state reads its three live rows from: the
+   * stage-0 anchor, configuration. It was the live example's slug until that
+   * module left the page (DEC-0196); the stage still reads the same
+   * `placeEvents()` interface, so the swap to a real reference place stays
+   * one constant (`state/open.md`).
+   */
+  const liveSlug = STAGE_ZERO_ANCHOR.slug;
+
+  /**
+   * TS-WEB-0005 through, not around: the inline surface is **3** positions
+   * (DEC-0048), gated, scored, rotated and ordered by the engine. The three
+   * quotes are real (sourced, clearance pending), so `demo` and every
+   * displayed label come off `isDemoSlot(proofDemo)`, not a hard-coded flag.
+   */
+  const proofIsDemo = isDemoSlot(proofDemo);
+  const proofSelection = await selectProof({
+    routeId: ROUTE,
+    locale,
+    focusJob: "publish-our-dates",
+    surface: "inline",
+    candidates: listItems(proofDemo.blocks).map((line, index) => {
+      const quote = parseDemoProofElement(
+        line,
+        PROOF_CONTEXT_FALLBACK[proofIsDemo ? "demo" : "sourced"][locale],
+      );
+      const place = quote.attribution.split(", ").slice(1).join(", ").trim();
+      return {
+        id: `mitmachen-7-proof-demo-${index + 1}`,
+        contextLine: quote.contextLine,
+        claim: quote.claim,
+        attribution: quote.attribution,
+        geo: {
+          level: "snapshot" as const,
+          label: GEO_SNAPSHOT_LABEL[proofIsDemo ? "demo" : "sourced"][locale],
+        },
+        geoCommunity: place === "" ? null : place,
+        // All three publish for themselves — customer proof, not press
+        // (review line 462). A selection facet; the heading is the same on
+        // every page (DEC-0143 §1, DEC-0209).
+        proofKind: "customer" as const,
+        // issue 220: the hub proof id behind this line names its archive entry.
+        deeplink: proofDeeplink(proofDemo.derivedFrom, index),
+        demo: proofIsDemo,
+      };
+    }),
+  });
+
+  const heroCtaLabel = fieldAt(hero.blocks, 2) ?? "";
+
+  // TS-WEB-0003 D2 declares this page's LCP element to be the WhatsApp scene
+  // image, which is the hero itself (`data-block="scene"` below). The entry
+  // carries `lcp: true`, and `photo-surface` turns that into the preload a
+  // CSS background image can actually carry.
+  const heroImage = pageImage(page, HERO_IMAGE_ID.takePart);
+  // `mitmachen-path-whatsapp`, `-calendar` and `-website` stay declared in the
+  // artifact's `images:` block — they are real, credited photographs and the
+  // credits page cites them — but no path renders one any more. The review is
+  // explicit about the WhatsApp one ("Das Foto ist Quatsch"): what belongs in
+  // state 1 is a hand holding a phone over a flyer, which nobody has shot, so
+  // the stage shows `media-frame`'s "Foto gesucht" hatch instead of a bus
+  // shelter (DEC-0068 rule 2, state/open.md).
+
+  // Three pairs, each with its topic glyph (issue 159): a table that is not
+  // three rows fails the build rather than rendering a pair without a
+  // sentence or a glyph (DEC-0203 §3).
+  const comparison = comparisonPairs(objections.blocks, OBJECTION_ICONS, "mitmachen-2-objections");
+  const proofBlock = <ProofBlock linkLabel={proofDemo.fields["Link"]} locale={locale} proofSelection={proofSelection} />;
+
+  return (
+    <>
+      {/* TS-WEB-0011 D4 — one JSON-LD graph per page, server-rendered. */}
+      <PageJsonLd locale={locale} route={ROUTE} />
+    <PageFrame
+      closing={{
+        to: "register",
+        label: heroCtaLabel,
+        heading: fieldAt(closing.blocks, 0),
+        /*
+         * TS-WEB-0022-A11 asks for a cleared backing before the permanence
+         * promise ships, and the artifact now names one: the offering
+         * record `community-calendar` calls free access "a public
+         * commitment, not a pricing decision that can be quietly
+         * reversed", and the 2022 Nordkurier entry records the same
+         * sentence in public. The slot is `provenance: sourced` with both
+         * in its `derived_from`, so the sentence is rendered word for word
+         * rather than withheld. What stays open is only whether a `proof/`
+         * element of its own gets minted (`state/open.md` #17) — a
+         * bookkeeping question, not a clearance one.
+         */
+        reassurance: fieldAt(closing.blocks, 2),
+        // DEC-0196 (issue 154): the call to act follows the third path
+        // directly, on the page's one dark ground, and the proof comes after.
+        surface: "ink",
+        followedBy: proofBlock,
+      }}
+      contextBandHeading={fieldAt(contextBand.blocks, 0)}
+      locale={locale}
+      meta={pageMeta}
+    >
+      <div data-block="scene" data-mechanism="whatsapp">
+        <HeroBlock
+          cta={
+            <Button dataCta="primary" locale={locale} onward to="register">
+              {heroCtaLabel}
+            </Button>
+          }
+          headline={fieldAt(hero.blocks, 0) ?? ""}
+          id="hero"
+          /*
+           * The opener is two short statements, which is what the review
+           * asked for in place of the question ("Lieber zwei Sätze, und als
+           * Aussage statt mit Fragezeichen"): the `h1` carries the first, the
+           * lead the second. Both are inside CG-020's and CG-021's budgets —
+           * the question they replace was one 66-character line — so the
+           * primary conversion stays above the fold at 360 × 640 (A2), which
+           * is the constraint that removed the old lead in the first place.
+           */
+          lead={fieldAt(hero.blocks, 1)}
+          // F-2-33: the hero's `photo-surface` badges itself out of the
+          // dictionary — without the page's language it marks an English
+          // page in German.
+          locale={locale}
+          aiEdited={heroImage?.aiEdited}
+          focal={heroImage?.focal}
+          notDepicting={heroImage?.notDepicting}
+          credit={imageCredit(heroImage, locale)}
+          placeholderId={heroImage?.placeholderId}
+          priority={heroImage?.priority}
+          src={heroImage?.src}
+          state={slotState(hero)}
+          wideSrc={heroImage?.wideSrc}
+        />
+      </div>
+
+      {/* The comparison module of issue 159 (DEC-0203), the same component
+          as `/dein-kalender`'s, with the organisers' three pairs. It replaces
+          the two halves that stood here, the people who do not hear about the
+          date and the usual channels on the archive ground, and the
+          hand-off sentence above them: the head is the kicker and the heading
+          and nothing else, and each problem stands beside its solution. The
+          proof position beside the block (D3) still renders nothing until a
+          proof clears (DEC-0175 §3). */}
+      <SectionShell
+        className={COMPARISON_SECTION_CLASS}
+        dataBlock="objections"
+        kicker={dictionary(locale).kickers.objection}
+        labelledBy="objections-heading"
+        surface="paper"
+      >
+        <ComparisonTable
+          headingId="objections-heading"
+          headline={fieldAt(objections.blocks, 0) ?? ""}
+          rows={comparison.rows}
+          todayLabel={comparison.labels.today}
+          withProductLabel={comparison.labels.withCalendar}
+        />
+      </SectionShell>
+
+      {/*
+          The `wege` slot — one slot, three grounds.
+
+          `paper → lime-100 → paper`: solution content takes a fresh ground,
+          and `surface-2` is one of the sober greys the design system keeps
+          for the municipal argument and for inactive things ("grey-green
+          never carries positive content", SRC-0014 §Section grounds). The
+          three of them used to stand in a single `surface-2` block of
+          2035 px, which is the violation `e2e/section-budget.spec.ts` was
+          written for. */}
+      <SectionShell
+        dataBlock="wege"
+        labelledBy="wege-heading"
+        surface="paper"
+      >
+        <h2 id="wege-heading">{fieldAt(pathWhatsapp.blocks, 0)}</h2>
+        <p data-wege-subline>{fieldAt(pathWhatsapp.blocks, 1)}</p>
+        <PathModule
+          cta={{
+            // The number is the hub's, through the generated file — never a
+            // number typed on a page (TS-WEB-0016 D13, TS-WEB-0016-A16), and
+            // no `?text` prefill exists for it (D14 §6).
+            href: contactHref("whatsapp"),
+            icon: "smartphone",
+            label: fieldAt(pathWhatsapp.blocks, 3) ?? "",
+            // `wa.me` is another origin, so the chat opens a new tab (DEC-0169).
+          }}
+          demo={isDemoSlot(whatsappSteps)}
+          locale={locale}
+          mechanism="whatsapp"
+          ordinal={1}
+          stage={[
+            // State 1, drawn (issue #26, DEC-0161) — as on `/`.
+            <StageFlyerPhoto key="1" />,
+            <StageChat
+              key="2"
+              locale={locale}
+              reply={withChannelTokens(fieldAt(whatsappSteps.blocks, 1) ?? "")}
+              time={fieldAt(whatsappSteps.blocks, 2) ?? ""}
+            />,
+            // State 3 is "the date is in the calendar": three live rows of
+            // the stage-0 anchor, off the same `placeEvents()` interface
+            // module and cache profile every live module uses (DEC-0115).
+            <LiveStageCalendar
+              key="3"
+              locale={locale}
+              place={SHOWCASE_COMMUNITY.name}
+              referenceDate={referenceDate}
+              // The fallback is this path's own sample, not path 2's: those
+              // rows illustrate "neu, verschoben, abgesagt", and this path
+              // ends in "Termin steht im Kalender" (DEC-0124 §5).
+              sample={threeSampleRows(
+                listAt(whatsappSteps.blocks, 1),
+                "mitmachen-3a-path-whatsapp-steps-demo",
+              )}
+              slug={liveSlug}
+            />,
+          ]}
+          steps={withStepLinks(
+            threeSteps(listAt(whatsappSteps.blocks, 0), "mitmachen-3a-path-whatsapp-steps-demo"),
+            locale,
+          )}
+          title={fieldAt(pathWhatsapp.blocks, 2) ?? ""}
+        />
+      </SectionShell>
+
+      <SectionShell dataBlock="wege" label={fieldAt(pathCalendar.blocks, 0)} surface="lime-100">
+        <PathModule
+          cta={{
+            label: fieldAt(pathCalendar.blocks, 1) ?? "",
+            locale,
+            onward: true,
+            to: "register",
+          }}
+          demo={isDemoSlot(calendarSteps)}
+          locale={locale}
+          mechanism="calendar-connection"
+          ordinal={2}
+          stage={[
+            // State 1, drawn: a date entered in your own calendar, as usual
+            // (issue #88, DEC-0174 §1). No grey panel in production.
+            <StageCalendarEntry key="1" />,
+            <StageRegistration
+              address={fieldAt(calendarSteps.blocks, 1) ?? ""}
+              key="2"
+              locale={locale}
+              source="calendar"
+            />,
+            <SampleStageCalendar
+              key="3"
+              locale={locale}
+              place={SHOWCASE_COMMUNITY.name}
+              referenceDate={referenceDate}
+              sample={threeSampleRows(
+                listAt(calendarSteps.blocks, 1),
+                "mitmachen-4a-path-calendar-steps-demo",
+              )}
+            />,
+          ]}
+          steps={threeSteps(
+            listAt(calendarSteps.blocks, 0),
+            "mitmachen-4a-path-calendar-steps-demo",
+          )}
+          title={fieldAt(pathCalendar.blocks, 0) ?? ""}
+        />
+      </SectionShell>
+
+      <SectionShell dataBlock="wege" label={fieldAt(pathWebsite.blocks, 0)} surface="paper">
+        {/* The availability badge is the hub record's, not a copy decision:
+            it goes when `community-calendar` stops saying alpha, and not
+            before (D4 "Honest availability"). It sits beside the module
+            rather than inside it — the component's shape is fixed by D4 and
+            carries no badge slot. */}
+        <p data-path-availability="alpha">
+          <StatusBadge availability="alpha" label={fieldAt(pathWebsite.blocks, 1)} />
+        </p>
+        <PathModule
+          cta={{
+            label: fieldAt(pathWebsite.blocks, 2) ?? "",
+            locale,
+            onward: true,
+            to: "register",
+          }}
+          demo={isDemoSlot(websiteSteps)}
+          locale={locale}
+          mechanism="website-import"
+          ordinal={3}
+          stage={[
+            // State 1, drawn: the dates kept on your own website, as usual
+            // (issue #88, DEC-0174 §1).
+            <StageWebsiteDates key="1" />,
+            <StageRegistration
+              address={fieldAt(websiteSteps.blocks, 1) ?? ""}
+              key="2"
+              locale={locale}
+              source="website"
+            />,
+            <SampleStageCalendar
+              key="3"
+              locale={locale}
+              place={SHOWCASE_COMMUNITY.name}
+              referenceDate={referenceDate}
+              sample={threeSampleRows(
+                listAt(websiteSteps.blocks, 1),
+                "mitmachen-5a-path-website-steps-demo",
+              )}
+            />,
+          ]}
+          steps={threeSteps(
+            listAt(websiteSteps.blocks, 0),
+            "mitmachen-5a-path-website-steps-demo",
+          )}
+          title={fieldAt(pathWebsite.blocks, 0) ?? ""}
+        />
+
+        {/* D11 / A17 — one banner, at the end of the slot, after the third
+            path. It states the boundary of BUS-WEB-0017 and enumerates the
+            offering record's standard sources; no figure, no `data-cta`, no
+            conversion (DEC-0107 §3). */}
+        <HintBanner locale={locale} sources={standardSources()}>
+          <p>{fieldAt(pathWebsite.blocks, 3)}</p>
+          {/* The boundary itself, as the second sentence: what a connection
+              costs, which the review's availability sentence above does not
+              say and which D11:210 keeps apart from path 3's alpha badge.
+              Final wording since 2026-10-28 (slot 5b, DEC-0176 amendment):
+              the slot is sourced, so `isDemoSlot` no longer marks it. */}
+          <p data-demo={isDemoSlot(bannerBoundary) ? "true" : undefined}>
+            {fieldAt(bannerBoundary.blocks, 0)}
+          </p>
+        </HintBanner>
+      </SectionShell>
+
+      {/* No cross-reference to `/dein-kalender` here (owner's review
+          2026-10-27, issue #92, DEC-0174 §3): the context band hands off to
+          every other job, `Dein Kalender` included, and a sentence that says
+          the same a few sections earlier only repeats it.
+
+          What follows the third path is the frame's closing CTA, on `ink`,
+          and then `proofBlock` (DEC-0196). */}
+    </PageFrame>
+    </>
+  );
+}
+
+/** The proof block, which `PageFrame` renders after the closing CTA (DEC-0196). */
+function ProofBlock({
+  linkLabel,
+  locale,
+  proofSelection,
+}: {
+  readonly linkLabel?: string;
+  readonly locale: Locale;
+  readonly proofSelection: Awaited<ReturnType<typeof selectProof>>;
+}) {
+  // The one head every proof section carries (DEC-0209).
+  const head = proofIntro(locale);
+  return (
+      <SectionShell
+        dataBlock="beleg"
+        kicker={head.kicker}
+        labelledBy="beleg-heading"
+        // Lime between the closing CTA's `ink` and the band's `surface`
+        // (DEC-0196): `paper → ink → lime-100 → surface`, no run of one
+        // colour family, which this page's own rhythm test checks (A16, D10).
+        surface="lime-100"
+      >
+        <h2 id="beleg-heading">{head.heading}</h2>
+        {/* G-7: one emphasis per stream. The first card opens it at sub-head
+            size, the rest are hairline rows — three identical filled cards
+            read as one block rather than as three institutions. No `geo`
+            badge either: every card here already names its source in its
+            own context line, and `BELEG` beside `Stiftung Lebendiges Lehre`
+            is the same word twice. */}
+        <ProofStream label={head.heading} layout="rows">
+          {proofSelection.entries.map((entry, position) =>
+            entry.kind === "item" ? (
+              <ProofCard
+                attribution={entry.candidate.attribution}
+                claim={entry.candidate.claim}
+                contextLine={entry.candidate.contextLine}
+                emphasis={position === 0 ? "feature" : "compact"}
+                logo={partnerLogo(entry.candidate.contextLine)}
+                key={entry.candidate.id}
+                link={proofCardLink(entry.candidate, linkLabel)}
+                locale={locale}
+                state={entry.state}
+              />
+            ) : // A missing proof renders nothing (DEC-0175 §3).
+            null,
+          )}
+        </ProofStream>
+      </SectionShell>
+  );
+}

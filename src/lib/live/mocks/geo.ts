@@ -1,0 +1,80 @@
+/**
+ * The mock geo backend — `state/open.md` row 5 (`Mock aktiv`).
+ *
+ * It stands behind exactly the interface `src/clients/geo-api/client.ts`
+ * offers, so `places.ts` calls one or the other without knowing which. What
+ * it stands in for, measured against the pinned specification:
+ *
+ *  - **name search** (Q-0025) does not exist upstream at all — the committed
+ *    index answers it for real, this mock only under `LIVE_DATA=mock`;
+ *  - **coordinate → county** (Q-0032) and **nearest covered community**
+ *    (Q-0051) have no operation;
+ *  - **a caller-supplied radius** (Q-0038) is not a parameter, so the mock
+ *    answers the same shape the real proximity search does and the ~15 km cut
+ *    stays in `widening.ts` for both.
+ *
+ * Where the real geo-api *does* answer (the order flow's postcode lookup,
+ * slug lookup, proximity search) this mock is used only because the
+ * environment has no read token — see `config.ts`.
+ */
+
+import {
+  AMBIGUOUS_DEMO_PLACES,
+  AMBIGUOUS_DEMO_ZIP,
+  DEMO_PLACES,
+  demoPlaceBySlug,
+  demoPlaceForZip,
+  UNCOVERED_DEMO_ZIP,
+} from "./fixtures";
+import { haversineKm } from "../widening";
+
+import type { Place } from "../types";
+
+/**
+ * TS-WEB-0023-A6 (F-2-5, round 2): `AMBIGUOUS_DEMO_ZIP` is the one postcode that
+ * answers more than one place, so `searchPlaces`' `suggestions.length > 1`
+ * branch — "a municipality hit with several communities does not advance"
+ * — has a real fixture to walk, not only the stubbed unit test in
+ * `resolve-place.test.ts`.
+ */
+export function mockSearchByZip(zip: string): Place[] {
+  if (zip === AMBIGUOUS_DEMO_ZIP) return [...AMBIGUOUS_DEMO_PLACES];
+  const place = demoPlaceForZip(zip);
+  return place ? [place] : [];
+}
+
+/**
+ * Name search. The real one is the committed index (`place-index.ts`); the
+ * mock matches a case-insensitive substring over the demo places' names
+ * **and** municipalities, the way the index does (TS-WEB-0008 D7a), so the
+ * typeahead is reviewable under `LIVE_DATA=mock` with the same shape.
+ */
+export function mockSearchByName(name: string): Place[] {
+  const needle = name.trim().toLowerCase();
+  if (needle.length < 2) return [];
+  return DEMO_PLACES.filter(
+    (place) =>
+      place.name.toLowerCase().includes(needle) || (place.municipality ?? "").toLowerCase().includes(needle),
+  );
+}
+
+/** Proximity search — nearest first, capped like the real default (10). */
+export function mockSearchByPoint(
+  point: { readonly lat: number; readonly lng: number },
+  maxResults = 10,
+): Place[] {
+  return [...DEMO_PLACES]
+    .sort((a, b) => haversineKm(point, a) - haversineKm(point, b))
+    .slice(0, maxResults);
+}
+
+export function mockCommunityBySlug(slug: string): Place | undefined {
+  return demoPlaceBySlug(slug);
+}
+
+/** Coordinate → county (Q-0032): upstream has no such operation. */
+export function mockCountyForPoint(point: { readonly lat: number; readonly lng: number }): Place["county"] {
+  return mockSearchByPoint(point, 1)[0]?.county;
+}
+
+export { AMBIGUOUS_DEMO_ZIP, UNCOVERED_DEMO_ZIP };

@@ -1,0 +1,82 @@
+import { RouteLink } from "../route-link/route-link";
+
+import { legalAnchor } from "@/src/lib/routes/legal-anchors";
+
+import type { Locale } from "@/src/lib/i18n/locales";
+
+import styles from "./trust-block.module.css";
+
+export const TRUST_SUBJECTS = ["data-protection", "operations", "ai"] as const;
+
+export type TrustSubjectId = (typeof TRUST_SUBJECTS)[number];
+
+export interface TrustSubject {
+  readonly id: TrustSubjectId;
+  readonly label: string;
+  /** Absent → the subject does not ship — no hub record, no sentence (TS-WEB-0024 D10). */
+  readonly body?: string;
+}
+
+export interface TrustBlockProps {
+  readonly headline: string;
+  readonly subjects: readonly TrustSubject[];
+  readonly locale?: Locale;
+  /** Overrides the two legal-link labels — German by default, `en` pages pass their own. */
+  readonly privacyLabel?: string;
+  readonly dataProcessingLabel?: string;
+  readonly className?: string;
+}
+
+/**
+ * 37 `trust-block` [PROPOSED] — content type 17 `trust-block`, TS-WEB-0024 D10.
+ *
+ * Structure: one block, three possible subjects (data protection ·
+ * operations · AI), with links to `/rechtliches#datenschutz` and
+ * `/rechtliches#auftragsverarbeitung`. Occurs once per page.
+ * States: a subject without a hub record behind it does not ship — the
+ * caller omits its `body`, and this component skips it rather than
+ * rendering a heading over nothing. Today only `data-protection` renders.
+ * Inherits: the `violet-500` provenance section on `/dein-kalender`
+ * (DEC-0172 §4), composed by the caller's `section-shell`; the subjects side
+ * by side from `xl`, each under a hairline in the ground's label colour;
+ * **no icons** — the polish brief (page 6, item 5) struck
+ * the green `circle-check` beside each subject: a check mark affirms a
+ * feature, and "who runs this and where he lives" is a biography, not a
+ * feature. Each subject is a mono label over its paragraph instead. No badge
+ * implying certification.
+ * Space: static content.
+ * A11y: the two legal links name their targets in the link text itself.
+ */
+export function TrustBlock({
+  headline,
+  subjects,
+  locale,
+  privacyLabel = "Datenschutzerklärung",
+  dataProcessingLabel = "Auftragsverarbeitung",
+  className,
+}: TrustBlockProps) {
+  const shipped = subjects.filter((subject) => subject.body);
+
+  return (
+    <div className={[styles.block, className].filter(Boolean).join(" ")}>
+      <h2 className={styles.headline}>{headline}</h2>
+      <ul className={styles.list}>
+        {shipped.map((subject) => (
+          <li className={styles.item} key={subject.id}>
+            <p className={styles.subjectLabel}>{subject.label}</p>
+            <p className={styles.body}>{subject.body}</p>
+          </li>
+        ))}
+      </ul>
+      <p className={styles.links}>
+        <RouteLink hash={legalAnchor("privacy", locale ?? "de")} locale={locale} to="legal">
+          {privacyLabel}
+        </RouteLink>
+        {" · "}
+        <RouteLink hash={legalAnchor("dataProcessing", locale ?? "de")} locale={locale} to="legal">
+          {dataProcessingLabel}
+        </RouteLink>
+      </p>
+    </div>
+  );
+}

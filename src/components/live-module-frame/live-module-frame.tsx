@@ -1,0 +1,131 @@
+import { isMocked, isPending, type DataStateProps } from "../data-state";
+import { FreshnessLabel, type FreshnessTier } from "../freshness-label/freshness-label";
+import { Skeleton } from "../skeleton/skeleton";
+
+import type { Locale } from "@/src/lib/i18n/locales";
+import type { ReactNode } from "react";
+
+import styles from "./live-module-frame.module.css";
+
+export interface LiveModuleFrameProps extends DataStateProps {
+  /** The full heading, already naming its own radius — "in <place>", "in der Umgebung", "im Kreis <county>". */
+  readonly title: string;
+  /**
+   * Read, not seen. The heading still names the module's own radius (TS-WEB-0008
+   * D1) — it is only taken out of sight where the block directly above
+   * already says the same sentence, which on `/dein-ort` state A is the
+   * page's `h1` (polish brief, page 2, fix 2: "the second identical heading
+   * goes away entirely").
+   */
+  readonly titleHidden?: boolean;
+  readonly subline?: string;
+  /** One sentence under the title, at reading size — the section's own lead, not a meta line (issue 152). */
+  readonly lead?: string;
+  /** An onward action beside the module — never the primary CTA of the page. */
+  readonly cta?: ReactNode;
+  /** `true` where arriving content changes the page's meaning (the `/dein-ort` focus-job shift). */
+  readonly announced?: boolean;
+  readonly updatedAt?: string | Date;
+  /** Which fallback tier `degraded` renders — `stale` (cached) or `snapshot` (build-time). */
+  readonly tier?: Extract<FreshnessTier, "stale" | "snapshot">;
+  /** Overrides the default loading placeholder, built from this same frame's geometry. */
+  readonly skeleton?: ReactNode;
+  /**
+   * The heading level of the module's title. `h3` by default, because a
+   * module usually stands inside a section that has its own `h2`; a page
+   * whose section *is* the module passes `h2`, so the document keeps a
+   * hierarchical heading order (TS-WEB-0002, Web Interface Guidelines).
+   */
+  readonly headingLevel?: "h2" | "h3";
+  /** The page's language — the freshness label reads it. */
+  readonly locale?: Locale;
+  /**
+   * `split` puts the heading and the CTA in desktop columns 1–4 and the body
+   * in 5–12 from `xl` (SRC-0014 §Layout Grid, *Two-column*, DEC-0150). Below
+   * `xl`, and with the default `stack`, the three stack as before. One tree
+   * either way — only the column placement changes (TS-WEB-0017 D2d).
+   */
+  readonly layout?: "stack" | "split";
+  readonly className?: string;
+  /**
+   * Hold the freshness label's line in every state — for a frame whose data
+   * loads after paint (DEC-0163), so a degraded answer does not push the
+   * page down when it lands.
+   */
+  readonly reserveMarks?: boolean;
+  readonly children: ReactNode;
+}
+
+/**
+ * 40 `live-module-frame` [PROPOSED] — content type 19, TS-WEB-0008, TS-WEB-0009.
+ *
+ * Structure: the shell every live module stands in — the title naming its own
+ * radius, an optional subline, the module body, an optional onward `cta`. A
+ * widened module never presents itself as the narrower one; that is why the
+ * radius lives in the title text, not in a separate badge.
+ * States (D-9, all four):
+ *   loading  → `skeleton`, built from this same frame so header and body
+ *              never drift apart;
+ *   empty    → the children render the module's own declared conversion —
+ *              the frame adds no box, no styling of its own;
+ *   degraded → the last cached answer plus `freshness-label` ("Stand: …"),
+ *              or the build-time snapshot with no label at all — never a
+ *              spinner, never an error sentence, never a retry control;
+ *   mocked   → the children's stand-in rows, marked `data-demo="true"` on
+ *              the frame and nowhere in the page.
+ * Inherits: radius 0; stands in the `ink` section that carries the live data,
+ * once per page.
+ * Space: declares the module's final geometry before the data arrives; a
+ * skeleton older than ~2 s is the caller's decision to replace, not this
+ * component's.
+ * A11y: the loading placeholder is `aria-hidden`; where `announced` is set the
+ * frame is a `role="status"` region, announced once.
+ */
+export function LiveModuleFrame({
+  title,
+  titleHidden = false,
+  subline,
+  lead,
+  cta,
+  announced = false,
+  updatedAt,
+  tier = "stale",
+  skeleton,
+  headingLevel: Heading = "h3",
+  locale = "de",
+  state = "ready",
+  layout = "stack",
+  className,
+  reserveMarks = false,
+  children,
+}: LiveModuleFrameProps) {
+  return (
+    <div
+      className={[
+        styles.frame,
+        layout === "split" ? styles.split : undefined,
+        reserveMarks ? styles.reserveMarks : undefined,
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
+      data-demo={isMocked(state) ? "true" : undefined}
+      role={announced ? "status" : undefined}
+    >
+      <header className={styles.header}>
+        <div className={styles.heading}>
+          <Heading className={titleHidden ? styles.titleHidden : styles.title}>{title}</Heading>
+          {lead ? <p className={styles.lead} data-lead="">{lead}</p> : null}
+          {subline ? <p className={styles.subline}>{subline}</p> : null}
+        </div>
+        <div className={styles.marks}>
+          {state === "degraded" ? <FreshnessLabel locale={locale} tier={tier} updatedAt={updatedAt} /> : null}
+        </div>
+      </header>
+      <div className={styles.body}>
+        {isPending(state) ? (skeleton ?? <Skeleton rows={3} variant="row" />) : children}
+      </div>
+      {cta ? <div className={styles.cta}>{cta}</div> : null}
+    </div>
+  );
+}

@@ -1,0 +1,453 @@
+---
+artefact: tactical-spec
+id: TS-WEB-0011
+kind: rule
+status: DRAFT
+version: 0.1.0
+implements: [FUN-WEB-0070, FUN-WEB-0071, FUN-WEB-0072, FUN-WEB-0074, CON-WEB-0075, FUN-WEB-0076, FUN-WEB-0077, FUN-WEB-0078, FUN-WEB-0207, FUN-WEB-0208, FUN-WEB-0209, FUN-WEB-0210, FUN-WEB-0213, NFR-WEB-0066, NFR-WEB-0067]
+sources: [SRC-0003, SRC-0006, SRC-0010, SRC-0019]
+decisions: [DEC-0018, DEC-0020, DEC-0022, DEC-0026, DEC-0035, DEC-0036, DEC-0037]
+ai_provenance:
+  prompt_id: UNKNOWN
+  prompt_version: UNKNOWN
+  model: "Claude Opus 5 (1M context)"
+  generated_at: "2026-09-10T14:39:53+02:00"
+---
+
+# TS-WEB-0011 — Findability
+
+## Purpose
+
+How the relaunch keeps the rank the old site earned and makes every new
+page legible to search engines and answer engines: the redirect map from
+the legacy URLs, the semantic skeleton every page is built on, which
+structured-data type sits on which page type, titles, descriptions and
+share metadata, the share image, the site icons and the manifest, and what an
+SEO landing page may be. D11 is the inventory: every search and sharing surface
+of a page, with the requirement and the criterion that hold it — including the
+ones specified elsewhere.
+
+Not here: sitemaps, `robots.txt`, `llms.txt` (TS-WEB-0004 D1, FUN-WEB-0073 and
+FUN-WEB-0169, FUN-WEB-0170), hreflang and the canonical rule itself (TS-WEB-0001 D6 — D9 below
+only settles the query-parameter case), the URL inventory redirect
+targets must hit (TS-WEB-0004 D1), the legal anchors they may point at
+(TS-WEB-0004 D8), and the inherited `/:community` forwarding (TS-WEB-0004 D3
+rule 6, FUN-WEB-0048).
+
+## Determinations
+
+### D1 — Redirect map: one source, one hop [FIXED: SRC-0006 / FUN-WEB-0070]
+
+Every URL the old site exposed either resolves unchanged or answers a
+**301** to its successor. The map lives in one generated file
+(`redirects.ts`) and is consumed in exactly one place: `proxy.ts`
+(TS-WEB-0004 D3) evaluates it as **step 0**, before any locale rule, so a
+legacy URL never passes through the bare-path rewrite first. Next.js
+config-level `redirects()` is not used — one legacy URL is known in one
+place only.
+
+| Rule | Binding statement |
+| --- | --- |
+| Status | 301 (permanent). 302 only for the `/:community` forwarding, which is TS-WEB-0004's. |
+| Hops | Exactly one. A target may never itself be a redirect source; chains are resolved at map-build time, not at request time. |
+| Query string | Preserved verbatim and appended to the target — `etcc_cmp`, `etcc_med` and every other campaign parameter survive every redirect (FUN-WEB-0048 contract). |
+| Fragment | Not touched; the browser carries it. Targets that need an anchor carry it in the map (e.g. `#impressum`, TS-WEB-0004 D8). |
+| Targets | Either a member of the TS-WEB-0004 D1 inventory or an absolute URL on an owned host (`schafe-vorm-fenster.de`, community-site and the village calendars — DEC-0146, DEC-0168 §5; the planned `app.schafe-vorm-fenster.de` has no DNS record and is no target, DEC-0177). Nothing else. |
+| Language | Legacy URLs are German-only; they target the **bare** path, never `/en/…`. |
+| No successor | A ranked URL never answers 404. Where no successor exists, it 301s to the nearest topically containing page — the home page only as the last resort. |
+| Normalisation | Uppercase paths and trailing slashes 301 to the lowercase, slash-free form before the map is consulted. |
+| Retirement | Rows are never deleted. The map is append-only, like the legal anchors (TS-WEB-0004 D8): links we do not control keep resolving. |
+
+### D2 — Known legacy families [PROPOSED — completion pending Q-0016]
+
+Extracted from the route files in `legacy-content/app/` (SRC-0010). This
+is **not** the inventory: the archive holds route files, not a URL list,
+the `/hilfe` article slugs and their markdown were not archived, and no
+export of actually-indexed URLs exists. Q-0016 closes that gap; until it
+does, the rows below are the confirmed floor.
+
+| Legacy path | Was | Proposed target | Note |
+| --- | --- | --- | --- |
+| `/` | project home | `/` | unchanged |
+| `/start` | "Anmelden" — publisher signup | `/mitmachen` | entry intent, not the form; `/mitmachen/registrieren` is one click on |
+| `/funktionen` | feature list (10 markdown features) | `/dein-kalender` | the only page that still argues features |
+| `/presse` | press page | `/ueber-uns/archiv` | proof archive is its successor (FUN-WEB-0018); the press page since DEC-0166 |
+| `/en/press` | — (not a legacy URL) | `/en/about/archive` | DEC-0166 — the English press address, so each language has one to hand to journalists |
+| `/impressum` | imprint **and** privacy (one page, legacy footer linked both here) | `/rechtliches#impressum` | anchor per TS-WEB-0004 D8 |
+| `/hilfe` | help index | `https://schafe-vorm-fenster.de/hilfe` | community-site (DEC-0146), CON-WEB-0010 |
+| `/hilfe/{slug}` | help articles | `https://schafe-vorm-fenster.de/hilfe/{slug}` | same slug, per article (community-site#204) |
+| apex `/:community` | village calendars | TS-WEB-0004 D3 rule 6 | not this spec's row |
+
+Inventory check of 2026-11-12 (issues 192 and 193): the live legacy site lists
+exactly six pages (`/`, `/funktionen`, `/start`, `/presse`, `/impressum`,
+`/hilfe`) and 36 `/hilfe/{slug}` articles, the same 36 as `content/support/`;
+it has no sitemap.xml and no robots.txt (both answer 404). All 36 targets on
+community-site answered 200. `/` and `/start` stay live (no row; see the module
+doc of `redirect-map.ts`). The slug list is `LEGACY_HELP_SLUGS` there and
+`redirect-map.test.ts` holds it against the archived articles. The apex
+`/hilfe/{slug}` row is therefore complete for the known legacy site; Q-0016
+stays open only for URLs that were indexed but never linked.
+
+### D3 — Semantic skeleton and the demotion registry [FIXED: SRC-0006 / FUN-WEB-0071, FUN-WEB-0077; ties TS-WEB-0002 D5]
+
+One skeleton per page: `header > nav` · `main > article` · `aside`\* ·
+`footer`. Exactly one `main`, exactly one `h1` (the page's argument
+headline), heading levels never skip, every `nav` and every `aside`
+carries an accessible name (its own heading or `aria-label`).
+
+Streamed content (FUN-WEB-0198, FUN-WEB-0199, FUN-WEB-0200, CON-WEB-0089, CON-WEB-0090 skeletons) lands **inside the landmark its
+final content belongs to** — the landmark structure of a page is
+identical before and after hydration.
+
+Demotion is decided per element, not per page. The registry is binding:
+
+| Element | Landmark | Reason |
+| --- | --- | --- |
+| Page argument, scene, mechanism (FUN-WEB-0138, CON-WEB-0059) | `main > article` | the one primary argument |
+| Primary conversion CTA (FUN-WEB-0133, FUN-WEB-0134, FUN-WEB-0135, FUN-WEB-0136, FUN-WEB-0006) | inside `article` | must stay dominant |
+| Place search on `/` and `/dein-ort` | inside `article` | the job is fulfilled in place (FUN-WEB-0007) |
+| Place search anywhere else | `aside` | secondary entry point |
+| Live dates / "this week nearby" on `/dein-ort` | inside `article` | there the live data *is* the argument |
+| The same modules on every other page | `aside` | illustration of a claim |
+| Context band naming the other three jobs (FUN-WEB-0005) | `aside` | offer, not argument |
+| Live counters (FUN-WEB-0041) | `aside` | proof beside a claim |
+| Media-echo teasers outside `/ueber-uns/archiv` | `aside` | citation of third-party content |
+| Archive list on `/ueber-uns/archiv` | `main > article` | there it is the page |
+| Teasers for other offerings (TS-WEB-0004 D7) | `aside` | one page, one offering |
+| Header nav, footer nav, legal links, language switcher | `header` / `footer` + `nav` | never inside `main` |
+
+No element is demoted by CSS alone and no `aside` is used for layout: if
+it is in an `aside`, it is secondary; if it is secondary, it is in an
+`aside`.
+
+### D4 — Structured data: type per page type [FIXED: DEC-0069, DEC-0071]
+
+No source fixes the vocabulary; this selection does. **JSON-LD** carries
+entities, server-rendered in the page HTML, one `<script
+type="application/ld+json">` graph per page, never injected by client
+JS. **Schema.org microdata** (`itemscope`/`itemtype`/`itemprop` — not
+microformats2, so both forms share one vocabulary) marks up visible,
+repeating DOM structures. The rule that keeps them from contradicting
+each other: **one entity, one representation** — an entity described in
+JSON-LD is not also described in microdata on the same page.
+
+**D4a — the price is emitted, and it carries its own scope [FIXED: DEC-0069].**
+480 € is **per organisation and per year, net** — however many places that
+organisation covers. A bare `price: 480` with `unitCode: ANN` states the
+year and nothing else, so a search engine or assistant could quote the
+figure as if it were per place or gross. The `priceSpecification` carries
+both missing halves: `valueAddedTaxIncluded: false` for the net, and a
+`referenceQuantity` whose `unitText` names the organisation for the
+scope. The same two qualifiers appear in the visible copy — structured
+data never says more precisely what the page says vaguely.
+
+Emitted types:
+
+| Page | JSON-LD | Microdata |
+| --- | --- | --- |
+| every page | `WebPage` (`inLanguage`, `isPartOf` → `WebSite`, `primaryImageOfPage`, `description`) and `Organization` (the one full node: `name`, `url`, `logo`, `@id` = site root; FUN-WEB-0213, `Q-0098`) | — |
+| `/` | `WebSite` | — |
+| second-level pages (`/dein-ort/starten`, `/mitmachen/registrieren`, `/dein-kalender/bestellen`, `/deine-region/angebot`, `/ueber-uns/archiv`) | `BreadcrumbList` — **all five** (DEC-0071) | — (one entity, one representation: the trail is described in JSON-LD, so it is not also marked up in microdata) |
+| `/dein-kalender` | `Service` + `Offer` with a `priceSpecification` (`price` 480, `priceCurrency` EUR, `valueAddedTaxIncluded: false`, `unitCode` ANN, `referenceQuantity` 1 with `unitText` naming the **organisation**, `provider` → `Organization` `@id`) — see D4a | — |
+| `/deine-region` | `Service` **without** any price or `Offer` (BUS-WEB-0015, FUN-WEB-0202: the region price is not published) | — |
+| `/ueber-uns/archiv` | — | `ItemList` of `NewsArticle`/`CreativeWork`, each with the **outlet** as `publisher` and `url` to the original — a citation list, never authored content |
+| any page with a visible Q&A block | `FAQPage` | alternatively microdata on the block; one of the two, per the one-entity rule |
+| `/rechtliches` | `WebPage` only | — |
+| 404 / 500 | none | — |
+
+Rules for values: every `Organization` field (legal name, address,
+contact, registration) is read at build time from `content/legal/`
+(FUN-WEB-0180, FUN-WEB-0181, FUN-WEB-0182) — no identity data is written into code or into this spec.
+`sameAs` lists only profiles that exist. `inLanguage` and every localized
+string come from the page language (TS-WEB-0001 D3, DEC-0026).
+
+Deliberately **not** emitted, each for a reason:
+
+| Type | Why not |
+| --- | --- |
+| `LocalBusiness` | No premises customers visit and no opening hours. Emitting it would assert something untrue about a software operator that happens to sit in a village. `Organization` is the honest node. |
+| `Event` | Event markup belongs to the app's calendar pages. The website shows excerpts of the same dates under a different host; marking them up would put the two in competition for one rich result — exactly the duplication DEC-0037 avoids for place pages. |
+| `Review` / `AggregateRating` | No rating data exists. Proof is quoted, never scored (FUN-WEB-0150, FUN-WEB-0151, CON-WEB-0069). |
+| `Product` | The 480 € licence is a service, not a shippable product; product snippets additionally invite merchant signals the site cannot supply. |
+| `SearchAction` (sitelinks searchbox) | The place parameter takes a resolved slug, not free text (CON-WEB-0062, FUN-WEB-0142). Revisit only if a free-text search URL is ever introduced. |
+
+`FAQPage` no longer produces rich results for a site of this kind. It is
+emitted anyway: it is valid, it makes the answer machine-readable, and
+answer engines are an explicit channel (DEC-0018).
+
+### D5 — Titles and descriptions [FIXED: SRC-0006 / FUN-WEB-0076; patterns PROPOSED]
+
+Both are content, not code: they come from `seo.title` and
+`seo.description` in the page's content frontmatter, fields of the Zod
+schema (FUN-WEB-0089), generated from the page brief in SRC-0003 (FUN-WEB-0172, FUN-WEB-0173)
+and written per language (FUN-WEB-0143, FUN-WEB-0144, CON-WEB-0063, DEC-0026). Neither is ever derived at
+runtime from body copy or from the `h1`.
+
+| Rule | Value |
+| --- | --- |
+| Title length | ≤ 60 characters **including** the suffix ` · Schafe vorm Fenster`. If the page title does not fit, the suffix is dropped — the title is never truncated. |
+| Title on `/` | Brand first: `Schafe vorm Fenster — <claim>`. |
+| Title content | Names the job, not the product; product names stay out (FUN-WEB-0002's rule read for metadata). |
+| Description length | 120–158 characters. |
+| Description content | The job plus the concrete next step. Generic claims ("einfach", "digital") are not copy (FUN-WEB-0138, CON-WEB-0059). |
+| Uniqueness | Unique per (path, language). A duplicate, a missing value, or an out-of-range length fails the build. |
+| Landing pages | Same contract, no exception (D7). |
+| Error pages | Title required, description not (they are `noindex`, D9). |
+
+Decided by the owner on 2026-11-12: the separator before the brand is the
+middle dot (`Q-0094`), built in the layout template
+(`app/[lang]/layout.tsx`: `%s · Schafe vorm Fenster`); the home title keeps
+its brand-first form with the em dash, as the row above writes it. And no
+page emits `<meta name="keywords">`, on purpose (`Q-0096`): search engines
+ignore the tag, and none is wanted.
+
+### D6 — Social sharing metadata [FIXED: SRC-0019 / FUN-WEB-0078, FUN-WEB-0207, FUN-WEB-0208, NFR-WEB-0066, NFR-WEB-0067; image system PROPOSED]
+
+Every indexable page emits the complete set. Values derive from D5 and
+from TS-WEB-0001 D6, so title, canonical and `og:url` cannot drift apart.
+
+| Tag | Value |
+| --- | --- |
+| `og:type` | `website` |
+| `og:site_name` | Schafe vorm Fenster |
+| `og:title` | `seo.title` without the brand suffix |
+| `og:description` | `seo.description` |
+| `og:url` | the canonical of the page, absolute (TS-WEB-0001 D6, D9) |
+| `og:locale` | the page language + region (e.g. `de_DE`), from TS-WEB-0001 D3 |
+| `og:locale:alternate` | one per hreflang alternate of the page |
+| `og:image` | absolute URL, the page's own image |
+| `og:image:width` / `:height` | 1200 / 630 |
+| `og:image:alt` | localized, from frontmatter |
+| `twitter:card` | `summary_large_image` |
+| `twitter:title` / `:description` / `:image` | emitted explicitly, same values — never left to parser fallback |
+| `twitter:site` | never emitted: there is no account (`Q-0097`, owner 2026-11-12) |
+
+Per-page image: generated at build time with `next/og` from the page
+frontmatter (title line, brand mark, theme tokens) and stored per
+(route, language) — the image carries text, so it is localized like any
+other text (DEC-0026); artifacts inside it are not. A hand-made image
+named in frontmatter overrides the generated one. Format JPEG or PNG
+(scrapers do not reliably render AVIF/WebP), ≤ 300 KB — outside the
+TS-WEB-0003 D1 image budget, because the page never loads it. No third-party
+image service (DEC-0013).
+
+Built (issue 195): `app/api/og/[lang]/[route]/route.tsx` draws one 1200×630
+PNG per (route, language) at build time from `seo.title`, the brand mark,
+the brand paper/lime/ink tokens and the brand typeface, all read from the
+brand package (TS-WEB-0017-A6). Its address is `/api/og/<lang>/<route>` and
+not a file-convention path, because the proxy answers an unknown
+asset-shaped URL with the 404 and lets `/api/` through. `og:image:alt` is
+derived (`Schafe vorm Fenster — <title>`, `src/lib/seo/share-image.ts`)
+since the frontmatter carries no alt field; the hand-made override named in
+frontmatter and the `twitter:site` tag are not built (no source, no account).
+The site icons and the manifest are D10; keywords are D5 (`Q-0096`).
+
+### D7 — Interest-oriented landing pages [PROPOSED — bounded by DEC-0037, DEC-0036]
+
+A landing page addresses an **interest** — a role with a need — and
+never a place. The bounds are hard:
+
+1. No place slug in any path, ever (CON-WEB-0062, FUN-WEB-0142, DEC-0037). There are no
+   `…-<ortsname>` pages, in any phase.
+2. A landing page nests under an existing base (TS-WEB-0004 D1a). It never
+   founds a URL family and never introduces a product name into a path
+   (FUN-WEB-0002).
+3. It carries everything a page carries: one focus job (FUN-WEB-0001), one
+   primary conversion (FUN-WEB-0133, FUN-WEB-0134, FUN-WEB-0135, FUN-WEB-0136), the context band (FUN-WEB-0005), its own
+   title/description/OG image (D5, D6), self-canonical and the hreflang
+   set of TS-WEB-0001 D6, and a sitemap entry (TS-WEB-0004).
+4. It ships only with substance that stands on its own. Near-duplicate
+   pages differing in a keyword are doorway pages — a policy violation
+   that would cost the ranking FUN-WEB-0070 exists to protect.
+5. It exists in the languages where the demand exists. A German-only
+   landing page emits a self-canonical and **no** alternate: hreflang
+   pairs real equivalents only (TS-WEB-0001 D6).
+6. New pages enter the IA first (DEC-0022), then the specs. None of the
+   candidates below is buildable before that amendment.
+
+Candidate set, from the examples in FUN-WEB-0074:
+
+| Path | Interest | Focus job | Conversion |
+| --- | --- | --- | --- |
+| `/deine-region/landkreis` | county looking for a regional culture/event platform | run our own calendar | `request-licence-quote` |
+| `/dein-kalender/gemeinde` | municipality looking for a calendar solution | run our own calendar | `buy-calendar-licence` |
+| `/dein-kalender/tourismus` | tourism organisation with a regional date list | run our own calendar | `request-product-briefing` |
+
+### D8 — Competitor-keyword pages: not prepared, not reserved [FIXED: CON-WEB-0075, Q-0009]
+
+Deferred means nothing is built **and** nothing is staged: no routes
+reserved, no drafts in the content folder, no sitemap entries, no
+competitor name in any title, description, `llms.txt` line, or landing
+page. The website names no competitor while Q-0009 is open.
+
+The review Q-0009 must answer, named so it can actually be asked: whether
+comparison pages naming a competitor's mark are permissible under UWG § 6
+(vergleichende Werbung) and MarkenG § 14 (use of a third party's mark),
+including use of the mark in title and meta description, and whether the
+answer differs for organic pages and for paid keywords should those ever
+follow.
+
+### D9 — Indexable surface: parameters and noindex [PROPOSED — refines TS-WEB-0001 D6]
+
+TS-WEB-0001 D6 sets the canonical to "self, exactly as served". That is
+ambiguous for the query parameters this site actually uses, and the
+ambiguity would open an unbounded set of indexable URLs. The refinement:
+
+| Surface | Directive |
+| --- | --- |
+| `/dein-ort?ort=…`, `/dein-ort/starten?ort=…` | indexable; canonical points at the **parameter-free** path |
+| Any URL carrying `etcc_*` or other campaign parameters | canonical strips them; the parameters still reach analytics and still survive redirects (D1) |
+| 404 and 500 | `noindex, follow`, real status (FUN-WEB-0145, FUN-WEB-0147, CON-WEB-0064, FUN-WEB-0027) |
+| `next.*` preview and `*.vercel.app` | `noindex, nofollow` on **every** response, as both `X-Robots-Tag` header and meta tag (DEC-0035) |
+| Landing-only domains | indexable; self-canonical only (TS-WEB-0001 D6) |
+| `/mitmachen/registrieren`, `/dein-kalender/bestellen`, `/deine-region/angebot` | indexable, no special treatment — they are content pages, not funnels |
+
+Rule of thumb behind the table: a query parameter changes what a page
+*shows*, never which page it *is*.
+
+### D10 — Site icons and the web app manifest [FIXED: SRC-0019 / FUN-WEB-0209, FUN-WEB-0210; sizes and manifest fields PROPOSED]
+
+Every icon is the brand mark of `@schafe-vorm-fenster/brand-design`, read at
+build time; no logo file is committed here (`TS-WEB-0017-A6`, `pnpm
+check:brand`).
+
+| Surface | Value |
+| --- | --- |
+| `rel="icon"` | the round file from the brand package (`./logo-round.svg`), from `/api/icon/svg` (F-3-13) |
+| `rel="icon"` PNG | 32 px, from `/api/icon/32` |
+| `rel="apple-touch-icon"` | 180 px, from `/api/icon/180` |
+| manifest icons | 192 px and 512 px PNG, from `/api/icon/<size>` |
+| `rel="manifest"` | `/manifest.webmanifest` (`app/manifest.ts`), which the proxy lets through |
+| manifest fields | `name` and `short_name` = the site name of the default language; `start_url` `/`; `display` `standalone`; background and theme colour from the brand tokens |
+
+The four sizes and the manifest fields beyond name and icons are what the
+build chose (issue #195); no source names them. They stay [PROPOSED] until a
+decision point takes them.
+
+Shape: a full circle on every surface, favicon included (`logo.radius` =
+`radius.pill`); the owner decided so on 2026-11-12 (`Q-0095`). The SVG and the
+PNG sizes are the round file from the brand package (`./logo-round.svg`,
+`./logo-round.png`, go-to-market-os PR 712, brand-design 2.10.0; corners
+transparent), scaled and not redrawn (issue #199).
+
+The JSON-LD `Organization.logo` is the 512 px rendition above (FUN-WEB-0213, `Q-0098`); the 512 px rendition is round (issue #199).
+
+### D11 — Inventory of the search and sharing surfaces [FIXED: the requirements named]
+
+One row per surface, so none of them is specified only in code. A surface
+specified in another tactical spec is listed with its home; this spec does not
+restate it.
+
+| Surface | Requirement | Specified in | Verified by |
+| --- | --- | --- | --- |
+| `<title>` | FUN-WEB-0076 | D5 (separator ` · `, `Q-0094`) | TS-WEB-0011-A7, A15 |
+| `<meta name="description">` | FUN-WEB-0076 | D5 | TS-WEB-0011-A7, A15 |
+| `<meta name="keywords">` | none, by decision (`Q-0096`) | D5 | — |
+| `rel="canonical"` | FUN-WEB-0073 | TS-WEB-0001 D6; parameters D9 | TS-WEB-0011-A10, A15 |
+| `hreflang` incl. `x-default` | FUN-WEB-0065, FUN-WEB-0073 | TS-WEB-0001 D6 | TS-WEB-0011-A15 |
+| `robots` meta and `X-Robots-Tag` | CON-WEB-0023, FUN-WEB-0145 | D9 | TS-WEB-0011-A10 |
+| `/sitemap.xml` | FUN-WEB-0073 | TS-WEB-0004 D1 | TS-WEB-0004-A5 |
+| `/robots.txt` | FUN-WEB-0169 | TS-WEB-0004 D1, DEC-0164 | TS-WEB-0004-A5 |
+| Open Graph set (`og:type`, `og:site_name`, `og:title`, `og:description`, `og:url`, `og:locale`) | FUN-WEB-0078 | D6 | TS-WEB-0011-A8, A15 |
+| `og:image` with `:width`, `:height`, `:type` | FUN-WEB-0078, FUN-WEB-0207, NFR-WEB-0066 | D6 | TS-WEB-0011-A8, A9, A15 |
+| `og:image:alt`, `twitter:image:alt` | FUN-WEB-0208 | D6 | TS-WEB-0011-A15 |
+| `twitter:card` = `summary_large_image`, `twitter:title`, `twitter:description`, `twitter:image` | FUN-WEB-0078 | D6 | TS-WEB-0011-A8, A15 |
+| `twitter:site` | none, by decision: there is no account (`Q-0097`) | D6 | — |
+| Share image (per page and language, title and brand mark) | FUN-WEB-0207, NFR-WEB-0066, NFR-WEB-0067 | D6 | TS-WEB-0011-A9 |
+| Favicon, touch icon, app icons | FUN-WEB-0209 (shape `Q-0095`) | D10 | TS-WEB-0011-A16 |
+| Web app manifest | FUN-WEB-0210 | D10 | TS-WEB-0011-A16 |
+| Structured data (JSON-LD, microdata) | FUN-WEB-0072, FUN-WEB-0213 (`Organization` with logo, `Q-0098`) | D4 | TS-WEB-0011-A5, A6, A14, A17 |
+| `/llms.txt` | FUN-WEB-0170 | TS-WEB-0004 D1, DEC-0018 | TS-WEB-0004-A5 |
+
+## Free for the generator
+
+- [FREE] Emission mechanics for JSON-LD (Next.js Metadata API, a helper
+  module, or explicit script tags) as long as D4's one-entity rule holds
+  and the output is server-rendered.
+- [FREE] Visual design of the OG image template, within D6's format,
+  size and localization constraints.
+- [FREE] The wording of titles and descriptions — content phase
+  (CON-WEB-0087), within D5's limits.
+- [FREE] Internal file layout and build-time generation of the redirect
+  map, provided D1's single-source and single-hop rules hold.
+
+## Acceptance criteria
+
+| ID | Level | Check |
+| --- | --- | --- |
+| TS-WEB-0011-A1 | static | Every URL in the legacy inventory has exactly one map row; no row's target is another row's source (no chains); every internal target is a member of TS-WEB-0004 D1. |
+| TS-WEB-0011-A2 | integration | Each legacy URL answers 301 in one hop; the target answers 200; `?etcc_cmp=x&etcc_med=y` is present, unmodified, on the target request. |
+| TS-WEB-0011-A3 | tool | Every page: exactly one `main`, exactly one `h1`, no skipped heading level, every `nav` and `aside` named. Zero HTML-validator errors. |
+| TS-WEB-0011-A4 | integration | The D3 registry holds per page: every listed secondary element renders inside an `aside`, every primary element inside `main > article`; the context band is an `aside` on every page. |
+| TS-WEB-0011-A5 | tool | Structured-data validation (schema.org validator + Rich Results Test) reports zero errors per page type, and each page emits exactly the D4 types assigned to it — no more. |
+| TS-WEB-0011-A6 | static | No entity `@id`/`itemtype` appears both as JSON-LD and as microdata on the same page. |
+| TS-WEB-0011-A7 | static | Every (path, language) has a unique non-empty title ≤ 60 chars and a description of 120–158 chars; violations fail the build. |
+| TS-WEB-0011-A8 | integration | Every indexable page emits the complete D6 tag set with absolute URLs; `og:url` equals the canonical; `og:locale` matches `<html lang>`; `og:locale:alternate` matches the hreflang set. |
+| TS-WEB-0011-A9 | e2e | The OG image of every (path, language) responds 200, is 1200×630, within the size budget, and shows text in that language. |
+| TS-WEB-0011-A10 | integration | `/dein-ort?ort=<slug>` and an `etcc_*`-carrying URL emit a parameter-free canonical; a preview host emits `noindex` in both header and meta on every route. |
+| TS-WEB-0011-A11 | static | No route, content file, sitemap entry, metadata field, or `llms.txt` line names a competitor while Q-0009 is open. |
+| TS-WEB-0011-A12 | manual | Each interest landing page passes the SRC-0001 page-brief compliance check and is reviewed against D7.4 (not a keyword permutation of an existing page) before publication. |
+| TS-WEB-0011-A13 | manual | Post-cutover watch: Search Console shows no rise in 404s on formerly indexed URLs, and the previously best-ranking legacy URLs keep their impressions within the agreed corridor eight weeks after launch. |
+| TS-WEB-0011-A14 | integration | Each of the five second-level pages emits exactly one `BreadcrumbList` whose `itemListElement` positions match the visible trail of TS-WEB-0006 D2 item for item, and whose last item is the current page. No other page emits one, and no page emits the trail twice (JSON-LD and microdata both). |
+| TS-WEB-0011-A15 | e2e | On every (path, language) of the route table, the rendered head carries a non-empty title, a description of 120–160 characters, the self-canonical, one hreflang per language plus `x-default`, `og:title`, `og:description` equal to the description, `og:type` `website`, `og:url` equal to the canonical, `og:image` equal to the page's own share image with width 1200 and height 630, a non-empty `og:image:alt`, `twitter:card` `summary_large_image`, explicit `twitter:title`, `twitter:description` and `twitter:image`, and a non-empty `twitter:image:alt`. |
+| TS-WEB-0011-A16 | e2e | `/` links `rel="icon"`, `rel="apple-touch-icon"` and `rel="manifest"` (the root layout emits them, so every page does); the touch icon, the manifest and the 32, 192 and 512 px app icons each answer 200, the 192 px icon as `image/png`. |
+| TS-WEB-0011-A17 | e2e | On every (path, language) of the route table the one JSON-LD graph holds exactly one `Organization` node with a non-empty `name`, `url` equal to the site origin and a `logo` whose `url` answers 200 as `image/png`. |
+
+## Coverage
+
+| Requirement | Discharged by |
+| --- | --- |
+| FUN-WEB-0070 (keep it stable or answer it with a 301 …) | D1, D2, D9 · A1, A2, A13 |
+| FUN-WEB-0071 (strictly semantic markup) | D3 · A3, A4 |
+| FUN-WEB-0072 (JSON-LD plus microdata) | D4 · A5, A6, A14 |
+| FUN-WEB-0074 (interest landing pages) | D7 · A12 |
+| CON-WEB-0075 (never publish a keyword-oriented landing page targeting a competitor …) | D8 · A11 |
+| FUN-WEB-0076 (purposeful titles + descriptions) | D5 · A7 |
+| FUN-WEB-0077 (secondary content identifiable) | D3 demotion registry · A4 |
+| FUN-WEB-0078 (OG + Twitter, per-page image) | D6, D11 · A8, A9, A15 |
+| FUN-WEB-0207 (a share image per page and language, with title and brand mark) | D6 · A9, A15 |
+| FUN-WEB-0208 (a text alternative for the share image, in the page language) | D6 · A15 |
+| FUN-WEB-0209 (favicon, touch icon and app icons from the brand mark) | D10 · A16 |
+| FUN-WEB-0210 (a web app manifest naming the site and its icons) | D10 · A16 |
+| FUN-WEB-0213 (a JSON-LD `Organization` with name, URL and logo on every page) | D4 · A17 |
+| NFR-WEB-0066 (share image 1200 × 630 px) | D6 · A9 |
+| NFR-WEB-0067 (share image ≤ 300 KB) | D6 · A9 |
+
+## Open points
+
+- **Q-0016 — legacy URL inventory (carried, not solved).** The archive
+  (SRC-0010) contains route files, not URLs: `/hilfe` article slugs and
+  their markdown are missing, and no export of actually indexed URLs
+  exists. D2 is the confirmed floor, not the inventory. Needed:
+  a Search Console / server-log export of indexed and linked URLs of the
+  live site. Owner: spec work. D2 stays [PROPOSED] until it lands.
+- **Q-0009 — competitor-keyword pages (carried, not solved).** D8 holds
+  the prohibition and names the questions the legal review must answer.
+  Owner: legal. CON-WEB-0075 stays S1 until then.
+- ~~**Where do `/hilfe` and `/hilfe/{slug}` redirect?**~~ **Resolved
+  2026-09-27 by DEC-0146 and community-site#204.** Help lives in
+  community-site (CON-WEB-0010), which now publishes `/hilfe` and
+  `/hilfe/{slug}` at the legacy site's own slugs. `redirect-map.ts` carries
+  the per-article target; D1's "no ranked URL answers 404" rule holds for
+  both rows of D2.
+- **New question: does the IA get a visible breadcrumb on second-level
+  pages?** D4 assigns `BreadcrumbList` there; a visible trail is a UI
+  element the IA does not have, and the IA is authoritative (DEC-0022).
+  Either the IA is amended or the breadcrumb markup is dropped.
+- **New question: do the three D7 landing-page candidates enter the IA?**
+  They are buildable only after the IA amendment (DEC-0022) and the
+  content phase (CON-WEB-0087).
+- **Answered 2026-11-12 by the owner:** `Q-0094` the title separator is ` · `;
+  `Q-0095` the favicon is a full circle (round artwork pending in the brand
+  package); `Q-0096` no meta keywords, on purpose; `Q-0097` no `twitter:site`,
+  there is no account (`Organization.sameAs` lists only profiles that exist,
+  none now).
+- **Answered 2026-11-12 by the owner:** `Q-0098` yes, the `Organization` node
+  carries the brand mark as `logo`, on all pages (FUN-WEB-0213); the round
+  rendition follows with issue #199.
+- **Amendment owed to TS-WEB-0004 D3:** the legacy redirect map is a new
+  step 0 in the proxy's evaluation order (D1).
+- **Amendment owed to TS-WEB-0001 D6:** the query-parameter canonical rule of
+  D9 refines "self, exactly as served".
+- [PROPOSED] and awaiting a decision point: D2, D4, D6's image system,
+  D7, D9, D10's sizes and manifest fields.

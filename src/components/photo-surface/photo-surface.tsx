@@ -1,0 +1,288 @@
+import Image from "next/image";
+
+import { AiEditedMark } from "../ai-edited-mark/ai-edited-mark";
+import { isMocked, isPending, type DataStateProps } from "../data-state";
+import { PlaceholderSurface } from "../placeholder-surface/placeholder-surface";
+import { Skeleton } from "../skeleton/skeleton";
+
+import { PhotoCredit } from "./photo-credit";
+
+import { focalPosition, photoUrl } from "./url";
+
+import type { ReactNode } from "react";
+import type { CSSProperties } from "react";
+
+import type { Locale } from "@/src/lib/i18n/locales";
+
+import styles from "./photo-surface.module.css";
+
+export interface PhotoSurfaceProps extends DataStateProps {
+  /** The photograph. Absent → the honest hatch, never a stock picture. */
+  readonly src?: string;
+  /**
+   * The landscape rendition of the same motif, swapped in from 48rem — the
+   * width at which `--ratio-hero` turns landscape. Without it the base image
+   * is used at every width.
+   */
+  readonly wideSrc?: string;
+  /**
+   * This surface carries the page's **declared** LCP element (TS-WEB-0003 D2).
+   * The photograph is a CSS background — the design system requires it to be
+   * one (§Photo surface: photo and gradient in the same declaration), and a
+   * background carries neither `loading` nor `fetchpriority`. So the priority
+   * signal is a `preload` link per rendition instead, which is the instrument
+   * a background image has. At most one surface per page may set it.
+   */
+  readonly priority?: boolean;
+  /**
+   * This surface is the page's hero — the photograph the header lies on
+   * until it has scrolled past (Jan's round-3 point 2). `hero-block` sets it
+   * for every hero it renders; a page composing its hero out of a bare
+   * `photo-surface` (`/ueber-uns`) sets it itself. It reaches the markup only
+   * when a photograph actually exists: the missing-photo hatch is a light
+   * ground that paper-coloured header items could not sit on.
+   */
+  readonly hero?: boolean;
+  /**
+   * The hero's height from `xl` (SRC-0014 §Layout Grid, DEC-0150): `home`
+   * is `min(80vh, 680px)`, `page` — every other hero — `min(70vh, 560px)`.
+   * Below `xl` the hero keeps its reserved band and `ratio-hero`.
+   */
+  readonly heroSize?: "home" | "page";
+  /**
+   * The motif's focal point, as percentages of the frame — the inventory's
+   * `focal: {x, y}` (`ImageEntrySchema`), what `background-position` takes.
+   * Never `center` by default (DEC-0105 §2): absent, the stylesheet's own
+   * `50% 40%` applies, which crops a sky-heavy motif's sky away and lands the
+   * subject above the reading band's opaque end.
+   */
+  readonly focal?: { readonly x: number; readonly y: number };
+  readonly ratio?: "hero" | "feature";
+  /**
+   * Render the photograph as a responsive `<img>` (`next/image`, `fill`,
+   * `object-fit: cover`) instead of a CSS background, with this `sizes`
+   * (issue 164). A background carries no `srcset`, so every viewport would
+   * download the one full-size file; the `<img>` lets the browser and the
+   * optimizer pick the width. The scrim ladder is laid over it as its own
+   * element, from the same two gradient variables. Only for a below-the-fold
+   * surface: the `priority` preload links belong to the background mode.
+   */
+  readonly imageSizes?: string;
+  /**
+   * The photo does not depict what the copy claims. It reaches the markup as
+   * `data-provenance="generated"` and nothing else — Jan, 2026-09-18.
+   */
+  readonly notDepicting?: boolean;
+  /**
+   * A real photograph edited with an AI tool (DEC-0161, Q-0092). It depicts
+   * what the copy claims, so it carries no "Nicht motivgenau" badge; the
+   * editing is named in `content/legal/image-credits.md`, reaches the markup
+   * as `data-provenance="ai-edited"`, and is marked on the picture by
+   * `ai-edited-mark` in its top-right corner (DEC-0165).
+   */
+  readonly aiEdited?: boolean;
+  readonly id?: string;
+  /**
+   * The block name a page's composition sheet uses (`data-block`), as
+   * `section-shell` carries it — for a photo section that is a block of its
+   * own rather than the hero (`/ueber-uns`'s quote band, DEC-0162 §1).
+   */
+  readonly dataBlock?: string;
+  /** The section's accessible name, where it carries no heading of its own. */
+  readonly label?: string;
+  /** The manifest slot id when this surface shows a generated image (DEC-0068). */
+  readonly placeholderId?: string;
+  /**
+   * Kept in the interface so every page composes the surface the same way;
+   * the surface itself renders no words of its own any more.
+   */
+  readonly locale?: Locale;
+  readonly className?: string;
+  /**
+   * A photograph that replaces the surface's own after hydration, with its
+   * credit line — `photo-layer.tsx` (DEC-0167). Rendered under the text stack.
+   */
+  readonly photoLayer?: ReactNode;
+  /**
+   * The photograph's credit, where its rights holder asks for one (the
+   * inventory's `credit`, lead word included). Rendered as the © control in
+   * the picture's corner, never as text on it (DEC-0168, issue 101).
+   */
+  readonly credit?: ReactNode;
+  readonly children?: ReactNode;
+}
+
+/**
+ * 6 `photo-surface` [FIXED] — SRC-0014 §Photo surface.
+ *
+ * Structure: a full-width section with no radius and no border. The
+ * photograph is the section's background layer with the scrim above it *in
+ * the same declaration* — the design system's fixed neutral-black ladder,
+ * two gradients (the top band that carries the header, the reading band
+ * under the text stack), ceiling 0.72, never a tint of ink or violet
+ * (DEC-0105 §1). One treatment for every surface; the crop follows the
+ * motif's `focal` point, and every piece of type on the surface carries the
+ * soft `shadow.textOnPhoto`. The placeholder and demo marks sit in the
+ * picture's top corner, not in the text stack: they mark the photograph, and
+ * inside the stack they pushed the copy a badge's height further up the
+ * picture.
+ * States (D-9, all four):
+ *   loading  → the `skeleton` hatch at the same ratio;
+ *   empty    → `placeholder-surface`: a flat brand-colour ground at the same
+ *              ratio, with nothing written on it (Jan, 2026-09-18);
+ *   degraded → the section renders with whatever image it has; a missing one
+ *              is the empty case, so there is no third visual;
+ *   mocked   → the full surface, marked `data-mock="true"`.
+ * Inherits: radius 0, no border, no shadow. Never adjacent to another photo
+ * section — a rhythm rule `section-shell` enforces at composition time.
+ * Space: the ratio is declared before the image arrives (8:9 on the phone,
+ * 21:9 from the lg switch point for the hero). A surface marked `hero`
+ * additionally reserves a band at its top that the text stack cannot enter —
+ * ~35 % of the box at every width — so a hero with long copy still shows the
+ * photograph rather than growing its box and covering all of it
+ * (`state/open.md` row 203).
+ * A11y: the photograph is a background and carries no alt — an image that
+ * carries meaning belongs in `media-frame`. The scrim half of the contrast
+ * pair is the fixed ladder `pnpm check:contrast` measures (NFR-WEB-0058/0059);
+ * the photograph's half is the motif rule — a picture that only works when
+ * the scrim covers its subject is the wrong picture (DEC-0105 §2).
+ */
+export function PhotoSurface({
+  src,
+  wideSrc,
+  priority = false,
+  hero = false,
+  heroSize = "page",
+  focal,
+  ratio = "hero",
+  imageSizes,
+  notDepicting = false,
+  aiEdited = false,
+  locale,
+  state = "ready",
+  id,
+  dataBlock,
+  label,
+  placeholderId,
+  className,
+  photoLayer,
+  credit,
+  children,
+}: PhotoSurfaceProps) {
+  const asImage = imageSizes !== undefined;
+  const classes = [styles.surface, className].filter(Boolean).join(" ");
+
+  if (isPending(state)) {
+    return <Skeleton className={className} ratio={ratio} variant="box" />;
+  }
+
+  /*
+   * `empty` is a statement about *this surface's own asset*, and it removes
+   * the photograph only where the surface **is** the asset — a standalone
+   * photo slot with nothing in it. A surface that wraps content is a hero,
+   * and its `state` is the state of the copy the caller renders inside it:
+   * `/mitmachen` and `/deine-region` both pass `slotState(hero)`, their
+   * headline slot's own state, and in the production build that slot is
+   * `empty` (its content is still `status: draft`). The surface then dropped
+   * the photograph, `data-hero` with it, and the two pages shipped a hero
+   * with no picture and a solid header — in the build, while `next dev`
+   * showed the photograph. An absent copy slot is not an absent photograph.
+   */
+  const missingPhoto = !src || (state === "empty" && !children);
+
+  // A surface with no content of its own (a standalone photo slot — the
+  // `/ueber-uns` origin photo, an archive row) *is* the invitation: the
+  // hatch, the badge, its own headline and CTA. A surface wrapping content
+  // (`hero-block`, `scene-block`) must still render that content — the
+  // design system's own rule is "never a text-only card without the badge",
+  // which presumes the text renders; dropping the caller's `children`
+  // entirely (the previous behaviour here) silently deleted the page's one
+  // `h1` whenever no photograph existed, which is every hero on this site
+  // today (no photography asset exists anywhere in the tree yet).
+  if (missingPhoto && !children) {
+    return (
+      <PlaceholderSurface className={className} ratio={ratio} />
+    );
+  }
+
+  return (
+    <>
+      {/*
+        The LCP background, announced before the stylesheet that references it
+        is even parsed. Two links, each behind the media query that decides
+        which rendition the browser will actually paint, so the phone never
+        fetches the landscape frame and the desktop never fetches the upright
+        one. React hoists them into `<head>`.
+      */}
+      {priority && !missingPhoto ? (
+        <>
+          <link
+            as="image"
+            fetchPriority="high"
+            href={src}
+            media={wideSrc ? "(max-width: 47.999rem)" : undefined}
+            rel="preload"
+          />
+          {wideSrc ? (
+            <link
+              as="image"
+              fetchPriority="high"
+              href={wideSrc}
+              media="(min-width: 48rem)"
+              rel="preload"
+            />
+          ) : null}
+        </>
+      ) : null}
+    <section
+      aria-label={label}
+      className={classes}
+      data-block={dataBlock}
+      /* The page's hero surface — what the header observes to know when it
+         has scrolled off the photograph (Jan's round-3 point 2). */
+      data-hero={hero && !missingPhoto ? "true" : undefined}
+      data-hero-size={hero && !missingPhoto ? heroSize : undefined}
+      data-mock={isMocked(state) ? "true" : undefined}
+      data-placeholder={missingPhoto ? "true" : placeholderId}
+      data-picture={asImage && !missingPhoto ? "true" : undefined}
+      data-provenance={
+        missingPhoto ? undefined : notDepicting ? "generated" : aiEdited ? "ai-edited" : undefined
+      }
+      id={id}
+      style={
+        {
+          "--photo-image": missingPhoto || asImage ? "none" : photoUrl(src!),
+          ...(wideSrc && !missingPhoto ? { "--photo-image-wide": photoUrl(wideSrc) } : {}),
+          ...(focal ? { "--photo-focal": focalPosition(focal) } : {}),
+          "--photo-ratio": `var(--ratio-${ratio})`,
+        } as CSSProperties
+      }
+    >
+      {/* F-3-R1: the marks left the text stack — and, since Jan's decision
+          of 2026-09-18, the page entirely. What this surface is standing in
+          for is readable from `data-placeholder`, `data-provenance` and
+          `data-mock` above, and from `state/open.md`; a visitor sees a
+          finished picture or a finished flat ground, never a label. */}
+      {/* The text stack stands in the page's container, so it starts on the
+          same left edge as the header and every section (DEC-0150, F-4-1). */}
+      {photoLayer}
+      {asImage && !missingPhoto ? (
+        <>
+          <div aria-hidden="true" className={styles.picture} data-photo-picture="">
+            <Image alt="" className={styles.pictureImage} fill loading="lazy" sizes={imageSizes} src={src!} />
+          </div>
+          <div aria-hidden="true" className={styles.scrim} />
+        </>
+      ) : null}
+      <div className={`container ${styles.content}`}>{children}</div>
+      {/* DEC-0165: every photograph edited with an AI tool carries the mark. */}
+      {aiEdited && !notDepicting && !missingPhoto ? <AiEditedMark locale={locale} /> : null}
+      {credit && !missingPhoto ? (
+        <PhotoCredit besideMark={aiEdited && !notDepicting} locale={locale} own>
+          {credit}
+        </PhotoCredit>
+      ) : null}
+    </section>
+    </>
+  );
+}

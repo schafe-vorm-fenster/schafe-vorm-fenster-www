@@ -1,0 +1,45 @@
+/*
+ * The same geometry as `badge` (SRC-0014 §Badge and chip): mono 15 px / 700,
+ * radius 999, padding 7 × 15, 26 px minimum. A status badge sits on the same
+ * line as a category badge and must not be taller than it.
+ */
+.badge {
+  align-items: center;
+  border-radius: var(--radius-pill);
+  display: inline-flex;
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  font-weight: 700;
+  letter-spacing: var(--type-label-tracking);
+  line-height: 1;
+  min-height: var(--height-badge);
+  padding: 7px 15px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ── The three pairs — brand tokens `--color-status-event-*`, verbatim ──── */
+
+.neu {
+  background: var(--color-status-event-neu);
+  color: var(--color-status-event-neu-text);
+}
+
+.verschoben {
+  background: var(--color-status-event-verschoben);
+  color: var(--color-status-event-verschoben-text);
+}
+
+/*
+ * On a paper ground the paper badge takes a 1 px `line` hairline — one of
+ * the three named border exceptions (SRC-0014 §Event-status badge). Drawn
+ * inside the box so the badge stays exactly as tall as its two siblings.
+ */
+.verschoben[data-ground="paper"] {
+  box-shadow: inset 0 0 0 1px var(--color-neutral-line);
+}
+
+.abgesagt {
+  background: var(--color-status-event-abgesagt);
+  color: var(--color-status-event-abgesagt-text);
+}

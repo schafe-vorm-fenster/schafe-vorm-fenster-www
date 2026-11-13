@@ -1,0 +1,365 @@
+---
+artefact: tactical-spec
+id: TS-WEB-0004
+kind: system
+status: DRAFT
+version: 0.1.1
+implements: [FUN-WEB-0002, CON-WEB-0062, FUN-WEB-0142, FUN-WEB-0146, CON-WEB-0067, FUN-WEB-0010, FUN-WEB-0011, FUN-WEB-0012, FUN-WEB-0013, FUN-WEB-0014, FUN-WEB-0015, FUN-WEB-0016, FUN-WEB-0017, FUN-WEB-0018, FUN-WEB-0140, FUN-WEB-0141, FUN-WEB-0137, CON-WEB-0061, FUN-WEB-0145, FUN-WEB-0147, CON-WEB-0064, FUN-WEB-0027, FUN-WEB-0158, FUN-WEB-0159, FUN-WEB-0048, FUN-WEB-0067, FUN-WEB-0073, FUN-WEB-0169, FUN-WEB-0170, CON-WEB-0042, CON-WEB-0043, CON-WEB-0044, CON-WEB-0045]
+sources: [SRC-0003]
+decisions: [DEC-0002, DEC-0024, DEC-0025, DEC-0032, DEC-0035, DEC-0163, DEC-0164, DEC-0167]
+ai_provenance:
+  prompt_id: UNKNOWN
+  prompt_version: UNKNOWN
+  model: "Claude Opus 5 (1M context)"
+  generated_at: "2026-09-10T13:40:07+02:00"
+---
+
+# TS-WEB-0004 — URL and Routing Structure
+
+## Purpose
+
+The complete public URL inventory and its realisation as a Next.js
+App Router tree — the skeleton the one-shot generation hangs everything
+on. Locale *detection* is TS-WEB-0001; this spec fixes *which URLs exist* and
+*how the framework serves them*.
+
+## Determinations
+
+### D1 — Public URL inventory [FIXED: SRC-0003, DEC-0012, DEC-0024, DEC-0032]
+
+Bare paths render the TLD-default language; `/en/…` variants exist for
+every row on `.de` (phase 1). One row per page; conversions per the `pages` area of
+`../requirements/functional/`.
+
+| Path | Page | Req |
+| --- | --- | --- |
+| `/` | Home | FUN-WEB-0010 |
+| `/dein-ort` | know what is on (place as query param, never a path segment) | FUN-WEB-0011, CON-WEB-0062, FUN-WEB-0142 |
+| `/mitmachen` | publish our dates | FUN-WEB-0012 |
+| `/mitmachen/registrieren` | register, handover to app | FUN-WEB-0013 |
+| `/dein-ort/starten` | start in my place (uncovered); place as query param | FUN-WEB-0158, FUN-WEB-0159 |
+| `/dein-kalender` | run our own calendar (480 €) | FUN-WEB-0014 |
+| `/dein-kalender/bestellen` | order + invoice checkout | FUN-WEB-0015 |
+| `/deine-region` + `/deine-region/angebot` | whole region | FUN-WEB-0016 |
+| `/ueber-uns` | who is behind it | FUN-WEB-0017 |
+| `/ueber-uns/archiv` | proof archive | FUN-WEB-0018 |
+| `/rechtliches` | all legal content, one page, anchors `#impressum` · `#datenschutz` · `#barrierefreiheit` | FUN-WEB-0146, CON-WEB-0067, CON-WEB-0027 |
+| `/sitemap.xml` · `/robots.txt` · `/llms.txt` | machine surfaces, per domain | FUN-WEB-0073, FUN-WEB-0169, FUN-WEB-0170 |
+| `/start` | **the registration surface** — it renders the Google Form as a visible embed while the widget is undelivered (TS-WEB-0016 D15, FUN-WEB-0205, DEC-0013 amendment 2026-09-25), and it is the one route on the site that embeds a third party. `noindex`, absent from the sitemap. It is also the lead fallback's target (TS-WEB-0016 D6), so the swap to envoy changes this one route and no lead surface. **It was specified as "redirect only, renders nothing" until 2026-09-25**, which would have removed the only registration that works | FUN-WEB-0184, FUN-WEB-0185, FUN-WEB-0187, FUN-WEB-0152, CON-WEB-0083, FUN-WEB-0205 |
+
+Reserved, not built: `/mitmachen/vor-ort-werben` (Q-0005),
+`/nutzungsbedingungen` (if the legal import delivers terms).
+
+`/start` is the only row that is not a page. It exists so that no lead
+surface hard-codes a third-party URL: every fallback links to `/start`,
+and what `/start` resolves to is one decision in one place. It carries
+`noindex` and is absent from the sitemap.
+
+**Landing-only domains** (`.pl`, `.at`, `sheepoutside.com`, phase 1):
+serve `/`, the three legal routes, and the machine surfaces; every other
+path 404s. [PROPOSED]
+
+**`/llms.txt` body** (FUN-WEB-0170, issue #202, 2026-11-12). The llmstxt.org
+shape: `# Schafe vorm Fenster`, one `>` summary, the twelve core facts
+FUN-WEB-0170 lists as `Label: value` lines, then `## Seiten` (the primary
+language), `## Pages in English` (the second language, full-site domains only)
+and `## Optional` last (press archive, legal, community-site's help, sitemap,
+robots; the file does not list itself). A page line is
+`- [title](url): description`, title and description being the page's own
+`<title>` and meta description. Facts a page also shows are read from the
+module that page reads (prices, imprint identity, contact record, locales);
+the others are hub records, cited per line in `src/lib/routes/llms-facts.ts`.
+A landing-only domain keeps the summary but carries no facts block (owner
+decision 2026-11-12: the side domains do not go online for now), lists its
+served pages in one section and carries no help link.
+
+### D1a — Route naming system [FIXED: DEC-0036, IA amended]
+
+Two word classes carry every route. **Possessive bases** name what the
+visitor gets — the website speaks to the visitor (dein/deine); `mein-…`
+is reserved for the logged-in app space. **Verbs** name what the visitor
+does.
+
+| Route | Offering / role |
+| --- | --- |
+| `/dein-ort` + `/dein-ort/starten` | community-calendar: reading · founding |
+| `/dein-kalender` + `/bestellen` | portalize-calendar (480 €) |
+| `/deine-region` + `/angebot` | portalize-enterprise |
+| `/deine-termine` | **reserved, not built** for portalize-website-widget — the name is held so no other plan claims it; it answers 404 until the offering is sellable (DEC-0071) |
+| `/mitmachen` + `/registrieren` | publishing entry (stays a verb by rule) |
+
+A bare verb is not a base: the founding page is `/dein-ort/starten`
+(start *what*? your place), not `/starten`. **No path ever carries a
+place slug** (CON-WEB-0062, FUN-WEB-0142, DEC-0037) — a place travels as a query
+parameter, so no segment can collide with a place name.
+
+Product names never appear in routes or labels (FUN-WEB-0002). SEO landing
+pages (FUN-WEB-0074) nest under the bases instead of founding new URL
+families.
+
+### D2 — Internal route tree [FIXED: DEC-0002; layout PROPOSED]
+
+One tree carries all languages via a `[lang]` segment; public URLs stay
+per TS-WEB-0001 D4 (bare for TLD default) through the rewrite in D3.
+
+```text
+proxy.ts                     ← stateless URL mapping only (D3)
+app/
+├── [lang]/
+│   ├── layout.tsx           ← <html lang>, tokens/themes, header, footer, context band slot
+│   ├── page.tsx
+│   ├── dein-ort/{page.tsx, starten/page.tsx}
+│   ├── mitmachen/{page.tsx, registrieren/page.tsx}
+│   ├── dein-kalender/{page.tsx, bestellen/page.tsx}
+│   ├── deine-region/{page.tsx, angebot/page.tsx}
+│   ├── ueber-uns/{page.tsx, archiv/page.tsx}
+│   ├── rechtliches/page.tsx   ← one page, anchored sections
+│   └── not-found.tsx        ← 404 per DEC-0032: place search + jobs band
+├── api/…                    ← BFF routes (D5)
+├── global-error.tsx         ← 500 per DEC-0032: static, minimal
+├── sitemap.ts               ← per-domain, language-aware
+├── robots.ts                ← AI crawlers allowed
+└── llms.txt/route.ts
+```
+
+> **Amended by DEC-0164 (2026-10-13).** `robots.ts` and `llms.txt/route.ts`
+> are replaced by build-time variants: `app/variants/robots/[variant]/route.ts`,
+> `app/variants/llms/[variant]/route.ts`, and the per-language 404 document
+> `app/variants/not-found/[lang]/` with its own root layout. `proxy.ts`
+> rewrites `/robots.txt`, `/llms.txt` and every unservable URL onto the right
+> variant. `global-not-found.tsx` stays for what Next's router alone treats as
+> unknown, and it is static.
+
+`[lang]` is validated against the domain's language set
+(`generateStaticParams` + `dynamicParams = false`); an unsupported code
+404s (TS-WEB-0001 D4).
+
+### D3 — Stateless rewrite in `proxy.ts` [PROPOSED — amends TS-WEB-0001 D3]
+
+Public → internal mapping, pure function of hostname + path, evaluated
+per request:
+
+1. `/{tldDefault}/…` requested literally → 301 to the bare path.
+2. Bare path → rewrite (invisible) to `/{tldDefault}/…`.
+3. `/{otherSupportedLang}/…` → passes through.
+4. Unsupported first segment that looks like a lang code → falls into
+   the `[lang]` 404.
+5. Landing-only domain, path outside D1's landing set → 404.
+6. After the calendars move to `app.*`: apex arrives here via 301 from
+   DNS level; `/:community` slugs (svf.li QR, FUN-WEB-0048) forward 302 to
+   the place's calendar on `app.*`, `etcc_*` preserved. Until the move:
+   rule inactive.
+
+The proxy is a pure function of hostname + path and holds no state. The
+binding rules it must not break are stated where they belong, not as a
+technology ban: locale is determined by the URL alone (TS-WEB-0001 D3), and
+external APIs are reached server-side only, through the website's own
+client endpoints (DEC-0025, CON-WEB-0042, CON-WEB-0043, CON-WEB-0044, CON-WEB-0045).
+
+### D3a — Localized pathnames: one route translation map [FIXED: DEC-0036; EN segments PROPOSED]
+
+Public path segments are localized. A single table (`routes.ts`) is the
+only source: `routeId → { de: path, en: path, … }`. Three consumers, no
+other place knows a path: the proxy (D3) translates inbound public paths
+to internal routes; the link facade (TS-WEB-0001 D5) renders outbound links in
+the current language; hreflang/canonical (TS-WEB-0001 D6) derive from the same
+table — that is how language variants know they belong together.
+Candidate implementation: `next-intl` localized `pathnames`, or an own
+map consumed by proxy + facade; decided at implementation, the contract
+above is what binds. Route names themselves are fixed by DEC-0036.
+
+Proposed EN segments (de → en):
+
+| de | en |
+| --- | --- |
+| `/dein-ort` | `/your-place` |
+| `/mitmachen` | `/take-part` |
+| `/mitmachen/registrieren` | `/take-part/register` |
+| `/dein-ort/starten` | `/your-place/start` |
+| `/dein-kalender` + `/dein-kalender/bestellen` | `/your-calendar` + `/your-calendar/order` |
+| `/deine-region` + `/deine-region/angebot` | `/your-region` + `/your-region/quote` |
+| `/ueber-uns` | `/about` |
+| `/ueber-uns/archiv` | `/about/archive` |
+| `/rechtliches` | `/legal` |
+
+### D4 — Navigation model [FIXED: SRC-0003, FUN-WEB-0002, FUN-WEB-0140, FUN-WEB-0141, FUN-WEB-0137, CON-WEB-0061]
+
+- Header: logo → `/`, the four job labels (Was ist los → `/dein-ort`,
+  Termine veröffentlichen → `/mitmachen`, Dein Kalender →
+  `/dein-kalender`, Über uns → `/ueber-uns`), ~~persistent "Kalender"
+  button → `/dein-ort`~~ (removed by the owner, 2026-11-12, DEC-0191; the
+  header has two variants, the inline row from `xl` and the track below it,
+  and no calendar button). The fourth label named the job ("Warum wir")
+  until DEC-0120; the review rejected it in the band and on the page
+  (R-home-33, R-ueber-1), and the sender surface is the one label that
+  names the page rather than a job — the FUN-WEB-0002 carve-out the review
+  asked for. English: "About us".
+- Footer: Newsletter, the press link "Presse" / "Press" → `/ueber-uns/archiv`
+  (DEC-0166 — the press page is reached from the footer and `/ueber-uns`,
+  never from the header), the legal links "Impressum" / "Datenschutz" /
+  "Barrierefreiheit" pointing at their anchors on `/rechtliches`, and the
+  language switcher (plain links, TS-WEB-0001 D5). **No contact entry**: the
+  contact section stands immediately above the footer on every page and is
+  the site's one contact surface (DEC-0081, TS-WEB-0006 D2). The three legal
+  labels are conventional landmarks bound to the anchor registry (D8), not
+  copy a spec is stating (DEC-0083 §4).
+- The context band and the contact section are components on every page, never routes.
+- All internal links go through the route facade (TS-WEB-0001 D5); no
+  hard-coded hrefs.
+
+### D5 — BFF route inventory [FIXED: DEC-0025; shapes PROPOSED]
+
+> **Amended by DEC-0163 (2026-10-13).** Three routes join the inventory: `GET /api/places/nearest?lat=&lng=` (DEC-0119, already built), `GET /api/places/resolve?ort=` (TS-WEB-0008 D7's outcome and TS-WEB-0023's step-1 lookup, for the pages that read `?ort=` in the browser) and `GET /api/places/{slug}/examples` (the story pool, DEC-0152). `GET /api/places/{slug}/events` takes `rows` (1–12).
+
+Client-facing, use-case-cut, rate-limited + origin-checked (CON-WEB-0044, CON-WEB-0045);
+each proxies exactly one upstream need, server-side tokens only, cache
+TTLs from TS-WEB-0003 D5:
+
+| Route | Serves | Upstream |
+| --- | --- | --- |
+| `GET /api/places/search?q=` | place search by name (all pages) | the committed covered-community index (TS-WEB-0008 D2/D7) |
+| `GET /api/places/search?zip=` | postcode → places, order flow scope step only (TS-WEB-0025 D3) | geo-api `community/search` (zips) |
+| `GET /api/places/{slug}/events?window=` | dein-ort live dates, empty-state detection | events-api search |
+| `GET /api/places/{slug}/photo` | the stage's place photograph and its credit on `/` and `/dein-ort` (DEC-0167) | geo-api `community/{geonameId}` (else the public calendar) + assets-api image headers |
+| `GET /api/nearby?lat=&lng=&radius=` | "this week nearby" | events-api + geo-api |
+| `GET /api/region/{county}/examples` | active example places (DEC-0034) | events-api (activity signal, Q-0015/Q-0025) |
+| `GET /api/stats` | live counters | events-api `/api/stats` (public) |
+
+envoy widget and Portalize loader talk to their own backends directly —
+they are not proxied (their hosts are CSP-allowlisted, TS-WEB-0003 D4/CON-WEB-0030).
+
+### D6 — Rendering per route [FIXED: DEC-0019; assignment PROPOSED]
+
+> **Amended by DEC-0163 (2026-10-13).** Every content page is fully static — no ISR, no streamed module: live modules render their frame and skeleton in the HTML and load their data in the browser from the D5 routes. No page reads a request value; the remaining dynamic routes are the BFF handlers, `robots.txt`, `llms.txt` and the 404 surface.
+>
+> **Amended by DEC-0164 (2026-10-13).** `robots.txt`, `llms.txt` and the 404 are static too. Each distinct output is prerendered at its own path: one `llms.txt` per domain, one robots body per canonical host plus `noindex`, and one 404 document per language with status 404 set at build time. The proxy only rewrites onto the right one. The BFF handlers are the only dynamic routes.
+
+| Routes | Mode |
+| --- | --- |
+| all D1 content pages | static + ISR (1 h), live modules streamed via Suspense with skeletons (FUN-WEB-0198, FUN-WEB-0199, FUN-WEB-0200, CON-WEB-0089, CON-WEB-0090) |
+| `/ueber-uns/archiv` | fully static from build-time `media-echo` fetch (FUN-WEB-0179, CON-WEB-0080) |
+| `/dein-kalender/bestellen` | static shell; order interaction client-side against D5 routes |
+| BFF routes | dynamic, cached per TS-WEB-0003 D5 |
+| 404 | static shell + streamed place search; 500 fully static |
+
+### D7 — Offering → surface map [FIXED: DEC-0052, DEC-0071]
+
+Offerings never define routes (FUN-WEB-0002); every promoted offering has
+exactly one primary surface. This map is the contract — later verifiable
+against content frontmatter offering references (FUN-WEB-0178, CON-WEB-0079):
+
+| Offering | Promotion | Primary surface |
+| --- | --- | --- |
+| `community-calendar` | promoted | `/dein-ort` (read) · `/mitmachen` (publish) · tier 1 on `/dein-kalender` |
+| `portalize-calendar` | promoted | `/dein-kalender` + order flow |
+| `portalize-enterprise` | promoted | `/deine-region` |
+| `portalize-website-widget` | withheld | none built; `/deine-termine` is reserved but not built and answers 404 (DEC-0071). Nothing on the site links to it, and it is absent from the sitemap |
+| `local-advertising` | withheld | **none** — DEC-0052 §3 narrowed CON-WEB-0015's "at most one sentence" to no occurrence while the offering is withheld; the guard checks for absence |
+| `custom-data-integration` | on-request | mention on the enterprise page |
+
+SEO landing pages (FUN-WEB-0074) attach to this map later instead of
+inventing product URLs.
+
+### D8 — Legal anchor registry [FIXED: DEC-0039]
+
+`/rechtliches` (EN `/legal`) carries every legal section. **These anchors
+are permanent.** Once published they are linked from contracts, invoices,
+app screens, printed material and third-party records; changing one
+breaks references we do not control. An anchor is never renamed, never
+removed — a retired section keeps its anchor with a pointer to its
+successor. New sections append.
+
+| Anchor (de) | Anchor (en) | Section | Source |
+| --- | --- | --- | --- |
+| `#impressum` | `#imprint` | Impressum | `content/legal/imprint.md` |
+| `#datenschutz` | `#privacy` | Datenschutzerklärung | `content/legal/privacy-policy.md` |
+| `#barrierefreiheit` | `#accessibility` | Barrierefreiheitserklärung (BFSG, CON-WEB-0027) | to be written |
+| `#nutzungsbedingungen` | `#terms` | Nutzungsbedingungen | `content/legal/terms-of-use.md` |
+| `#community-richtlinien` | `#community-guidelines` | Community-Richtlinien | `content/legal/community-guidelines.md` |
+| `#auftragsverarbeitung` | `#data-processing` | Auftragsverarbeitung (Q-0029) | `content/legal/dpa.md` |
+
+Rules: anchors are lowercase kebab-case, localized like path segments
+(D3a), and stable across languages in *meaning* — `/rechtliches#impressum`
+and `/legal#imprint` are the same section. The on-page navigation lists
+the sections in registry order. Footer links point at
+`#impressum`, `#datenschutz`, `#barrierefreiheit` with their conventional
+labels (D4).
+
+## Free for the generator
+
+- [FREE] Component/file organisation below the route level (co-location,
+  private folders), loading.tsx granularity beyond FUN-WEB-0198, FUN-WEB-0199, FUN-WEB-0200, CON-WEB-0089, CON-WEB-0090.
+- [FREE] Exact Suspense boundary placement within a page, within D6.
+
+## Acceptance criteria
+
+| ID | Level | Check |
+| --- | --- | --- |
+| TS-WEB-0004-A1 | integration | Every D1 path responds 200 on `.de`, bare and `/en/…`, correct `<html lang>`. |
+| TS-WEB-0004-A2 | integration | `/de/mitmachen` → 301 `/mitmachen`; `/uk/mitmachen` → 404 (real status). |
+| TS-WEB-0004-A3 | integration | Landing-only domain: `/` and legal routes 200, `/mitmachen` 404. |
+| TS-WEB-0004-A4 | integration | 404 renders place search + jobs band with status 404 and `noindex`; 500 renders without any data dependency. |
+| TS-WEB-0004-A5 | integration | `sitemap.xml`, `robots.txt`, `llms.txt` respond per domain; sitemap lists only that domain's URLs in its languages. |
+| TS-WEB-0004-A12 | integration | `/llms.txt` and the 404 are build-time files. There is one prerendered `llms.txt` per D1 domain and one 404 document per served language, each at its own path, and neither reads the request. The proxy rewrites `/llms.txt` onto the request domain's variant (unknown hosts mirror `.de`) and every unservable URL onto the 404 of the URL's language (path prefix first, then the TLD default). The 404 document carries status 404 from the build. |
+| TS-WEB-0004-A13 | unit | `llmsTxtFor(host)` opens with the H1, one `>` summary and the core facts before any H2; on `.de` German leads and English is its own section; `## Optional` is last and holds press, legal and help. Every page line is `- [title](url): description` with the page's own title and meta description. The three prices equal the offerings package (0 €, 480 € / Jahr zzgl. USt., auf Anfrage; the enterprise figure absent); provider, founder, award, region, age and contact match the imprint, the people, proof and goals records read at test time. A landing-only domain links only its own origin, no help, no facts block, and has one page section plus `## Optional`. |
+| TS-WEB-0004-A6 | e2e | No external API host appears in any client-initiated request except envoy and Portalize (verified via CSP report / network trace). |
+| TS-WEB-0004-A7 | integration | BFF routes return 429 beyond the rate limit and reject foreign origins. |
+| TS-WEB-0004-A8 | e2e | Navigation labels match D4 exactly on every page; every internal link resolves within the D1 inventory. |
+| TS-WEB-0004-A9 | integration | Footer on every page carries newsletter and the three legal links under their conventional labels ("Impressum", "Datenschutz", "Barrierefreiheit"), each resolving to its anchor on `/rechtliches`. The footer carries no contact entry and no form; the contact section renders once, directly above it (TS-WEB-0006-A17). |
+| TS-WEB-0004-A10 | static | No route segment in the app tree is a place slug or a place-shaped parameter: the route inventory equals D1 exactly, and no dynamic segment resolves against the place set. A place reaches a page only as a query parameter. |
+| TS-WEB-0004-A11 | integration | Once the calendars have moved to `app.*`: a request to `/{community}` carrying `etcc_cmp`/`etcc_med` redirects to that place's calendar on `app.*` with both parameters intact. Before the move the rule is inactive and the path is served by the apex — the criterion is skipped with a recorded reason, not silently passed. |
+
+## Coverage
+
+| Requirement | Discharged by |
+| --- | --- |
+| FUN-WEB-0002 (nav labels name jobs) | D4 · A8 |
+| FUN-WEB-0010 (page route) | D1, D2, D6 · A1 |
+| FUN-WEB-0011 (page route) | D1, D2, D6 · A1 |
+| FUN-WEB-0012 (page route) | D1, D2, D6 · A1 |
+| FUN-WEB-0013 (page route) | D1, D2, D6 · A1 |
+| FUN-WEB-0014 (page route) | D1, D2, D6 · A1 |
+| FUN-WEB-0015 (page route) | D1, D2, D6 · A1 |
+| FUN-WEB-0016 (page route) | D1, D2, D6 · A1 |
+| FUN-WEB-0017 (page route) | D1, D2, D6 · A1 |
+| FUN-WEB-0018 (page route) | D1, D2, D6 · A1 |
+| FUN-WEB-0140 (carry the newsletter entry with the goal subscribe-to-newsletter) | D4 |
+| FUN-WEB-0141 (carry the legal links "Impressum") | D4 |
+| FUN-WEB-0137 (carry a persistent "Kalender" entry to /dein-ort) | D4 |
+| CON-WEB-0061 (never place contact inside the footer) | D4 |
+| FUN-WEB-0146 (serve one route /rechtliches (EN /legal) as a) | D1, D4, D8 |
+| CON-WEB-0067 (never rename or remove a legal anchor) | D1, D4, D8 |
+| FUN-WEB-0145 (answer with status 404 and noindex) | D2, D6 · A4, A12 |
+| FUN-WEB-0147 (render one sentence) | D2, D6 · A4 |
+| CON-WEB-0064 (never guess a place slug from an unknown path) | D2, D6 · A4 |
+| FUN-WEB-0027 (500) | D2, D6 · A4 |
+| FUN-WEB-0158 (lead to /dein-ort/starten with the place as a query …) | D1, D1a, D2 |
+| FUN-WEB-0159 (reach /dein-ort/starten on submit) | D1, D1a, D2 |
+| CON-WEB-0062 (never put a place slug in a website path) | D1, D1a |
+| FUN-WEB-0142 (travel as the query parameter ?ort=<slug>) | D1, D1a |
+| FUN-WEB-0048 (forward a /:community path to that place's calendar on …) | D3 rule 6 |
+| FUN-WEB-0067 (other domains navigable) | D1 landing set · A3 |
+| FUN-WEB-0073 (sitemaps + canonicals) | D1, sitemap.ts · A5 |
+| FUN-WEB-0169 (explicitly allow AI crawlers) | D1 · A5 |
+| FUN-WEB-0170 (maintain a short description and its core facts) | D1 · A5, A12, A13 |
+| CON-WEB-0042 (never expose an external API token to the client) | D5 · A6 |
+| CON-WEB-0043 (call ecosystem APIs server-side only) | D5 · A6 |
+| CON-WEB-0044 (protect its client-facing endpoints with rate limiting and an …) | D5 · A7 |
+| CON-WEB-0045 (never issue a client-side auth token for public read …) | D5 · A7 |
+| FUN-WEB-0140 (carry the newsletter entry with the goal subscribe-to-newsletter) | D4 · A9 |
+| FUN-WEB-0141 (carry the legal links "Impressum") | D4 · A9 |
+| FUN-WEB-0137 (carry a persistent "Kalender" entry to /dein-ort) | D4 · A9 |
+| CON-WEB-0061 (never place contact inside the footer) | D4 · A9 |
+| CON-WEB-0062 (never put a place slug in a website path) | D1, D1a · A10 |
+| FUN-WEB-0142 (travel as the query parameter ?ort=<slug>) | D1, D1a · A10 |
+| FUN-WEB-0048 (forward a /:community path to that place's calendar on …) | D3 rule 6 · A11 |
+
+## Open points
+
+- D1 landing set, D2 layout, D3
+  (incl. the TS-WEB-0001 D3 amendment), D3a (EN segments), D5
+  shapes, D6 assignment, D7 are [PROPOSED]. The two renames
+  (`bestellen`, `regionalkalender`) change routes defined in the IA and
+  need the IA amendment first (DEC-0022).
+- `/dein-ort/starten` ships only after the IA amendment is accepted
+  (Q-0028).

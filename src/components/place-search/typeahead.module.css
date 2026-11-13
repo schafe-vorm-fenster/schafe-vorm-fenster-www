@@ -1,0 +1,102 @@
+/**
+ * The suggestion overlay — SRC-0014 §Place-search result overlay, TS-WEB-0008 D7a.
+ *
+ * Absolutely positioned inside `place-search`'s own stacking context, so the
+ * list never takes layout space: nothing below the field moves when it
+ * opens, closes or changes length, and the module's reserved 56 px stays
+ * 56 px (NFR-WEB-0047–0051, TS-WEB-0008-A15).
+ */
+.popup {
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: 20;
+}
+
+/* The one element in the system with a boundary of its own: a 1 px `line`
+   hairline on all four sides, radius 0, paper ground. No max-height and no
+   overflow — the list is 3–4 rows and never scrolls; further matches are for
+   the visitor's next letter, not for a scrollbar (D7a "Rows shown"). */
+.list {
+  background: var(--color-neutral-paper);
+  border: 1px solid var(--color-neutral-line);
+  border-radius: 0;
+  list-style: none;
+  margin: var(--space-2) 0 0;
+  padding: 0;
+}
+
+.list > li + li .option,
+.list > li + li.none {
+  border-top: 1px solid var(--color-neutral-line);
+}
+
+/* Row 56 px — the same height as the field it hangs from.
+
+   Its text pair is the overlay's own, set on the row in every state (review
+   2026-10-27, issue #79): `ink` on `paper` at rest, `ink` on `surface` while
+   hovered or active. The row is an `<a>`, and `base.css`'s `a:hover
+   { color: var(--link-hover) }` (0,1,1) out-specified `.option` (0,1,0) — on
+   the photo hero, whose ground publishes `lime-300` as its link hover, the
+   hovered place name turned `lime-300` on `surface`, 1.2:1. The two-class
+   selectors below outrank it, and the pair is measured by
+   `pnpm check:contrast` and in the browser by `TS-WEB-0008-A17`. */
+.option {
+  --typeahead-text: var(--color-neutral-ink);
+  --typeahead-secondary: var(--color-neutral-muted);
+  --typeahead-active-ground: var(--color-neutral-surface);
+  align-items: baseline;
+  color: var(--typeahead-text);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-2);
+  min-height: var(--height-search);
+  padding: var(--space-3) var(--space-3);
+  text-decoration: none;
+}
+
+/* The place name, 18 px / 400 `ink`; the matched substring at 700. */
+.name {
+  font-size: var(--type-body-size);
+  font-weight: 400;
+}
+
+.match {
+  font-weight: 700;
+}
+
+/* The municipality in brackets, 15 px / 400 `muted` — 5.24:1 on `surface`, 5.70:1 on `paper`. */
+.municipality {
+  color: var(--typeahead-secondary);
+  font-size: var(--font-size-body-sm);
+  font-weight: 400;
+}
+
+/* The active row is marked by a `surface` ground; the focus ring stays on
+   the field (SRC-0014: the ring rule applies to the field, not the row). */
+.option.active,
+.option:hover,
+.option:focus-visible {
+  background: var(--typeahead-active-ground);
+  color: var(--typeahead-text);
+}
+
+/* No match: one designed row, the same 56 px and hairline as the others,
+   `map-pin` in muted, the line in ink, no arrow and no error colour — an
+   empty result, not a fault. Not a link: the onward action is the field's
+   own submit. */
+.none {
+  align-items: center;
+  color: var(--color-neutral-ink);
+  display: flex;
+  font-size: var(--type-body-size);
+  gap: var(--space-2);
+  min-height: var(--height-search);
+  padding: var(--space-3) var(--space-3);
+}
+
+.pin {
+  color: var(--color-neutral-muted);
+  flex: none;
+}

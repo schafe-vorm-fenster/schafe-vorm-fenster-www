@@ -1,0 +1,134 @@
+/**
+ * Price display data for the offerings this page-implementation work package
+ * touches — TS-WEB-0006 D10 ("the price string is read from the offering package
+ * rather than typed into copy, so one place changes it").
+ *
+ * `price-tag` and `origin-story` already take the resolved figure as a typed
+ * prop rather than importing `@schafe-vorm-fenster/offerings` themselves
+ * (`state/open.md` #54): that package is a devDependency (content-pipeline
+ * tooling) today, not a registered runtime dependency, and the loader
+ * architecture (`src/lib/content/loader.ts`) deliberately never opens a hub
+ * package at request time (TS-WEB-0007 D3) — "no hub package, no GTM artefact, no
+ * registry". This module is the single, small, page-implementation-owned
+ * place that stands in for the M3 content-pipeline resolver #54 asks for:
+ * one table, transcribed from the offering packages' own frontmatter
+ * (`node_modules/@schafe-vorm-fenster/offerings/*.offering.md`, read once
+ * while building this work package, not imported at runtime), so a page
+ * never types a price literal itself.
+ *
+ * [PROPOSED] — TS-WEB-0006 D10 leaves sourcing open; this is this work package's
+ * reading, consistent with the already-shipped `price-tag`/`origin-story`
+ * contract. Replaced wholesale once the real content-pipeline resolver
+ * (`state/open.md` #54) lands.
+ */
+
+import type { PriceDisplay, PriceFigure } from "@/src/components/price-tag/price-tag";
+import type { Locale } from "@/src/lib/i18n/locales";
+
+/**
+ * The six offerings of `@schafe-vorm-fenster/offerings`, as a value rather
+ * than only as a type, so a runtime check — `{price:…}` naming an id that does
+ * not exist (`price-token.ts`) — reads the same list the type is derived from.
+ * Same shape as `PRICE_DISPLAYS` beside it.
+ */
+export const OFFERING_IDS = [
+  "community-calendar",
+  "portalize-calendar",
+  "portalize-enterprise",
+  "custom-data-integration",
+  "local-advertising",
+  "portalize-website-widget",
+] as const;
+
+export type OfferingId = (typeof OFFERING_IDS)[number];
+
+export interface OfferingPrice {
+  readonly display: PriceDisplay;
+  readonly figure?: PriceFigure;
+}
+
+/**
+ * Transcribed from each offering's `price` / `price_status` / `promotion`
+ * frontmatter. `portalize-enterprise` carries a real figure (4000) in the
+ * package, but `price_status: on-request` means `publishablePrice` is
+ * `false` (TS-WEB-0018 D2/D3, TS-WEB-0026 D6) — the figure is never read here, on
+ * purpose, so a template mistake cannot print it (TS-WEB-0026-A4).
+ * `local-advertising` and `portalize-website-widget` are `promotion:
+ * withheld` in the package (TS-WEB-0018 D2/D3, D8): no page renders them,
+ * and the table carries them only so `publishablePrice` answers `false`
+ * over the whole shipped index (TS-WEB-0018-A2) — the widget's indicative
+ * `5` is never transcribed (TS-WEB-0018-A3).
+ */
+const OFFERING_PRICES: Readonly<Record<OfferingId, OfferingPrice>> = {
+  "community-calendar": { display: "permanent" },
+  "portalize-calendar": {
+    display: "priced",
+    figure: { amount: 480, currency: "EUR", interval: "year", vatNote: "zzgl. USt." },
+  },
+  "portalize-enterprise": { display: "on-request" },
+  "custom-data-integration": { display: "on-request" },
+  "local-advertising": { display: "withheld" },
+  "portalize-website-widget": { display: "withheld" },
+};
+
+/**
+ * The net qualifier a figure is never shown without, per locale. The table
+ * above transcribes the package's own German `vat: excluded` note, and an
+ * English page read "€480 / year, zzgl. USt." until this pass — the same
+ * F-2-33 failure mode as every other German literal that outlived its page.
+ */
+const VAT_NOTE: Readonly<Record<Locale, string>> = {
+  de: "zzgl. USt.",
+  en: "excl. VAT",
+};
+
+/** The one place a page reads an offering's price display (TS-WEB-0006 D10). */
+export function offeringPrice(offering: OfferingId, locale: Locale = "de"): OfferingPrice {
+  const price = OFFERING_PRICES[offering];
+  if (price.figure === undefined) return price;
+  return { ...price, figure: { ...price.figure, vatNote: VAT_NOTE[locale] } };
+}
+
+/**
+ * The price as the three tier rows of `/dein-kalender` show it (DEC-0205):
+ * like `offeringPrice`, but the permanent-free offering also carries its
+ * package figure (`price.amount: 0`, `interval: forever`), so the row can set
+ * "0 €" beside the others. Running text keeps using `offeringPrice`, which
+ * carries no figure for it — a sentence still cannot print "0 €"
+ * (TS-WEB-0006-A12).
+ */
+export function tierPrice(offering: OfferingId, locale: Locale = "de"): OfferingPrice {
+  const price = offeringPrice(offering, locale);
+  if (offering === "community-calendar") {
+    return { ...price, figure: { amount: 0, currency: "EUR" } };
+  }
+  return price;
+}
+
+/**
+ * TS-WEB-0026 D6 / TS-WEB-0018 D2/D3 — true only for a `price_status: fixed`
+ * offering. Two of the six are fixed in the package: `portalize-calendar`
+ * (480, priced) and `community-calendar` (0, forever — rendered as the
+ * permanence statement, still a fixed price). TS-WEB-0018-A2 names both as
+ * `true`; until this pass the function read `display === "priced"` and
+ * answered `false` for the free tier, which `offerings.test.ts` now holds
+ * against the package frontmatter.
+ */
+export function publishablePrice(offering: OfferingId): boolean {
+  const { display } = OFFERING_PRICES[offering];
+  return display === "priced" || display === "permanent";
+}
+
+/**
+ * The figure of a priced offering — what the JSON-LD `Offer` and any figure
+ * render read (TS-WEB-0024-A11: one import, no literal). It throws for an
+ * offering that publishes no figure, so a template mistake fails the build
+ * rather than printing a `0` or the enterprise figure (TS-WEB-0026-A4).
+ */
+export function publishedFigure(offering: OfferingId, locale: Locale = "de"): PriceFigure {
+  const { figure } = offeringPrice(offering, locale);
+  if (figure === undefined) {
+    throw new Error(`offering ${offering} publishes no figure (TS-WEB-0018 D2/D3)`);
+  }
+  return figure;
+}

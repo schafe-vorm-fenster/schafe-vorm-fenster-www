@@ -1,0 +1,55 @@
+.stream {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* lg — 48rem / 768px: proof cards stand in a real grid. */
+/* xl — 64rem: side by side only from the desktop tier (SRC-0014 §Layout Grid, DEC-0150). */
+@media (min-width: 64rem) {
+  .grid {
+    column-gap: var(--grid-gap);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.scroller {
+  display: flex;
+  gap: var(--space-4);
+  overflow-x: auto;
+}
+
+.scroller > * {
+  flex: 0 0 80%;
+}
+
+/* lg — 48rem / 768px: the scroller shows more of the next card. */
+@media (min-width: 48rem) {
+  .scroller > * {
+    flex-basis: 32%;
+  }
+}
+
+/*
+ * G-7, DEC-0172 §1 — one emphasis per stream. Below `xl` one column: the
+ * feature item, then the compact ones, each flat on the section ground with
+ * its own hairline above it, so the gap between children is zero. From `xl`
+ * the feature item keeps the whole row and the others stand side by side,
+ * 6 + 6 — a stream of three no longer leaves the right half of the
+ * container empty (review 2026-10-27, #91).
+ */
+.rows {
+  gap: 0;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 64rem) {
+  .rows {
+    column-gap: var(--grid-gap);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .rows > :first-child {
+    grid-column: 1 / -1;
+  }
+}

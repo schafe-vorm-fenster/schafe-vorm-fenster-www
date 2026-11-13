@@ -1,0 +1,214 @@
+import { describe, expect, it } from "vitest";
+
+import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+
+import { checkContentTree } from "@/src/lib/content/validate";
+import { CONTENT_PAGE_DIRS, loadPage, slot } from "@/src/lib/content/loader";
+import { createHubResolver } from "@/src/lib/content/source-refs";
+import { LOCALES } from "@/src/lib/i18n/locales";
+import { ROUTE_IDS, ROUTES } from "@/src/lib/routes/routes";
+
+import type { RouteId } from "@/src/lib/routes/routes";
+
+const ROUTE_LIST = ROUTE_IDS as readonly RouteId[];
+
+describe("TS-WEB-0007-A5: every route of the inventory loads its German page artifact", () => {
+  it("loads all eleven German page artifacts without an error", async () => {
+    const pages = await Promise.all(
+      ROUTE_LIST.map((routeId) => loadPage(routeId, "de")),
+    );
+    const broken = pages.filter((page) => !page.ok);
+    expect(broken.map((page) => `${page.routeId}: ${page.reason}`)).toEqual([]);
+    expect(new Set(pages.map((page) => page.file)).size).toBe(
+      new Set(Object.values(CONTENT_PAGE_DIRS)).size,
+    );
+  });
+
+  it("gives every page its slots, and every slot a provenance and a status", async () => {
+    for (const routeId of ROUTE_LIST) {
+      const page = await loadPage(routeId, "de");
+      expect(page.slots.length, `${routeId} has slots`).toBeGreaterThan(0);
+      for (const contentSlot of page.slots) {
+        expect(contentSlot.provenance, `${routeId}/${contentSlot.id}`).not.toBe(
+          "unavailable",
+        );
+        // DEC-0222: the owner approved everything the preview renders (issue 206).
+        expect(contentSlot.status).toBe("approved");
+        expect(contentSlot.empty).toBe(false);
+      }
+    }
+  });
+
+  it("binds every page to the tactical spec the route table names (TS-WEB-0017-A14)", async () => {
+    for (const routeId of ROUTE_LIST) {
+      const page = await loadPage(routeId, "de");
+      expect(page.frontmatter?.page_id, routeId).toBe(ROUTES[routeId].spec);
+    }
+  });
+
+  it("keeps slot ids unique inside a page and locale-free across locales (TS-WEB-0007 D4)", async () => {
+    for (const routeId of ROUTE_LIST) {
+      const de = await loadPage(routeId, "de");
+      const en = await loadPage(routeId, "en");
+      const ids = de.slots.map((s) => s.id);
+      expect(new Set(ids).size, routeId).toBe(ids.length);
+      if (en.ok) expect(en.slots.map((s) => s.id), routeId).toEqual(ids);
+    }
+  });
+
+  it("serves every configured locale from a sibling file (TS-WEB-0007 D8)", async () => {
+    for (const locale of LOCALES) {
+      for (const routeId of ROUTE_LIST) {
+        const page = await loadPage(routeId, locale);
+        expect(page.ok, `${routeId}/${locale}: ${page.reason ?? ""}`).toBe(true);
+      }
+    }
+  });
+});
+
+describe("TS-WEB-0007-A2: every `derived_from` of the shipped tree resolves", () => {
+  it("resolves every page-level and slot-level reference against the installed packages", async () => {
+    const resolver = createHubResolver();
+    const unresolved: string[] = [];
+    for (const locale of LOCALES) {
+      for (const routeId of ROUTE_LIST) {
+        const page = await loadPage(routeId, locale);
+        const refs = [
+          ...(page.frontmatter?.derived_from ?? []),
+          ...page.slots.flatMap((s) => s.derivedFrom),
+        ];
+        for (const ref of refs) {
+          const result = resolver.resolve(ref);
+          if (!result.ok) unresolved.push(`${page.file}: ${ref} — ${result.problem}`);
+        }
+      }
+    }
+    expect(unresolved).toEqual([]);
+  });
+});
+
+describe("TS-WEB-0007-A8: no content reference is a repository path", () => {
+  it("addresses every source by package name and exact version (DEC-0042)", async () => {
+    for (const locale of LOCALES) {
+      for (const routeId of ROUTE_LIST) {
+        const page = await loadPage(routeId, locale);
+        for (const ref of page.slots.flatMap((s) => s.derivedFrom)) {
+          expect(ref.includes("/packages/"), ref).toBe(false);
+          expect(ref.endsWith(".md"), ref).toBe(false);
+        }
+      }
+    }
+  });
+});
+
+describe("TS-WEB-0007-A12: no request-time module reads a hub package", () => {
+  it("keeps the source adapter out of everything a page imports", () => {
+    const requestTime = ["loader.ts", "blocks.ts", "slot-meta.ts", "provenance.ts", "types.ts"];
+    for (const file of requestTime) {
+      const source = readFileSync(join(process.cwd(), "src/lib/content", file), "utf-8");
+      const imports = source
+        .split("\n")
+        .filter((line) => /^\s*import /.test(line))
+        .join("\n");
+      expect(imports, `${file} imports the source adapter`).not.toContain("source-refs");
+      expect(imports, `${file} imports a hub package`).not.toContain("@schafe-vorm-fenster/");
+      expect(imports, `${file} imports the validator`).not.toContain("content/validate");
+    }
+  });
+
+  it("has no barrel that would pull the adapter into a page bundle", () => {
+    expect(() => readFileSync(join(process.cwd(), "src/lib/content/index.ts"), "utf-8")).toThrow();
+  });
+});
+
+describe("TS-WEB-0007-A5: `pnpm check:content` is green on the shipped tree", () => {
+  it("reports no error-level finding", async () => {
+    const findings = await checkContentTree();
+    const errors = findings.filter((finding) => finding.level === "error");
+    expect(
+      errors.map((e) => `${e.file}${e.slot ? `#${e.slot}` : ""} [${e.check}] ${e.message}`),
+    ).toEqual([]);
+  });
+});
+
+/*
+ * Issue 206, DEC-0222: production renders what preview renders. The owner
+ * approved every page and slot the preview shows (2026-11-12), and the gate
+ * `pnpm check:content:production` keeps it so: a slot the production build
+ * would drop fails the check on every PR to `next-2026` and `main`.
+ */
+describe("TS-WEB-0007-A14 / DEC-0222: production renders every slot preview renders", () => {
+  it("loads the same slots per route and language in a production and a preview build", async () => {
+    const lost: string[] = [];
+    for (const locale of LOCALES) {
+      for (const routeId of ROUTE_LIST) {
+        const preview = await loadPage(routeId, locale, { environment: "preview" });
+        const production = await loadPage(routeId, locale, { environment: "production" });
+        const kept = new Set(production.slots.map((s) => s.id));
+        if (!production.ok) lost.push(`${routeId}/${locale}: page (${production.reason})`);
+        for (const contentSlot of preview.slots) {
+          if (!kept.has(contentSlot.id)) lost.push(`${routeId}/${locale}: ${contentSlot.id}`);
+        }
+      }
+    }
+    expect(lost).toEqual([]);
+  });
+
+  it("reports no lifecycle finding when the tree is checked for production", async () => {
+    const findings = await checkContentTree({ targetEnvironment: "production" });
+    expect(findings.filter((finding) => finding.check === "lifecycle")).toEqual([]);
+  });
+
+  it("fails the production check the moment one slot of the shipped tree is `draft`", async () => {
+    const root = mkdtempSync(join(tmpdir(), "svf-206-"));
+    try {
+      cpSync(join(process.cwd(), "content/pages"), root, { recursive: true });
+      const file = join(root, CONTENT_PAGE_DIRS.home, "de.md");
+      const raw = readFileSync(file, "utf-8");
+      const flipped = raw.replace(
+        /(<!-- id: home-1-search-hero;[^>]*?status: )approved/,
+        "$1draft",
+      );
+      expect(flipped, "fixture: the home hero slot is approved in the shipped tree").not.toBe(raw);
+      writeFileSync(file, flipped);
+
+      const findings = await checkContentTree({ contentRoot: root, targetEnvironment: "production" });
+      const gate = findings.filter((finding) => finding.check === "lifecycle");
+      expect(gate).toHaveLength(1);
+      expect(gate[0]).toMatchObject({
+        level: "error",
+        file: "content/pages/home/de.md",
+        slot: "home-1-search-hero",
+      });
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+});
+
+describe("TS-WEB-0007-A1: a page renders its slots as typed content, not as markdown", () => {
+  it("hands the home hero its authored fields", async () => {
+    const page = await loadPage("home", "de");
+    const hero = slot(page, "home-1-search-hero");
+    expect(hero.empty).toBe(false);
+    expect(hero.contentType).toBe("hero");
+    expect(Object.keys(hero.fields).length).toBeGreaterThan(0);
+    expect(hero.blocks.some((block) => block.kind === "field")).toBe(true);
+  });
+
+  it("marks the prototype's dummy-content slots so the badge can render", async () => {
+    // `/dein-kalender`, not `/ueber-uns/archiv`: the archive's rows are the
+    // real 31 media-echo entries now (sourced, clearance pending), so it
+    // carries no `demo` slot at all. The one dummy-content slot left on this
+    // page group is the trust block's AI-use placeholder, which has no hub
+    // record behind it (TS-WEB-0024 D10, state/open.md #19).
+    const page = await loadPage("calendar", "de");
+    const demo = page.slots.filter((s) => s.demo);
+    expect(demo.length).toBeGreaterThan(0);
+    for (const contentSlot of demo) {
+      expect(contentSlot.provenance).toBe("generated");
+    }
+  });
+});

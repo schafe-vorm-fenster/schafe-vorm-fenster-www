@@ -1,0 +1,265 @@
+/**
+ * The Content-Security-Policy and the static security headers — TS-WEB-0014.
+ *
+ * TS-WEB-0014 D7 makes this module the *single* source of the policy: "The policy
+ * is one typed structure in one module — never a string spread across config
+ * files." D1's allowlist table and `ALLOWLIST` below are the same list; a host
+ * in one and not the other is a defect (TS-WEB-0014-A1).
+ *
+ * DEC-0045 fixes the script strategy: per-build `'sha256-…'` hashes, no
+ * per-request nonce, so the prerendered shell of TS-WEB-0004 D6 survives. The hash
+ * set is injected at build time — see `scriptHashes` below,
+ * `scripts/generate-csp-hashes.mjs` (the extraction step, run as part of
+ * `pnpm build`, after `next build`) and `src/lib/security/csp-hashes.ts` (how
+ * `proxy.ts` reads the result at runtime).
+ *
+ * `'strict-dynamic'` is **not** part of the policy — a correction to DEC-0045,
+ * recorded in state/open.md rows 21 and 31. The scaffolded module shipped it
+ * unconditionally with an empty hash set, which blocked every script,
+ * hydration included: 'strict-dynamic' makes the browser stop honouring
+ * 'self' and the host allowlist in this directive, and every script tag Next
+ * renders (chunks *and* the inline flight payload) is parser-inserted into
+ * the static HTML rather than appended at runtime by a trusted script — the
+ * only case 'strict-dynamic' actually helps. Measured in Chromium: even with
+ * real hashes present, adding 'strict-dynamic' back let the hashed inline
+ * scripts run but kept refusing every same-origin `<script src>` chunk.
+ * Dropping it lets 'self' and the hashes both apply normally, which is what
+ * hydrates.
+ */
+
+/**
+ * The external origins of TS-WEB-0014 D1. Every one of them is Jan's own
+ * infrastructure except eTracker, which is the one named third party.
+ *
+ * `assets` joined the table on 2026-09-18, when the real Portalize calendar
+ * was embedded on `/dein-kalender` (state/open.md row 82). The widget renders
+ * event images straight from the events data, and the embedded calendar's
+ * images all come from the ecosystem's own asset host — so this is one host,
+ * ours, in one directive (`img-src`), added because a real embed genuinely
+ * needs it. It is also **why that particular calendar was chosen**: a
+ * region-wide one carries images from municipal websites, and allow-listing
+ * those would put a visitor's IP on hosts we do not run.
+ */
+export const ALLOWLIST = {
+  etracker: "https://code.etracker.com",
+  /**
+   * eTracker's collector, measured on a production build with the real secure
+   * code (2026-11-13): `e.js` loads scripts from `/cntcc` and
+   * `/api/v6/tracking/webEvents` here and falls back to `fetch`. Script and
+   * connect only, no `img-src`.
+   */
+  etrackerCollector: "https://www.etracker.de",
+  portalize: "https://portalize.schafe-vorm-fenster.de",
+  envoy: "https://envoy-api.api.schafe-vorm-fenster.de",
+  /** The ecosystem's image proxy — the embedded calendar's event images. */
+  assets: "https://assets.api.schafe-vorm-fenster.de",
+  /*
+   * No `app` entry since DEC-0177. It was a reserved row (CON-WEB-0030) active
+   * in no directive: the handover is a navigation, which CSP does not govern,
+   * and the host it named has no DNS record. Every link "to the app" goes to
+   * `APP_URL` on our own apex now (`src/lib/live/app-handover.ts`).
+   */
+  /**
+   * The registration form's host — the fifth external origin, and the one
+   * third party besides eTracker (TS-WEB-0014 D1 row of 2026-09-25, DEC-0121).
+   * `/start` embeds the Google Form visibly (TS-WEB-0016 D15, FUN-WEB-0205,
+   * DEC-0108), so the frame needs a `frame-src` source; this host is active
+   * in that one directive and no other. The origin, not the form's path:
+   * D1 is a table of origins, and the form URL itself is
+   * `src/lib/routes/lead-fallback.ts`'s. It lapses with the embed.
+   */
+  googleForms: "https://docs.google.com",
+} as const;
+
+/**
+ * A `script-src` hash source, exactly as `scripts/generate-csp-hashes.mjs`
+ * writes it: `sha256-` plus the 44 base64 characters of a SHA-256 digest.
+ *
+ * The policy interpolates each entry as `'<hash>'` (below), so a string
+ * carrying `'` or `;` would write arbitrary tokens — a whole extra
+ * directive — into the header. F-2-36: the shape is checked here, at the
+ * interpolation point, so the guard holds for every caller and not only for
+ * the one module that fetches the build artifact
+ * (`csp-hashes.ts` applies the same predicate at its own boundary).
+ */
+export const SCRIPT_HASH_PATTERN = /^sha256-[A-Za-z0-9+/]{43}=$/;
+
+/** True for a string that may be interpolated into `script-src` as `'<hash>'`. */
+export function isScriptHash(value: string): boolean {
+  return SCRIPT_HASH_PATTERN.test(value);
+}
+
+export type Environment = "production" | "preview" | "development";
+
+export interface PolicyInput {
+  readonly environment: Environment;
+  /**
+   * DEC-0045: the per-build `'sha256-…'` hashes of every inline script, from
+   * `src/lib/security/csp-hashes.ts`. When empty, the inline scripts have
+   * nothing to run on except the `'unsafe-inline'` concession below — which
+   * applies in `next dev` (no build has run the extraction step) and nowhere
+   * else — not in preview since DEC-0163, never in production.
+   */
+  readonly scriptHashes?: readonly string[];
+}
+
+/** The directive set of TS-WEB-0014 D2, as data rather than as a string. */
+export function policyDirectives({
+  environment,
+  scriptHashes = [],
+}: PolicyInput): Record<string, readonly string[]> {
+  const isDev = environment === "development";
+  const { etracker, etrackerCollector, portalize, envoy, assets, googleForms } = ALLOWLIST;
+  // F-2-36: only a well-formed hash source is interpolated. A rejected entry
+  // is dropped rather than escaped — there is no legitimate `script-src`
+  // hash this predicate refuses, so anything it refuses is a defect or an
+  // attack, and neither belongs in the header.
+  const validHashes = scriptHashes.filter(isScriptHash);
+  const hasHashes = validHashes.length > 0;
+
+  const scriptSrc = [
+    "'self'",
+    ...validHashes.map((hash) => `'${hash}'`),
+    // No 'strict-dynamic', by measurement rather than by the original design
+    // (DEC-0045 assumed it would "still apply" once hashes exist — see
+    // state/open.md rows 21/31 for the correction). Every script tag Next
+    // renders here — the framework/page chunks *and* the inline flight
+    // payload — is parser-inserted straight into the static HTML, not
+    // appended at runtime by an already-trusted script. CSP3's
+    // 'strict-dynamic' only propagates trust to the *latter* kind; for the
+    // former it does the opposite of what's needed, since its defined
+    // behaviour is to make the browser stop matching 'self' and every host
+    // source in this directive. Measured in Chromium: with 'strict-dynamic'
+    // present, the hashed inline scripts ran but every same-origin
+    // `<script src>` chunk was still refused — hydration stayed broken.
+    // Without it, 'self' matches the chunks and the hashes match the inline
+    // scripts, both at once; that combination is what actually hydrates.
+    etracker,
+    etrackerCollector,
+    portalize,
+    envoy,
+    // TS-WEB-0014 D5: HMR needs eval, and only in local development.
+    ...(isDev ? ["'unsafe-eval'"] : []),
+    // `next dev` never produces the static HTML the hash extraction scans, so
+    // there is no hash set to trust Next's inline bootstrap/flight scripts
+    // with. TS-WEB-0014 D7's 'unsafe-inline' ban is scoped to "a production
+    // script directive" — this is the same kind of dev-only concession as
+    // 'unsafe-eval' just above, not a production relaxation.
+    ...(isDev && !hasHashes ? ["'unsafe-inline'"] : []),
+    // No preview fallback any more (DEC-0163): the per-page hash map reaches
+    // the deployed proxy through the build adapter (`scripts/csp-adapter.mjs`),
+    // measured on a Vercel preview — so preview carries exactly production's
+    // script policy. Until then preview added `'unsafe-inline'` whenever its
+    // hash set was empty (state/open.md rows 31/173). An empty set on a
+    // deployment now means a broken build, and the page refuses to hydrate
+    // rather than quietly running every inline script.
+  ];
+
+  const connectSrc = [
+    "'self'",
+    etracker,
+    etrackerCollector,
+    portalize,
+    envoy,
+    ...(isDev ? ["ws:", "http://localhost:*"] : []),
+  ];
+
+  return {
+    "default-src": ["'self'"],
+    "base-uri": ["'self'"],
+    "script-src": scriptSrc,
+    // TS-WEB-0014 D2: the one bounded concession — Next inlines critical CSS and
+    // both web components style their shadow roots inline.
+    "style-src": ["'self'", "'unsafe-inline'"],
+    // `assets` carries the embedded Portalize calendar's event images; the
+    // widget sets them from the events data, so they are real requests from
+    // the visitor's browser and need a real source (TS-WEB-0014 D1).
+    "img-src": ["'self'", "data:", etracker, assets],
+    "font-src": ["'self'"],
+    "connect-src": connectSrc,
+    "media-src": ["'self'"],
+    "manifest-src": ["'self'"],
+    "worker-src": ["'self'"],
+    "object-src": ["'none'"],
+    // The one framed document on the site: the registration form on `/start`
+    // (TS-WEB-0016 D15, DEC-0108, DEC-0121). `'none'` until 2026-09-25, which
+    // pinned Portalize to web-component mode — that pin still holds, because
+    // the Portalize host is not a source here: its iframe fallback fails as
+    // loudly as before.
+    "frame-src": [googleForms],
+    // `child-src` is the fallback for `frame-src` and `worker-src` only when
+    // those are absent; both are named, so `'none'` here governs nothing
+    // today and stays as the floor.
+    "child-src": ["'none'"],
+    "form-action": ["'self'"],
+    "frame-ancestors": ["'none'"],
+    ...(isDev ? {} : { "upgrade-insecure-requests": [] }),
+    "report-to": ["csp"],
+    "report-uri": ["/api/csp-report"],
+  };
+}
+
+/** The policy serialised for the `Content-Security-Policy` header. */
+export function contentSecurityPolicy(input: PolicyInput): string {
+  return Object.entries(policyDirectives(input))
+    .map(([directive, values]) =>
+      values.length ? `${directive} ${values.join(" ")}` : directive,
+    )
+    .join("; ");
+}
+
+/**
+ * TS-WEB-0014 D4 — the static header set, applied to every route.
+ * `Strict-Transport-Security` is per-environment (D5) and therefore not here;
+ * it is added in the proxy alongside the CSP.
+ */
+export const STATIC_SECURITY_HEADERS: ReadonlyArray<{
+  key: string;
+  value: string;
+}> = [
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  {
+    key: "Permissions-Policy",
+    value: [
+      "accelerometer=()",
+      "autoplay=()",
+      "browsing-topics=()",
+      "camera=()",
+      "display-capture=()",
+      "encrypted-media=()",
+      "fullscreen=(self)",
+      "geolocation=(self)",
+      "gyroscope=()",
+      "idle-detection=()",
+      "magnetometer=()",
+      "microphone=()",
+      "midi=()",
+      "payment=()",
+      "picture-in-picture=()",
+      "publickey-credentials-get=()",
+      "screen-wake-lock=()",
+      "serial=()",
+      "usb=()",
+      "xr-spatial-tracking=()",
+    ].join(", "),
+  },
+  { key: "X-Frame-Options", value: "DENY" },
+  { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+  { key: "Cross-Origin-Resource-Policy", value: "same-origin" },
+  { key: "Reporting-Endpoints", value: 'csp="/api/csp-report"' },
+];
+
+/** TS-WEB-0014 D5 — HSTS differs per environment; off in local development. */
+export function strictTransportSecurity(
+  environment: Environment,
+): string | null {
+  switch (environment) {
+    case "production":
+      return "max-age=63072000; includeSubDomains";
+    case "preview":
+      return "max-age=86400; includeSubDomains";
+    case "development":
+      return null;
+  }
+}

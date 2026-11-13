@@ -1,0 +1,178 @@
+.section {
+  /* Surfaces are square: no border, no shadow, no radius (SRC-0014). */
+  border-radius: 0;
+  display: block;
+  width: 100%;
+}
+
+/*
+ * One vertical rhythm for every section — G-3/G-4.
+ *
+ * `base.css` gives `p` a `margin-bottom`, so a section ending on a paragraph
+ * carried the shell's own padding plus that margin and read a step taller
+ * than its neighbour. The shell owns the space at its own edges.
+ *
+ * This reaches the section's own last child only. A second selector used to
+ * stand here for the last child *inside* `.container`, and it never matched:
+ * `.container` is the global class of `app/styles/base.css`, this file is a CSS
+ * Module, so the compiled selector asked for a hashed class no element carries
+ * (DEC-0129 §12, `state/open.md` row 252). Nothing depends on it — an
+ * uncontained section carries its kicker and transition in a container of
+ * their own, which is not the section's last child either way.
+ */
+.section > :last-child {
+  margin-bottom: 0;
+}
+
+/*
+ * The kicker — G-3. Mono, uppercase, no fill, and 8 px above the heading it
+ * introduces. `--ground-kicker` is the ground's own label colour, published
+ * beside `--ground-link`, so the same class reads on paper and on ink.
+ */
+.kicker {
+  color: var(--ground-kicker);
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  font-weight: 700;
+  letter-spacing: var(--type-label-tracking);
+  line-height: 1.2;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+/* The hand-off line: one sentence, at Lead size, tying this section to the
+   one before it. */
+.transition {
+  font-size: var(--type-lead-size);
+  line-height: var(--leading-relaxed);
+  margin: 0;
+  max-width: var(--measure-reading);
+}
+
+/* The content stack itself — the space between the blocks — is the global
+   layout primitive `[data-stack]` in `app/styles/base.css` (DEC-0171). */
+
+/*
+ * An uncontained section (`contained={false}`) stacks only its own two lines;
+ * the caller's full-bleed children follow outside the stack. The space between
+ * the two is still the shell's, so it is the lede's own padding — the same
+ * step the stack would have put there: `--block-gap` after a transition line,
+ * `--block-gap-bound` after a kicker that stands alone.
+ */
+.lede {
+  padding-block-end: var(--block-gap);
+}
+
+.lede:has(> [data-kicker]:last-child) {
+  padding-block-end: var(--block-gap-bound);
+}
+
+.standard {
+  padding-block: var(--section-padding-block);
+}
+
+.tight {
+  padding-block: var(--section-padding-block-tight);
+}
+
+.paper {
+  background: var(--color-neutral-paper);
+  color: var(--color-neutral-ink);
+}
+
+.surface {
+  background: var(--color-neutral-surface);
+  color: var(--color-neutral-ink);
+}
+
+.surface2 {
+  background: var(--color-neutral-surface2);
+  color: var(--color-neutral-ink);
+}
+
+.lime100 {
+  background: var(--color-lime-100);
+  color: var(--color-neutral-ink);
+}
+
+.lime500 {
+  background: var(--color-lime-500);
+  color: var(--color-lime-900);
+}
+
+/* The dark anchor: once per page, and it carries the live data. */
+.ink {
+  background: var(--color-neutral-ink);
+  color: var(--color-neutral-paper);
+}
+
+.violet500 {
+  background: var(--color-violet-500);
+  color: var(--color-neutral-paper);
+}
+
+/*
+ * The archive ground — SRC-0014 §Archive block, §"Section grounds carry
+ * rhythm": "what does not work today", and nothing positive is ever set on
+ * it. Body text stays `ink` (18.72:1) and `text-2` (9.52:1); the kicker takes
+ * `archive ink` (6.35:1 on the ground, DEC-0117). Links keep the light
+ * ground's `lime-800`, 6.19:1 here. The hairline that reads on this ground
+ * is `archive line` (1.42:1) — `archive-block` sets it; `line` would vanish.
+ */
+.archive {
+  --ground-kicker: var(--color-archive-ink);
+  background: var(--color-archive-ground);
+  color: var(--color-neutral-ink);
+}
+
+/*
+ * The ground publishes its own link colour, rather than recolouring every
+ * descendant `a` by selector.
+ *
+ * The old rules here were `.ink a, .violet500 a { color: lime-400 }` — one
+ * class plus one type selector. That out-specified every single-class rule
+ * beneath it: `chip`'s own fill/text pair (F-3-R2), `outbound-link`'s
+ * secondary pill (F-2-28), `event-row`'s `.title a { color: inherit }`, and
+ * `button`'s five variants. Each of those had to be patched back up to two
+ * classes one at a time, and the one that was not — `button` — is what put
+ * `route-link`'s `.bare { color: inherit }` in charge of the closing CTA's
+ * label and rendered ink on ink at the foot of four pages (polish brief
+ * finding 1).
+ *
+ * A custom property inherits instead of competing: the ground names its link
+ * colour once, every component that paints link-coloured text reads
+ * `--ground-link` (`app/styles/components.css`), and a control that brings
+ * its own fill simply does not read it. `--link`/`--link-hover` are set
+ * alongside for the plain `a` of `base.css` — imported prose, a legal text —
+ * which has no component of its own.
+ */
+.ink,
+.violet500 {
+  --ground-kicker: var(--color-lime-300);
+  --ground-meta: var(--color-lime-300);
+  --ground-link: var(--color-lime-400);
+  --ground-link-hover: var(--color-lime-300);
+  --link: var(--color-lime-400);
+  --link-hover: var(--color-lime-300);
+  /* SRC-0014 §Button: the primary inside an ink or photo section. */
+  --ground-primary-fill: var(--color-lime-500);
+  --ground-primary-text: var(--color-neutral-ink);
+  --ground-primary-fill-hover: var(--color-lime-400);
+  /* DEC-0160: the secondary is the `paper` pill on a dark ground, and the
+     "Amtlich" badge, `ink` on light, takes the `paper` pill here too. */
+  --ground-secondary-fill: var(--color-neutral-paper);
+  --ground-secondary-text: var(--color-neutral-ink);
+  --ground-secondary-border: var(--color-neutral-paper);
+  --ground-secondary-fill-hover: var(--color-neutral-surface);
+  --ground-secondary-text-hover: var(--color-neutral-ink);
+  --category-official-fill: var(--color-neutral-paper);
+  --category-official-text: var(--color-neutral-ink);
+}
+
+.lime500 {
+  --ground-kicker: var(--color-lime-900);
+  --ground-link: var(--color-lime-900);
+  --ground-link-hover: var(--color-neutral-ink);
+  --link: var(--color-lime-900);
+  --link-hover: var(--color-neutral-ink);
+}

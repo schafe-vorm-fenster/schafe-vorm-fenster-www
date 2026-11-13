@@ -1,0 +1,500 @@
+---
+artefact: tactical-spec
+id: TS-WEB-0008
+kind: system
+status: DRAFT
+version: 0.1.0
+implements: [FUN-WEB-0040, FUN-WEB-0041, FUN-WEB-0043, FUN-WEB-0153, FUN-WEB-0154, FUN-WEB-0045, FUN-WEB-0155, FUN-WEB-0156, FUN-WEB-0157, CON-WEB-0070, CON-WEB-0071, CON-WEB-0072, FUN-WEB-0049]
+sources: [SRC-0001, SRC-0002, SRC-0003, SRC-0011]
+decisions: [DEC-0013, DEC-0019, DEC-0021, DEC-0024, DEC-0025, DEC-0029, DEC-0030, DEC-0034, DEC-0035, DEC-0037, DEC-0079, DEC-0154, DEC-0163, DEC-0167, DEC-0168, DEC-0173]
+ai_provenance:
+  prompt_id: UNKNOWN
+  prompt_version: UNKNOWN
+  model: "Claude Opus 5 (1M context)"
+  generated_at: "2026-09-10T14:39:53+02:00"
+---
+
+# TS-WEB-0008 — Live Modules and Place Search
+
+## Purpose
+
+What the live modules show, where each figure comes from, and how the
+place search behaves — it asks for a **place name** (DEC-0079) and
+resolves it against the covered communities — including the two cases
+the website earns its conversions from: a covered place with no dates,
+and a place that is not covered at all.
+
+Scope boundary: *which* elements a widened module selects and in which
+order is the relevance engine (TS-WEB-0005 D1/D6/D8, FUN-WEB-0042). This spec
+fixes the module inventory, the data sources, the resolution procedure
+that produces the candidate set, the failure behaviour, and the handover
+into the app. The BFF routes are inventoried in TS-WEB-0004 D5; cache
+lifetimes in TS-WEB-0003 D5; skeletons and streaming in FUN-WEB-0198, FUN-WEB-0199, FUN-WEB-0200, CON-WEB-0089, CON-WEB-0090 / DEC-0033.
+
+## Determinations
+
+### D1 — Module inventory and page assignment [FIXED: SRC-0002 §Live Content, SRC-0003 page briefs]
+
+Four positions, radii per SRC-0002 §Live Content; page assignment per the
+page briefs in SRC-0003 (do not re-read them from this file — they are the
+source).
+
+| Pos | Module | Radius | Shows | Carried by |
+| --- | --- | --- | --- | --- |
+| 1 | dates in the place | place (community) | 3 dates of the searched/known place, chosen from its next 30 by the shared preference (D3, DEC-0210) | `/`, `/dein-ort` |
+| 1′ | embed demo (replaces 1) | place | the real Portalize widget, filtered to the searched place (D6) | `/dein-kalender`, `/deine-region` (focus job "run our own calendar") |
+| 2 | this week nearby | ~20 km (the events-api's `region` scope) | up to 5 dates, each with its place name — a varied selection of the week (different categories and organisers, at most two recurring dates), taken from the fortnight where the week passes fewer than five (D3, DEC-0185) | `/`, `/dein-ort`, empty state (D4) |
+| 3 | active places in the county | county | a small set of active example places — **never a place list** (DEC-0034) | `/deine-region`, `/dein-ort/starten` (nearest active place) |
+| 4 | live counters | all regions | places · dates · updates today, subject to D8 | `/`, `/deine-region`, `/ueber-uns` |
+
+The place search (D7) is a live module in the sense of FUN-WEB-0040 and
+appears on every page that offers an entry into a place: `/`,
+`/dein-ort`, `/dein-ort/starten`, `/dein-kalender/bestellen` (scope
+step), and 404 (FUN-WEB-0145, FUN-WEB-0147, CON-WEB-0064).
+
+Rules that hold for every position:
+
+- A module renders a skeleton and streams (FUN-WEB-0198, FUN-WEB-0199, FUN-WEB-0200, CON-WEB-0089, CON-WEB-0090); the shell never
+  waits (FUN-WEB-0192, CON-WEB-0088).
+- A module states its radius in its own heading ("in <place>",
+  "in der Umgebung", "im Kreis <county>"). A widened module never
+  presents itself as the narrower one.
+- Place-bound output comes only from covered places (FUN-WEB-0024, TS-WEB-0005
+  D5). The searched place appears in copy even when uncovered; it never
+  appears as data.
+
+### D2 — Data sources per module [FIXED: SRC-0011; upstream shapes verified 2026-09-10]
+
+Every module reaches its upstream through the BFF route of TS-WEB-0004 D5 —
+no component fetches an ecosystem host directly (DEC-0025, CON-WEB-0042, CON-WEB-0043).
+Responses are validated against Zod schemas derived from the pinned
+`openapi.json` (DEC-0021).
+
+| Module | BFF route (TS-WEB-0004 D5) | Upstream operation | Key parameters |
+| --- | --- | --- | --- |
+| 1 | `GET /api/places/{slug}/events?window=` | events-api `POST /api/{token}/events/search` | `communities: [geonameId]`, `after`/`before` |
+| 2 | `GET /api/nearby?lat=&lng=&radius=` | geo-api `GET|POST /api/{token}/community/search` (geoPoint) → events-api events search | geoPoint; then `communities: [ids]`, `after`/`before` |
+| 3 | `GET /api/region/{county}/examples` | events-api events search by `counties`, ranked by activity | `counties: [geonameId]` |
+| 4 | `GET /api/stats` | events-api `GET /api/stats` (tokenless, cache-controlled) | none |
+| place search | `GET /api/places/search?q=` | the committed covered-community index — `src/generated/snapshots/communities.json`, built by `scripts/build-place-index.ts` from the public calendar site, ~1,760 entries of name · slug · position · municipality. Not an ecosystem call and needs no token | `q` — the typed name |
+| scope postcode (order flow only, TS-WEB-0025 D3) | `GET /api/places/search?zip=` | geo-api `community/search` (zips) | `countryCode=DE`, `zips` |
+| handover | — (link built server-side) | geo-api `GET /api/{token}/community/slug/{slug}` | `slug` |
+| stage photograph (DEC-0167) | `GET /api/places/{slug}/photo` | geo-api `GET /api/{token}/community/{geonameId}` → `image` (Wikidata P18), else the public calendar's community page; then assets-api `GET /api/image?wikimediaCommonsId=<file>`, headers only (`License`, `Copyright`) | `geonameId`; the Commons file name |
+
+Verified in the service repositories on 2026-09-10, because three of
+these shapes constrain what the modules can promise:
+
+1. **events-api events search takes administrative id lists, not a
+   radius**: `communities`, `municipalities`, `counties`, `states`, plus
+   `after`/`before` (ISO-8601 or relative, e.g. `now`, `today`). The
+   widening chain is therefore expressed as *which id list is sent*
+   (D3), never as a distance parameter.
+2. **geo-api proximity search has no caller-supplied radius**: a
+   `geoPoint` search runs against a server-side constant
+   (`PROXIMITY_SEARCH_RADIUS_KM = 20`) and returns at most
+   `maxResults` (default 10 for geo searches). "~15 km" is not
+   expressible upstream — see D3 and Open points.
+3. **geo-api results carry `geo` (position), `slug`, `geonameId` and the
+   full hierarchy**, so distance filtering and slug-based handover (D9)
+   are possible on our side without a second call.
+4. **geo-api has no name parameter, and the place search does not need
+   one.** `community/search` 3.1.3 takes `countryCode`, `lat`/`lng`,
+   `zips` and geoname id lists; the name lookup is therefore answered
+   from the committed index, which carries the municipality name the
+   suggestion row needs. Which store answers a name is **free** (D7);
+   a geo-api name endpoint (Q-0025) may replace the index behind the same
+   BFF route without touching this spec.
+
+`findbyaddress` is **forbidden** (DEC-0024): it triggers a paid, slow
+external Google lookup. Enforced statically (A1).
+
+**Test organizers (DEC-0173 §3).** Every source turns into `LiveEvent` in
+`src/lib/live/adapters.ts`, and both adapters first drop events whose organizer id
+appears in `MATEO_TEST_USER_IDS`: `organizer.id` from events-api, and
+`calendar.organizer._id` from the public calendar site. This is the village
+calendar's rule (`community-site/src/filter/filterTestEvents.ts`) with the same
+variable. The list is configuration and never code, and an empty list filters
+nothing. The Portalize widget (D6) reads events-api through its own backend, so
+this site cannot filter it. The same rule goes into that backend
+(portalize#144). Tested by A20 and A21, plus TS-WEB-0024-A22 for the widget.
+
+### D3 — Widening chain as a resolution procedure [FIXED: SRC-0002 §Live Content; ~15 km realisation PROPOSED]
+
+The chain resolves an anchor (a community geoname id, or coordinates
+from IP geolocation) into the candidate set of each position. Selection
+and ordering inside the set are TS-WEB-0005.
+
+| Step | Radius | Resolution | Stop condition |
+| --- | --- | --- | --- |
+| 1 | place | events search with `communities: [anchor]` | ≥ 1 date in the window → position 1 filled |
+| 2 | ~20 km | the community the anchor sits in (committed place index) → events-api `GET …/events/search/{community}/region` for the next 14 days; the radius is the service's own scope (DEC-0185) — geo-api is not asked | ≥ 1 date → position 2 filled |
+| 3 | county | events search with `counties: [anchor.hierarchy.county]` | active example places found → position 3 filled |
+| 4 | all regions | `/api/stats` | D8 |
+
+Rules:
+
+- **The chain never skips silently.** Each step that fires is labelled
+  with its radius (D1). A module widened to step 2 says so.
+- **Step 2 is an approximation, and the approximation is ours.** Upstream
+  returns communities within a fixed 20 km and caps the result count
+  (D2.2); the 15 km cut is applied by the BFF on the returned `geo`
+  positions. If the cap truncates before 15 km is reached, the module
+  shows what it has and does not claim completeness. A caller-supplied
+  radius is a demand to geo-api (Open points).
+- **Anchor precision decides how far the chain gets.** Stage-0 visitors
+  (no geo) have no anchor: positions 1–3 do not render, the place search
+  and position 4 do (TS-WEB-0005 D8, FUN-WEB-0052). IP geolocation resolves to
+  county, so it starts the chain at step 3 until a place is searched.
+- **The window** for positions 1 and 2: position 1 asks
+  `after=now`, position 2 `after=now&before=7d`, in `Europe/Berlin`.
+  "Today" is the local calendar day, not a rolling 24 h. [PROPOSED]
+- **Position 1 chooses, it does not take the first three** [FIXED: owner
+  decision 2026-11-12, DEC-0210, issue #22]. Position 1 is no longer strictly
+  chronological: out of the next 30 dates of its window it shows three by the
+  one preference every date selection shares (`src/lib/live/event-preference.ts`):
+  a one-off before a recurring date, the least-represented category first,
+  culture (`culture-tourism`) on a tie, then the earlier start; the three are
+  displayed in start order. Past dates and dates outside the window never enter
+  the pool. The nearby module (below) and the home intro's phone use the same
+  function. `A22`.
+- **Position 2 picks a varied week** [FIXED: owner review 2026-10-28,
+  DEC-0185, supersedes "fills its rows" of 2026-10-27]. One call asks the
+  events-api's `region` scope for the next 14 days (ISO instants; the relative
+  words of the id search are a 400 on this route). `pickVariedWeek`
+  (`src/lib/live/varied-week.ts`) takes five dates from the **next 7 days**:
+  different organisers (one date per organiser), the least-represented
+  category first, at most two recurring dates (`occurrence` ≠ `once`), one-offs
+  before recurring ones, start order (the shared preference of DEC-0210: a
+  one-off outranks category spread, culture wins a tie). Where the week passes fewer than five,
+  the same rules run over the 14 days. Where fewer than five pass, the list is
+  shorter — it is never refilled with a second date of an organiser. The
+  answer carries `window`: `week` while every row starts inside the seven
+  days, `upcoming` otherwise, and the heading follows it (the page's "this
+  week" heading for `week`, `live.nearbyUpcoming` for `upcoming`, CG-033).
+  The anchor's own community is left out: position 1 shows it. `A18`.
+- **The list ends with its rows** [FIXED: issue #83]. Position 2 reserves its
+  five two-line rows for the skeleton only (`event-list` `reserve="loading"`);
+  the answer takes the height of the rows it has. The kept reserve was the
+  empty space under two rows the owner found. The module stands below the
+  fold: on `/dein-ort` (story 4) its loading list starts at 1,443 px at
+  360×800 and at 1,094 px at 1280×800, measured 2026-10-27; on `/` it follows
+  the whole of block 1. So the collapse is no visible shift; `e2e/layout-stability.spec.ts` exempts the
+  movement below such a list only while the list stood below the viewport,
+  and CLS counts it not at all (`A19`, TS-WEB-0009-A8 unchanged).
+
+### D4 — Empty state as the conversion moment [FIXED: SRC-0002 §Live Content, SRC-0003 §your-place, FUN-WEB-0153, FUN-WEB-0154]
+
+Trigger: the anchor is a **covered** place (geo-api resolved it) and step
+1 returns zero dates in its window. This is the only runtime focus-job
+change on the website.
+
+| Changes | Stays |
+| --- | --- |
+| focus job → "publish our dates" | route, URL, canonical, `hreflang` |
+| primary conversion → `register-as-publisher` | header, footer, context band |
+| headline/CTA name the place ("nothing entered in <place> yet") | the page's identity in analytics beyond one flag |
+| chain starts at step 2 (D3) | position 4 |
+
+Constraints:
+
+- The empty result is **not** an error and carries no error styling, no
+  warning icon, no retry affordance (FUN-WEB-0045). Visually it is a normal
+  module with a different offer.
+- The place name is echoed from the resolved geo-api community's `name`,
+  never from raw user input (no unescaped reflection of the query).
+- Distinct from the uncovered place (D7): there the place is not in the
+  system at all and the visitor goes to `/dein-ort/starten`. The two
+  states never share copy.
+- Position 1 is not left blank: its slot carries the publish offer.
+
+### D5 — Emptiness, staleness and failure are three different things [FIXED: DEC-0019, FUN-WEB-0193, FUN-WEB-0194, FUN-WEB-0195, FUN-WEB-0102, FUN-WEB-0103, FUN-WEB-0196, FUN-WEB-0197]
+
+| Condition | Behaviour | Tier |
+| --- | --- | --- |
+| upstream 200, zero results | conversion state per D4 (positions 1–2) / module omitted (position 3) | 1 |
+| upstream 200, results | render, no freshness label | 1 |
+| upstream error or timeout, cache warm | last cached answer + "Stand: <time>" | 2 |
+| upstream error, cache cold | build-time snapshot, labelled as an example | 3 |
+| position 4 (counters), cache cold | **hide the module** — never tier 3 | — |
+
+Timeout budget per BFF call: 800 ms to first byte, 2 s total; on expiry
+the route answers from tier 2/3 rather than holding the stream open.
+[PROPOSED] A module never renders a spinner and never renders an error
+sentence to the visitor; failures are logged server-side.
+
+### D6 — Embed demo [FIXED: DEC-0030, FUN-WEB-0043]
+
+On pages whose focus job is "run our own calendar", position 1′ replaces
+position 1 with the **real product**: the Portalize loader
+`<script src="https://<portalize-host>/api/{organizerId}/load.js">`,
+web-component mode (the default; iframe mode exists and is not used).
+
+| Aspect | Determination |
+| --- | --- |
+| Proxying | none — the loader talks to its own backend, its host is CSP-allowlisted (TS-WEB-0003 D4, CON-WEB-0030). It is not a BFF route. |
+| Place filter | the loader parameter that filters to the searched place is a demand (Q-0026). Until it exists, the demo renders the reference organizer unfiltered and is labelled as an example, never as "your place". |
+| Cookies | the embed must set no cookie and introduce no consent duty; verification is part of Q-0026 and blocks shipping the module (A12). |
+| Loading | lazy, when the container approaches the viewport (TS-WEB-0003 D4); the demo is never on the LCP path. |
+| Failure | the loader failing to load leaves the section's static copy and the CTA — the page never shows an empty frame. |
+| Not a third-party embed exception | DEC-0013 bans third-party embeds; this is our own product, which is why it is decided separately (DEC-0030). |
+| Theming | the widget is styled only through its `--portalize-*` properties. Every colour property and the mount's base `color` are site tokens on the box's light ground, and contrast is measured in the rendered shadow root (DEC-0173 §1, TS-WEB-0024-A20). |
+| Own events | the showcase and highlight are off, because the embedded licence is one organizer's while the page presents a place's calendar (DEC-0173 §2, TS-WEB-0024-A21). |
+| Test dates | none. The filter lives in the widget's backend (D2 "Test organizers", TS-WEB-0024-A22). |
+
+### D7 — Place search: the visitor types a name [FIXED: DEC-0079, DEC-0024, FUN-WEB-0155, FUN-WEB-0156, FUN-WEB-0157, CON-WEB-0070, CON-WEB-0071, CON-WEB-0072, CON-WEB-0062, FUN-WEB-0142/DEC-0037]
+
+One component, one BFF route, the same behaviour everywhere it appears
+(D1). The input is a **place name**. A postcode is not offered: not as an
+input mode, not in the label, the placeholder, a helper text or page
+copy, and no surface states an interim (FUN-WEB-0155, FUN-WEB-0156, FUN-WEB-0157, CON-WEB-0070, CON-WEB-0071, CON-WEB-0072). A postcode is an
+administrative abstraction; a place name is what a person says when she
+says where she lives, and that is the sentence this field is asking for.
+
+| Input | Status | Resolved against |
+| --- | --- | --- |
+| place name | **the feature** — matched against place names **and** municipality names | the covered-community index (D2) |
+| coordinates (browser geolocation, opt-in) | works today, offered as a control beside the field (FUN-WEB-0160, FUN-WEB-0161, FUN-WEB-0162, CON-WEB-0073, TS-WEB-0010 D5) | geo-api geoPoint search |
+| postcode | **not offered.** Five typed digits are treated like any other query: no match, no suggestion, the submit reaches the founding route | — |
+| address | **forbidden** — `findbyaddress` (DEC-0024) | — |
+
+**Where the names come from is free** (see Free for the generator): today
+the committed index of D2, tomorrow a geo-api name endpoint (Q-0025), or
+both behind the one BFF route. What this determination fixes is what the
+visitor is promised — a name — not which store answers her. Replacing the
+store is not a change to this spec.
+
+**Scope is the covered communities** [FIXED: DEC-0079 amendment
+2026-09-24, closing Q-0071]: the index knows ~1,760 of them and nothing
+else. A name it does not know is not an error (see the classification
+below), and no surface of the search states that a limit exists.
+Germany-wide finding by name is the target, carried by Q-0025 as an
+upstream demand; it changes the store, not this determination.
+
+Result classification — three outcomes, three destinations:
+
+| Outcome | Meaning | Destination |
+| --- | --- | --- |
+| covered, has dates | a place matched, events exist | stay / go to `/dein-ort?ort=<slug>`, chain from step 1 |
+| covered, no dates | a place matched, events empty | `/dein-ort?ort=<slug>` in the empty state (D4) |
+| not covered | nothing matched the typed name | `/dein-ort/starten?ort=<slug-or-query>` (FUN-WEB-0158, FUN-WEB-0159) |
+
+Mechanics:
+
+- The place travels as the query parameter `?ort=` — **never as a path
+  segment** (CON-WEB-0062, FUN-WEB-0142, DEC-0037). The parameter carries the geo-api
+  `slug`; for an uncovered place it carries the raw query, escaped.
+- Submitting is a plain navigation; the search works without JavaScript
+  (progressive enhancement), typeahead is an enhancement on top.
+- Query-parameterised place pages are **indexable with a parameter-free
+  canonical** (DEC-0057, TS-WEB-0011 D9); an earlier `noindex,follow` proposal
+  here is withdrawn because the canonical already prevents a place URL
+  from ranking. SEO landing
+  pages are a separate surface (FUN-WEB-0074, TS-WEB-0004 D7). [PROPOSED]
+- Input is never echoed unescaped (see D4).
+- **No surface of this module names a postcode.** Where a page carries a
+  helper text under the field it speaks about names ("tipp den Ortsnamen
+  ein"), never about a postcode and never about a feature that is still
+  to come. Asserted statically across both locales (A16).
+
+### D7a — The suggestion overlay [FIXED: DEC-0079; mechanics below these properties stay free]
+
+Without suggestions a name search asks a visitor to spell a village
+correctly on the first attempt, which is exactly the failure that made
+the postcode look attractive. The overlay is therefore part of the
+feature, not a nicety, and its properties are determined.
+
+| Property | Determination |
+| --- | --- |
+| Trigger | from the **second** typed character — one letter matches hundreds of villages |
+| Matching | the typed string matches a **place name** or its **municipality name**; either way the suggestion is the place |
+| Row format | **"Ort (Gemeinde)"** — the place first, its municipality in brackets, so two villages of the same name are told apart |
+| Rows shown | **3–4**. The list is a shortcut, not a result page: further matches are neither paged nor scrolled — the visitor types one more letter |
+| Placement | an **overlay**, drawn over the page and anchored to the field; it occupies no space in the flow |
+| Layout | nothing below the field moves when the list opens or closes — no reserved space while absent, no shift while present (NFR-WEB-0047, NFR-WEB-0048, NFR-WEB-0049, NFR-WEB-0050, NFR-WEB-0051, CLS) |
+| No match | one non-interactive row stating that no place was found; the form still submits and reaches `/dein-ort/starten` (FUN-WEB-0158, FUN-WEB-0159). Never "try a postcode", never an error treatment |
+| Without JavaScript | the list does not exist and nothing is lost — the field stays the plain GET form of D7 |
+| Keyboard and a11y | the ARIA combobox pattern of TS-WEB-0002 on the existing input; each suggestion is a real link, so pointer, keyboard and "open in new tab" behave alike |
+| Hovered and active row | marked by the `surface` ground; its text keeps the overlay's own pair — place name `ink` (18.5:1 on `surface`), municipality `muted` (5.2:1) — and never takes the ground's link or link-hover colour, which on the photo hero is `lime-300` (1.2:1 on `surface`, owner review 2026-10-27, issue #79). ≥ 4.5:1 for both texts in rest, hover and active state; `check:contrast` measures the token pairs, `A17` the rendered rows |
+| Where | every surface that carries the search (D1); a surface may decline the enhancement (the 404 page, the order flow's scope step) but may not alter its shape |
+
+### D8 — Live counters [FIXED: FUN-WEB-0041, FUN-WEB-0196, FUN-WEB-0197; figure set constrained by Q-0015]
+
+"Counted live or not shown." No static traction figure exists anywhere
+on the website — not in copy, not as a fallback, not in an image.
+
+Verified against `events-api/src/app/api/stats` on 2026-09-10:
+`/api/stats` returns `totalEvents`, `earliestEventDate`,
+`latestEventDate` and data-quality counters (unknown category, unknown
+scope, with image, with document). It is tokenless and cache-controlled.
+
+| Figure (SRC-0002 position 4) | Backed today | Rule |
+| --- | --- | --- |
+| dates | yes — `totalEvents` | render |
+| places | **no field** | not rendered until Q-0015 delivers one; no substitute, no estimate |
+| updates today | **no field** | same |
+
+So the counter module ships with the figures it can count and grows when
+the demand lands — a partially filled module is correct, an invented
+number is a defect. Serving tier 2 with a timestamp is permitted; tier 3
+is not (FUN-WEB-0196, FUN-WEB-0197, D5).
+
+County-level counters on `/deine-region` ("{n} places in county X are
+already in", DEC-0034) need the same missing places-per-scope signal and
+follow the same rule.
+
+### D9 — Handover into the app [FIXED: DEC-0029, DEC-0035]
+
+Links from the website into the app are built from the geo-api community
+**slug** — the only current contract (DEC-0029).
+
+| Step | Determination |
+| --- | --- |
+| Resolve | the searched place resolves to a community via `community/search`; `slug` and `geonameId` come from that response. `community/slug/{slug}` validates a slug that arrives from outside (a link, a QR code). |
+| Build | calendar URL = `{CALENDAR_ORIGIN}/{slug}.{geonameId}` — the village calendar's own address scheme, both parts from the same geo-api place (DEC-0168, issue #81). `CALENDAR_ORIGIN` is an environment value (`NEXT_PUBLIC_COMMUNITY_SITE_ORIGIN`): community-site on the apex, `https://schafe-vorm-fenster.de`, for every domain the website serves; `app.schafe-vorm-fenster.de` has no DNS record yet (DEC-0035's target, measured 2026-10-27). One place in the code knows this (`app-handover.ts`). |
+| Mark | outbound app links are external links, not route-facade links (TS-WEB-0001 D5 covers website routes only). Campaign parameters present on the inbound request are preserved (FUN-WEB-0048, TS-WEB-0004 D3 rule 6). |
+| App links | every link "to the app" that is not a village calendar — the registration handover, help — is `APP_URL`, `https://schafe-vorm-fenster.de/schlatkow.2838887`, the owner's answer of 2026-10-28 while the app has no domain of its own (DEC-0177). It lapses when the app moves; the same module then takes the app's origin. |
+| Registration prefill | **no contract exists** (DEC-0029). `/mitmachen/registrieren` receives `?ort=<slug>` on our own route and prefills its own place step; nothing is appended to the app URL until the app defines it. |
+| Never | a slug is never guessed, never string-built from user input, never used before geo-api confirmed it. An unresolvable slug leads to `/dein-ort/starten`, not to a broken app link. |
+
+### D10 — Client contract for live modules [FIXED: DEC-0025, CON-WEB-0042, CON-WEB-0043, CON-WEB-0044, CON-WEB-0045, DEC-0021]
+
+> **Amended by DEC-0163 (2026-10-13).** The browser is now the live modules' only caller of the BFF: each module renders its frame in the static HTML and fetches its envelope after hydration (`src/lib/live/browser.ts`), one request per URL per page view, `no-store` towards the browser cache while the CDN keeps D5's `Cache-Control`. No answer (204, 404, network failure) removes the module; it never shows an error sentence.
+
+| Rule | Consequence |
+| --- | --- |
+| Only BFF routes are client-reachable | no ecosystem host, token or `Sheep-Token` header ever reaches the browser (TS-WEB-0004 A6) |
+| Tokens are environment values read server-side | one client module per service under `src/clients/{service}-api/`, mirroring TS-WEB-0005 D9 |
+| Responses are validated | Zod schemas derived from the pinned `openapi.json`; a validation failure is treated as an upstream error (D5), never rendered |
+| Cache keys carry no visitor identity | keys are `{slug|county|window}` and, for segmented modules, `{community, trait, job}` (TS-WEB-0005 D8); no IP, no session |
+| Rate limit + origin check | per TS-WEB-0004 D5 / CON-WEB-0044, CON-WEB-0045 |
+
+## Free for the generator
+
+- [FREE] Visual design of module skeletons and of the empty-state block,
+  within FUN-WEB-0198, FUN-WEB-0199, FUN-WEB-0200, CON-WEB-0089, CON-WEB-0090 and TS-WEB-0002.
+- [FREE] Typeahead mechanics **below** D7a's determined properties:
+  debounce interval, cancellation of an in-flight request, how the overlay
+  is positioned — provided D7's no-JS path and the combobox pattern of
+  TS-WEB-0002 hold. How the active row is highlighted is no longer free: D7a
+  fixes its ground and its text pair (issue #79).
+- [FREE] **Where the names come from** (D7): the committed index, a
+  geo-api name endpoint once Q-0025 lands, or both behind the one BFF
+  route. The visitor is promised a name, not a store.
+- [FREE] Internal file layout of the BFF handlers and the service
+  clients, provided D2 and D10 hold.
+- [FREE] Copy of the empty state and the counter labels — content phase,
+  placeholders until then.
+
+## Owed by the owner's review of 2026-10-12 (DEC-0154)
+
+Two rules the live-data layer did not yet carry, each with its issue:
+
+- ~~**The rows shown are chosen for variety, not only for time** (issue #22).~~
+  **Done by DEC-0210.** Every date selection (home intro, nearby module,
+  position 1 including `/dein-ort`) prefers one-offs, mixes the themes and takes
+  culture on a tie; only measurable features rank (category, `occurrence`), no
+  invented weights (D3, A22).
+- ~~**A test date is never shown** (issue #52).~~ **Done by DEC-0173 §3.**
+  The date the review saw came from the Portalize widget, which reads
+  events-api unfiltered (portalize#144). This site's own tokenless source was
+  already clean because the village calendar filters before it renders. The
+  token-scoped source was not. Both adapters now drop a test organizer's
+  dates (D2, row "Test organizers"; A20, A21).
+
+## Acceptance criteria
+
+| ID | Level | Check |
+| --- | --- | --- |
+| TS-WEB-0008-A1 | static | No source file references `findbyaddress`; no ecosystem host or read token appears outside `src/clients/*`; no client component imports a service client. |
+| TS-WEB-0008-A2 | unit | Chain resolution per D3: place with dates stops at step 1; place without dates starts at step 2; county anchor starts at step 3; stage-0 anchor renders only search + counters. |
+| TS-WEB-0008-A3 | unit | Step 2 distance filter: given a geo-api fixture spanning 0–20 km, only communities ≤ 15 km enter the events query; a truncated result set never claims completeness. |
+| TS-WEB-0008-A4 | integration | `GET /api/places/{slug}/events` with an empty upstream result answers 200 with an empty list; the module renders the conversion state, no error markup, no retry control. |
+| TS-WEB-0008-A5 | integration | Upstream 500 with warm cache → tier 2 plus "Stand: …"; cold cache → tier 3 snapshot; counters cold → module absent from the DOM (D5). |
+| TS-WEB-0008-A6 | e2e | `/dein-ort?ort=<covered place with no dates>`: focus job and primary CTA switch to publishing, the place name appears escaped in the copy, URL and canonical are unchanged, position 2 renders labelled as surroundings. |
+| TS-WEB-0008-A7 | e2e | Searching an uncovered place lands on `/dein-ort/starten?ort=…`; the live example on that page is a covered place with dates; no website path contains a place slug. |
+| TS-WEB-0008-A8 | e2e | On `/dein-kalender` the Portalize loader is requested from the allowlisted host, position 1 is absent, and the page sets no cookie from the embed; blocking the loader leaves the section's copy and CTA intact. |
+| TS-WEB-0008-A9 | integration | Counters render only figures present in the `/api/stats` response; a stub omitting a field omits that figure and never substitutes a number. |
+| TS-WEB-0008-A10 | static | No numeric traction figure (places, dates, updates) exists in content sources, snapshots or fallback fixtures (FUN-WEB-0041). |
+| TS-WEB-0008-A11 | unit | Calendar URL is `{CALENDAR_ORIGIN}/{slug}.{geonameId}` — `https://schafe-vorm-fenster.de/lehre.2879378` — with slug and geoname id taken from one geo-api place; a place whose slug or id is not geo-api-shaped yields no link; an unresolved slug yields the founding route, never an app link; inbound `etcc_*` parameters survive. (DEC-0168, issue #81; the rendered handovers on `/` and `/dein-ort` are asserted against the same address in `e2e/active-place.spec.ts`, `e2e/pages/home.spec.ts` and `e2e/pages/dein-ort.spec.ts`). |
+| TS-WEB-0008-A12 | manual | Q-0026 verification: the Portalize embed sets no cookie and introduces no consent duty, and the place-filter parameter behaves as documented — recorded before the module ships. |
+| TS-WEB-0008-A13 | tool | Build fetches each service's `openapi.json`, compares it with the pinned copy, and fails on drift affecting the operations in D2 (DEC-0021). |
+| TS-WEB-0008-A14 | integration | Place search by name: a typed place name and a typed municipality name each answer with at least one suggestion carrying that place, each rendered "Ort (Gemeinde)"; a name that matches nothing answers with the classified "not covered" outcome whose destination is `/dein-ort/starten?ort=…` — never an empty answer, never a hint to type something else, and never a postcode fallback. |
+| TS-WEB-0008-A15 | e2e | The suggestion overlay (D7a): typing two characters opens a list of at most 4 rows, each matching `Ort (Gemeinde)`; the bounding box of the element directly below the field is byte-identical between closed and open state and the interaction contributes 0 to CLS; typing a name with no match shows the single no-match row and submitting still lands on `/dein-ort/starten?ort=…`; with JavaScript disabled no list exists and the form still submits. |
+| TS-WEB-0008-A17 | e2e | On the hero field of `/` and `/dein-ort`, with the pointer on the first suggestion and with the keyboard's active row: the place name and the municipality each measure ≥ 4.5:1 against the ground the row paints; a row at rest as well (D7a "Hovered and active row"). |
+| TS-WEB-0008-A18 | integration | Position 2, both sources (D3 "Position 2 picks a varied week", DEC-0185): a week that passes five varied dates answers them inside the week with `window` `week`; a week that passes fewer answers the fortnight's varied five with `window` `upcoming`; no row starts before now or after 14 days; never two dates of one organiser, never more than two recurring; fewer than five passing rules answers fewer. On the token path the request is one `region`-scope call for the fortnight and geo-api is not asked. `varied-week.test.ts`, `nearby-selection.integration.test.ts`, `public-source.integration.test.ts`. |
+| TS-WEB-0008-A19 | e2e | `/dein-ort?ort=…` with `/api/nearby` answering two rows past the week, then five inside it: the space between the last row and the module's calendar link is the same within 2 px for both (no reserved row stays behind); the two-row answer carries the "coming up" heading and not "Diese Woche", the five-row answer the page's "this week" heading; at 360×800 the loading list stands below the viewport and the page's CLS stays < 0.1 (D3 "The list ends with its rows"). |
+| TS-WEB-0008-A16 | static | No visitor-facing string of a place-search surface contains "Postleitzahl", "PLZ" or "postcode" — checked over the search module's label, placeholder, hint and submit in both locale dictionaries and over the search blocks of the page content artifacts for `/`, `/dein-ort`, `/dein-ort/starten`, `/deine-region` and `/mitmachen/registrieren` (FUN-WEB-0155, FUN-WEB-0156, FUN-WEB-0157, CON-WEB-0070, CON-WEB-0071, CON-WEB-0072). The order flow's scope step (TS-WEB-0025 D3) is out of scope: its postcode entry is a purchase configuration, not the place search. |
+| TS-WEB-0008-A20 | unit | With `MATEO_TEST_USER_IDS` naming an organizer, `toLiveEvents` drops every event whose `organizer.id` is that organizer, and `toLiveEventsFromSite` drops every event whose `calendar.organizer._id` is. Both keep the order of the rest, keep an event with no organizer id, and keep a real organizer's event whose title says "TEST". With the variable empty, nothing is dropped. Position 1 and the nearby list built from a public page whose dates all belong to the listed organizer are empty, and they are not empty when the variable is unset (DEC-0173 §3). |
+| TS-WEB-0008-A21 | e2e | The rendered text of `/dein-kalender` outside the widget's shadow root contains no word "TEST" (DEC-0173 §3; the widget's half is TS-WEB-0024-A22). |
+| TS-WEB-0008-A22 | unit | The shared date preference (D3 "Position 1 chooses", DEC-0210): a one-off outranks a recurring date however late it starts; categories are mixed before one repeats; `culture-tourism` wins a tie; the chosen dates are shown in start order; the result is a subset of the candidate list, so nothing past or outside the caller's window enters. The same function serves position 1 (`placeEvents`, `publicPlaceEvents`), the nearby module (`pickVaried`) and the home intro's slots (`pickRows`). `event-preference.test.ts`, `dorfkalender.test.ts`, `varied-week.test.ts`, `public-source.integration.test.ts`. |
+
+## Coverage
+
+| Requirement | Discharged by |
+| --- | --- |
+| FUN-WEB-0040 (live data wherever it proves something) | D1, D2, D3, D7, D8 · A2, A4, A9, A14, A18, A19, A20, A21, A22 |
+| FUN-WEB-0041 (count it live or not show it at all) | D8, D5 counters row · A9, A10 |
+| FUN-WEB-0043 (embed demo via Portalize loader) | D6 · A8, A12 |
+| FUN-WEB-0153 (start the widening chain at radius 2) | D4, D3 step 2 · A6 |
+| FUN-WEB-0154 (shift the page's focus job to "publish our dates") | D4, D3 step 2 · A6 |
+| FUN-WEB-0045 (empty is a conversion occasion, not an error) | D4, D5 · A4, A5, A6 |
+| FUN-WEB-0155 (ask for a place name) | D7, D7a, D2 · A1, A7, A14, A15, A16, A17 |
+| FUN-WEB-0156 (match it against place names and municipality names and …) | D7, D7a, D2 · A1, A7, A14, A15, A16 |
+| FUN-WEB-0157 (cover the covered communities) | D7, D7a, D2 · A1, A7, A14, A15, A16 |
+| CON-WEB-0070 (never offer a postcode as a product feature) | D7, D7a, D2 · A1, A7, A14, A15, A16 |
+| CON-WEB-0071 (never state an interim on a search surface) | D7, D7a, D2 · A1, A7, A14, A15, A16 |
+| CON-WEB-0072 (never use findbyaddress) | D7, D7a, D2 · A1, A7, A14, A15, A16 |
+| FUN-WEB-0049 (build it from a geo-api community slug (/api/{token}/community/slug/{slug})) | D9, D2 handover row · A11 |
+
+Adjacent, discharged elsewhere and only consumed here: FUN-WEB-0042
+(widening) TS-WEB-0005 D1/D8 · FUN-WEB-0158, FUN-WEB-0159 (founding route) TS-WEB-0004 D1 ·
+FUN-WEB-0048 (QR forwarding) TS-WEB-0004 D3 · FUN-WEB-0192, CON-WEB-0088, FUN-WEB-0193, FUN-WEB-0194, FUN-WEB-0195, FUN-WEB-0102, FUN-WEB-0103, FUN-WEB-0196, FUN-WEB-0197, FUN-WEB-0105, FUN-WEB-0198, FUN-WEB-0199, FUN-WEB-0200, CON-WEB-0089, CON-WEB-0090 (resilience,
+skeletons) TS-WEB-0003 D5 · CON-WEB-0042, CON-WEB-0043, CON-WEB-0044, CON-WEB-0045 (BFF) TS-WEB-0004 D5.
+
+## Open points
+
+- ~~**Q-0071 — search scope (jan-henrik).**~~ **Closed by the DEC-0079
+  amendment of 2026-09-24:** covered-only suggestions ship, a name without
+  a match routes to `starten`, and Germany-wide finding by name stays the
+  target carried by Q-0025. No search surface states a limit either way.
+  What remains is the upstream demand below, not a decision.
+- **Q-0025 (geo-api, name search) — no longer a blocker.** The name search
+  ships on the committed index (D2), so nothing here waits for the
+  endpoint. Its value is that the index could then be retired, that the
+  refresh step (`pnpm build:place-index`) would disappear with it, and
+  that Q-0071 option 1 becomes possible at all.
+- **The committed index is load-bearing and has a freshness duty (D2).**
+  It is rebuilt from the public calendar site, not per request. A release
+  whose covered-village set moved needs a rebuilt index; a stale one
+  costs *suggestions*, never the search — an unmatched name still reaches
+  `/dein-ort/starten`. Open: whether the rebuild is wired into the
+  content-update trigger (DEC-0050) or stays a manual release step.
+- **Q-0026 (Portalize).** Two answers needed before D6 ships: the
+  place-filter parameter of the loader, and written confirmation of
+  cookie freedom. Without the filter the demo is generic, which weakens
+  the strongest moment of `/dein-kalender`.
+- **Q-0015 residue, now measured.** `/api/stats` covers *dates* only. Two
+  demands to events-api: a **places** count (distinct communities with at
+  least one event) and an **updates today** count (events created or
+  changed in the local day) — and, for DEC-0034, a per-county variant of
+  the places count plus the events-per-place activity signal that
+  `/api/region/{county}/examples` needs. That route currently has **no
+  upstream operation** behind its ranking.
+- **New demand to geo-api: a caller-supplied proximity radius and result
+  count.** `community/search` by `geoPoint` runs against a fixed 20 km
+  constant and returns 10 results by default; "~15 km" (SRC-0002) is
+  therefore approximated on our side (D3). Question for geo-api: can
+  `radiusKm` and `maxResults` be exposed for proximity searches, and can
+  the response carry the computed distance?
+- **Window semantics (D3, [PROPOSED]).** "Today" and "this week" are
+  fixed to `Europe/Berlin` calendar days here; confirm against how the
+  app's calendars cut their days, so website and app do not disagree on
+  what "today" contains.
+- **`CALENDAR_ORIGIN` switch (D9).** The calendar host changes when the
+  calendars move to `app.*` (DEC-0035). Open: who flips the environment
+  value, and whether both hosts must work during the transition. Until then
+  it is community-site's own origin (DEC-0168).
+- **Timeout budget (D5)** is set, not measured. The `?ort=` indexing rule
+  is settled by DEC-0057. (D7
+  are [PROPOSED]** — they need TS-WEB-0003 and the SEO area to confirm rather
+  than this spec to assert.

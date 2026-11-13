@@ -1,0 +1,31 @@
+.pair {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* The space is this component's own (DEC-0178 §4): a wrapper it owns pads it,
+   so no margin rides on another component's root through `className` (A32). */
+.mediaRow {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: var(--space-2);
+}
+
+.feature {
+  font-size: var(--type-card-size);
+  font-weight: 700;
+  letter-spacing: var(--type-card-tracking);
+  margin: 0;
+}
+
+.benefit {
+  color: var(--color-neutral-text2);
+  font-size: var(--type-body-size);
+  line-height: var(--leading-relaxed);
+  margin: 0;
+}
+
+.proof {
+  margin-top: var(--space-2);
+}

@@ -1,0 +1,532 @@
+---
+artefact: tactical-spec
+id: TS-WEB-0017
+kind: rule
+status: DRAFT
+version: 0.1.0
+implements: [CON-WEB-0046, CON-WEB-0047, CON-WEB-0048, CON-WEB-0049, CON-WEB-0050, CON-WEB-0051, CON-WEB-0003, CON-WEB-0052, FUN-WEB-0131, CON-WEB-0053, CON-WEB-0054, CON-WEB-0006, CON-WEB-0055, CON-WEB-0056, CON-WEB-0057]
+sources: [SRC-0006, SRC-0008, SRC-0011, SRC-0012]
+decisions: [DEC-0002, DEC-0020, DEC-0023, DEC-0029, DEC-0031, DEC-0035, DEC-0085, DEC-0150, DEC-0151, DEC-0155, DEC-0160, DEC-0171, DEC-0177, DEC-0178]
+ai_provenance:
+  prompt_id: UNKNOWN
+  prompt_version: UNKNOWN
+  model: "Claude Opus 5 (1M context)"
+  generated_at: "2026-09-10T14:39:53+02:00"
+---
+
+# TS-WEB-0017 — Technical Foundation
+
+## Purpose
+
+The constraints that bound every other tactical spec: one framework, one
+layout law, one brand source, one owner of the calendars, one language
+and one package manager, one specification method. Constraints are
+givens — this spec adds nothing to them except the form in which they can
+be **checked**. Where a constraint cannot be machine-checked, it is
+named as such and given a manual criterion with a moment.
+
+Nothing here re-decides what another spec already fixed. Contrast and
+type weights are TS-WEB-0002 D3; font delivery is TS-WEB-0003 D3; routes, header
+and BFF inventory are TS-WEB-0004; block order and reference viewports are
+TS-WEB-0006. This spec references them.
+
+## Determinations
+
+### D1 — One framework, one host [FIXED: DEC-0002, CON-WEB-0046, CON-WEB-0047, CON-WEB-0048; deny-set PROPOSED]
+
+Next.js (current major), App Router, server-first rendering (DEC-0019 via
+TS-WEB-0003 D4), hosted on Vercel; the existing Vercel project link stays
+(DEC-0035, DEC-0031). "The stack is deliberately not diversified" is made
+checkable as a **dependency rule**, not as a habit:
+
+| Rule | Form |
+| --- | --- |
+| The framework is singular | `next` is the only rendering/routing framework in `dependencies`. A deny-set enumerates the alternatives (other React routers, other meta-frameworks, other component frameworks, a second application server). |
+| Every runtime dependency is justified | A register at the repository root (`stack.allow.json`) lists each `dependencies` entry with one line of reason. An entry absent from the register fails; a dependency present in the register but absent from `package.json` is removed. |
+| Sibling patterns are intent, not code | DEC-0002: a pattern adopted from a sibling repository (`community-calendar`, `classification-api`, SRC-0012) is adopted as *intent*. A dependency whose only reason is "the sibling uses it" is not a reason — this is the one part of the rule a script cannot judge, so it is a review moment (A16), not a check. |
+
+The deny-set is [PROPOSED]: no source enumerates forbidden frameworks.
+Its content is a list in `stack.allow.json`, changed by a decision, not
+by a commit.
+
+### D2 — Mobile-first as a layout law [FIXED: CON-WEB-0049, CON-WEB-0050, CON-WEB-0051, DEC-0054, DEC-0056]
+
+"Mobile first" is turned into four rules a reviewer can apply and a
+build can test. The numbers are no longer this spec's: the design system
+has landed and `brand-design` fixes every value below (DEC-0056).
+
+**(a) Direction.** Base styles are the phone styles — the styles that
+apply with no media query at all. Every media query is `min-width`.
+A `max-width` query is a defect, because it makes the desktop the base
+case. Checkable by inspecting the generated CSS (A4).
+
+**(b) Breakpoints — six, and three of them below the tablet.** The values
+come from `brand-design` (`breakpoint.xs…2xl`); this spec proposes none
+of its own and none may be invented at a call site.
+
+| Token | Width | px | What it is for |
+| --- | --- | --- | --- |
+| base | — | 0 | below `xs`: 320 px phones, the floor TS-WEB-0002 A7 guards |
+| `xs` | 22.5rem | 360 | the small-phone reference viewport (TS-WEB-0006 D3) |
+| `sm` | 26.75rem | 428 | large phones — where the extra width is actually spent |
+| `md` | 40rem | 640 | phone landscape and the smallest tablets |
+| `lg` | 48rem | 768 | tablet portrait |
+| `xl` | 64rem | 1024 | small desktop |
+| `2xl` | 80rem | 1280 | the desktop reference viewport (TS-WEB-0006 D3) |
+
+**Why the small range is dense, and deliberately so.** Three of the six
+switch points sit below 640 px. That is the decision, not an accident of
+a default scale: the primary audience arrives on a phone (CON-WEB-0049, CON-WEB-0050, CON-WEB-0051), so
+the phone is not one case to be survived but *the* case to be optimised —
+and "phone" is not one width. A 360 px handset and a 428 px handset differ
+by nearly a fifth of the available line; that difference is enough for a
+date row to earn its preview thumbnail, for a counter trio to stop
+wrapping, for a label to sit beside its control instead of under it.
+Collapsing both into one undifferentiated "mobile" spends that width on
+nothing and tunes the layout for neither. The upper three switch points
+exist for the opposite reason: they keep the layout from falling apart as
+the window grows, where width is deliberately not maximised (c).
+
+The consequence for verification: a criterion that samples only 360 and
+1280 cannot see whether the small range does anything at all. A8 and A9
+therefore sample **three** widths — 360, 428 and 1280.
+
+**(c) Width is not maximised.** Above `2xl` the *content* stops growing;
+only the outer margin does. The container measure is `measure.page`
+(75rem = **1200 px**) and the text measure is `measure.text` (68 ch) —
+both token values, neither a proposal of this spec. No page defines its
+own.
+
+Why 1200 and not wider or narrower (DEC-0069): the container does not
+carry text width — `measure.text` caps that separately at 68 ch, roughly
+600 px, so a paragraph never spans the container. What the container
+carries is the multi-column blocks: date rows with a preview thumbnail,
+the counter trio, the map. A **1350 px** container would sit above the
+1280 px desktop reference viewport (TS-WEB-0006 D3), so its maximum would
+never be reached at the width everything is tested at — a limit that only
+applies beyond your own reference is a limit nobody verifies. **980 px**
+would leave a three-column row about 300 px per column where 1200 leaves
+about 380. Anything materially wider than 1200 stops being the same
+layout at a greater width and becomes a different layout, which D2(d)
+forbids.
+
+**Amended by DEC-0150 (2026-10-07): 1200 px is the content box.** The owner's
+desktop grid keeps the value and moves it. The 1200 px is the content, and
+the outer margin lies outside it: 16 px below `md`, 32 px from `md`, at least
+48 px from `xl`. So at 1280 the content box is 1184 px and at 1440 it is
+1200 px. The grid offers 1 / 8 / 12 columns at the three tiers. From `xl`,
+running text is capped at 7 of 12 columns, which is tighter than
+`measure.text` there. The placements are bound in
+`concept/website-design-system.md` § *Layout Grid*, not restated here. Its
+acceptance criteria are A23–A27, each with its test in
+`e2e/layout-grid.spec.ts` or `e2e/photo-surface.spec.ts`.
+
+**Amended by DEC-0171 (2026-10-27): one owner per level of vertical space.**
+The grid fixes width; nothing fixed the space between blocks until issues
+#90 and #108 showed blocks touching inside a section. A section owns its
+`padding-block`; its content box is a **content stack** (`[data-stack]`,
+`app/styles/base.css`) that owns the space between its direct children —
+`--block-gap` (`space-4`), or `--block-gap-bound` (`space-2`) after a section
+kicker; a block owns nothing outside its own box. A wrapper that groups
+several blocks inside a stack is a stack itself. The rule and its reasons are
+bound in `concept/website-design-system.md` § *Shape and Space*, not restated
+here. Its acceptance criteria are A31 (`e2e/block-gaps.spec.ts`) and A32
+(`pnpm check:brand`).
+
+**(d) Tablet and desktop stay close to the mobile layout.** Made
+operative as a single-tree rule:
+
+- One component tree serves every viewport. No breakpoint-twinned
+  markup: a block rendered for mobile and a second block rendered for
+  desktop showing the same content is forbidden.
+- A breakpoint may change **only** spacing, type-scale step, image
+  aspect, and the column count of a block that declares itself
+  multi-column via `data-columns-<token>`, the token naming the
+  breakpoint at which the further column appears.
+- A breakpoint may **never** change the order of blocks, the presence of
+  a block, or its wording. TS-WEB-0006 D2 fixes the block sequence once, for
+  all viewports.
+
+**Six switch points do not license six layouts.** The density of (b) buys
+*tuning* — a step of space, a type size, a thumbnail that appears — and
+never a second component tree. The three rules above are what hold those
+two apart: without them, a dense scale becomes an invitation to build the
+phone layout twice.
+
+This is what makes A8 possible: if the visible text order at 360, at 428
+and at 1280 is identical, the layouts are the same layout at three
+widths.
+
+### D3 — The brand kit is binding: two packages, three levels (DEC-0044) [FIXED: CON-WEB-0003, SRC-0008; package identity PROPOSED]
+
+The brand lives in the hub and is **consumed**, never copied. Binding
+paths in `go-to-market-os`:
+
+| What | Where |
+| --- | --- |
+| written identity — usage rules, imagery direction, logo usage | `packages/identity/brand-identity/schafe-vorm-fenster.brand.md` |
+| design system — tokens (colour, type scale, roles, dark mode), logos, kit | `packages/identity/brand-design/` |
+
+"Binding" is made checkable as four rules:
+
+1. **No literal ever.** No colour literal (`#rgb`, `rgb(`, `hsl(`,
+   `oklch(`) and no `font-family` literal appears anywhere in `app/`,
+   `src/` or the stylesheets, except in the single file that imports the
+   brand token sheet. Every colour is a token — TS-WEB-0002 D4 already makes a
+   colour outside the token set a build error, in all three themes; this
+   rule is the same rule seen from the brand side, not a second one.
+2. **No brand asset is committed here.** Logos and typefaces are package
+   subpaths, resolved by the bundler. A logo or font file inside this
+   repository is a defect: it forks the source of truth.
+3. **The version is pinned and visible.** The brand package is an exact
+   version in `package.json`; a brand change reaches the website as a
+   reviewable version bump, never as a silent drift. **Pinned at `2.9.0`
+   since 2026-10-13** (DEC-0160; was `2.8.1` from 2026-09-25): the version
+   that ships `ink` as neutral black (DEC-0155), so `app/styles/brand.css`
+   carries no colour override any more.
+4. **Where brand and accessibility collide, accessibility is already
+   settled.** TS-WEB-0002 D3 fixes the operative rules (the brand colour is
+   not a text colour on light ground; the type-weight floor). TS-WEB-0003 D3
+   fixes delivery: one self-hosted variable `woff2`, latin subset,
+   preloaded. Neither is restated or amended here.
+
+**Not checkable:** the imagery rules are prose ("rural, grounded,
+authentic; not generic startup stock") and no script can judge a
+photograph against them. → manual, per release (A15).
+
+**Package identity is [PROPOSED]** and blocked: see Open points. The
+repository currently installs `@schafe-vorm-fenster/design-tokens`,
+generated from a hub path that no longer exists; the hub now publishes
+the authored design system under a different package name.
+
+### D4 — The app owns the calendars; the website borrows their data [FIXED: CON-WEB-0052, FUN-WEB-0131, DEC-0035, DEC-0029]
+
+The village calendars are a product surface of their own — community-site,
+on the apex today (`https://schafe-vorm-fenster.de/<slug>.<geonameId>`,
+DEC-0168 §5). DEC-0035 planned them on `app.schafe-vorm-fenster.de`; that host
+has no DNS record, and until the app has a domain of its own every link "to
+the app" is `APP_URL`, the Schlatkow village calendar (DEC-0177). The website links to them and
+renders read-only excerpts of their data; it does not reimplement them.
+The boundary, per concern:
+
+| Concern | Website | App |
+| --- | --- | --- |
+| calendar reading UI (day/week/month, filters, subscription) | never | owns |
+| a place's next dates as a read-only excerpt | renders, via the BFF (TS-WEB-0004 D5) | is the source |
+| creating, editing or deleting an event | never — hands over (`/mitmachen/registrieren`) | owns |
+| account, login, the logged-in `mein-…` space | never (TS-WEB-0004 D1a) | owns |
+| ICS / feed subscription | links | owns |
+| place search | owns (it is a website job, FUN-WEB-0030) | — |
+
+Three rules make the boundary testable:
+
+- **Read-only by construction.** Every website `/api/*` handler exports
+  `GET` and nothing else. A `POST`/`PUT`/`PATCH`/`DELETE` handler in the
+  website's route tree means the website took over a write the app owns.
+  (Lead capture is the envoy widget's own backend, TS-WEB-0004 D5 — not a
+  website route.)
+- **One handover module.** Links into the app are built from geo-api
+  community slugs (DEC-0029) in exactly one module,
+  `src/lib/live/app-handover.ts`. `APP_URL`'s literal appears in that module
+  and nowhere else, and the retired `app.schafe-vorm-fenster.de` appears in
+  the code of no module at all (DEC-0177) — no hard-coded app URL, and no
+  rendered page links that host.
+- **The persistent entry point — withdrawn 2026-11-12 (owner, DEC-0191): the header carries no calendar entry.** Formerly: A calendar entry sat in the header on
+  every page; its label and target are fixed by TS-WEB-0004 D4. CON-WEB-0052, FUN-WEB-0131
+  names a different label — see Open points; this spec does not resolve
+  it and does not contradict TS-WEB-0004.
+
+### D5 — Language, package manager, repository conventions [FIXED: CON-WEB-0053, CON-WEB-0054, existing repo; typecheck PROPOSED]
+
+The conventions are the ones the repository already has; the spec adds
+the two that are missing and states all of them as checks.
+
+| Convention | Rule | State |
+| --- | --- | --- |
+| package manager | pnpm, pinned via `packageManager` in `package.json`. `pnpm-lock.yaml` is the only lockfile; a `package-lock.json` or `yarn.lock` is a defect. | exists |
+| private registry | the `@schafe-vorm-fenster` scope resolves to GitHub Packages via `.npmrc`; hub packages (brand, offering model, content raw material per DEC-0020) install from there. | exists |
+| method registry | the `@leafcutter-strict` and `@leafcutter-os` scopes resolve to `https://packages.leafcutteros.ai/` via `.npmrc`. That is where the specification method lives as a versioned dependency (DEC-0085, CON-WEB-0006). The registry is private: the token comes from `LEAFCUTTER_REGISTRY_TOKEN`, set in all three Vercel environments and as an Actions organisation secret, and reaches pnpm through the user-level config, where `scripts/registry-auth.sh` writes it as a placeholder before every install and fails naming an unset variable (DEC-0112, DEC-0221 §2). | exists |
+| language | TypeScript throughout — application code, repository scripts, tests. Repository scripts run under `tsx`. | exists |
+| type strictness | a root `tsconfig.json` with `strict: true`; `pnpm typecheck` exists and is part of `pnpm check`. | **missing** [PROPOSED] |
+| one gate | `pnpm check` is the single entry point for every check. A new check is added *to* it, never run beside it. | exists |
+| pre-commit | husky runs `pnpm check`. | exists |
+| CI | the pipeline of DEC-0031 stage 2, modelled on SRC-0012 (typecheck · lint · tests + coverage · knip · jscpd · preview · auto-merge · deploy). | pending |
+
+`pnpm test` is a stub today; it becomes real with the verification
+strategy, not with this spec.
+
+### D6 — STRICT is the method; specs precede content [FIXED: DEC-0023, CON-WEB-0006]
+
+The specification method is STRICT, installed as
+`@leafcutter-strict/blueprint-complete@0.2.4` and cited by package name,
+never by path (DEC-0085). Three of its operating principles bind every
+artefact here:
+
+| Principle | What it means for a spec in this folder |
+| --- | --- |
+| Agents propose, decision points decide | every artefact is `status: DRAFT`; a determination is `[FIXED]` only against a source or a DEC, otherwise `[PROPOSED]`. |
+| No invention | a value with no source locator is `UNKNOWN` plus the question that resolves it — never a plausible guess. An unmarked gap is a defect, not freedom. |
+| Bad input becomes a demand | a detected defect produces a demand addressed to someone, not a silent workaround (this spec emits three — see Open points). |
+
+**The method is machine-checked.** `pnpm check:specs`
+(`scripts/check-specs.ts`) is the executable half of CON-WEB-0006: E1
+frontmatter · E2 ID uniqueness · E3 row shape · E4 S3-needs-a-decision ·
+E5 reference integrity across WEB/DEC/Q/SRC/TS/GL · E6 `implements` ↔
+Coverage symmetry · E7 decision index · E8/E9 acceptance-criterion IDs
+and levels · E10 test references, plus W1–W3 for the closure gaps. It
+runs in `pnpm check` and in the pre-commit hook (A13).
+
+### D6b — An undeclared custom property is an error, because the declaration disappears [FIXED: 2026-09-25]
+
+A `var(--x)` whose property nothing declares does not fall back to something
+sensible. It makes the **whole declaration** invalid, and the browser drops it.
+That is why this class hides: a heading loses the air a rule promised and looks
+like a heading with no rule; a focus outline falls back to the browser's and
+looks like a different outline. Two sat in the tree unnoticed —
+`var(--space-5)`, a step the brand scale deliberately does not have, and
+`var(--color-focus-ring)`, which was never a token name.
+
+`pnpm check:brand` (A19) collects every declared property — from the
+stylesheets, from the package token sheet, and from TS/TSX, where a component
+may set one through an inline style — and reports a use with no declaration.
+Two exemptions, both derived from what the browser does rather than from
+convenience: a `var()` **with a fallback** is a deliberate default and is not
+reported, and comments are blanked before the scan so a property named in prose
+is not a use.
+
+### D6c — A criterion is covered by the instrument its level names, and the backlog may only shrink [FIXED: DEC-0141]
+
+`specs/verification/verification-strategy.md` § *Linking tests to specs* says
+*"A test names the ID it verifies. That is the entire mechanism"*, and every
+example it gives puts the identifier in a `describe` or `test` **title**. W3 of
+`check:specs` does not read it that way: it scans each runner file whole, so a
+mention in a comment counts. On 2026-09-26 that cost a real criterion — two
+prose mentions of A14 of TS-WEB-0016, added to explain that the browser walk
+was *missing*, took it out of W3 and the count fell from 156 to 155.
+
+`pnpm check:coverage` (A20, A21) asks the question the strategy's § *Levels*
+table already answers — **which instrument, at the criterion's own level,
+names it?** — and gives one of five verdicts: VERIFIED (a test title),
+METERED (a `check` chain meter for `static`, a CI job for `tool`), ATTESTED (a
+current row in `specs/verification/manual-checks.md` for `manual`), NAMED ONLY
+(the identifier is in a runner file but in no title — **not** coverage, and its
+own verdict so that it cannot read as green), MISSING.
+
+Two rules gate, and they are deliberately unequal:
+
+- **A criterion born in a commit arrives with its instrument.** No budget, no
+  exception. Whoever writes a criterion is the person who knows how to check
+  it, so this costs nothing to obey and the backlog cannot grow.
+- **The backlog may only shrink.** `specs/verification/coverage-budget.json`
+  holds the worst tally allowed. Worse fails. *Better also fails*, asking for
+  the number to be lowered in the same commit — an unrecorded gain is budget
+  somebody can spend again without noticing. Raising a number is a governance
+  change and needs a decision record naming what was let go.
+
+An attestation expires after **90 days**, because a manual verdict is about one
+build. `manual` criteria can therefore never be closed permanently, which is
+the honest shape of a human check rather than a defect of the register.
+
+### D6a — A locator is verified against its excerpt, and a broken one says where the statement went [FIXED: DEC-0111, Q-0082]
+
+`check:specs` counts a locator; it never reads one. So a source edit silently
+invalidates every position into it — hub PR #510 inserted ten lines into
+`SRC-0003` and all 17 requirement locators into that file pointed at the wrong
+line the moment it merged, four of them at deleted text. `Q-0082` weighed three
+ways out and the owner chose **(c), automate the repair rather than change the
+scheme**: the excerpt is already the recovery key, the method mandates it, and
+it is what re-resolved all 17 by hand on 2026-09-25.
+
+`pnpm check:locators` (`scripts/check-locators.ts`) reads the line each
+`{source_id, loc, excerpt}` triple names and compares the excerpt as an **exact
+substring**. It is in the `check` chain and therefore in the pre-commit hook.
+
+| Outcome | What it means | What it gates |
+| --- | --- | --- |
+| `verified` | the excerpt is an exact substring of the named line | — |
+| `moved` | the excerpt is not on that line but **is** in the file; the check prints every line it is now on | **fails.** Reparable without a judgement: repoint the locator |
+| `gone` | the excerpt is nowhere in the file | **fails.** Not reparable here — the statement was rewritten or deleted, so the citation has no position to move to and somebody decides whether the source still supports it (a `DEM-####`, per the source-inventory contract) |
+| `not checked` | no root holds the file, or the anchor is a page / paragraph / timestamp rather than a line | **nothing.** And it is reported as `NOT CHECKED`, never as a pass |
+| `unknown` | `loc: UNKNOWN` | **nothing.** 87 of these are legitimate (DEC-0097); reporting them would report the same gap twice |
+
+**Three roots, derived rather than written down**: this repository, its parent
+directory — because `go-to-market-os/…` and `community-calendar/…` are named
+relative to the workspace — and `node_modules`, because
+`@schafe-vorm-fenster/offerings/…` is a published subpath. A path that climbs
+out of all three resolves nowhere.
+
+**Honest degradation is the determination, not an implementation detail.** Two
+of the three roots are sibling **checkouts, not dependencies**, and are absent
+in CI. The check therefore prints all five tallies and a line per root saying
+whether it is present, so a reader tells "verified" from "not checked" by the
+count rather than by the exit code. It gates exactly what it could read: in CI
+the hub locators degrade to `not checked` on their own and the in-repository
+ones are still enforced. Nothing has to be configured for that and nothing can
+be forgotten.
+
+**"Specs precede content" is the phase order** (DEC-0023): concept →
+specification → content. Copy is not written while the specification
+phase runs. Made checkable [PROPOSED]: every file under `content/`
+carries in its frontmatter the tactical spec (`TS-WEB-####`) it realises, and
+`check-specs.ts` fails a content file whose named spec does not exist
+(A14). DEC-0020 §5 already requires a machine-readable reference to the
+GTM package a content file derives from; this is the same field pattern
+for the spec side, and needs the content frontmatter schema
+(`src/domain/content-frontmatter.schema.ts`) extended.
+
+## Free for the generator
+
+- [FREE] The CSS technique — utility classes, CSS modules, or plain
+  stylesheets — as long as D2(a) and D3.1 hold.
+- [FREE] Any component library, provided it introduces no second
+  rendering framework (D1) and no second token source (D3).
+- [FREE] `tsconfig.json` beyond `strict: true`; lint rule set beyond the
+  checks named here.
+- [FREE] The internal shape of the app-handover module (D4), as long as
+  it is the only place the app hostname occurs.
+- [FREE] Which of the six breakpoints a given block uses — one, three or
+  none — provided every switch point it uses is a `breakpoint.*` token
+  value and the single-tree rule of D2(d) holds.
+
+## Acceptance criteria
+
+| ID | Level | Check |
+| --- | --- | --- |
+| TS-WEB-0017-A1 | static | `package.json`: `next` present; no dependency from the D1 deny-set; every `dependencies` entry has a reason line in `stack.allow.json`, and every register entry exists as a dependency. |
+| TS-WEB-0017-A2 | static | `pnpm-lock.yaml` is the only lockfile; `packageManager` pins pnpm; `.npmrc` maps the `@schafe-vorm-fenster` scope to the private registry and the `@leafcutter-strict` scope to the method registry (DEC-0085). |
+| TS-WEB-0017-A3 | static | Root `tsconfig.json` exists with `strict: true`; `pnpm typecheck` is a script, is part of `pnpm check`, and exits 0. |
+| TS-WEB-0017-A4 | static | Generated CSS contains no `@media (max-width: …)`, and every `min-width` media feature in it is one of the six `breakpoint.*` token values — a literal px breakpoint at a call site fails. A `@container` `min-width` is not a viewport switch point: its value is one of the container thresholds SRC-0014 names (today `30rem`, §Event row), and `scripts/check-brand.ts` holds the list (DEC-0153 amendment, 2026-10-13). |
+| TS-WEB-0017-A5 | static | No colour literal and no `font-family` literal outside the single brand-token import file (`app/`, `src/`, stylesheets). |
+| TS-WEB-0017-A6 | static | No logo, mark, or font file is committed in this repository; every logo reference is a brand-package subpath import. |
+| TS-WEB-0017-A7 | static | The brand package is pinned to an exact version; the lockfile version matches the version recorded in D3. |
+| TS-WEB-0017-A8 | e2e | Visible text order in the rendered DOM is identical at 360 × 640, 428 × 926 and 1280 × 800 on every page; no element is visible at one width and absent at another. This is the single-tree rule of D2(d) under test, and it samples the small range because that is where the switch points are dense. |
+| TS-WEB-0017-A9 | e2e | At 1920 px the content box of every container (its width less its inline padding) does not exceed `measure.page` (only margins grow; DEC-0150 put the margin outside the 1200 px); at 320 px no page scrolls horizontally (TS-WEB-0002 A7 is the floor); at 360 px and at 428 px no page scrolls horizontally either. |
+| TS-WEB-0017-A10 | static | Every website `/api/*` route handler exports `GET` only — no write handler anywhere in the route tree. |
+| TS-WEB-0017-A11 | static | No app link is assembled outside the handover module: `APP_URL`'s literal occurs in `src/lib/live/app-handover.ts` and in no other authored module, and the retired app hostname `app.schafe-vorm-fenster.de` occurs in the code (comments aside) of no authored module (DEC-0177; amended 2026-10-28 from "the app hostname occurs in exactly one module"). `pnpm check:api-routes`. |
+| TS-WEB-0017-A33 | e2e | On every route of the TS-WEB-0004 D1 inventory in both languages, and on `/dein-ort` with a chosen place, after the live modules answered: no `a[href]`, `area[href]`, `link[href]`, `form[action]` or `iframe[src]` names `app.schafe-vorm-fenster.de` (DEC-0177). `e2e/app-links.spec.ts`. |
+| TS-WEB-0017-A12 | integration | WITHDRAWN 2026-11-12 (DEC-0191, the calendar button left the header). Formerly: The persistent calendar entry is present in the header on every page and resolves to the target TS-WEB-0004 D4 fixes. |
+| TS-WEB-0017-A13 | tool | `pnpm check` (frontmatter + `check:specs`) exits 0 — pre-commit hook and CI; zero E-class errors. |
+| TS-WEB-0017-A14 | static | Every file under `content/` names the tactical spec it realises, and that spec exists; a content file naming no spec, or an unknown one, fails. |
+| TS-WEB-0017-A15 | manual | Imagery review: every image shipped is checked against the imagery rules in the brand identity profile — per release, by the brand owner. |
+| TS-WEB-0017-A17 | static | Exactly one icon dependency; every icon name used resolves to a Lucide export. |
+| TS-WEB-0017-A16 | manual | Dependency review: any dependency adopted from a sibling repository is confirmed as framework-neutral intent, not a ported implementation — per PR that changes `package.json`. |
+| TS-WEB-0017-A18 | static | Every `{source_id, loc, excerpt}` triple under `specs/` whose `loc` names a line resolves: the excerpt is an exact substring of that line in the file the locator names, resolved against the repository, the workspace parent and `node_modules`. A triple whose excerpt sits at another line of the same file fails as **moved** and the check names the line it moved to; one whose excerpt is absent from the file fails as **gone** and is reported as the different finding it is. A locator no root can read, and an anchor that is a page, paragraph or timestamp rather than a line, are reported as **not checked** — counted and printed as such, never as a pass — and gate nothing; `loc: UNKNOWN` is legitimate and is not a finding (D6a). |
+| TS-WEB-0017-A20 | static | `pnpm check:coverage` gives every acceptance criterion exactly one verdict against the instrument its own level names (`specs/verification/verification-strategy.md` § Levels): VERIFIED only from an identifier inside a `describe`/`test`/`Scenario` title in a file a runner actually runs; METERED only from a `scripts/check-*.ts` the `check` chain invokes (`static`) or a step in `.github/workflows/` (`tool`); ATTESTED only from an unexpired `pass` row in `specs/verification/manual-checks.md` whose criterion is declared `manual`. An identifier appearing in a runner file but in no title is **NAMED ONLY** and is not coverage; one appearing nowhere is MISSING. The run writes `state/coverage.md` naming every open criterion with its level, verdict and where its name appears (D6c). |
+| TS-WEB-0017-A21 | static | `pnpm check:coverage` fails when a criterion the working tree defines and `HEAD` does not is NAMED ONLY or MISSING — no budget and no exception — and fails when either open tally differs from `specs/verification/coverage-budget.json`, in **both** directions: a rise names how many criteria must be closed, a fall names the number to write into the budget. A tree with no git history reports rule 1 as **not checked** rather than as a pass (D6c). |
+| TS-WEB-0017-A19 | static | Every `var(--x)` in a stylesheet under `app/`, `src/`, `e2e/` or `scripts/` names a custom property something declares — any stylesheet, the brand token sheet in the package, or an inline style in a TS/TSX file. A `var()` **with** a fallback is exempt: there the undeclared property is a deliberate default, not a dropped declaration. Comments are blanked before the scan, so a property named in prose is not a use. An undeclared property invalidates the whole declaration, which is why this is an error and not a warning: the rule does not degrade, it disappears (D6b). |
+| TS-WEB-0017-A22 | static | No gradient in an authored source (`app/`, `src/`, `e2e/`, `scripts/`) or in a design board (`concept/v2.0/*.dc.html`) carries `ink` or `violet` — neither as an alpha colour, nor as a `color-mix()`, nor as a `var(--color-neutral-ink)` / `var(--color-violet-*)`. The scrim over a photograph is neutral black from `color.scrim.*` and nothing else (SRC-0014 §The scrim, DEC-0151). |
+| TS-WEB-0017-A23 | e2e | At 1280 × 800, 1440 × 900 and 1920 × 1080, on every page with a hero, the header logo, the hero's text stack, the hero `h1` and the first section's content start on one left edge; the content box is `min(1200 px, viewport − 96 px)` and the outer margin is at least 48 px (SRC-0014 §Layout Grid, DEC-0150). |
+| TS-WEB-0017-A24 | e2e | At the same widths the hero `h1` is no wider than 7 of 12 columns and the hero search no wider than 6. |
+| TS-WEB-0017-A25 | e2e | From `xl` the hero is at least `min(80vh, 680px)` tall on `/` and `min(70vh, 560px)` on every other page, and from 1280 px no taller than that cap. |
+| TS-WEB-0017-A26 | e2e | From `xl` two conversions in one hero stand in one row with at least `space-3` between them; below `xl` they stack (DEC-0116 §4 as amended by DEC-0150). |
+| TS-WEB-0017-A27 | e2e | At 1440 × 900 the live dates on `/` stand head in columns 1–4 and list in columns 5–12 (`live-module-frame` `layout="split"`). |
+| TS-WEB-0017-A28 | static | `ink` is neutral black: the effective `--color-neutral-ink` (the brand token sheet, then `app/styles/brand.css`) has equal red, green and blue, and the retired ink (the lime hue at 3 % chroma, which reads as dark green across a section) is written nowhere, in authored sources or in a design board. `pnpm check:brand` (DEC-0155). |
+| TS-WEB-0017-A29 | e2e | On every route, in both languages, at 390 and 1280 px, every `[data-cta]` with an opaque fill has at least 3:1 against the ground behind it, unless it has its own border or outline. A control known to fail is named with its issue; the list is empty since #41 and #28 (DEC-0160) were fixed, and every other control that disappears fails the route; photo grounds are skipped (WCAG 1.4.11, DEC-0155). |
+| TS-WEB-0017-A30 | static | No dark-green fill: no `background`, `background-color` or `fill` in a stylesheet under `app/` or `src/` names `lime-700` to `lime-950` — as the token, as a custom property that carries one (followed through aliases), or as its hex — and no design board in `concept/v2.0/` paints one as a background. Hover on an `ink` fill is `text-2`; the "Amtlich" badge and the badge kickers are `ink` with `paper`. `pnpm check:brand` (DEC-0160, issue #57). |
+| TS-WEB-0017-A31 | e2e | On every route, in both languages, at one width per tier of SRC-0014 §Layout Grid — 390 (mobile), 800 (tablet) and 1280 px (desktop) — in every content stack (`[data-stack]`): two adjacent blocks — direct children the browser draws, not absolutely positioned, taller than 1 px, `display: contents` looked through — that overlap horizontally stand at least that tier's `--block-gap` (16 / 16 / 24 px) apart, or its `--block-gap-bound` (8 / 8 / 12 px) after a section kicker; the second block's computed `margin-top` is exactly that value and the first block's `margin-bottom` is 0; the first block has no `margin-top` and the last no `margin-bottom` (DEC-0171, issues #90 and #108; per tier since DEC-0178, which amended "at 390 and 1280 px" and "16 px"). `e2e/block-gaps.spec.ts`. |
+| TS-WEB-0017-A32 | static | No `.tsx` under `app/` or `src/` passes a class as `className` to a component (a capitalised JSX tag) whose CSS-module rule declares a non-zero vertical margin; the hand-ins found when the rule was written are listed by name in `scripts/check-brand.ts` and the list may only shrink (DEC-0171) — it is empty since DEC-0178. `pnpm check:brand`. |
+| TS-WEB-0017-A34 | static | The per-level spacing tokens — `--section-padding-block`, `--section-padding-block-tight`, `--block-gap`, `--block-gap-bound`, `--control-gap` — are assigned in `app/styles/components.css` and in no other stylesheet under `app/` or `src/` (comments aside), so every value per tier has one home (DEC-0178). `pnpm check:brand`. |
+| TS-WEB-0017-A35 | e2e | The context band at 390, 820 and 1440 px, on `/`, `/en` and the merged `/ueber-uns`: exactly three link cards, 1, 2 and 3 of them in the first row; each card at least 44 px high with a radius of at least half its height, a fill that is not its ground, a 40 × 40 px icon well and a 44 × 44 px disc of neutral black; no label or blurb clipped or ellipsised; outside the merged block the mono kicker stands beside the heading from 820 px and below it at 390 px (DEC-0156, issue #39). `e2e/context-band.spec.ts`. |
+| TS-WEB-0017-A41 | e2e | The site footer of SRC-0014 §Site footer (DEC-0158), at 390 and 1280 px: its ground is `--color-neutral-ink`; the three legal links are `paper`, bold and not underlined at rest, and a keyboard-focused one shows a solid `focus-dark` outline; the active language segment is `lime-500` with `ink` text and the other `paper`, on a track that is neither the fill nor transparent; the phone stacks logo, switch, legal links and copyright, the desktop pairs logo and switch in row one and links and copyright on the base line. |
+| TS-WEB-0017-A42 | e2e | The footer carries one copyright line, `© <year> <legal name>`, in both languages, with the legal name read from `content/legal/imprint.md` (TS-WEB-0011 D4), never written into code (DEC-0158 §3). |
+| TS-WEB-0017-A43 | e2e | Every event row in a list, in the story stage or in the explain module's calendar picture, at 360, 390, 428, 640, 768, 1024, 1280 and 1920 px on `/` and `/dein-ort?ort=…`, shows its meta line whole (no ellipsis), with the longest category label the site carries and the meta "Wolgast · 19 km · 16:00" answered by the test itself; a row at least 30 rem wide shows the category as the SRC-0014 badge, a narrower one as the bare glyph, the label in the markup in both forms; in the story stage's 439 px panel at 1280 px the meta stays whole; and in the explain module's calendar picture on `/` (`StageCalendar`, 192–352 px rows) at the same widths the meta takes two lines — the place on the first, distance and time on the second — with nothing clipped (owner's decision of 2026-10-13, DEC-0153 amendment). `e2e/event-row.spec.ts`. |
+| TS-WEB-0017-A44 | e2e | The explain module's calendar picture on `/` (`StageCalendar`), at 360, 390, 428, 640, 768, 800, 900, 1024, 1100, 1200, 1280 and 1920 px, with three dates the test answers itself — each title longer than the two-line clamp, each meta "Wolgast · 19 km · 16:00" stacked: shows three rows, is at least as tall as it is wide, and every row ends inside it; the module's three panes share one height; the picture's and the module's heights are the same before and after the dates land; nothing scrolls sideways (owner's decision of 2026-10-13: the square is a minimum, DEC-0153 amendment 3). `e2e/explain-calendar.spec.ts`. |
+
+### D7 — One icon set [FIXED: DEC-0056, SRC-0014#icons]
+
+Lucide, 24 × 24 grid, 2 px stroke, round caps and joins. Monochrome,
+inheriting one token colour — never filled, never two-tone, never in a
+coloured circle unless that circle is a 44 px control well. Three sizes
+only: 24 (buttons, rows, list items), 18 (inside a badge or kicker), 32
+(section-leading). A new requirement takes the matching Lucide glyph; no
+glyph is drawn by hand and no second family enters the set.
+
+The set is a dependency of this repository — the design specification
+names it, the website installs it (`lucide-react` for the React tree, or
+the raw SVGs where a mask is needed). No icon file is committed here and
+none is requested from the design side; a glyph that does not exist in
+Lucide is a signal to pick a different glyph, not to draw one.
+
+Checkable: exactly one icon dependency in `package.json`, and every icon
+name used resolves to an export of it.
+
+## Coverage
+
+| Requirement | Discharged by |
+| --- | --- |
+| CON-WEB-0046 (be built with Next.js at its current major version) | D1, D5 · A1, A2, A16 |
+| CON-WEB-0047 (be hosted on Vercel) | D1, D5 · A1, A2, A16 |
+| CON-WEB-0048 (never introduce a second framework) | D1, D5 · A1, A2, A16 |
+| CON-WEB-0049 (optimise its layout for the phone first) | D2 · A4, A8, A9, A23, A24, A25, A26, A27, A31, A32 |
+| CON-WEB-0050 (keep the tablet and desktop layout close to the …) | D2 · A4, A8, A9, A23, A24, A25, A26, A27, A31 |
+| CON-WEB-0051 (take its breakpoints from @schafe-vorm-fenster/brand-design (breakpoint.xs…2xl) | D2 · A4, A8, A9 |
+| CON-WEB-0003 (brand kit binding) | D3 (with TS-WEB-0002 D3, TS-WEB-0003 D3) · A5, A6, A7, A15, A22, A28, A29, A30, A35, A41, A42, A43, A44 |
+| CON-WEB-0052 (never reimplement the village calendars) | D4 · A10, A11, A12 |
+| FUN-WEB-0131 (embed what the village calendars serve rather than hold its own) | D4 · A10, A11, A12, A33 |
+| CON-WEB-0053 (be written in TypeScript throughout) | D5 · A2, A3, A13 |
+| CON-WEB-0054 (use pnpm as its package manager) | D5 · A2, A3, A13 |
+| CON-WEB-0055 (take every icon from exactly one set) | D7 · A17 |
+| CON-WEB-0056 (install the icon set as a dependency and import …) | D7 · A17 |
+| CON-WEB-0057 (never commit an icon file or draw a glyph …) | D7 · A17 |
+| CON-WEB-0006 (be specified against @leafcutter-strict/blueprint-complete) | D6 · A13, A14 |
+
+## Open points
+
+- **The design system has landed (DEC-0056), and D2 no longer proposes
+  numbers.** Breakpoints, container measure and text measure are token
+  values; this spec's earlier proposals — two breakpoints at 768 and
+  1024, a 960 px container — are withdrawn, including their names, which
+  collided with the token names for other widths. What remains this
+  spec's own is the *rules*: min-width only, one component tree, block
+  order never changes. Those hold regardless of how many switch points
+  the token set carries. Still missing from the design system, and
+  tracked in the design-system contract rather than here: a container
+  width and outer gutter **per breakpoint** — six now, not two.
+
+- **CON-WEB-0003 points at a path that no longer exists, and names a
+  superseded typeface.** The requirement and SRC-0008 both cite
+  `@schafe-vorm-fenster/brand-design`. The hub has
+  since split the identity into `packages/identity/brand-identity/` and
+  `packages/identity/brand-design/`, and on 2026-09-09 adopted a new
+  colour system and a new typeface — the family CON-WEB-0003 names
+  (Catamaran) is no longer the brand's — resolved by DEC-0043, which moves
+  the rules to Atkinson Hyperlegible Next. TS-WEB-0002 D3 (weight floor, brand
+  colour vs. text) and TS-WEB-0003 D3 (one variable `woff2`) rest on the same
+  superseded fact. **Demand** to the brand owner and the spec owner:
+  *is the new brand-design package binding for the relaunch, and do
+  CON-WEB-0003, SRC-0008, TS-WEB-0002 D3 and TS-WEB-0003 D3 get amended to it?* This
+  spec does not resolve it — resolving it here would contradict two
+  accepted tactical specs. It needs an entry in the question register,
+  which this spec does not own.
+
+- **Which brand package is the website's dependency?** The repository
+  installs `@schafe-vorm-fenster/design-tokens` (generated, from the
+  retired hub path); the hub publishes the authored design system under
+  a different name, and a third, older brand package is also present in
+  the tree. Question for the brand owner: *which package is binding for
+  the website, and who retires the others?* A7 cannot name a version
+  until this is answered, and D3's package identity stays [PROPOSED].
+
+- **Header label divergence (D4).** CON-WEB-0052, FUN-WEB-0131 specifies a persistent
+  header entry labelled "Dorfkalender öffnen"; TS-WEB-0004 D4 fixes a
+  persistent entry with a different label, pointing at the website's own
+  place page rather than at the app. Question for the IA owner: *which
+  label binds, and does the entry point at the website page or at the
+  app once the calendars have moved (DEC-0035)?* A12 tests presence and
+  the TS-WEB-0004 target; the label is out of this spec's reach.
+
+- **A3 and A14 are demands, not passing checks.** There is no root
+  `tsconfig.json` and no `typecheck` script today, and the content
+  frontmatter schema carries no spec reference. Both are repository work
+  this spec requires; both fail until done.
+
+- **The STRICT Core Specification is not locally available.** ID scheme,
+  requirement-class split and statement grammar are documented project
+  conventions awaiting reconciliation against it (`specs/README.md`
+  conventions). Until then, `check-specs.ts` is the operative definition
+  of CON-WEB-0006's method half — a repo-local interim its own header marks
+  for migration into shared tooling.
+
+- **D1's deny-set and D2's numbers are [PROPOSED];** D3's package
+  identity and D5's typecheck row are [PROPOSED]. Everything else in
+  this spec is [FIXED] against a source or a decision.

@@ -1,0 +1,40 @@
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+/*
+ * No phone cap. A list prints the same rows at every width: the row count is
+ * the role's (`EVENT_LIST_CAPS`, G-2), and the rest of the dates stand behind
+ * the module's own calendar link at every width alike.
+ *
+ * Until 2026-10-13 a `capPhone` class hid rows 4 and 5 of the nearby list
+ * below 48 rem. That made a block present at 1280 px and absent at 360 px,
+ * which is exactly what TS-WEB-0017-A8 forbids ("no element is visible at one
+ * width and absent at another", D2(d)'s single-tree rule) and which no
+ * criterion of TS-WEB-0008 asked for — `e2e/smoke.spec.ts` caught it on
+ * `/dein-ort`, whose story 4 now always carries the anchor's nearby dates
+ * (DEC-0163).
+ */
+
+/* A capped list and the quiet affordance under it (G-2). */
+.withMore {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/*
+ * A list whose rows load in the browser reserves the rows it may print at the
+ * height of a two-line row (DEC-0163) — in its skeleton and, above the fold,
+ * in its answer alike, so the module does not grow when the rows land, and a
+ * shorter answer leaves room at the end rather than pulling everything below
+ * it up. The nearby list stands below the fold and reserves for its skeleton
+ * only (`reserve="loading"`, issue #83): kept in the answer, the reserve was
+ * the empty space under two rows the owner's review of 2026-10-27 found.
+ */
+.reserve {
+  /* `--height-event-row-tall` itself takes its tablet value at 48 rem
+     (`base.css`), so the reserve follows the row without a query here. */
+  min-height: calc(var(--event-list-rows) * var(--height-event-row-tall));
+}

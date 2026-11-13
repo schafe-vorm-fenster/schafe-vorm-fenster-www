@@ -1,0 +1,66 @@
+/* One block on the `surface` ground — a note, not a card: radius 0, no
+   border, no shadow. */
+.banner {
+  background: var(--color-neutral-surface);
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+.well {
+  align-items: center;
+  background: var(--color-lime-100);
+  border-radius: var(--radius-pill);
+  color: var(--color-lime-800);
+  display: inline-flex;
+  flex: none;
+  height: var(--height-icon-well);
+  justify-content: center;
+  width: var(--height-icon-well);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.text {
+  font-size: var(--type-body-size);
+  line-height: var(--leading-normal);
+  max-width: var(--measure-reading);
+}
+
+.text > :last-child {
+  margin-bottom: 0;
+}
+
+.text > :first-child {
+  margin-top: 0;
+}
+
+.sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sources li {
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* A source term longer than the phone column wraps inside its pill instead
+   of running past the viewport, where `body { overflow-x: hidden }` would
+   cut it off unreadable. The tag's `nowrap` is for rows that may be struck;
+   nothing here is ever struck. */
+.sources li > * {
+  line-height: var(--leading-tight);
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}

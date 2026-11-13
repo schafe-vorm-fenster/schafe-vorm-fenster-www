@@ -1,0 +1,142 @@
+/* The space is this component's own (DEC-0178 §4): a wrapper it owns pads it,
+   so no margin rides on another component's root through `className` (A32). */
+.kickerRow {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: var(--space-4);
+}
+
+.headline {
+  color: var(--color-neutral-paper);
+  font-size: var(--type-display-size);
+  font-weight: 800;
+  letter-spacing: var(--type-display-tracking);
+  line-height: var(--type-display-leading);
+  margin: 0;
+  min-height: calc(var(--hero-headline-lines) * var(--type-display-leading) * 1em);
+}
+
+/*
+ * G-8: the `h1` is never clamped.
+ *
+ * SRC-0014 §Fixed heights allows a **place name** two display lines, so a
+ * long village never grows the reserved box. This variant is also what a
+ * page renders when it has no resolved place — `/dein-ort`'s S0 headline is
+ * a whole sentence — and the clamp then cut it mid-word: "Such deinen Ort,
+ * dann steht hier, was dort lo…", 98 px of text in a 61 px box (polish brief
+ * finding 5).
+ *
+ * The clamp is gone; the two-line `min-height` reserve stays, which is the
+ * half that actually buys the no-shift promise — the box is already two
+ * display lines tall before the place is known, and only a name longer than
+ * that grows it. A cut sentence is the worse failure of the two, and the one
+ * a visitor sees on the first screen of the site's highest-traffic page.
+ *
+ * Hand breaks in a display headline (`SCHLAT / KOW`, SRC-0014 §Typography)
+ * are unaffected: nothing here collapses white space, so a break the author
+ * writes still renders.
+ */
+.placeName {
+  color: var(--color-neutral-paper);
+  font-size: var(--type-place-size);
+  font-weight: 800;
+  letter-spacing: var(--type-display-tracking);
+  line-height: var(--type-display-leading);
+  margin: 0;
+  min-height: calc(var(--hero-headline-lines) * var(--type-display-leading) * 1em);
+}
+
+.lead {
+  color: var(--color-neutral-paper);
+  font-size: var(--type-lead-size);
+  line-height: var(--leading-relaxed);
+  margin: var(--space-3) 0 0;
+  max-width: var(--measure-reading);
+}
+
+/*
+ * The CTA slot stacks what it is given: one button on most pages, two on
+ * `/dein-kalender` — the primary conversion and the equal-weight secondary,
+ * adjacent, in the same block (TS-WEB-0024 D3, TS-WEB-0006 D3). A column
+ * with a gap at every width, as the 2026-09-23 draft draws it. A button (or
+ * the tracker span around one) keeps its own width instead of stretching to
+ * the stack's; a search module handed in as the conversion (`/dein-ort` S0)
+ * is a block and keeps the stack's full width.
+ */
+.cta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+  /* The photo surface's content stack aligns its children to the start, so
+     a slot is only as wide as what is in it. The search module's helper line
+     used to stretch it; since issue #20 the stage search has none, and the
+     slot takes the row itself — or the pill collapses around its submit and
+     cuts its own placeholder. A button inside still keeps its own width. */
+  width: 100%;
+}
+
+.cta > :where(a, button, span) {
+  align-self: flex-start;
+}
+
+/* The search module keeps its block width — it is a form, not a button —
+   and takes the row (see `.cta` above for why it has to say so). */
+.search {
+  margin-top: var(--space-4);
+  width: 100%;
+}
+
+/*
+ * Round 3, Jan's point 1: on the 8:9 phone rendition the stack's own internal
+ * spacing is what decides how far up the picture the headline starts. It is
+ * a step tighter below `md` and the design system's own values return above
+ * it — spacing per breakpoint, which is exactly what TS-WEB-0017 D2(d) allows a
+ * switch point to change.
+ */
+@media (min-width: 40rem) {
+  .lead {
+    margin-top: var(--space-4);
+  }
+
+  .cta,
+  .search {
+    margin-top: var(--space-6);
+  }
+}
+
+/*
+ * xl — the desktop grid (SRC-0014 §Layout Grid, DEC-0150). The text stands in
+ * columns 1–7 at the container's bottom-left, never centred over the
+ * photograph; the search takes columns 1–6, because a place name does not
+ * need 1200px. The CTA slot turns into a row with `space-3` between the
+ * buttons, wrapping when they do not fit — DEC-0116 §4's column now holds
+ * below xl only. A block handed in as the conversion (`/dein-ort` S0's search)
+ * still takes a line of its own.
+ */
+@media (min-width: 64rem) {
+  .headline,
+  .placeName {
+    max-width: var(--span-7);
+  }
+
+  .lead {
+    max-width: min(var(--measure-reading), var(--span-7));
+  }
+
+  .cta {
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .cta > :not(:where(a, button, span)) {
+    flex-basis: 100%;
+    max-width: var(--span-6);
+  }
+
+  .search {
+    max-width: var(--span-6);
+    width: 100%;
+  }
+}

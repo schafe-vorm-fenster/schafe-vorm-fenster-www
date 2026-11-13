@@ -1,0 +1,80 @@
+/*
+ * The segmented control of SRC-0014 §Site footer (DEC-0158): a pill track
+ * lifted off `ink`, one segment per language, the current one filled
+ * `lime-500` with `ink` text. The fill (`lime-500`) is never the ground it
+ * stands on (the lifted track), TS-WEB-0017-A29's rule.
+ */
+.nav {
+  display: block;
+}
+
+.track {
+  /* `ink` lifted by a share of `paper` — tokens only, no hex of its own. */
+  background: color-mix(in srgb, var(--color-neutral-paper) 13%, var(--color-neutral-ink));
+  border-radius: var(--radius-pill);
+  display: inline-flex;
+  gap: var(--space-1);
+  list-style: none;
+  margin: 0;
+  padding: var(--space-1);
+}
+
+.item {
+  display: flex;
+}
+
+.segment {
+  align-items: center;
+  border-radius: var(--radius-pill);
+  color: var(--color-neutral-paper);
+  display: inline-flex;
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  font-weight: 700;
+  justify-content: center;
+  letter-spacing: var(--type-label-tracking);
+  min-height: var(--target-min);
+  min-width: var(--target-min);
+  padding-inline: var(--space-6);
+  text-decoration: none;
+}
+
+.segment:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+
+.segment[aria-current="page"] {
+  background: var(--color-lime-500);
+  color: var(--color-neutral-ink);
+}
+
+.segment[aria-current="page"]:hover {
+  text-decoration: none;
+}
+
+/* On `ink` the light-ground ring (violet) would all but vanish; the dark
+   ground takes `focus-dark` (`lime-400`). */
+.segment:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-roles-focus-dark);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/*
+ * `glass` — the phone menu overlay (DEC-0189). The overlay is the page itself,
+ * blurred under `scrim-72`, so the track is a translucent `paper` lift and the
+ * current segment a stronger one, both with `paper` text.
+ */
+.nav[data-tone="glass"] .track {
+  background: color-mix(in srgb, var(--color-neutral-paper) 12%, transparent);
+}
+
+.nav[data-tone="glass"] .segment {
+  color: color-mix(in srgb, var(--color-neutral-paper) 78%, transparent);
+}
+
+.nav[data-tone="glass"] .segment[aria-current="page"] {
+  background: color-mix(in srgb, var(--color-neutral-paper) 22%, transparent);
+  color: var(--color-neutral-paper);
+}

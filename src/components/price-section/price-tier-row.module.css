@@ -1,0 +1,150 @@
+/*
+ * Three rows inside one `paper` section, divided by a 1 px `line` hairline —
+ * never a 2 px lime rule, never three sections (SRC-0014 §Page Rhythm). The
+ * row owns no ground: it stands on the section's.
+ */
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* Phone: the three offers stand one under the other, a hairline between them
+   and 32 px (`--space-8`) of air on both sides of it (DEC-0205). */
+.row + .row {
+  border-top: 1px solid var(--color-neutral-line);
+  padding-top: var(--space-8);
+}
+
+/* Desktop (xl): the three rows are columns of one grid and each row spans the
+   same five tracks through `subgrid`, so kicker, title, price, list and
+   button start at the same height in every column; the list track takes the
+   leftover height and pushes the button to the foot (DEC-0205). */
+@media (min-width: 64rem) {
+  .row {
+    column-gap: 0;
+    display: grid;
+    row-gap: var(--space-3);
+    grid-row: span 5;
+    grid-template-rows: subgrid;
+  }
+
+  .row + .row {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .cta {
+    align-self: end;
+  }
+}
+
+/* The well and the kicker on one line: a 40 px `lime-100` disc with a 24 px
+   `lime-800` glyph, then the mono label — the drafts' "IM DORFKALENDER". */
+.kicker {
+  align-items: center;
+  color: var(--color-lime-800);
+  display: flex;
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  font-weight: 700;
+  gap: var(--space-3);
+  letter-spacing: var(--type-label-tracking);
+  line-height: 1.2;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.well {
+  align-items: center;
+  background: var(--color-lime-100);
+  border-radius: var(--radius-pill);
+  color: var(--color-lime-800);
+  display: inline-flex;
+  flex: none;
+  height: var(--height-icon-well);
+  justify-content: center;
+  width: var(--height-icon-well);
+}
+
+/* H2 step, 800 — the issue's 26 / 24 px sits inside this role's clamp
+   (24 on the phone, 30 at most). Always two lines, broken where the copy puts
+   its ` / ` (DEC-0205). */
+.title {
+  font-size: var(--font-size-h2);
+  font-weight: 800;
+  letter-spacing: var(--type-subhead-tracking);
+  line-height: 1.1;
+  margin: var(--space-1) 0 0;
+}
+
+.titleLine {
+  display: block;
+}
+
+/*
+ * The figure at the display-mono step (the issue's 44 / 40 px; the token is
+ * 48), the same size for "0 €", "480 €" and "Auf Anfrage", with its
+ * explanation in Meta beneath (DEC-0205).
+ */
+.price {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+}
+
+.figure {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-display-mono);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.qualifier {
+  color: var(--color-neutral-text2);
+  font-size: var(--type-meta-size);
+  font-weight: 700;
+}
+
+.checks {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.check,
+.checkEmphasis {
+  align-items: flex-start;
+  border-top: 1px solid var(--color-neutral-line);
+  color: var(--color-neutral-ink);
+  display: flex;
+  font-size: var(--type-body-size);
+  gap: var(--space-3);
+  line-height: var(--leading-normal);
+  padding-block: var(--space-3);
+}
+
+.checkEmphasis {
+  font-weight: 700;
+}
+
+.check :global(svg),
+.checkEmphasis :global(svg) {
+  color: var(--color-lime-800);
+  flex: none;
+}
+
+/* All three buttons are one size: the full column width, 56 px high. On the
+   desktop grid the track keeps them at the foot of the column. */
+.cta {
+  display: flex;
+  margin-top: var(--space-6);
+}
+
+.cta > * {
+  flex: 1;
+}

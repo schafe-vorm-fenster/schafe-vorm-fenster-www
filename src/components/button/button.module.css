@@ -1,0 +1,128 @@
+.button {
+  align-items: center;
+  border: 0;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: var(--font-sans);
+  font-size: var(--type-body-size);
+  font-weight: 800;
+  gap: var(--control-gap);
+  justify-content: center;
+  letter-spacing: var(--tracking-tight);
+  line-height: 1.1;
+  padding: 0 var(--space-6);
+  text-align: center;
+  text-decoration: none;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.label {
+  /* A long label wraps inside the pill instead of pushing the row sideways. */
+  min-width: 0;
+}
+
+.primary {
+  min-height: var(--height-button);
+}
+
+.compact {
+  min-height: var(--height-control);
+  padding: 0 var(--space-4);
+}
+
+/* ── The five variants — SRC-0014 §Button ──────────────────────────────────
+ *
+ * Every variant re-asserts its own fill/text pair at **two classes**
+ * (`.button.primaryLight`), which is the pattern `chip` and `outbound-link`
+ * already carry for the same reason. A button that renders as a link is a
+ * `route-link` in its `bare` form, and `bare` sets `color: inherit` at one
+ * class; `section-shell` used to recolour every `a` on a dark ground at one
+ * class plus one type. Both tie or beat a single-class variant rule, so which
+ * of them won was decided by CSS-module import order — and the production
+ * bundle orders the modules differently from `next dev`, which is why the
+ * closing CTA computed ink on ink on four pages in the preview and looked
+ * correct locally (polish brief finding 1 / G-6). Two classes settle it in
+ * both builds, without `!important` and without a tone prop the caller would
+ * have to remember.
+ *
+ * `secondary` reads the ground's pair the same way (DEC-0160).
+ * `quiet` is the one variant with no fill of its own, so it cannot name a
+ * colour: it reads `--ground-link`, which every surface publishes for the
+ * ground it paints (`app/styles/components.css`).
+ */
+
+/*
+ * "Primary on light" and "primary on dark" are one role in SRC-0014's own
+ * table — same action, same weight, the pair swapped for the ground. This
+ * variant takes the ground's pair, so a page that composes its hero CTA the
+ * way every other page does gets a legible pill on a photograph instead of
+ * ink on ink (G-5). `primary-dark` below stays, for the caller who wants to
+ * name the dark pair on a light ground.
+ */
+.button.primaryLight {
+  background: var(--ground-primary-fill);
+  color: var(--ground-primary-text);
+  /* DEC-0147: this fill already gives the label its contrast on a photo
+     surface — the shadow `photo-surface.module.css` hands down would only
+     blur it. */
+  text-shadow: none;
+}
+
+.button.primaryLight:hover {
+  background: var(--ground-primary-fill-hover);
+}
+
+.button.primaryDark {
+  background: var(--color-lime-500);
+  color: var(--color-neutral-ink);
+  text-shadow: none; /* DEC-0147 */
+}
+
+.button.primaryDark:hover {
+  background: var(--color-lime-400);
+}
+
+/* Paid conversion only, and never twice on one screen. */
+.button.pulse {
+  background: var(--color-himbeere-600);
+  color: var(--color-neutral-paper);
+  text-shadow: none; /* DEC-0147 */
+}
+
+.button.pulse:hover {
+  background: var(--color-himbeere-700);
+}
+
+/* The ground's secondary pair (`app/styles/components.css`, DEC-0160): on a
+   light ground transparent with a 2 px `ink` border, on a dark one the `paper`
+   pill. The border is drawn on both, in the fill's colour on dark, so the
+   pill keeps one size whatever it stands on. */
+.button.secondary {
+  background: var(--ground-secondary-fill);
+  border: 2px solid var(--ground-secondary-border);
+  color: var(--ground-secondary-text);
+  text-shadow: none; /* DEC-0147 */
+}
+
+.button.secondary:hover {
+  background: var(--ground-secondary-fill-hover);
+  color: var(--ground-secondary-text-hover);
+}
+
+.button.quiet {
+  background: transparent;
+  color: var(--ground-link);
+  padding: 0 var(--space-2);
+}
+
+.button.quiet:hover {
+  color: var(--ground-link-hover);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.15em;
+}

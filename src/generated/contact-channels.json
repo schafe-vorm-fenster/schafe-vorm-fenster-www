@@ -1,0 +1,47 @@
+{
+  "builtAt": "2026-09-25T18:59:56.217Z",
+  "source": "@schafe-vorm-fenster/goals@0.3.3#contact-channels.md",
+  "channels": [
+    {
+      "order": 1,
+      "id": "appointment",
+      "label": "Video appointment",
+      "address": "https://calendar.app.google/VG9bZoYVnFcX1W6F8",
+      "goals": [
+        "make-contact",
+        "request-product-briefing"
+      ],
+      "responder": "Jan-Henrik Hempel"
+    },
+    {
+      "order": 2,
+      "id": "whatsapp",
+      "label": "WhatsApp",
+      "address": "+49 156 78204630",
+      "goals": [
+        "make-contact"
+      ],
+      "responder": "Jan-Henrik Hempel"
+    },
+    {
+      "order": 3,
+      "id": "phone",
+      "label": "Phone",
+      "address": "+49 156 78204630",
+      "goals": [
+        "make-contact"
+      ],
+      "responder": "Jan-Henrik Hempel"
+    },
+    {
+      "order": 4,
+      "id": "mail",
+      "label": "E-mail",
+      "address": "jan@schafe-vorm-fenster.de",
+      "goals": [
+        "make-contact"
+      ],
+      "responder": "Jan-Henrik Hempel"
+    }
+  ]
+}

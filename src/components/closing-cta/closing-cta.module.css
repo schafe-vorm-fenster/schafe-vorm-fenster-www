@@ -1,0 +1,40 @@
+.repeat {
+  display: flex;
+  flex-direction: column;
+  /* G-6: the reassurance was jammed against the helper text above it. */
+  gap: var(--space-4);
+}
+
+.reassurance {
+  /* The ground's meta colour, never `muted` by name: on the ink closing block
+     of `/` that was 3.53:1 (DEC-0160). */
+  color: var(--ground-meta);
+  font-size: var(--type-meta-size);
+  margin: 0;
+}
+
+.merged {
+  /* The band's cards stand on `paper` here, so they take the `surface` fill —
+     a card's fill is never its ground's (TS-WEB-0017-A29, DEC-0156). */
+  --band-card-fill: var(--color-neutral-surface);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.heading {
+  font-size: var(--type-subhead-size);
+  font-weight: 800;
+  letter-spacing: var(--type-subhead-tracking);
+  margin: 0;
+}
+
+/*
+ * The second, quiet way forward under the repeated conversion (brief, page 6).
+ * `/dein-kalender` ends on "Kalender bestellen" with "Lieber erst sprechen?"
+ * beneath it — one primary treatment per screenful, so the alternative is a
+ * link, never a second pill.
+ */
+.footer {
+  margin-top: var(--space-2);
+}

@@ -1,0 +1,357 @@
+---
+artefact: tactical-spec
+id: TS-WEB-0022
+kind: interaction
+status: DRAFT
+version: 0.1.0
+implements: [FUN-WEB-0012, BUS-WEB-0017, FUN-WEB-0204]
+sources: [SRC-0001, SRC-0003, SRC-0008, SRC-0014]
+decisions: [DEC-0029, DEC-0036, DEC-0048, DEC-0052, DEC-0056, DEC-0080, DEC-0082, DEC-0083, DEC-0105, DEC-0107, DEC-0109, DEC-0110, DEC-0154, DEC-0161, DEC-0172, DEC-0174, DEC-0175, DEC-0196, DEC-0203]
+ai_provenance:
+  prompt_id: UNKNOWN
+  prompt_version: UNKNOWN
+  model: "Claude Opus 5 (1M context)"
+  generated_at: "2026-09-11T07:13:07+02:00"
+---
+
+# TS-WEB-0022 — `/mitmachen`, the publishing entry
+
+## Purpose
+
+The page that turns an Akteur who has never published into a registered
+publisher. Focus job *publish our dates*, conversion
+`register-as-publisher`.
+
+Thin by design: block frame, primary conversion, context band, closing
+CTA, scene shape and pricing are TS-WEB-0006 · route and rendering TS-WEB-0004 ·
+proof TS-WEB-0005 · live modules TS-WEB-0008 · stages TS-WEB-0010 · metadata TS-WEB-0011 ·
+events TS-WEB-0012 · content types TS-WEB-0007. What follows is this page only.
+
+## Determinations
+
+### D1 — Manifest values [FIXED: SRC-0003 §Publish our dates, FUN-WEB-0012]
+
+`page.meta.ts` (TS-WEB-0006 D1) for this route:
+
+| Field | Value |
+| --- | --- |
+| `focusJob` | publish our dates — invariant at every stage (D8) |
+| `primaryConversion` | `register-as-publisher` |
+| `equalWeightConversion` | none |
+| `audiences` | `actors` (primary) · `municipalities` (as publisher) |
+| `liveModules` | path 1's third stage state, three live rows of the stage-0 anchor (TS-WEB-0008 position 1); the example-place module of D5 left with DEC-0196 |
+| `proofSlots` | beside the objection block (D3) · the proof block (D6) · the CTA reassurance (D7) |
+
+The offering is `community-calendar`, free. Price display is TS-WEB-0006 D10 —
+free is not a price: no figure, no range, no "ab"; 480 € belongs to
+`/dein-kalender`. "Portalize" does not occur here, `local-advertising`
+nowhere (DEC-0052 §1, §3).
+
+### D2 — Slot inventory and order [FIXED: TS-WEB-0006 D2 for the frame, SRC-0003 for the sequence]
+
+Block 2 of TS-WEB-0006 D2, in this order; types per TS-WEB-0007 B.3, fragments B.2.
+
+| # | Slot | Content type | Carries |
+| --- | --- | --- | --- |
+| 1 | `hero` | `hero` | the WhatsApp scene, the primary `Cta` (D7) |
+| 2 | `warum-heute-nichts-ankommt` | `comparison` (DEC-0203) | why the current channels fail, each beside its answer (D3) |
+| 3 | `wege` | 3 × `publishing-path` | the three mechanisms (D4) |
+| 4 | ~~`beispiel`~~ **removed (DEC-0196)** | ~~`live-module-frame`~~ | ~~a real covered place, live (D5)~~ |
+| 5 | `beleg` | 3 × `proof-card` | proof, publish-weighted (D6) |
+
+Context band and closing CTA come from the layout, not from here. No
+other block type is permitted — no feature list, no tier table.
+
+**Amended by DEC-0196** (owner, issue #154, 2026-11-12). The live example
+(slot 4) is removed without replacement, and the layout's **closing CTA stands
+between slot 3 and slot 5**: directly after the third path and its hint banner,
+on `ink`, then the proof block, then the context band. The page's order is
+therefore hero · objections · three paths · closing CTA · proof · context band.
+The layout still renders the closing CTA; the page hands the proof block to it
+as the blocks that follow the closing block (`PageFrame`'s `closing.followedBy`).
+Heading, label, target and reassurance of the closing CTA are unchanged (D7).
+This deviates from TS-WEB-0006 D2/D6, where the closing block directly precedes
+the band; TS-WEB-0006 D6 names the exception.
+
+**Order inside the problem block, amended by DEC-0154** (owner's review of
+2026-10-12; CG-042). The solution sentence ("Fotografier den Flyer, schick das
+Bild per WhatsApp, fertig") now stands **before** slot 2 (in the hero or as the
+block's opening line), not inside it. Slot 2 carries the problem only, and its
+halves swap: **"Die üblichen Wege" first, then "Wer euren Termin heute nicht
+mitbekommt"**. The wording of both halves is copy under CG-009, and the review
+asks for a more natural, less promotional register (issues #44 to #46).
+
+**Amended by DEC-0203 (issue #159, 2026-11-12).** The two halves and the
+solution sentence before them are gone. Slot 2 is the comparison module
+"Heute → Mit eurem Kalender", the same component as `/dein-kalender`'s
+contrast block: the kicker, the heading "Wer euren Termin heute nicht
+mitbekommt" and three pairs, each usual channel beside what changes with the
+calendar. The head carries nothing else — no hand-off sentence above it, no
+closing line under it. One section, `data-block="objections"`; the
+`archiv` section is gone.
+
+### D3 — The objection block, and what it is made of [FIXED: SRC-0003 "why the six current channels fail"; item set PROPOSED]
+
+| Property | Rule |
+| --- | --- |
+| Position | **before** the offer; it is not a Q&A block (D8). The detailed answer is slot 3; since DEC-0203 each problem carries its one-sentence answer beside it, and that answer names no product |
+| Shape | one headline plus *n* pairs (three); each *today* half = the channel in the visitor's own words + the one concrete way it fails (a boundary, a deadline, a reach), each *with your calendar* half the one thing that changes. The comparison module of SRC-0014 §Comparison, one glyph per pair from the page (`megaphone`, `clock`, `users`) (DEC-0203) |
+| Sources | `@schafe-vorm-fenster/audiences#actors` (Problem) · `@schafe-vorm-fenster/messaging` (positioning alternatives, `actors--community-calendar` pains), declared as `derived_from` (TS-WEB-0007 D6) |
+| Forbidden | a feature, our own name, a competitor product, and any numeral asserting how many channels exist — *six* is a figure of speech in the audience record, not an enumeration, and the hub names fewer explicitly, so the block renders what the sources carry and states no number |
+| Proof | one slot beside the block, elements per TS-WEB-0005; **renders nothing** if nothing clears — the reach rows then stand alone (DEC-0175 §3, which replaced "visibly empty") |
+
+### D4 — Three publishing paths, one mechanism each — and the path block **is** the explain module [FIXED: SRC-0003, SRC-0001 §1a, TS-WEB-0006 D7, SRC-0014 §"Explain module", SRC-0017 CG-025]
+
+| Order | Path | `mechanism` | Availability in the hub |
+| --- | --- | --- | --- |
+| 1 | photo of the flyer via WhatsApp | `whatsapp` | generally available |
+| 2 | the actor's own calendar, connected | `calendar-connection` | generally available |
+| 3 | the actor's own website as a source | `website-import` | **alpha** |
+
+| Rule | Determination |
+| --- | --- |
+| One appearance | each mechanism appears once. The hero is the WhatsApp scene; the WhatsApp path block is its step detail and repeats neither opener nor instance, so **on this page the hero is the only `data-block="scene"`** and no path block is wrapped in one (`DEC-0110 §3`) [PROPOSED — a test hook] |
+| Honest availability | a path whose hub record is not `generally-available` renders the `status_badge` of its `Step` fragment; it may not be shown as dependable while the hub marks it alpha, and the badge goes only when that record changes |
+| **One CTA per path** [FIXED: DEC-0082 §4] | each of the three path blocks ends in exactly one CTA at secondary treatment, pointing at that path's own next step — the WhatsApp path at its chat handover, paths 2 and 3 at `/mitmachen/registrieren` through the route facade. None of them carries `data-cta="primary"`: the page's one primary stays the hero CTA (D7), and a CTA in a module is a link, not a conversion declaration (TS-WEB-0006 D9). A path without a CTA is the review's finding, not a variant |
+| Cross-link | **none** — the context band hands off to `/dein-kalender` (D9, DEC-0174 §3) |
+
+#### The render form is fixed, and it is the explain module
+
+**Each of the three path blocks is the `explain-module` component** that
+`SRC-0014 §"Explain module"` specifies (audit A6, 2026-09-25). The step count and
+the render form used to be `[FREE]` here, and this determination used to say
+*"three steps is a working assumption, not a rule"* — while the guide fixed both.
+Two specification-side artefacts said opposite things about the same component;
+this is the side that was wrong.
+
+**The component is also used once on `/`** — for the WhatsApp path only, in
+whichever of the three block positions the entry trait gives it
+(`TS-WEB-0019 D3a`, `DEC-0109`). Nothing below changes for it: the component is
+not forked and `/` supplies only the slot. The one difference is which artefact
+introduces the job, and since `DEC-0110` it has an answer rather than a conflict.
+
+**On `/` the scene wraps the module; here it does not** [FIXED: DEC-0110 §3].
+There the module **is** the job introduction, because that page has no WhatsApp
+hero, so it stands inside a `scene-block` with the opener above it and the live
+event row below it — and `TS-WEB-0006 D7` is satisfied without an exception and
+without the component gaining slots. On this page the hero *is* the WhatsApp
+scene and carries the opener and the instance, so `D7` is satisfied once, by the
+hero, and the three path blocks stay **bare modules**. The rule that decides it:
+a scene wraps a module only where the module is the job introduction. Wrapping
+the path blocks here would mint three openers and three instances, which the
+"One appearance" rule forbids and `A4` would fail on. `CONF-0026` is `RESOLVED`
+and `Q-0080` is closed; nothing in this determination changed to close them.
+
+Paths 2 and 3 need no scene of their own either. `/mitmachen` has **one** job —
+publish our dates — and three mechanisms of it, and `D7` counts introductions,
+not mechanisms.
+
+| Property | Determination |
+| --- | --- |
+| Ordinal | one per module, mono display size, with the module title beside it |
+| Step lines | **exactly three.** Each is a numbered disc plus two lines — the bold core and the normal detail. Not two, not four, and not a count derived from the offering record: `@schafe-vorm-fenster/offerings#community-calendar` supplies what each step *says*, and this determination supplies how many there are |
+| Below `lg` (`48rem`) | a **graphic stage**: one box holding three states, each at least as tall as it is wide and every graphic filling its state's full height, the next cropped in at the trailing edge, with the three step lines beneath it (DEC-0182). The box never changes size, so a state change cannot shift the page. The stage is a **horizontal scroll-snap container**: the reader swipes from state to state, and **two arrow buttons** inside it (real buttons with a name, 44 px, `aria-disabled` at either end) select the neighbour. A swipe or an arrow is handwork and stops the pass; under `prefers-reduced-motion` the change is instant (DEC-0161, issue #27) |
+| One viewport below `lg` | the module plus its three step lines fit **one viewport height at the phone breakpoint**. If they do not, the copy is too long; the module does not grow (SRC-0017 CG-025) |
+| From `lg` | the three steps **stand side by side**, each with its own graphic above its own two lines. No stage, no crop, **no slide** — everything is visible at once, which is why the stage existed. Nothing auto-advances |
+| Graphics | **every state of every path has its graphic** — a photograph, or a drawing in brand tokens where none exists; never a grey frame, a hatch or an empty box (DEC-0174 §1, issue #88). Path 1: the flyer photographed, the flyer in the chat — **no chat header** (DEC-0174 §2, issue #89) — the calendar. Path 2: a date entered in your own calendar as usual, the registration with that calendar in its slot, the calendar. Path 3: the dates kept on your own website as usual, the registration with that website in its slot, the calendar. A drawn calendar or website is nobody's product: no logo, no product colours, no lettering (SRC-0014 §Explain module) |
+| The one breakpoint | `lg` = `48rem` and no other. A generator does not choose it; it is the component's own and the only `min-width` it declares (`specs/contracts/design-system-contract.md`) |
+| Motion | the auto-advance exists **only below `lg`** — the system's one exception, an owner decision (DEC-0105 §6). It **starts on the first intersection at which three quarters of the module are in the viewport**, never on page load — `IntersectionObserver` on the module element at `threshold: 0.75`, three quarters of the **module's own height**, which is what keeps the trigger reachable at 360 × 640 where *"the whole module"* was not (`Q-0083`, answered by the owner 2026-09-25); state 1 gets a full dwell before the first advance; it runs **one pass** — `4 000 + 550 + 4 000 + 550` ms = **9.1 s** at the 4 s dwell floor — and then **stops at state 3**. No loop, and no restart when the reader scrolls back: once per page view, spent by a pass that started. **Any interaction stops it for good**, focus included; it does not pause and resume. The step lines are real buttons at every size and are therefore the mechanism **WCAG 2.2.2** requires (TS-WEB-0002 D7, TS-WEB-0002-A13). Under `prefers-reduced-motion` there is no advance at all: the stage shows state 1 static and the step lines stay operable |
+| One CTA | as the row above, at secondary treatment. `explain-module` may not take `primary` even as a prop value |
+| Line length | each step line is **written** to a single line at 390 px viewport width — core ≤ 30, detail ≤ 40 characters (SRC-0017 CG-025). That is a target the copy is written to, **not a clamp: a step line is never truncated**. A longer line wraps; readability goes before a fixed height — shorter or equally long copy first, then a two-line height for all three steps (DEC-0155 §2, DEC-0161). Until 2026-10-13 the lines were clamped with an ellipsis |
+
+**Amendment 2026-11-12 (owner, third review of #142 — "macht die WhatsApp-Nummer
+gerne direkt zu einem Link"; refs #141).** A step line is a **row**, not a
+button: the `li` carries the grid, the border and the active state; the disc
+(`aria-hidden`) and the detail stand in it; one `<button>` holds the core and is
+stretched over the whole row (`::after`), so the row stays one 44 px target and
+`aria-current="step"` stays on the button. The detail may carry a link — today
+the WhatsApp number in step 2, a plain `<a>` to the click-to-chat URL that sits
+above the overlay and is its own target. A link inside the button is invalid and
+fails axe `nested-interactive`; this is why the structure changed. Look,
+height (A6/A19 budget) and the side-by-side layout are unchanged. The link
+emits no analytics event: `make-contact` is registered for the contact-section
+rows (TS-WEB-0016 D12), and widening it is a registry decision, not made here.
+
+Three phone numbers are in play and they are not interchangeable: **390 px** is
+the authoring width the copy budget is derived from, **360 × 800** is what
+SRC-0014 means by "per screen", and **360 × 640** is A2's fold viewport. The
+single-line target is 390 px, the one-viewport rule is the phone breakpoint;
+A20 asserts at 390 and 1280 px that no line is cut, A19 the viewport.
+
+### D5 — The live example: a real place, never the visitor's own [RETIRED: DEC-0196]
+
+**Retired 2026-11-12 (owner, issue #154, DEC-0196).** The page carries no live
+example any more: after three paths that each end in the calendar, the reader
+is to act. The determination below is kept for the record and binds nothing.
+What stays live on the page is path 1's third stage state (D4, DEC-0115), which
+reads the stage-0 anchor's three rows.
+
+TS-WEB-0008 position 1 (`GET /api/places/{slug}/events`) inside a
+`live-module-frame`, labelled with its radius ("in `<place>`").
+
+| Case | Determination |
+| --- | --- |
+| Stage 0 (TS-WEB-0010 D1) | the configured reference place: one covered place with dates and a cleared, place-bound proof element (Open points) |
+| Stage 1–3 | the nearest **active** place, resolved as on `/dein-ort/starten` (TS-WEB-0008 D1 position 3 → position 1 for its dates) |
+| Never | the visitor's own searched place, and never an uncovered place as data (FUN-WEB-0024) |
+| Zero dates | not an empty state here — the next candidate is taken; the focus-job switch of TS-WEB-0008 D4 belongs to `/dein-ort` and never fires on this route |
+| Failure | TS-WEB-0008 D5 / TS-WEB-0009 D4 unchanged; the slot reserves its space before paint (SRC-0014 §Skeletons, DEC-0033) |
+| Outbound | `{APP_HOST}/{slug}` (TS-WEB-0008 D9) — external, not a route-facade link |
+
+### D6 — Proof is publish-weighted [FIXED: TS-WEB-0005 D5, DEC-0048]
+
+The page passes `job: publish-our-dates` to the engine, which applies
+that focus job's weight profile — unlike the sell pages, fixed in TS-WEB-0005
+D5, not restated. Three elements (TS-WEB-0005 D6 / DEC-0048).
+
+They render as SRC-0014 §Proof stream (DEC-0172 §1), the same form as on
+`/dein-kalender`: flat items on the `lime-100` ground with a hairline above,
+the claim first and a byline of initials well, name and place under it, the
+first item at sub-head size across the row and the other two side by side from
+`xl` (A23). The grey feature card over hairline rows it replaces read as the
+old state in the owner's review of 2026-10-27 (#91).
+
+### D7 — The CTA and the permanence promise [FIXED: SRC-0003; binding PROPOSED]
+
+| Property | Rule |
+| --- | --- |
+| Label | names the action and that it costs nothing. The wording is copy, written under SRC-0017 CG-026 — this spec states no label string and no grammatical form (DEC-0083) |
+| Target | `/mitmachen/registrieren` through the route facade (TS-WEB-0004 D3a) |
+| Goal ID | `register-as-publisher`, on the hero CTA and the closing CTA alike (TS-WEB-0006 D6) |
+| Prefill | `?ort=<slug>` only when geo-api resolved the slug (TS-WEB-0008 D9, DEC-0029); an unresolved value is never forwarded |
+| Reassurance | the permanence promise, in the `Cta` fragment's `reassurance` field |
+| Backing | the 2022 public commitment, referenced by hub element ID via `proof_refs` and selected by TS-WEB-0005 (clearance is a hard filter). Not quoted here, not copied into this repository (working rule 7). With nothing cleared behind it the promise is removed, not softened (SRC-0001 §4, TS-WEB-0006 D11) — today the commitment sits in `media-echo`, not in `proof`, see Open points |
+
+### D8 — Invariants of this page [FIXED: SRC-0001 §6, TS-WEB-0006 D8, TS-WEB-0010 D7, TS-WEB-0011 D3/D4]
+
+| What | Determination |
+| --- | --- |
+| Stage variance | only which proof elements are selected (D6); the place the example showed (D5) went with DEC-0196. Block count, block order, `focusJob` and the primary conversion never vary |
+| No classification | no place search on this route, no role switcher, no audience control of any kind |
+| Markup | `WebPage` only — the objection block is no `FAQPage`, the free offering emits no `Offer`, no `Service`, no price value; skeleton, `aside` rule, titles, descriptions and share image per TS-WEB-0011 D3/D5/D6 |
+
+### D9 — No hand-off sentence to `/dein-kalender`; the context band is the hand-off [FIXED: owner's review 2026-10-27, DEC-0174 §3, SRC-0017 CG-045]
+
+A Verein with its own website belongs on `/dein-kalender` (TS-WEB-0024); path
+3 imports *from* a website, the licence puts a calendar *on* one. The reader
+who came for the second reaches it through the **context band**, which offers
+`/dein-kalender` on this page anyway (TS-WEB-0006 D5) — and through nothing
+else in the page body.
+
+Until 2026-10-27 this determination put one sentence plus a link at the end
+of slot 3, in an `aside` (*"Wenn eurem Verein oder eurer Gemeinde ein eigener
+Kalender auf der eigenen Website vorschwebt … ist das ein anderes Angebot"*).
+The owner's review rejected it (issue #92): the hand-off follows a few
+sections later in the band, so the sentence only repeated it, explained the
+offering structure rather than the reader's gain, and stood alone as a stray
+line. Issue #50, which asked for better wording of that sentence, is
+superseded. SRC-0003's brief for this page names no such link — its structure
+ends in the context band — so the change deviates from no source.
+
+| Property | Rule |
+| --- | --- |
+| Count | **no** link to `/dein-kalender` in the page body outside the context band |
+| Container | — |
+| Contents | no sentence that sends the reader to another job's page; the band is the page's only hand-off (CG-045, TS-WEB-0006-A20) |
+
+### D10 — Section rhythm [FIXED: SRC-0014 §Page Rhythm]
+
+The rhythm *rules* bind even though the home-page sequence does not:
+never two photo sections in a row, at most two consecutive sections of
+one colour family, one `himbeere` element per screen, and the dark `ink`
+section — here the closing CTA, since DEC-0196 (it was the live example) —
+exactly once, as the anchor. From the third path on the grounds read `paper`
+(path 3) → `ink` (closing CTA) → `lime-100` (proof) → `surface` (context
+band). Media boxes declare their ratio before paint; paths use
+`ratio-feature`.
+
+### D11 — The hint banner carries the price boundary [FIXED: BUS-WEB-0017, FUN-WEB-0204, DEC-0107 §3]
+
+One banner, at the end of slot 3, after the three path blocks.
+
+| Property | Rule |
+| --- | --- |
+| Count | exactly one on the page, and only in slot 3. The boundary is a fact about all three paths, so it is not repeated per path |
+| What it states | the boundary of `BUS-WEB-0017` — a source the platform already supports publishes free; an individual integration into a system it does not already support is the `custom-data-integration` add-on |
+| The source list | is the offering's, never this spec's (`specs/README.md` rule 1): the standard sources resolve from `@schafe-vorm-fenster/offerings#community-calendar` through the content pipeline. **The record carries them since 0.3.5** — lines 112–113, with lines 230–234 declaring the list owned there — so the banner may enumerate, and DEM-0065 is ANSWERED. It enumerates what the package holds at build time and never a list written here |
+| The cooperations | `kirche-mv.de`, VEVG Karlsburg and the Volkshochschulen are **not** free-path examples. They are connected without an invoice as explicit cooperations (owner, 2026-09-25) and stay the reference cases of the paid `custom-data-integration` add-on, so the banner and the path blocks name none of them as an illustration of the free side. DEM-0067 is open against the offering record, whose Open Points now imply the opposite |
+| No figure | no amount, no currency symbol, no "ab", no range. `/mitmachen` renders no price at all (D1, A12), and the add-on has none to render — `price_status: on-request`, and `publishablePrice` is false for it (`TS-WEB-0018-A2`) |
+| Not a CTA | no `data-cta` of any rung and no conversion declaration. One CTA per path is D4's, the page's one primary is the hero's (D7), and a boundary is not an action (DEC-0082 §1) |
+| Not a status badge | D4's `status_badge` says path 03's *mechanism* is alpha; this says what a connection *costs*. Two different facts, two elements |
+| Wording | copy, under SRC-0017 — this spec states no sentence and no grammatical form (DEC-0083) |
+
+## Free for the generator
+
+- [FREE] All copy — the hero opener, objection items, step wording, every
+  CTA label; content phase, placeholders until then. The opener is a scene
+  opener under TS-WEB-0006 D7: a statement of what works, a question only where
+  the block answers it in the next sentence (SRC-0017 CG-005/CG-006). The
+  earlier "aha question" is withdrawn — SRC-0001 §1a's aha is the stance the
+  opener takes, not a punctuation mark it has to carry (DEC-0080, DEC-0083).
+- [FREE] Visual design and markup of the five own slots, within SRC-0014,
+  TS-WEB-0002 and D10; icon choice from the permitted set. **Not free any more:**
+  the path blocks' render form and step count, which are the `explain-module`
+  component of SRC-0014 and are fixed in D4 (audit A6, 2026-09-25).
+- [FREE] Component and file naming; the `data-*` hooks may be renamed as
+  long as the acceptance criteria stay walkable.
+
+## Acceptance criteria
+
+| ID | Level | Check |
+| --- | --- | --- |
+| TS-WEB-0022-A1 | static | `page.meta.ts` for `/mitmachen` declares `focusJob` "publish our dates", `primaryConversion` `register-as-publisher`, no `equalWeightConversion`, `audiences` `[actors, municipalities]`, one live module with its empty state, and the three proof slots of D1. |
+| TS-WEB-0022-A2 | e2e | At 360 × 640 and 1280 × 800 exactly one element carries `data-cta="primary"`, it is fully visible without scrolling, and its href resolves to `/mitmachen/registrieren`. |
+| TS-WEB-0022-A3 | e2e | DOM order is hero · objections · three paths · the layout's closing CTA on `ink` · proof · the layout's context band, in German and in English; no live example renders (D2 as amended by DEC-0196). The objection block is one section since DEC-0203 (no `archiv` section). |
+| TS-WEB-0022-A4 | e2e | Exactly one block declares `data-block="scene"`; its mechanism is `whatsapp` and its opening line is a **statement** — no question mark unless the block answers it in the next sentence (TS-WEB-0006 D7, SRC-0017 CG-005/CG-006). No other block declares the same mechanism as a scene. |
+| TS-WEB-0022-A5 | e2e | Exactly three publishing-path blocks exist, mechanisms distinct and ordered `whatsapp`, `calendar-connection`, `website-import`; **each renders an ordinal, a title and exactly three step lines**, each step line carrying a bold core and a normal detail, and exactly one CTA carrying `data-cta="secondary"` resolving to that path's next step; the `website-import` block shows a visible status badge while its hub record is not `generally-available`. The count of `data-cta="primary"` on the page stays 1 (A2). |
+| TS-WEB-0022-A18 | e2e | **Superseded by TS-WEB-0022-A20 (DEC-0161).** Written text: every step line renders on exactly one line at 390 px. It was superseded first in substance by DEC-0154 (no step line is truncated; readability goes before a fixed height); its instrument measured "one line" as "as tall as one line-height", which an ellipsis clamp satisfies by construction, so it passed on the defect the owner's review found (issue #47). A20 carries the rule and the instrument that fails truncation. |
+| TS-WEB-0022-A20 | e2e | **No step line of an explain module is truncated** — on the fixture `/dev/explain-module`, on `/` and on `/mitmachen`, at 390 px and at 1280 px: no core or detail computes `text-overflow: ellipsis` or a `-webkit-line-clamp`, and for each `scrollHeight ≤ clientHeight` and `scrollWidth ≤ clientWidth`. A longer line wraps; the module's height is fixed by its longest step (DEC-0155 §2, DEC-0161, issue #47). |
+| TS-WEB-0022-A21 | e2e | **Below `lg` the stage swipes and two arrows step through it** (issue #27, DEC-0161): at 390 px both arrows are visible `<button>`s with an accessible name and at least 44 × 44 px, the previous one `aria-disabled` at state 1 and the next one at state 3; activating an arrow — by pointer or by `Enter` — selects the neighbouring step, stops the pass (`data-advance="stopped"`), moves `aria-current` to that step line and scrolls the stage to its pane; a scroll of the stage that settles on a pane selects that step; the module's height does not change and the page does not scroll horizontally. Under `prefers-reduced-motion` an arrow puts the pane in place within one frame. From `lg` no arrow is shown. |
+| TS-WEB-0022-A22 | e2e | On every route that renders an explain module (`/`, `/mitmachen` and their English siblings), at 390 and 1280 px, every stage graphic is a photograph or a drawing: no graphic carries `data-placeholder` other than the marked sample rows of the calendar state (`sample-events`, DEC-0115), none is a `media-frame` without an image, none is a hatch, and none is empty; the chat graphic carries no header (DEC-0174 §1–2). |
+| TS-WEB-0022-A19 | e2e | Below `lg` (`48rem`): each module — ordinal, title, graphic stage and its three step lines — fits within **one viewport height** at the phone breakpoint, and the stage's box keeps the same height across all three states. **The advance is keyed to visibility, runs once and ends**: with the page loaded and the module still below the viewport, the stage is at state 1 and stays there however long the page sits; scrolled down until **three quarters of the module's own height** are inside the viewport — and no further, asserted at 360 × 640 as well as 360 × 800, where "the whole module" would not have fired — it holds state 1 for the full dwell, reaches state 3 no earlier than 9.1 s later and then changes no more — no fourth transition, no return to state 1, and no restart after scrolling it out of view and back. Activating a step line, or focusing the module, stops the advance from that moment and it never resumes (DEC-0105 §6 as amended, TS-WEB-0002-A13). From `lg` the three steps render side by side in one row, no stage element exists, and no element's position changes over 5 s without interaction. |
+| TS-WEB-0022-A6 | e2e | The objection block renders a headline and *n* items — since DEC-0203 *n* comparison pairs, three, each a `[data-half="today"]` and a `[data-half="with"]`, with no lead paragraph and no closing paragraph around them; no item contains a product name, a term from the generic-claims lint list, or a numeral asserting how many channels exist. A cleared proof sits beside it, or nothing does — no `data-empty-proof` element and no placeholder panel (DEC-0175 §3). |
+| TS-WEB-0022-A7 | unit | **Retired with D5 (DEC-0196).** Example-place selection: with no anchor it returns the configured reference place; with an anchor the nearest active covered place with dates; a candidate with zero dates is skipped, never rendered. |
+| TS-WEB-0022-A8 | integration | **Retired with D5 (DEC-0196).** Events upstream answering zero dates for the first candidate → the next candidate renders; upstream failing → TS-WEB-0008 D5 tier 2/3 with its freshness label. Neither case produces error markup, a retry control, or a changed focus job. |
+| TS-WEB-0022-A9 | e2e | **Retired with D5 (DEC-0196).** The live example states its radius as "in `<place>`" for a covered place; its outbound calendar link points at `{APP_HOST}/{slug}`; no website URL on this page carries a place slug as a path segment. |
+| TS-WEB-0022-A10 | e2e | Stage-0 request (no geo, no referrer, no UTM, no query) and a stage-3 request yield identical block structure, identical block count and identical `focusJob`; only the proof order differs (the example place went with DEC-0196). |
+| TS-WEB-0022-A11 | e2e | The closing CTA carries the same conversion goal ID, target and label as the primary CTA, and its reassurance contains the permanence promise. With the backing element unavailable at build time the promise is absent rather than reworded. |
+| TS-WEB-0022-A12 | static | The rendered HTML of `/mitmachen` contains no numeric price, no currency symbol, no "ab", no "480", no "Portalize" and no `local-advertising` mention; it emits exactly one JSON-LD graph, containing `WebPage` and no `FAQPage`, `Offer` or `Service` node. |
+| TS-WEB-0022-A13 | e2e | No link to `/dein-kalender` exists in `main` outside the context band, and no `aside` but the context band exists in `main` (D9 as amended by DEC-0174 §3). |
+| TS-WEB-0022-A14 | e2e | With a resolved place the primary CTA's href carries `?ort=<slug>`; with an unresolvable or free-text place it carries no `ort` parameter. |
+| TS-WEB-0022-A15 | integration | Navigating from the primary CTA fires no analytics event on `/mitmachen`; `register-as-publisher` with stage `handover` is emitted on `/mitmachen/registrieren` (TS-WEB-0012 D4). |
+| TS-WEB-0022-A17 | e2e | Exactly one hint banner exists, inside the publishing-path slot and after the third path block. It carries no `data-cta` attribute and declares no conversion goal. It contains no numeric amount, no currency symbol and no "ab"; the page-wide price assertion of A12 is unchanged by its presence. Every standard source it names is one `@schafe-vorm-fenster/offerings#community-calendar` lists, and neither the banner nor any of the three path blocks names `kirche-mv.de`, VEVG Karlsburg or a Volkshochschule — the proof slot is out of scope here, because a publisher testimonial is not a statement about price. |
+| TS-WEB-0022-A23 | e2e | At 390 and 1280 px, each of the three items of `data-block="beleg"` has no fill and a `hairlineOnLime` top border, carries an `aria-hidden` 40 × 40 initials well under its claim — or the voice's logo in its place, 40 px high (DEC-0183) — exactly one is `data-emphasis="feature"`, and from `xl` the other two share one row (D6, DEC-0172 §1). `e2e/module-designs.spec.ts`. |
+| TS-WEB-0022-A16 | e2e | Rhythm: no two adjacent sections are photo sections, exactly one is dark and it is the closing CTA, the grounds from the third path on read `paper` · `ink` · `lime-100` · `surface`, and every asynchronous box has a declared ratio or height before its content arrives (no layout shift on the live stage state) (D10 as amended by DEC-0196). |
+
+## Coverage
+
+| Requirement | Discharged by |
+| --- | --- |
+| FUN-WEB-0012 (`/mitmachen`, focus job publish our dates, `register-as-publisher`, one CTA per publishing path) | D1–D10 · A1–A16, A18 (superseded), A19–A23 |
+| BUS-WEB-0017 (a publishing path whose source the platform already supports publishes free) | D11 · A17 — the rule is the business's; D11 is where the website states it |
+| FUN-WEB-0204 (state the price boundary of BUS-WEB-0017 at the publishing paths) | D11 · A17 |
+
+Split against TS-WEB-0004: TS-WEB-0004 discharges the *route* — the path, its EN
+sibling, its place in the App Router tree, its rendering mode (TS-WEB-0004 D1,
+D1a, D3a, D6 · TS-WEB-0004-A1). This spec discharges what the route *is*:
+manifest values, blocks and order, the mechanism rule, the live example,
+the proof binding, the conversion carriage.
+
+Adjacent, consumed and not discharged here: FUN-WEB-0001, FUN-WEB-0004–0007, FUN-WEB-0009, FUN-WEB-0133–0136, FUN-WEB-0138 (TS-WEB-0006) ·
+FUN-WEB-0024, FUN-WEB-0030–0035, FUN-WEB-0149–0151 (TS-WEB-0005) · FUN-WEB-0040, FUN-WEB-0045, FUN-WEB-0049 (TS-WEB-0008) · FUN-WEB-0050–0052
+(TS-WEB-0010) · FUN-WEB-0071, FUN-WEB-0076, FUN-WEB-0078 (TS-WEB-0011) · CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064 (TS-WEB-0012).
+
+## Open points
+
+| Open point | Addressee |
+| --- | --- |
+| **TS-WEB-0008 D1 has no row for `/mitmachen`** — its module-to-page table assigns position 1 to `/` and `/dein-ort` only, so D5 proposes an assignment this page needs but does not own. And "nearest active place" is not yet buildable: the Q-0015 residue leaves `/api/region/{county}/examples` without an upstream ranking operation. | TS-WEB-0008 · app team |
+| **The permanence promise has no element in `@schafe-vorm-fenster/proof`.** The 2022 public commitment is held as a `media-echo` entry, referenced from the `community-calendar` offering; `proof/` carries nothing for it. Either mint a commitment-type proof element, or let TS-WEB-0005 selection accept a media-echo element in a CTA reassurance slot. Until then D7's promise is unpublishable and A11 fails open. | hub evidence owner |
+| ~~**"Six channels" is not enumerated.**~~ **Decided by DEC-0064 §2** — the channels become a list in the hub's messaging, and the **artefact is still owed** (Q-0050, DEM-0036, `ANSWERED`). Until it lands D3 forbids the numeral and the block states no number, which is a working rule rather than a blocked one. | hub messaging owner |
+| **Website-source import is alpha** (hub open point on `community-calendar`). D4 requires the status badge — confirm the state before the page ships and say what the badge must claim. | product |
+| ~~Does the explain module appear on `/`, and in which slot?~~ **Answered 2026-09-25 by the owner, `DEC-0109`**: on `/` the component renders **one** path — the WhatsApp one — in whichever of the three block positions the entry trait gives it, and the `embed` and `provenance` blocks stay scenes. None of the three options `Q-0079` listed was taken; the answer is a fourth. The two things it left open are answered too: `Q-0080` by **`DEC-0110`** — the scene wraps the module on `/`, and on this page it does not, because the hero is the introduction (`D4` above) — and `Q-0081` by the **`DEC-0105 §6` amendment** of the same day, which fixes the trigger, the one pass and the stop. `Q-0079`, `Q-0080` and `Q-0081` are all closed. | — |
+| ~~**The one-viewport rule and the advance's trigger do not meet at every phone height.**~~ **Answered 2026-09-25 by the owner, amended into `DEC-0105 §6`** — the advance starts when **three quarters of the module** are in the viewport, measured against the module's own height (`threshold: 0.75` on the module element). The premise held and was measured: at 360 px the module is 630 px with a one-line title and 687 px with a two-line one, so *"the whole module"* could not fit 360 × 640 and three quarters fit at both heights. None of `Q-0083`'s three options was taken — the fraction was lowered rather than a short-viewport fallback granted, so the `[PROPOSED]` "graphic stage plus the first step line" clause is **withdrawn** and the one-viewport rule of `D4` is untouched. `Q-0083` is closed. What the fraction does not fix is which three quarters: read upward the missing quarter crops the stage, and that is **Q-0084**. | — |
+| **Read upward, three quarters need not be the top three quarters.** A reader who re-enters the module from above — the case `DEC-0105 §6` edge 1 keeps alive, because "once" is spent only by a pass that started — reaches `0.75` with the graphic stage 73–86 % visible and its top cropped. The trigger still fires and the reader still sees most of state 1, so nothing is blocked; whether the stage in full should be added to the fraction is the owner's, as **Q-0084**. | jan-henrik |
+| **No component exists for `objection-list`, `publishing-path` or the live-module frame** (Q-0044): three of five slots need shells the design system does not specify, and no component declares which content type it renders. | design |
+| ~~**The stage-0 reference place is unnamed.** D5 needs one covered place with dates and a cleared, place-bound proof element, held as configuration rather than in copy.~~ **Obsolete with D5 (DEC-0196).** | — |
+| **Registration prefill stops at our own route.** DEC-0029 leaves the app-side contract open, so `?ort=` travels no further than `/mitmachen/registrieren`; if the app later accepts a place, D7 and A14 need a second row. | app team |

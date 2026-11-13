@@ -1,0 +1,12 @@
+.band {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--control-gap);
+}
+
+/* The loading pill: a badge's exact box, its content invisible. */
+.pending {
+  display: inline-flex;
+  visibility: hidden;
+}

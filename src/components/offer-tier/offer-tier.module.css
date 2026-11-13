@@ -1,0 +1,89 @@
+/*
+ * Denser at phone width, where three tiers stand one under the other and the
+ * section has to stay inside G-4's screen-and-a-half budget. From `sm` the
+ * padding and the internal rhythm go back to the design system's own step.
+ */
+.tier {
+  background: var(--color-neutral-surface);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  height: 100%;
+  padding: var(--space-4);
+}
+
+@media (min-width: 40rem) {
+  .tier {
+    gap: var(--space-4);
+    padding: var(--space-6);
+  }
+}
+
+.name {
+  font-size: var(--type-card-size);
+  font-weight: 700;
+  letter-spacing: var(--type-card-tracking);
+  margin: 0;
+}
+
+.audience {
+  color: var(--color-neutral-text2);
+  font-size: var(--type-meta-size);
+  margin: 0;
+}
+
+.price {
+  margin: 0;
+}
+
+.checks {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.check,
+.checkEmphasis {
+  align-items: flex-start;
+  color: var(--color-neutral-text2);
+  display: flex;
+  font-size: var(--type-body-size);
+  gap: var(--space-2);
+  line-height: var(--leading-normal);
+}
+
+.checkEmphasis {
+  color: var(--color-neutral-ink);
+  font-weight: 700;
+}
+
+.check :global(svg),
+.checkEmphasis :global(svg) {
+  color: var(--color-lime-800);
+  flex: none;
+}
+
+/*
+ * Left-aligned, and stacked at phone width — brief, page 6, item 3: tier 3's
+ * call to action rendered as centred text with no arrow, breaking the
+ * left-aligned rhythm every other control on the site keeps. `align-items`
+ * keeps a control at its own width instead of stretching it to the column,
+ * which is what pushed a long label into a centred two-line block.
+ */
+.ctas {
+  align-items: flex-start;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--control-gap);
+  justify-content: flex-start;
+}
+
+.footnote {
+  color: var(--color-neutral-muted);
+  font-size: var(--type-meta-size);
+  margin: 0;
+}

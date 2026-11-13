@@ -1,0 +1,247 @@
+---
+artefact: tactical-spec
+id: TS-WEB-0013
+kind: rule
+status: DRAFT
+version: 0.1.0
+implements: [FUN-WEB-0125, CON-WEB-0033, NFR-WEB-0024, NFR-WEB-0063, FUN-WEB-0126]
+sources: [SRC-0001, SRC-0003, SRC-0006, SRC-0010, SRC-0011]
+decisions: [DEC-0004, DEC-0009, DEC-0013, DEC-0015, DEC-0024, DEC-0025, DEC-0030, DEC-0039, DEC-0108]
+ai_provenance:
+  prompt_id: UNKNOWN
+  prompt_version: UNKNOWN
+  model: "Claude Opus 5 (1M context)"
+  generated_at: "2026-09-10T14:39:53+02:00"
+---
+
+# TS-WEB-0013 — Data Protection as an Implementation Property
+
+## Purpose
+
+The site *says* it sets no tracking cookies. This spec is what makes the
+sentence true and keeps it true: the closed inventory of hosts a visitor's
+browser may contact, the rule that governs adding one, and the handling
+rule for IP geolocation. Analytics behaviour itself (cookieless mode,
+event set, eTracker configuration — NFR-WEB-0061, NFR-WEB-0062, CON-WEB-0028, CON-WEB-0029, FUN-WEB-0124, NFR-WEB-0022, CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064) belongs to the
+analytics spec; this spec only counts eTracker as a request.
+
+## Determinations
+
+### D1 — The claim, and where it is made [FIXED: FUN-WEB-0125, CON-WEB-0033, SRC-0001#boundaries, SRC-0003]
+
+The absence of tracking is a sales argument, not only a legal posture. It
+appears as a data-protection block on `/dein-kalender` (the page that asks
+for 480 €) and as the corresponding section on
+`/rechtliches#datenschutz` (DEC-0039). Both state the same fact.
+
+What the claim asserts — and therefore what the build must not break:
+
+| Asserted | Meaning in the implementation |
+| --- | --- |
+| no tracking cookies | no cookie set by the site or by any host in D2 that carries a visitor identifier |
+| no persistent identifier | no `localStorage` / `sessionStorage` / IndexedDB / ETag-style identifier used for recognition |
+| no consent banner | no consent layer exists anywhere on the site (`NFR-WEB-0062`). **The stronger half of this row was withdrawn on 2026-09-25**: it read "no processing on the page requires consent, so no consent layer exists at all", which is a claim about processing, and on `/start` — the one route that embeds a third party's form (`FUN-WEB-0205`) — it cannot be proved. `CON-WEB-0016` forbids a claim the implementation does not support, so the claim is now about the layer, on the pages the claim is actually made on (`/dein-kalender`, `/rechtliches#datenschutz`). `/start` makes no claim: it carries the notice of `FUN-WEB-0206` instead, and the accepted residual risk is DEC-0108 §4's |
+| no third-party trackers | the D2 inventory is the whole set; one external company is in it (eTracker), and it is named |
+
+Under CON-WEB-0016 the site makes no claim it cannot prove. The claim may
+therefore not be worded more strongly than D2 supports — in particular
+not "no third-party services at all", because eTracker and the platform
+(Vercel) are third parties and are declared as such in the privacy
+policy.
+
+### D2 — Client-request inventory: the closed set [FIXED: DEC-0015 allowlist, DEC-0004, DEC-0009, DEC-0030; classification PROPOSED]
+
+Every host a visitor's browser may contact while a page of this site is
+open. Nothing outside this table is permitted; a request to an unlisted
+host is a defect, not a configuration detail.
+
+| Host | Request kind | Introduced by | Party | Note |
+| --- | --- | --- | --- | --- |
+| `schafe-vorm-fenster.de` (and `.pl`, `.at`, `sheepoutside.com`) | document, CSS, JS, fonts, images, `/api/*` BFF calls | own origin | first party | everything self-hosted per D4 |
+| `/_vercel/speed-insights/*` | RUM script + beacon | TS-WEB-0003 D7 | Vercel (host, processor) | same-origin path, no separate host, cookieless |
+| `code.etracker.com` | deferred analytics script and its beacon | DEC-0004 | eTracker GmbH, Hamburg — **the only external company in this table** until 2026-09-25, and still the only one whose script runs on a page; the form host below is the second | `data-block-cookies="true"`, config extracted from SRC-0010 |
+| `www.etracker.de` | eTracker's collector: the loader `e.js` pulls its page-view and event scripts from here (measured 2026-11-13, TS-WEB-0014 D1) | DEC-0004 | eTracker GmbH, Hamburg — the same company as the row above, a second host of it, not a second processor | `data-block-cookies="true"`, cookieless |
+| `portalize.schafe-vorm-fenster.de` | Portalize loader `…/api/{organizerId}/load.js` and the widget's own calls | DEC-0030; host corrected by DEC-0177 (the row named `app.schafe-vorm-fenster.de`, which serves nothing and has no DNS record; the loader has always come from this host, `src/lib/security/csp.ts`) | own ecosystem | cookie-freedom is a demand, not yet verified (Q-0026) |
+| envoy widget host — **UNKNOWN** | web-component script, form submission | DEC-0009 | own ecosystem | cannot be allowlisted before the host is named (Q-0022) |
+| `docs.google.com` | the registration form, framed on `/start` and — since DEC-0176, for the launch — on `/mitmachen/registrieren` (`TS-WEB-0023` D10), and nowhere else — the navigation of the one `iframe` each of them renders | TS-WEB-0016 D15 (FUN-WEB-0205, DEC-0013 amendment 2026-09-25, DEC-0108); row written 2026-09-25 by DEC-0121 | Google LLC — the second external company in this table, and the one no script of ours loads | `frame-src` only (TS-WEB-0014 D1, the fifth row); one route, in no page's flow, `noindex`; what the framed document then loads from other Google hosts is that document's, outside the CSP's reach and outside A1's trace of *our* requests (DEC-0121 §6); its cookie behaviour is the residual risk DEC-0108 §4 accepts, unverified (DEM-0066). The row lapses with the embed (D15 "It lapses") |
+
+**Navigations, not subresource requests** — these load no code into the
+page and are not part of the allowlist: handover links to the app — today
+`APP_URL`, the Schlatkow village calendar on our own apex, because the app has
+no domain of its own (DEC-0029, DEC-0177) — and outbound links to external
+media. Under DEC-0013 external media are represented by our own preview
+(screenshot, quote from `media-echo/`) plus a link; there is no embedded
+player and no click-to-load layer, so no third-party host is contacted
+until the visitor leaves the site. What leaks on leaving is governed by
+the referrer-policy header (CON-WEB-0032, security spec).
+
+**Explicitly absent, and to stay absent**: `fonts.googleapis.com` /
+`fonts.gstatic.com`, any script or CSS CDN, map tiles, social buttons and
+pixels, video/audio players, captcha services (CON-WEB-0039, NFR-WEB-0065 excludes them),
+consent-management platforms, session-replay and heatmap tools.
+
+The CSP allowlist (CON-WEB-0030) and this table are the same set seen from
+two sides. If they diverge, one of them is wrong.
+
+### D3 — Everything else leaves from the server [FIXED: DEC-0025, CON-WEB-0042, CON-WEB-0043]
+
+Every ecosystem API is called server-side through the site's own BFF
+routes (TS-WEB-0004 D5), so no API host appears in a client request and no
+visitor IP reaches an upstream service:
+
+| Reached from the server only | Occasion |
+| --- | --- |
+| `events.api.…`, `geo.api-v2.…`, `calendar.api.…`, `assets.api.…` (SRC-0011) | request-time BFF calls |
+| `classify.api.…`, Google Docs legal import (DEC-0012), `media-echo` package data | build time only |
+| envoy-api | reached by the widget, not by the site (D2) |
+
+Two binding consequences:
+
+1. **The BFF does not forward the client IP.** `x-forwarded-for`,
+   `x-real-ip` and equivalents are not passed upstream; a BFF route sends
+   only the parameters its use case needs.
+2. **Place search never uses `findbyaddress`.** DEC-0024 forbids it for
+   cost and latency; the privacy reason is the same endpoint's external
+   Google Maps lookup, which would carry the visitor's search term to a
+   third party through our server. Name search uses the Typesense-backed
+   endpoint (Q-0025).
+
+Images sourced from `assets.api.…` are served through the site's own
+image pipeline, so the asset host does not appear in the browser either.
+[PROPOSED]
+
+### D4 — Self-hosting is the default [FIXED: NFR-WEB-0063, FUN-WEB-0126, FUN-WEB-0109, FUN-WEB-0110, FUN-WEB-0111, TS-WEB-0003 D3]
+
+Every static asset ships from our own origin. Fonts are the settled case
+and the precedent: the brand typeface is self-hosted as a variable `woff2`
+(TS-WEB-0003 D3) — a performance decision and a privacy decision in the same
+move, because a font CDN would hand the visitor's IP to a third party on
+every page view. The same rule covers icons, images, stylesheets and
+JavaScript libraries: vendored into the build, never linked from a CDN.
+
+### D5 — The rule for additions [FIXED: NFR-WEB-0063, FUN-WEB-0126, CON-WEB-0031, DEC-0013]
+
+A new outbound request is never a code change alone. Candidates are taken
+in this order, and a lower rung may only be used once the ones above are
+shown not to work:
+
+| Rung | Option | Cost |
+| --- | --- | --- |
+| 1 | self-host the asset (D4) | build size |
+| 2 | proxy it server-side through a BFF route (D3) | a route, a cache TTL |
+| 3 | allowlist the third-party host | PR review, CSP change, privacy-policy section |
+| — | embed it as a third party | **not available** (DEC-0013). One named exception exists and it is not a rung: the registration form on `/start` (DEC-0013 amendment 2026-09-25, TS-WEB-0016 D15). It is scoped to one route and it lapses when the form is rebuilt. It does not clear the consent disqualifier below — it was **isolated** instead, at DP-04, by DEC-0108: `CONF-0025` is RESOLVED with outcome ISOLATE, a notice stands above the embed (`FUN-WEB-0206`, TS-WEB-0016 D17), no consent UI is added, and the residual legal risk is accepted with `DEM-0066` still open as the thing that would reopen it |
+
+Rung 3 requires all of: a reviewed PR against the CSP allowlist, never a
+wildcard (CON-WEB-0031); a named section in the privacy policy on
+`/rechtliches#datenschutz` before the host goes live; a row added to D2;
+and evidence that the host sets no cookie and no persistent identifier.
+
+**The disqualifier is consent.** If a candidate would make a consent
+banner necessary, it is rejected at rung 3 regardless of its merits —
+banner-freedom is a requirement (NFR-WEB-0061, NFR-WEB-0062) and a published sales
+argument (D1), not a preference to be traded against a feature.
+
+**This sentence was re-read on 2026-09-25 and needs no amendment.** It governs
+**candidates at rung 3**, and the registration embed is not a rung — the row
+above says so. A reading in which the embed had to clear this sentence would
+make the exception self-contradictory, which is not what DEC-0013's amendment
+decided and not what DEC-0108 §3 resolved. What the embed did have to clear is
+the two requirements, and it clears `NFR-WEB-0062` unchanged.
+
+### D6 — IP geolocation without storage [FIXED: FUN-WEB-0160, FUN-WEB-0161, FUN-WEB-0162, CON-WEB-0073, FUN-WEB-0054; mechanism PROPOSED]
+
+Location detection is invisible (FUN-WEB-0160, FUN-WEB-0161, FUN-WEB-0162, CON-WEB-0073) and must stay unlinkable to a
+person:
+
+| Rule | Detail |
+| --- | --- |
+| where the IP is read | server-side only, from the platform request headers, inside the request that renders the page |
+| what it becomes | a county-level geo reference (`county` in the TS-WEB-0005 D1 hierarchy); finer resolution is not pursued — place level is explicitly out (SRC-0006, "spooky") |
+| lifetime | the request. The IP is never written to a database, a log line, a cookie, or the HTML payload |
+| what reaches the client | only the derived label, never the address it came from |
+| cache keys | never contain an IP. Segment keys are `{community, trait, job, isoWeek}` (TS-WEB-0005 D8) — derived and coarse, so no cache entry is traceable to a visitor |
+| upstream | the resolution call carries the IP no further than needed to resolve it (D3 rule 1 otherwise applies) |
+| browser geolocation | only after an explicit interaction; the coordinate is used for that request and not persisted |
+
+Mechanism [PROPOSED]: the platform's own geo headers where their
+resolution suffices, geo-api resolution otherwise; either way the rules
+above bind, and the choice is an implementation detail.
+
+The legal confirmation for this handling is outstanding — see Open points.
+
+## Free for the generator
+
+- [FREE] How the network-trace check (A1) is realised — Playwright route
+  interception, a CSP report endpoint, or both — as long as it fails on
+  any host outside D2.
+- [FREE] Wording, layout and length of the data-protection block on
+  `/dein-kalender`; only the claim's scope (D1) is fixed. Copy is written
+  in the content phase.
+- [FREE] Where the derived geo reference is held during a request
+  (context, prop drilling, request-scoped store), within D6.
+
+## Acceptance criteria
+
+| ID | Level | Check |
+| --- | --- | --- |
+| TS-WEB-0013-A1 | e2e | Network trace of every route in TS-WEB-0004 D1, on every domain: each request host appears in D2. Any other host fails the run. |
+| TS-WEB-0013-A2 | e2e | Full session (home → place search → `/dein-kalender` incl. embed demo → form open → legal page): no cookie carrying an identifier, and `localStorage` / `sessionStorage` / IndexedDB hold no identifier. |
+| TS-WEB-0013-A3 | static | Built output and source contain no external asset URL: no `fonts.googleapis.com`, `fonts.gstatic.com`, or any CDN host; fonts, icons and libraries resolve to own-origin paths. |
+| TS-WEB-0013-A4 | static | The deployed CSP allowlist equals the D2 host set exactly — no wildcard, no extra host, no missing host. |
+| TS-WEB-0013-A5 | integration | BFF routes call upstream without `x-forwarded-for` / `x-real-ip` / any client-IP header; no BFF route calls `findbyaddress`. |
+| TS-WEB-0013-A6 | unit | The geo resolver returns at most county-level, writes nothing, and no returned or cached key contains an IP address. |
+| TS-WEB-0013-A7 | manual | Every host in D2 outside our own origin has a named section in the privacy policy on `/rechtliches#datenschutz`, and the `/dein-kalender` block claims nothing D2 does not support. |
+| TS-WEB-0013-A8 | manual | Review gate: a PR adding an outbound request carries the D5 rung-3 evidence (allowlist diff, privacy-policy section, D2 row, no-cookie evidence) or is rejected. |
+
+## Coverage
+
+| Requirement | Discharged by |
+| --- | --- |
+| FUN-WEB-0125 (carry a data-protection block naming the absence of tracking …) | D1, D2, D4 · A1, A2, A3, A7 |
+| CON-WEB-0033 (never make a data-protection claim its implementation does not …) | D1, D2, D4 · A1, A2, A3, A7 |
+| NFR-WEB-0024 (Persisted IP addresses = 0 addresses) | D6, D3 · A5, A6 |
+| NFR-WEB-0063 (External asset hosts = 0 hosts) | D2, D3, D4, D5 · A1, A3, A4, A5, A8 |
+| FUN-WEB-0126 (require the rung-3 evidence of TS-WEB-0013 D5) | D2, D3, D4, D5 · A1, A3, A4, A5, A8 |
+
+## Open points
+
+- **Q-0008 — carried, not solved.** The DPIA / legal confirmation that
+  IP geolocation without storage is lawful in this form is still
+  outstanding (addressee: legal). Three questions need naming answers:
+  does resolving and discarding an IP within one request constitute
+  processing that needs a DPIA, or does an Art. 30 processing record
+  suffice; is the derived county-level reference personal data; and does
+  the coarse segment cache key (`{community, trait, job, isoWeek}`) stay
+  outside that assessment. Until answered, D6 is the intended handling,
+  not a cleared one.
+- **Q-0022 — the envoy widget host is unknown.** D2 has a row without a
+  hostname, so the CSP allowlist cannot be closed and A4 cannot pass.
+  The widget contract must also state that the widget sets no cookie and
+  no persistent identifier.
+- **Q-0026 — the Portalize embed is unverified.** Its cookie-freedom is a
+  demand, not a result. The embed demo sits on `/dein-kalender`, the same
+  page that carries the trust claim (D1): an embed that sets a cookie
+  falsifies the claim on the page that makes it. Verification is a launch
+  gate for that page.
+- **Q-0020 — the newsletter system is undecided.** If the chosen sender
+  needs a client-side script, it enters D5 at rung 3 and may not ship
+  before that review; a sender that would require consent is disqualified
+  by D5.
+- **eTracker is interim (CON-WEB-0028, CON-WEB-0029, FUN-WEB-0124).** It is the only external company in
+  D2; replacing it changes the table, the CSP allowlist and the privacy
+  policy in one move. Any successor must clear D5 including the consent
+  disqualifier.
+- **The registration form's host has its D2 row and its `frame-src` entry
+  since 2026-09-25 (DEC-0121)** — written together, as D2's own rule wants,
+  because this table and `TS-WEB-0014 D1`'s allowlist are one set seen from
+  two sides. Until then `A1` (every route of the `TS-WEB-0004 D1` inventory,
+  every request host in D2) and `A4` (the deployed CSP equals the D2 host set
+  exactly) failed on `/start` rather than merely lacking it, which DEC-0108
+  *Still owed* had recorded here. What stays open is not the row but what the
+  framed document does: whether Google sets a persistent identifier inside
+  the frame is unverified (DEC-0108 §4, `DEM-0066`), and `A7`'s named section
+  for the host on `/rechtliches#datenschutz` is the legal import's
+  (`TS-WEB-0029`), not this repository's to write.
+- D2's classification, D3's image-pipeline rule and D6's mechanism are
+  [PROPOSED].

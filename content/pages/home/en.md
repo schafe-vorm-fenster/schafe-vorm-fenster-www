@@ -1,0 +1,418 @@
+---
+id: home-de
+page_id: TS-WEB-0019
+route: "/"
+seo:
+  "/":
+    title: "Schafe vorm Fenster — what's on where you live"
+    description: "What is coming up where you live and in the villages next door: enter your place name and open the calendar for your own area."
+    provenance: generated
+content_type: section
+status: approved
+reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
+reviewed_at: "2026-11-13"
+locale: en
+sources:
+  - "@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"
+  - "@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"
+  - "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor"
+  - "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel"
+  - "@schafe-vorm-fenster/proof@0.3.5"
+  - "@schafe-vorm-fenster/media-echo@0.3.3"
+  - "ia"
+derived_from:
+  - "@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"
+  - "@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"
+  - "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor"
+  - "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel"
+  - "@schafe-vorm-fenster/proof@0.3.5"
+  - "@schafe-vorm-fenster/media-echo@0.3.3"
+  - "ia"
+generated_by: "playbook-content-production@1.0.0"
+generated_at: "2026-09-11"
+tone_profile: "du-everywhere"
+provenance: "sourced — every slot; slot 8 (proof stream) now carries real proof and media-echo records instead of demo cards, three of them with clearance pending (Q-0014, Q-0045); EN translation of content/pages/home/de.md, same source ids per slot"
+compliance_check: "state/content-map.md#compliance-checks — TS-WEB-0019"
+schema_note: >-
+  src/domain/content-frontmatter.schema.ts predates TS-WEB-0007 (8 content types,
+  no derived_from/RelevanceFacets). The fields above follow TS-WEB-0007 D6/D7
+  and are carried through even though the current schema neither requires
+  nor validates them — see state/open.md #37.
+images:
+  - id: home-hero
+    slot: home-1-search-hero
+    ratio: hero
+    provenance: real
+    source: >-
+      Wikimedia Commons, File:Melkerschule Schlatkow.jpg —
+      https://commons.wikimedia.org/wiki/File:Melkerschule_Schlatkow.jpg — Eigenaufnahme (Jan-Henrik
+      Hempel, Commons-Konto „J2hcom", own work), September 2016, 5073×2817. Motivregel `/`: Dorf mit
+      Aktivität (SRC-0014 §Motiv pro Seite). Nachweis hinter dem ©-Zeichen am Bild.
+    alt: >-
+      The half-timbered house of the Melkerschule in Schlatkow, with picnic benches, two parasols
+      and guests on the grass in front of it.
+    licence: CC BY-SA 4.0
+    credit: "Jan-Henrik Hempel, CC BY-SA 4.0, via Wikimedia Commons"
+    credit_title: "Melkerschule Schlatkow"
+    credit_url: "https://commons.wikimedia.org/wiki/File:Melkerschule_Schlatkow.jpg"
+    place: schlatkow
+    focal:
+      x: 50
+      "y": 55
+    status: real
+    file: /images/real/home-hero.webp
+    width: 800
+    height: 900
+    wide_file: /images/real/home-hero-wide.webp
+    wide_width: 1400
+    wide_height: 600
+  - id: home-scene-embed
+    slot: home-5-scene-embed
+    ratio: feature
+    provenance: real
+    source: >-
+      Wikimedia Commons, File:Guetzkow Ostvorpommern Rathaus.jpg —
+      https://commons.wikimedia.org/wiki/File:Guetzkow_Ostvorpommern_Rathaus.jpg — Foto: Erell, Mai
+      2007, 3008×2000. Fremdaufnahme: CC BY-SA verlangt Namensnennung, sie steht hinter dem ©-Zeichen am Bild.
+    alt: >-
+      The town hall of Gützkow in Western Pomerania, a white rendered building with a flight of
+      steps onto the street.
+    licence: CC BY-SA 2.5
+    credit: "Erell, CC BY-SA 2.5, via Wikimedia Commons, Bildausschnitt angepasst"
+    credit_title: "Rathaus Gützkow"
+    credit_url: "https://commons.wikimedia.org/wiki/File:Guetzkow_Ostvorpommern_Rathaus.jpg"
+    focal:
+      x: 42
+      "y": 30
+    status: real
+    file: /images/real/home-scene-embed.webp
+    width: 1400
+    height: 1000
+  - id: home-scene-provenance
+    slot: home-6-scene-provenance
+    ratio: feature
+    provenance: real
+    source: >-
+      @schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel/assets/2021-workshop-ranzin.jpeg —
+      Eigenaufnahme (in-house), unbeschränkte Nutzung, kein Credit nötig. Binärdatei liegt im
+      go-to-market-os-Repository, das npm-Paket liefert nur den .asset.md-Deskriptor.
+    alt: >-
+      Jan-Henrik Hempel standing in the open door of a brick building, the Schafe vorm Fenster
+      roll-up banner beside him.
+    licence: Eigenaufnahme, unbeschränkte Nutzung
+    credit: "Jan-Henrik Hempel"
+    focal:
+      x: 45
+      "y": 40
+    status: real
+    file: /images/real/home-scene-provenance.webp
+    width: 1400
+    height: 1000
+---
+
+# Home page (`/`)
+
+Focus area "know-what-is-on" with state logic (TS-WEB-0019 D2); order and
+states are layout logic, not part of this file. Placeholders in
+`{curly braces}` are runtime values, not authored text.
+
+## Slot 1 — Search field, no place known (Block 1 / State S1)
+
+<!-- id: home-1-search-hero; content_type: hero; provenance: sourced; derived_from: [ia]; status: approved -->
+
+**Headline:** What's up in your village?
+
+**Search input (placeholder):** Type the place name
+
+**Button:** Search
+
+<!-- source_note: the placeholder "Type the place name" follows the owner's German wording (review 2026-10-12, issue #20, DEC-0159): the helper text under the field goes and the placeholder carries the instruction. The field's name for screen readers stays "Your place" (src/lib/i18n/dictionary.ts, search.label). The postcode wording and the interim rationale went with DEC-0079 §1 (T-07, DEC-0119). -->
+
+## Slot 2 — Place known, dates exist (Block 1 / State S2)
+
+<!-- id: home-2-place-dates; content_type: hero; provenance: sourced; derived_from: [ia]; status: approved -->
+
+**Headline:** Here's what's on in {place}
+
+**CTA label (primary):** Open the {place} calendar
+
+**Hand-off under the dates (question):** Your event missing?
+
+**Hand-off under the dates (button):** Add it yourself
+
+The hand-off is the review's own wording of 2026-09-22 and this block's
+hand-off to the next one (CG-008): the gap in the list is the way into
+publishing, not a flaw the page has to hide. Since the review of 2026-10-12
+(issue #25, DEC-0159) it stands as a row of its own: the question and one
+secondary button to `/mitmachen`. The page's one primary CTA stays block 1's
+(TS-WEB-0006 D3).
+
+Place name and dates are live data (TS-WEB-0008 position 1); the headline
+is a text template with a named placeholder, not a sentence generated
+per place (segment independence, TS-WEB-0007 D7).
+
+## Slot 3 — Place known, no dates (Block 1 / State S3)
+
+<!-- id: home-3-place-empty; content_type: hero; provenance: sourced; derived_from: [ia]; status: approved -->
+
+**Module heading (own radius, not the place name):** This week nearby
+
+**Invitation text:** Nothing's in the calendar for {place} yet. Add the first date — your club, your fire brigade, your municipality.
+
+**CTA label:** Publish the first date
+
+Its own wording, distinct from `/dein-ort` state B and
+`/dein-ort/starten` (TS-WEB-0019 slot table row 3): this text addresses the
+gap in the visitor's own place, not a gap in the system.
+
+## Scene 1 — WhatsApp (mechanism: whatsapp)
+
+<!-- id: home-4-scene-whatsapp; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"]; status: approved -->
+
+**Aha statement:** A photo of the flyer by WhatsApp, and the date is in the calendar.
+
+**Intro:** Nobody types anything in on our side. The entries come from the clubs and the organisers who put something on around here as volunteers.
+
+**Explain-module title:** Send a flyer by WhatsApp
+
+**Hint above the button:** You can also keep your dates in a calendar of your own, a Google Calendar for example, and we import them. Or you already have a website that lists everything? Then we fetch the dates from there.
+
+**CTA label (secondary):** More on publishing dates
+
+The hint and the button label are the owner's wording (DEC-0192, 2026-11-12,
+issue #141, second version): the hint describes the two other ways, path 02
+and path 03 on `/mitmachen` (your own calendar, your website as the source),
+and the label leads to `takePart`. The scene still carries exactly one CTA
+(D3a, DEC-0110 §1). Since DEC-0206 (issue #163) two
+levels stand before the module, heading and intro: the former kicker repeated
+the heading's word stem and statement and is gone; the former transition
+above the heading is the intro below it, without the lead-in "Usually like
+this:" and without the heading's word stem.
+
+Source: `relievers[0]` of the "actors--community-calendar" value
+proposition — "send a photo of the printed flyer by WhatsApp and the
+date is created from it". The aha line is the same sentence as before
+without its question mark (CG-006, TS-WEB-0019-A6). This scene's body text
+is **gone**: the explain module beneath it says in three lines what the
+body said in two sentences, and a line that repeats the previous one is
+cut, not softened (CG-007, CG-016) — the review names that very
+replacement ("an animation that plays it would be better than a text like
+that"). Title and CTA label are `/mitmachen`'s
+own (`content/pages/mitmachen/en.md`, slot 3 and slot 1): the path is the
+same one, and this scene's target is the page that owns the job.
+
+### Slot 4a — Step lines and stage words of the WhatsApp scene (placeholder)
+
+<!-- id: home-4a-scene-whatsapp-steps-demo; content_type: value-story; provenance: generated; derived_from: []; status: approved; demo: true -->
+
+**Steps:**
+
+1. Photograph the flyer — The one you printed anyway.
+2. Send it to us on WhatsApp — To {whatsapp}. In the chat you check and approve the date.
+3. The date goes online automatically — In your place and around it.
+
+**Chat reply (state 2):** Thanks! Please check the date and approve it here.
+
+**Chat time (state 2):** 14:06
+
+**Sample rows (state 3):**
+
+- Fire brigade fair | Sat · 15:00 · fire station | social | Community life
+- Lantern parade | Fri · 17:30 · church | culture | Culture
+- Village flea market | Sun · 11:00 · village square | social | Community life
+
+Steps 2 and 3 and the chat reply are the owner's wording (DEC-0192, 2026-11-12, issue #141): step 2 carries the hub's WhatsApp number as the token `{whatsapp}`, substituted at render time from `contactChannel("whatsapp")` and never typed as a number; step 3 says "online automatically". The slot stays `demo: true` while step 1 and the sample rows are placeholders. No deadline, no turnaround (CG-031, CG-033).
+
+The same explain module as path 01 on `/mitmachen`, so the same
+placeholder set: the three step lines are the 2026-09-23 draft
+"3-Schritte-erklären" (11.20.03) and stay `provenance: generated`,
+`demo: true`, marked `data-demo="true"` in the markup until they are
+cleared (DEC-0068, DEC-0129, `state/open.md`). The sample rows are only the
+live panel's fallback in state 3, for when the upstream answers fewer than
+three rows; normally the panel shows the reference place's real dates.
+
+## Scene 2 — Embedding (mechanism: embed)
+
+<!-- id: home-5-scene-embed; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"]; status: approved -->
+
+**Aha statement:** A calendar for your municipality.
+
+**Text:** You embed it on your website with two lines and have nothing left to maintain afterwards.
+
+**Kicker:** No system of your own
+
+**Tick 1:** Your website shows the dates from every village in the municipality and from the surrounding area.
+
+**Tick 2:** Clubs and organisers enter their own dates.
+
+**Tick 3:** You decide which dates appear, for example only culture and tourism without the waste collection.
+
+**CTA label (secondary):** Order the calendar
+
+Source: the owner's German wording from issue #145 (2026-11-12), value proposition
+"municipalities--portalize-calendar", `gains`/`relievers` fields. **English draft**,
+a faithful translation of the German, not yet reviewed by the owner. The German
+address (headline "deine Gemeinde", text "ihr/eure") is an open point (issue #145,
+"Offen"; DEC-0193); the English draft follows it with "your" and "you". The CTA
+label is the target page's own primary label (`content/pages/dein-kalender/en.md`,
+slot 1).
+
+### Slot 5a — The calendar graphic of the embed scene (placeholder)
+
+<!-- id: home-5a-scene-embed-calendar-demo; content_type: value-story; provenance: generated; derived_from: []; status: approved; demo: true -->
+
+**Label address bar:** municipality-example.com/events
+
+**Label graphic title:** Events in the municipality
+
+**Label filter bar (screen reader):** Filter by category
+
+**Label graphic (screen reader):** Example: calendar on a municipality's website
+
+**Label community life:** Community life
+
+**Label education and health:** Education & health
+
+**Label everyday supply:** Supplies
+
+**Label culture and tourism:** Culture & tourism
+
+**Event community life 1:** 04 | Wed | Municipal council meeting | Community hall · 19:00
+
+**Event community life 2:** 11 | Wed | Fire brigade lantern parade | Fire station · 17:30
+
+**Event community life 3:** 18 | Wed | Sports club annual meeting | Clubhouse · 19:00
+
+**Event education and health 1:** 05 | Thu | County mobile library | Village square · 14:00
+
+**Event education and health 2:** 12 | Thu | First-aid course | Community hall · 10:00
+
+**Event education and health 3:** 19 | Thu | Blood donation | Fire station · 15:00
+
+**Event everyday supply 1:** 06 | Fri | Bakery van | Village street · 07:30
+
+**Event everyday supply 2:** 13 | Fri | Weekly market | Market square · 08:00
+
+**Event everyday supply 3:** 20 | Fri | Farm shop open | Manor farm · 10:00
+
+**Event culture and tourism 1:** 07 | Sat | Concert in the village church | Village church · 17:00
+
+**Event culture and tourism 2:** 14 | Sat | Reading in the fireside room | Manor house · 19:30
+
+**Event culture and tourism 3:** 21 | Sat | Guided tour of the castle park | Castle · 11:00
+
+English draft of the German graphic: the same twelve invented, neutral
+example dates, `provenance: generated`, `demo: true`, `data-demo="true"` in the
+markup (DEC-0068, DEC-0193). Event format: `day | weekday | title | place · time`,
+exactly three per category.
+
+## Scene 3 — Provenance (mechanism: provenance)
+
+<!-- id: home-6-scene-provenance; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor", "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel"]; status: approved -->
+
+**Aha statement:** Shaping our own villages ourselves.
+
+**Text:** Jan-Henrik Hempel was a volunteer mayor, sits on the municipal council and co-founded the culture club. He knows the place from within, as someone who joins in. The name Schafe vorm Fenster comes from the sheep pasture outside his own kitchen window.
+
+Source: `founder-former-volunteer-mayor` (`usage_rights: cleared`) —
+documented via Nordkurier 2019/2022 and the Zukunftswege-Ost portrait
+2026.
+The breadth of the roles (municipal council, co-founder of the culture
+club) and the precedence of volunteering over administration are
+the review's wording of 2026-09-22, as are "shaping our own villages
+ourselves" and "the name Schafe vorm Fenster". This slot carries **no**
+kicker: "Wo das herkommt" is on the avoid list (CG-017, CG-040) and the
+review names no replacement — the heading carries the scene on its own
+(no deviation any more since DEC-0206). The former transition above the
+heading ("The village calendar exists because somebody had the problem
+himself.") is gone: it says what the intro says with "knows the place
+from within", and shared a word stem with heading and intro (issue #163).
+
+## Block 2b — Provenance stamps
+
+<!-- id: home-7-provenance-stamps; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor"]; status: approved -->
+
+**Link:** More about us → `/ueber-uns`
+
+The stamp sentence "Built by someone who knows the office … Running since
+2018." is gone: "built" and "run" about this product are on the avoid list
+(CG-033, CG-040), and the review strikes the stamp. What stays is the way
+to the page that tells the origin in full — the label is this slot's own
+wording and the provenance scene's one secondary CTA (TS-WEB-0019 D3a,
+DEC-0082 §4).
+
+## Block 2c — Proof stream (4 elements)
+
+<!-- clearance: pending — `lehre-lelender`, `volkshochschule-uecker-randow` and `kulturlandbuero-broellin` are `usage_rights: unverified` (Q-0014), the three media-echo entries carry no `usage_rights` at all (Q-0045, state/open.md #1). The protected preview shows them; the pre-go-live hardening round clears them. `noerd-award-2026-smart-community` is `cleared`. -->
+<!-- source_note: the stage-0 rule "widest spread, most recent first" comes from gtm:concept/website-relevance-model.concept.md (context matrix, row "Direct visit, unknown"); the proof rule from gtm:concept/website-communication-principles.concept.md §4. -->
+<!-- id: home-8-proof-stream; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community", "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow", "@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin", "@schafe-vorm-fenster/media-echo@0.3.3#2026-08-abend-der-engagierten-lehre", "@schafe-vorm-fenster/media-echo@0.3.3#2026-05-noerd-2026-rostock", "@schafe-vorm-fenster/media-echo@0.3.3#2024-09-kulturlandbuero-volkshochschule"]; status: approved -->
+
+Selection and order of the four elements stay the relevance engine's job
+at runtime (TS-WEB-0005 D5, DEC-0048). This slot supplies the candidate set
+it draws from — pool:
+`@schafe-vorm-fenster/proof@0.3.5` and
+`@schafe-vorm-fenster/media-echo@0.3.3`. The section's kicker and heading
+are not here: every proof section carries the same head from
+`dictionary.ts` (`proofSection`, DEC-0209).
+
+**Candidates (stage 0: widest spread, most recent first):**
+
+1. The foundation runs the village calendar for 17 places under its own name: LeLender. — Stiftung Lebendiges Lehre, Lehre (Lower Saxony)
+2. Schafe vorm Fenster won the NØRD Award 2026 in the Smart Community category, under the patronage of Bitkom e.V. — NØRD digital convention, Rostock
+3. The adult education centre publishes its complete course programme in the village calendar. — Adult education centres in Vorpommern-Greifswald, Pasewalk
+4. "The project can make a valuable contribution to economic recovery and to visibility in rural areas." — Kulturlandbüro Uecker-Randow, Schloss Bröllin
+
+**Link:** View in the archive
+
+<!-- note: authoring note from here on, not copy — the passage quotes forbidden terms in order to forbid them (DEC-0142 §1) -->
+
+Since #36 every teaser carries exactly one link to its evidence entry in
+`/about/archive` (label: **Link** above, the same for all four). The sentences
+are unchanged; the anchors are the hub's media-echo ids that each record lists
+in `media_echo`. `kulturlandbuero-broellin` lists none; its Usage section points
+to "media-echo 2024-09", the same row (mapping in `app/[lang]/_proof-links.ts`).
+Merging this PR is the owner's approval of the link text (DEC-0222 §3).
+
+Names, figures, titles, and years are taken from the records as they
+stand: the 17 places, the name "LeLender" and the foundation's ownership
+from `lehre-lelender`, the win and the Bitkom patronage from
+`noerd-award-2026-smart-community`, the course programme from
+`volkshochschule-uecker-randow`, the Kulturlandbüro's quotation from
+`kulturlandbuero-broellin`. Since #160 (DEC-0209) every line is a whole
+sentence (CG-027) and, per record, the same line as on the other pages. The
+NØRD line is neutral, without the "proud" version CG-027 shows; the category's
+patron is from the record's body ("Schirmherr der Kategorie war der Bitkom
+e.V."), and the win came from a public vote, so no "jury". The adult education
+line follows the record (the course programme at the Pasewalk site); the
+benefit "courses in the villages too" is struck because no record carries it.
+The name "Adult education centres in Vorpommern-Greifswald" is the partner
+record's alias. Deviation: `@schafe-vorm-fenster/proof/lehre-lelender.proof.md#L8`
+says "Eine Gemeinde betreibt …"; the line names the foundation (review of
+2026-09-22, line 103). DEM-0080. The quotation keeps the modality the record
+keeps — "can make", now in full without an ellipsis, wording from §Evidence and
+the same sentence the reserved place on `/ueber-uns` carries
+(`content/pages/ueber-uns/en.md`). It is not a claim of ours: the record's
+assertive `claim:` is our own summary, not the Kulturlandbüro's sentence, and
+"valuable" comes from the quotation alone (the record's wording boundary). Four corrections from the 2026-09-22 review are
+in there: the foundation runs the LeLender, not the municipality; the NØRD
+Award was won, not merely entered; the adult education centres are named
+after the district (the benefit, courses in the villages too, is struck again
+with DEC-0209, see above); the Nordkurier nomination entry goes, because the award says
+the same thing more strongly. The internal meta line "Press and appearance
+record 2018 to 2026" is struck with nothing in its place (CG-035). The
+fifth element ("Running since 2018", `in-operation-since-2018`) was dropped
+on 2026-10-28 at the owner's request: with no sender and no logo it added
+nothing to the stream. No cleared record exists in the hub for "success with customers"
+(Wolgaster Kulturgesellschaft, named by the review) — `state/open.md`. One
+of the four is cleared; three are waiting for clearance and run with
+`clearance: pending`.
+
+## Context band (3 non-focus jobs)
+
+<!-- id: home-10-context-band; content_type: context-band; provenance: sourced; derived_from: [ia]; status: approved -->
+
+**Kicker:** Learn more about our calendar platform
+
+- **Publish dates:** By WhatsApp or from your calendar → `/mitmachen`
+- **Run your own calendar:** Under your own name, on your own website → `/dein-kalender`
+- **Who's behind it:** Who makes the village calendar → `/ueber-uns`
