@@ -10,7 +10,7 @@ seo:
 content_type: section
 status: approved
 reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
-reviewed_at: "2026-11-12"
+reviewed_at: "2026-11-13"
 locale: en
 sources:
   - "@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"
@@ -331,6 +331,8 @@ frontmatter and in `state/open.md`, not on the page.
 1. "The self-managed and automated provision of the date data reduces our municipality's workload." — Holger Wendt, mayor of Rubkow
 2. "For this project I see our rural population, and mobile traders too, as the winners." — Dr A. Zschiesche, mayor of Groß Kiesow
 3. "The service helps make what's on offer more visible and easier to find across a thinly settled area." — Uwe Eichler, Wasserschloss Quilow
+
+**Link:** View in the archive
 
 None of the three records names an article with a link — the hub's proof
 schema carries no such field

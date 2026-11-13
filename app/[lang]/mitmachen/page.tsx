@@ -34,6 +34,7 @@ import { standardSources } from "@/src/lib/pricing/standard-sources";
 import { buildDay } from "../_build-day";
 import { comparisonPairs } from "../_comparison";
 import { proofIntro, selectProof } from "../_proof";
+import { proofCardLink, proofDeeplink } from "../_proof-links";
 import { PageJsonLd } from "../_structured-data";
 import { pageContent } from "../_content";
 import { localeFrom, pageMetadataFor } from "../_locale";
@@ -211,6 +212,8 @@ export default async function Page({
         // (review line 462). A selection facet; the heading is the same on
         // every page (DEC-0143 §1, DEC-0209).
         proofKind: "customer" as const,
+        // issue 220: the hub proof id behind this line names its archive entry.
+        deeplink: proofDeeplink(proofDemo.derivedFrom, index),
         demo: proofIsDemo,
       };
     }),
@@ -235,7 +238,7 @@ export default async function Page({
   // three rows fails the build rather than rendering a pair without a
   // sentence or a glyph (DEC-0203 §3).
   const comparison = comparisonPairs(objections.blocks, OBJECTION_ICONS, "mitmachen-2-objections");
-  const proofBlock = <ProofBlock locale={locale} proofSelection={proofSelection} />;
+  const proofBlock = <ProofBlock linkLabel={proofDemo.fields["Link"]} locale={locale} proofSelection={proofSelection} />;
 
   return (
     <>
@@ -513,9 +516,11 @@ export default async function Page({
 
 /** The proof block, which `PageFrame` renders after the closing CTA (DEC-0196). */
 function ProofBlock({
+  linkLabel,
   locale,
   proofSelection,
 }: {
+  readonly linkLabel?: string;
   readonly locale: Locale;
   readonly proofSelection: Awaited<ReturnType<typeof selectProof>>;
 }) {
@@ -548,6 +553,7 @@ function ProofBlock({
                 emphasis={position === 0 ? "feature" : "compact"}
                 logo={partnerLogo(entry.candidate.contextLine)}
                 key={entry.candidate.id}
+                link={proofCardLink(entry.candidate, linkLabel)}
                 locale={locale}
                 state={entry.state}
               />

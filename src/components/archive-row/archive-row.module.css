@@ -18,6 +18,20 @@
   display: none;
 }
 
+/*
+ * Issue #36: a deeplink (`/ueber-uns/archiv#<id>`) from a proof teaser lands on
+ * its row and marks it — `lime-100` ground, an `ink` rule on the leading edge,
+ * existing tokens only. `:target` needs no script; `anchor-highlight` sets
+ * `data-anchored` where a client-side navigation leaves `:target` unset. The
+ * document's `scroll-padding-top` keeps the row clear of the sticky header.
+ */
+.row:target,
+.row[data-anchored="true"] {
+  background: var(--color-lime-100);
+  box-shadow: inset var(--space-1) 0 0 var(--color-neutral-ink);
+  padding-inline: var(--space-4);
+}
+
 .withPreview .preview {
   flex: none;
   width: 120px;
