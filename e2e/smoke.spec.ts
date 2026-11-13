@@ -360,6 +360,7 @@ test("TS-WEB-0014-A2: the security headers of TS-WEB-0014 D4 are on the response
   for (const directive of [scriptSrc, connectSrc]) {
     expect(directive).toContain("'self'");
     expect(directive).toContain("https://code.etracker.com");
+    expect(directive).toContain("https://www.etracker.de");
     expect(directive).toContain("https://portalize.schafe-vorm-fenster.de");
     expect(directive).toContain(
       "https://envoy-api.api.schafe-vorm-fenster.de",
@@ -388,6 +389,7 @@ test("TS-WEB-0014-A2 / F-2-36: script-src carries no token that is not a real ha
     "'unsafe-eval'", // TS-WEB-0014 D5, local development only
     "'unsafe-inline'", // state/open.md rows 21/31, dev + preview only
     "https://code.etracker.com",
+    "https://www.etracker.de",
     "https://portalize.schafe-vorm-fenster.de",
     "https://envoy-api.api.schafe-vorm-fenster.de",
   ]);
