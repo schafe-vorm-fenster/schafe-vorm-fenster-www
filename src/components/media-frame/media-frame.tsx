@@ -24,6 +24,23 @@ export const MEDIA_RATIOS = [
 
 export type MediaRatio = (typeof MEDIA_RATIOS)[number];
 
+/**
+ * Intrinsic-size hints per ratio, mirroring the `--ratio-*` tokens. They go on
+ * the `<img>` as `width`/`height` so the browser knows the aspect ratio of a
+ * lazy image before it loads (DevTools: "Lazy-loaded images should have
+ * explicit dimensions"); CSS stretches the image to the ratio box. `hero` is
+ * 8 / 9 below the lg switch and 21 / 9 above — the box is sized by CSS, the
+ * hint only needs to be non-zero.
+ */
+const RATIO_SIZE: Readonly<Record<MediaRatio, { width: number; height: number }>> = {
+  hero: { width: 1680, height: 720 },
+  feature: { width: 1400, height: 1000 },
+  proof: { width: 1000, height: 400 },
+  map: { width: 1600, height: 900 },
+  portrait: { width: 800, height: 1000 },
+  square: { width: 1000, height: 1000 },
+};
+
 export interface MediaFrameProps extends DataStateProps {
   readonly src?: string | StaticImageData;
   /** Meaningful text from the content frontmatter, or `""` when decorative. */
@@ -132,11 +149,12 @@ export function MediaFrame({
           // instead of preload"). So the attributes are set directly, which
           // is also what makes A8 checkable in the rendered HTML.
           fetchPriority={priority ? "high" : undefined}
-          fill
+          height={RATIO_SIZE[ratio].height}
           loading={priority ? "eager" : "lazy"}
           sizes={sizes}
           src={src}
           unoptimized={unoptimized}
+          width={RATIO_SIZE[ratio].width}
         />
         {markAiEdited ? <AiEditedMark locale={locale} /> : null}
         {credit ? (
