@@ -1,3 +1,4 @@
+import { AnchorHighlight } from "@/src/components/anchor-highlight/anchor-highlight";
 import { ArchiveFilter } from "@/src/components/archive-filter/archive-filter";
 import { ArchiveRow } from "@/src/components/archive-row/archive-row";
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
@@ -157,6 +158,8 @@ export default async function Page({
     <PageFrame closing={{ variant: "merged" }} locale={locale} meta={pageMeta}>
       <SectionShell labelledBy="archiv-h1" surface="paper">
         <MotionReveal>
+          {/* Issue #36: a proof teaser's deeplink lands on its row, marked. */}
+          <AnchorHighlight />
           <h1 id="archiv-h1">{fieldAt(heading.blocks, 0) ?? dictionary(locale).pages.archive}</h1>
 
           <ArchiveFilter locale={locale} types={filterTypes}>

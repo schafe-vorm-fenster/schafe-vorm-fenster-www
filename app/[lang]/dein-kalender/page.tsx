@@ -27,7 +27,7 @@ import { HERO_IMAGE_ID } from "@/src/lib/pages/hero-images";
 import { slot } from "@/src/lib/content/loader";
 import { isDemoSlot } from "@/src/lib/content/provenance";
 import { CONFIG_REPO_URL } from "@/src/lib/embed/config-repo";
-import { DEFAULT_WEEKS_AHEAD, SHOWCASE_CALENDAR } from "@/src/lib/embed/portalize";
+import { DEFAULT_WEEKS_AHEAD, DEIN_KALENDER_SHOWCASE } from "@/src/lib/embed/portalize";
 import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
 import { tierPrice } from "@/src/lib/pricing/offerings";
 import { dictionary } from "@/src/lib/i18n/dictionary";
@@ -36,6 +36,7 @@ import { comparisonPairs } from "../_comparison";
 import { PageJsonLd } from "../_structured-data";
 import { pageContent } from "../_content";
 import { parseProofLine, proofIntro, quoteAuthor, selectProof } from "../_proof";
+import { proofCardLink, proofDeeplink } from "../_proof-links";
 import { localeFrom, pageMetadataFor } from "../_locale";
 import { PageFrame } from "../_page-frame";
 
@@ -286,6 +287,8 @@ export default async function Page({
         // the heading is the same on every page (DEC-0143 §1, DEC-0209).
         proofKind: "customer" as const,
         ...(citation === undefined ? {} : { citation }),
+        // issue 220: the hub proof id behind this line names its archive entry.
+        deeplink: proofDeeplink(proofDemo.derivedFrom, index),
         demo: proofIsDemo,
       };
     }),
@@ -393,11 +396,11 @@ export default async function Page({
           copy={embedParagraphs[0]}
           heading={fieldAt(embedDemo.blocks, 0) ?? ""}
           locale={locale}
-          // The real calendar of Schlatkow, Schmatzin and Wolfradshof —
+          // The real calendar of Rothenklempenow, Dorotheenwalde, Glashütte and Mewegen —
           // `src/lib/embed/portalize.ts` records which one and why.
-          organizerId={SHOWCASE_CALENDAR.organizerId}
+          organizerId={DEIN_KALENDER_SHOWCASE.organizerId}
           ratio="map"
-          showBranding={SHOWCASE_CALENDAR.branding}
+          showBranding={DEIN_KALENDER_SHOWCASE.branding}
           state="ready"
           weeksAhead={DEFAULT_WEEKS_AHEAD}
         />
@@ -550,6 +553,7 @@ export default async function Page({
                 emphasis={position === 0 ? "feature" : "compact"}
                 logo={partnerLogo(entry.candidate.contextLine)}
                 key={entry.candidate.id}
+                link={proofCardLink(entry.candidate, proofDemo.fields["Link"])}
                 locale={locale}
                 state={entry.state}
               />

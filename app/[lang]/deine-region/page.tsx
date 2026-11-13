@@ -29,6 +29,7 @@ import { CountersIsland, RegionExamplesIsland } from "../_islands";
 import { PageJsonLd } from "../_structured-data";
 import { pageContent } from "../_content";
 import { proofIntro, selectProof } from "../_proof";
+import { proofCardLink, proofDeeplink } from "../_proof-links";
 import { localeFrom, pageMetadataFor } from "../_locale";
 import { PageFrame } from "../_page-frame";
 
@@ -271,6 +272,8 @@ export default async function Page({
       // a voice from the region. No press element stands in this pool, which is
       // what the heading above the section now says (DEC-0143 §1/§2).
       proofKind: "customer" as const,
+      // issue 220: the hub proof id behind this line names its archive entry.
+      deeplink: proofDeeplink(proofDemo.derivedFrom, index),
       demo: proofIsDemo,
     })),
   });
@@ -525,6 +528,7 @@ export default async function Page({
                   contextLine={entry.candidate.contextLine}
                   geo={entry.candidate.geo}
                   key={entry.candidate.id}
+                  link={proofCardLink(entry.candidate, proofDemo.fields["Link"])}
                   locale={locale}
                   state={entry.state}
                 />

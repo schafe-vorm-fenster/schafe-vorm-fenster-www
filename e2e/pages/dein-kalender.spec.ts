@@ -340,7 +340,7 @@ test.describe("TS-WEB-0024: /dein-kalender", () => {
     await expect(
       page
         .locator('[data-block="embed-demo"]')
-        .getByText("Hier seht ihr, was in Schlatkow, Schmatzin und Wolfradshof in den nächsten Wochen ansteht."),
+        .getByText("Hier seht ihr, was in Rothenklempenow, Dorotheenwalde, Glashütte und Mewegen in den nächsten Wochen ansteht."),
     ).toBeVisible();
     // The price section's framing line is the band's, not a transition above
     // it — one sentence, in one place (DEC-0118, DEC-0131 §2).

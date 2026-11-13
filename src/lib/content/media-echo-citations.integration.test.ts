@@ -82,7 +82,56 @@ function sortKey(date: string): string {
   return parts.join("-");
 }
 
+/**
+  * Issue 220 — a proof teaser that links into the archive has a row of its own. The
+ * hub proof records of type `testimonial` named here are cited the same way:
+ * id = the proof id, title = `claim`, source = `source`, date = `date`,
+ * quotation = `evidence`. The pages spell the quotation with its umlauts
+ * ("Fuer" is "Für"), so the quotation is compared with umlauts folded.
+ */
+const PROOF_DIR = join(process.cwd(), "node_modules/@schafe-vorm-fenster/proof");
+const TESTIMONIAL_ROWS = [
+  "eichler-wasserschloss-quilow",
+  "kulturlandbuero-broellin",
+  "kurzweg-baeckerei",
+  "wendt-rubkow",
+  "zschiesche-gross-kiesow",
+] as const;
+
+const fold = (text: string) =>
+  text
+    .replace(/ä/g, "ae")
+    .replace(/ö/g, "oe")
+    .replace(/ü/g, "ue")
+    .replace(/Ä/g, "Ae")
+    .replace(/Ö/g, "Oe")
+    .replace(/Ü/g, "Ue")
+    .replace(/ß/g, "ss");
+
+function frontmatterValue(raw: string, key: string): string {
+  const match = new RegExp(`^${key}: (.*)$`, "m").exec(raw);
+  return (match?.[1] ?? "").trim().replace(/^"(.*)"$/, "$1");
+}
+
+function testimonialEntries(): Entry[] {
+  return TESTIMONIAL_ROWS.map((id) => {
+    const raw = readFileSync(join(PROOF_DIR, `${id}.proof.md`), "utf8");
+    const evidence = /^## Evidence\s*\n+>\s*(.+)$/m.exec(raw)?.[1]?.trim() ?? "";
+    return {
+      id,
+      title: frontmatterValue(raw, "claim"),
+      types: frontmatterValue(raw, "type"),
+      date: frontmatterValue(raw, "date"),
+      source: frontmatterValue(raw, "source"),
+      url: "—",
+      quote: evidence,
+    };
+  });
+}
+
 const expected = packageEntries();
+const testimonials = testimonialEntries();
+const allExpected = [...expected, ...testimonials];
 
 describe("TS-WEB-0028-A15: every media-echo entry is cited on the press page, verbatim", () => {
   it("reads the package at all", () => {
@@ -106,9 +155,19 @@ describe("TS-WEB-0028-A15: every media-echo entry is cited on the press page, ve
         quote: quote ?? "",
       }));
 
-      expect(rows.map((row) => row.id).sort()).toEqual(expected.map((entry) => entry.id).sort());
+      expect(rows.map((row) => row.id).sort()).toEqual(
+        allExpected.map((entry) => entry.id).sort(),
+      );
       for (const row of rows) {
-        expect(row, row.id).toEqual(expected.find((entry) => entry.id === row.id));
+        const entry = allExpected.find((candidate) => candidate.id === row.id)!;
+        if (testimonials.includes(entry)) {
+          expect({ ...row, quote: fold(row.quote) }, row.id).toEqual({
+            ...entry,
+            quote: fold(entry.quote),
+          });
+        } else {
+          expect(row, row.id).toEqual(entry);
+        }
       }
     });
 
@@ -117,7 +176,7 @@ describe("TS-WEB-0028-A15: every media-echo entry is cited on the press page, ve
       const table = slot(page, "archiv-2-rows-demo").blocks.find((block) => block.kind === "table");
       if (table?.kind !== "table") throw new Error("no table");
       const ids = table.rows.map(([id]) => id ?? "");
-      const ordered = [...expected]
+      const ordered = [...allExpected]
         .sort((a, b) => a.id.localeCompare(b.id))
         .sort((a, b) => sortKey(b.date).localeCompare(sortKey(a.date)))
         .map((entry) => entry.id);

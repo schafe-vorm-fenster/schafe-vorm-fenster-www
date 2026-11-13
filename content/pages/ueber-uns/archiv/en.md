@@ -10,18 +10,20 @@ seo:
 content_type: section
 status: approved
 reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
-reviewed_at: "2026-11-12"
+reviewed_at: "2026-11-13"
 locale: en
 sources:
   - "@schafe-vorm-fenster/media-echo@0.3.3"
+  - "@schafe-vorm-fenster/proof@0.3.5"
   - "ia"
 derived_from:
   - "@schafe-vorm-fenster/media-echo@0.3.3"
+  - "@schafe-vorm-fenster/proof@0.3.5"
   - "ia"
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "sourced — all 31 media-echo entries as citations (DEC-0166, Q-0093): id, title, type, date, source and url verbatim from the package frontmatter, the place from geo, and the first quotation of an entry's `## Original Text` / `## Key Quotes` section verbatim from its body. A citation needs no clearance; no article photo and no third-party logo is shown. EN translation of content/pages/ueber-uns/archiv/de.md, same source ids per slot; entry titles stay in their original language"
+provenance: "sourced — all 31 media-echo entries as citations (DEC-0166, Q-0093): id, title, type, date, source and url verbatim from the package frontmatter, the place from geo, and the first quotation of an entry's `## Original Text` / `## Key Quotes` section verbatim from its body. A citation needs no clearance; no article photo and no third-party logo is shown; plus five hub proof records of type `testimonial` as rows of their own (#220, `proof@0.3.5`): id = the proof id, title = `claim`, source = `source`, date = `date`, quotation = `evidence`, all verbatim, spelling of umlauts restored as on the approved pages. EN translation of content/pages/ueber-uns/archiv/de.md, same source ids per slot; entry titles stay in their original language"
 compliance_check: "state/content-map.md#compliance-checks — TS-WEB-0028"
 schema_note: "see content/pages/home/de.md — same TS-WEB-0007/schema gap, state/open.md #37"
 open_points:
@@ -56,9 +58,10 @@ precision, title, link to the original and, where the entry has one, an
 excerpt marked as a quotation with its source (TS-WEB-0028 D3, DEC-0166).
 The rows stand in the slot below; its name is historical.
 
-<!-- id: archiv-2-rows-demo; content_type: archive-entry; provenance: sourced; derived_from: ["@schafe-vorm-fenster/media-echo@0.3.3"]; status: approved -->
+<!-- id: archiv-2-rows-demo; content_type: archive-entry; provenance: sourced; derived_from: ["@schafe-vorm-fenster/media-echo@0.3.3", "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow", "@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin", "@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei", "@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow", "@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"]; status: approved -->
 
-**Archive rows:** All 31 entries from `media-echo@0.3.3`, chronological,
+**Archive rows:** All 31 entries from `media-echo@0.3.3` and five voices
+from `proof@0.3.5` (type `testimonial`), chronological,
 newest first. ID (file name, also the anchor), title, type, date, source
 and link are the wording of each entry's own frontmatter; the quote is the
 first quotation in the entry's `Original Text` or `Key Quotes` section,
@@ -81,6 +84,11 @@ verbatim:
 | 2022-02-anzeigenkurier-plattform-doerfer | AnzeigenKurier — Neue Plattform für alle Dörfer | press | 2022-02 | AnzeigenKurier | Vorpommern-Greifswald county | — | — |
 | 2022-02-ihk-to-go-podcast-schafe-vorm-fenster | IHK to Go Podcast #50 — Schafe vorm Fenster: Digitaler Dorf-Aushang | podcast | 2022-02 | IHK Neubrandenburg / IHK to Go Podcast | Neubrandenburg (Mecklenburgische Seenplatte county) | https://soundcloud.com/ihk-to-go/50-schafe-vorm-fenster-digitaler-dorf-aushang | — |
 | 2022-nordkurier-plattform-doerfer | Nordkurier — Neue Plattform für alle Dörfer | press | 2022 | Nordkurier | Vorpommern-Greifswald county | — | — |
+| eichler-wasserschloss-quilow | Der Dienst macht Angebote in einem Flächenland besser auffindbar. | testimonial | 2022 | Uwe Eichler, Wasserschloss Quilow | — | — | Der Dienst hilft dabei, Angebote in einem Flächenland besser sichtbar und auffindbar zu machen. |
+| kulturlandbuero-broellin | Das Projekt leistet einen Beitrag zu wirtschaftlichem Wiederaufbau und Sichtbarkeit im ländlichen Raum. | testimonial | 2022 | Kulturlandbüro Uecker-Randow, Schloss Bröllin | — | — | Das Projekt kann einen wertvollen Beitrag zum wirtschaftlichen Wiederaufbau und zur Sichtbarkeit im ländlichen Raum leisten. |
+| kurzweg-baeckerei | Die Terminliste macht die Fahrtrouten mobiler Anbieter transparent. | testimonial | 2022 | Elisabeth Kurzweg, Bäckerei Kurzweg | — | — | Mit der Digitalen Terminliste für die Dörfer in Vorpommern-Greifswald werden die Fahrtrouten anderer Unternehmen transparenter. |
+| wendt-rubkow | Selbstverwaltete und automatisierte Termindaten senken den Arbeitsaufwand einer Gemeinde. | testimonial | 2022 | Holger Wendt, Bürgermeister in Rubkow | — | — | Die selbstverwaltete und automatisierte Bereitstellung der Termindaten reduziert den Arbeitsaufwand unserer Gemeinde. |
+| zschiesche-gross-kiesow | Von der Sichtbarkeit lokaler Termine profitieren Landbevölkerung und mobile Händler gleichermaßen. | testimonial | 2022 | Dr. A. Zschiesche, Bürgermeisterin Groß Kiesow | — | — | Für dieses Projekt sehe ich unsere Landbevölkerung, aber auch mobile Händler als Gewinner. |
 | 2021-12-ihk-faktor-wirtschaft-dorfkalender | IHK Faktor Wirtschaft — Digitaler Dorfkalender für Vorpommern-Greifswald | press | 2021-12 | IHK Neubrandenburg / Faktor Wirtschaft | Vorpommern-Greifswald county | https://www.neubrandenburg.ihk.de/fileadmin/user_upload/Presse/IHK-Zeitung/11-12_Faktor_2021_screen.pdf | — |
 | 2021-11-ndr-ard-themenwoche-stadt-land-wandel | NDR 1 Radio MV — ARD Themenwoche: Stadt.Land.Wandel | press | 2021-11-10 | NDR 1 Radio MV | Mecklenburg-Vorpommern | https://web.archive.org/web/20220121033049/https://www.ndr.de/themenwoche/stadtlandwandel/Schafe-vorm-Fenster-Digitale-Pinnwand-fuer-laendlichen-Raum,schafevormfenster102.html | — |
 | 2021-08-kfw-award-gruenden | KfW Award Gründen 2021 — Bewerbung ohne Zuschlag | award | 2021-08 | KfW Bankengruppe | nationwide | — | — |
@@ -97,6 +105,13 @@ verbatim:
 | 2018-09-nordkurier-schafe-vom-fenster-serie | Nordkurier — Schafe vorm Fenster (September, mehrere Artikel) | press | 2018-09 | Nordkurier | Mecklenburg-Vorpommern | — | — |
 | 2018-08-nordkurier-schafe-vorm-fenster | Nordkurier — Schafe vorm Fenster Bericht (August) | press | 2018-08 | Nordkurier | Mecklenburg-Vorpommern | — | — |
 | 2018-06-nordkurier-schafe-vorm-fenster | Nordkurier — Schafe vorm Fenster Bericht (Juni) | press | 2018-06 | Nordkurier | Mecklenburg-Vorpommern | — | — |
+
+The five voices (`testimonial`) each have a row of their own because a
+proof teaser on `/`, `/dein-kalender`, `/deine-region` or `/mitmachen`
+links to them (#220); id, title (`claim`), source, year and quotation
+(`evidence`) are the proof record's wording, only the umlauts are spelled
+as on the approved pages. The hub names neither a place nor an address for
+them: place and link stay empty.
 
 Every row is a citation and needs no clearance (Q-0093, DEC-0166). The
 page shows no article photos and no third-party logos. Entries with no
@@ -127,11 +142,13 @@ invention.
 - Portrait
 - Recognition
 - Social media
+- Voice
 - All
 
 Only types with at least one entry get a chip (TS-WEB-0028 D4). The set
-covers all seven today: press 14 times, award 8, conference 6, and once
-each for podcast, portrait, recognition, and social media. Four of the
+covers all eight today: press 14 times, award 8, conference 6, voice 5
+(the hub type `testimonial`), and once each for podcast, portrait,
+recognition, and social media. Four of the
 eight award entries are applications rather than prizes — the titles say
 so themselves ("Bewerbung ohne Zuschlag", "Wettbewerbseinreichung"), and
 the row takes the title verbatim instead of turning it into a win.

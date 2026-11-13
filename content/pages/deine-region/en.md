@@ -14,7 +14,7 @@ seo:
 content_type: section
 status: approved
 reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
-reviewed_at: "2026-11-12"
+reviewed_at: "2026-11-13"
 locale: en
 sources:
   - "@schafe-vorm-fenster/messaging@0.1.0#counties--portalize-enterprise"
@@ -249,6 +249,8 @@ from the proof set — cards 2 and 3 in the wording of their records
 1. The foundation runs the village calendar for 17 places under its own name: LeLender. — Stiftung Lebendiges Lehre, Lehre (Lower Saxony), 2026
 2. The undertaking is recognised by EU regional funding (LEADER) as worth funding for rural development. — LEADER / LAG Vorpommern-Greifswald, 2022
 3. "With the digital dates list for the villages in Vorpommern-Greifswald, the routes of other businesses become more transparent." — Elisabeth Kurzweg, Bäckerei Kurzweg
+
+**Link:** View in the archive
 
 None of the three is a delivered `portalize-enterprise` territory, and
 this page does not say otherwise.

@@ -34,7 +34,7 @@ export interface NextRedirect {
    * Next.js `permanent: true` emits 308 — a different status with different
    * method-rewriting semantics. `statusCode` states the one the specs fixed.
    */
-  readonly statusCode: 301;
+  readonly statusCode: 301 | 308;
 }
 
 /**
@@ -86,7 +86,28 @@ export function legacyRedirects(): NextRedirect[] {
   });
 }
 
+/**
+ * Rule 1b (issue 217) — the German slug is not a second URL for an English
+ * page: `/en/dein-ort` answers 308 to `/en/your-place`.
+ *
+ * The app tree's directories are the German segments, so `/en/dein-ort` used
+ * to match the tree directly and answered 200 — a duplicate of the canonical
+ * English URL. One explicit row per route whose English path differs from the
+ * German one; nothing wildcarded, so no other `/en/…` URL is touched. They
+ * come after the legacy map, which keeps its precedence (`/en/press` etc.),
+ * and 308 is Next's own `permanent: true`.
+ */
+export function englishSlugRedirects(): NextRedirect[] {
+  const rows: NextRedirect[] = [];
+  for (const route of ROUTE_IDS) {
+    const source = internalPath(route, "en");
+    const destination = href(route, "en");
+    if (source !== destination) rows.push({ source, destination, statusCode: 308 });
+  }
+  return rows;
+}
+
 /** Everything `next.config.ts` needs, in evaluation order. */
 export function redirectTable(): NextRedirect[] {
-  return [...legacyRedirects(), ...localeRedirects()];
+  return [...legacyRedirects(), ...localeRedirects(), ...englishSlugRedirects()];
 }
