@@ -34,7 +34,7 @@ On every page, the website SHALL link a favicon, a touch icon and app icons, eac
 
 SRC-0019 — issue #195 asks for favicon and app icons; the owner's statement of 2026-11-12 (line 10) names the logo among what must not get lost.
 
-Further: the owner's review of 2026-09-22 (`plan/reviews/2026-09-23/2026-09-22 Review SVF Preview Website.md`, line 6) asks for the favicon with a larger border radius, "like a deliberately rounded app icon". The brand package's rule is `logo.radius` = `radius.pill`, a full circle on every surface including the favicon (`specs/contracts/design-system-contract.md`, the `logo.*` row; `state/open.md` row 214). The owner decided on 2026-11-12 that the favicon is a full circle, the brand rule (`Q-0095`). The round artwork is added to the brand package in go-to-market-os PR 712 (`./logo-round.svg`); until that release is taken, the website clips the package's square logo to the circle at build time (issue #199). Status stays DRAFT.
+Further: the owner's review of 2026-09-22 (`plan/reviews/2026-09-23/2026-09-22 Review SVF Preview Website.md`, line 6) asks for the favicon with a larger border radius, "like a deliberately rounded app icon". The brand package's rule is `logo.radius` = `radius.pill`, a full circle on every surface including the favicon (`specs/contracts/design-system-contract.md`, the `logo.*` row; `state/open.md` row 214). The owner decided on 2026-11-12 that the favicon is a full circle, the brand rule (`Q-0095`). The website serves the round file from the brand package (`./logo-round.svg`, `./logo-round.png`, go-to-market-os PR 712, brand-design 2.10.0), issue #199. Status stays DRAFT.
 
 ## Notes
 

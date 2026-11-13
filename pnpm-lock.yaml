@@ -28,8 +28,8 @@ importers:
         specifier: 5.3.0
         version: 5.3.0
       '@schafe-vorm-fenster/brand-design':
-        specifier: 2.9.0
-        version: 2.9.0
+        specifier: 2.10.0
+        version: 2.10.0
       '@vercel/functions':
         specifier: 3.11.2
         version: 3.11.2(ws@8.22.2)
@@ -1868,8 +1868,8 @@ packages:
       zod:
         optional: true
 
-  '@schafe-vorm-fenster/brand-design@2.9.0':
-    resolution: {integrity: sha512-cHimHCyxVh9ZZ40E4DlHo0J/rUUwOXXvB/uhn3iTzluLAheHbinYoFFdcnvh+fwV7vmUiilBBu2kqLnNoBxdSg==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/brand-design/2.9.0/6e8eee68a8c64f17cb46b419df4fa2c6515d8b44}
+  '@schafe-vorm-fenster/brand-design@2.10.0':
+    resolution: {integrity: sha512-xTy76SvkmE4AL8WZuu8e9yB2Qo5S/TX35wYRg69miCQ6r5Vqe36zLwMDOZxY5Uq4aS9g4fv81wwyMP4mfymq+Q==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/brand-design/2.10.0/965f07ef1f493d548058c5181801e106894922b7}
 
   '@schafe-vorm-fenster/brand-identity@0.1.4':
     resolution: {integrity: sha512-EwAwerqHr8B413mzp7ph507Yzhh1sg4bXaSqonIwuC4O3NkUvbnoxlaf31Rimj9Ucw9pEo4ZK9pYSenr+K1FZw==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/brand-identity/0.1.4/e0056dedfe80121203efe71982b490b7c8af948b}
@@ -6090,7 +6090,7 @@ snapshots:
     optionalDependencies:
       zod: 4.6.7
 
-  '@schafe-vorm-fenster/brand-design@2.9.0':
+  '@schafe-vorm-fenster/brand-design@2.10.0':
     dependencies:
       '@fontsource/atkinson-hyperlegible-mono': 5.3.0
       '@fontsource/atkinson-hyperlegible-next': 5.3.0

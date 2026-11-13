@@ -313,7 +313,7 @@ check:brand`).
 
 | Surface | Value |
 | --- | --- |
-| `rel="icon"` | the package's SVG mark clipped to a full circle, from `/api/icon/svg` (F-3-13) |
+| `rel="icon"` | the round file from the brand package (`./logo-round.svg`), from `/api/icon/svg` (F-3-13) |
 | `rel="icon"` PNG | 32 px, from `/api/icon/32` |
 | `rel="apple-touch-icon"` | 180 px, from `/api/icon/180` |
 | manifest icons | 192 px and 512 px PNG, from `/api/icon/<size>` |
@@ -326,10 +326,9 @@ decision point takes them.
 
 Shape: a full circle on every surface, favicon included (`logo.radius` =
 `radius.pill`); the owner decided so on 2026-11-12 (`Q-0095`). The SVG and the
-PNG sizes are the package's logo clipped to the circle at build time (fill: the
-package's own `paper`, corners transparent). The round artwork itself is in
-go-to-market-os PR 712 (`./logo-round.svg`, `./logo-round.png`); once that
-package release is taken, the clip here is replaced by an import (issue #199).
+PNG sizes are the round file from the brand package (`./logo-round.svg`,
+`./logo-round.png`, go-to-market-os PR 712, brand-design 2.10.0; corners
+transparent), scaled and not redrawn (issue #199).
 
 The JSON-LD `Organization.logo` is the 512 px rendition above (FUN-WEB-0213, `Q-0098`); the 512 px rendition is round (issue #199).
 

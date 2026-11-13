@@ -97,18 +97,17 @@ export async function generateMetadata({
      * Not `app/icon.svg`: TS-WEB-0017-A6 forbids committing a logo, mark or font
      * file in this repository, and `pnpm check:brand` enforces it. The mark is
      * read from the brand package at build time and served by
-     * `app/api/icon/svg` (SVG) and `app/api/icon/<size>` (PNG), both clipped to
-     * a full circle.
+     * `app/api/icon/svg` (SVG) and `app/api/icon/<size>` (PNG), both the
+     * package's round file.
      *
      * **Shape: a full circle** (Q-0095, FUN-WEB-0209). A browser tab applies no
-     * CSS, so the favicon file itself is round, transparent corners. Until the
-     * brand package ships its own round file (go-to-market-os PR 712,
-     * `./logo-round.svg`), the clip is done in `roundLogoSvg`; then it goes.
+     * CSS, so the favicon file itself is round, transparent corners: the brand
+     * package's `./logo-round.svg` and `./logo-round.png`.
      */
     icons: {
       icon: [
-        // The round mark (Q-0095): the package's SVG clipped to a circle,
-        // served by `app/api/icon/svg`.
+        // The round mark (Q-0095): the package's round SVG, served by
+        // `app/api/icon/svg`.
         { url: "/api/icon/svg", type: "image/svg+xml" },
         // Raster fallbacks for the agents that do not take an SVG icon.
         { url: appIconPath(32), sizes: "32x32", type: "image/png" },

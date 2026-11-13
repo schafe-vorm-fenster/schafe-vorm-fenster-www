@@ -23,26 +23,21 @@ export async function logoDataUri(): Promise<string> {
   return `data:image/png;base64,${bytes.toString("base64")}`;
 }
 
+const BRAND_LOGOS = join(PACKAGES, "@schafe-vorm-fenster/brand-design/logos");
+
 /**
- * The sheep mark as a full circle (Q-0095): the package's square SVG clipped to
- * the circle inscribed in its 915 px canvas, corners transparent, fill the
- * package's own paper. Transitional: `@schafe-vorm-fenster/brand-design` carries
- * the round file from the release after go-to-market-os PR 712
- * (`./logo-round.svg`); then this clip is deleted and that file imported.
+ * The round sheep mark of the brand package (`./logo-round.png`, Q-0095): a
+ * full circle, corners transparent. Read by path, so the route must trace the
+ * file (`next.config.ts` `outputFileTracingIncludes`).
  */
+export async function roundLogoDataUri(): Promise<string> {
+  const bytes = await readFile(join(BRAND_LOGOS, "Schafe-vorm-Fenster_Logo_Round_V2.1.png"));
+  return `data:image/png;base64,${bytes.toString("base64")}`;
+}
+
+/** The round sheep mark as SVG (`./logo-round.svg`), the primary `rel="icon"`. */
 export async function roundLogoSvg(): Promise<string> {
-  const svg = await readFile(
-    join(PACKAGES, "@schafe-vorm-fenster/brand-design/logos/Schafe-vorm-Fenster_Logo_V2.1.svg"),
-    "utf8",
-  );
-  const open = svg.indexOf(">", svg.indexOf("<svg")) + 1;
-  const close = svg.lastIndexOf("</svg>");
-  return (
-    svg.slice(0, open) +
-    '<clipPath id="round"><circle cx="457.5" cy="457.5" r="457.5"/></clipPath><g clip-path="url(#round)">' +
-    svg.slice(open, close) +
-    "</g></svg>"
-  );
+  return readFile(join(BRAND_LOGOS, "Schafe-vorm-Fenster_Logo_Round_V2.1.svg"), "utf8");
 }
 
 /** The brand typeface (DEC-0043), in the `woff` form the image renderer reads. */
