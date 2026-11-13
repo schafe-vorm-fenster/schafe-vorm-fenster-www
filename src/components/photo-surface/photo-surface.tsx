@@ -5,6 +5,8 @@ import { isMocked, isPending, type DataStateProps } from "../data-state";
 import { PlaceholderSurface } from "../placeholder-surface/placeholder-surface";
 import { Skeleton } from "../skeleton/skeleton";
 
+import { photoBlur } from "./blur";
+import { HeroPreload } from "./hero-preload";
 import { PhotoCredit } from "./photo-credit";
 
 import { focalPosition, photoUrl } from "./url";
@@ -199,6 +201,10 @@ export function PhotoSurface({
   // entirely (the previous behaviour here) silently deleted the page's one
   // `h1` whenever no photograph existed, which is every hero on this site
   // today (no photography asset exists anywhere in the tree yet).
+  const showBlur = !missingPhoto && !asImage;
+  const blur = showBlur ? photoBlur(src!) : undefined;
+  const blurWide = showBlur && wideSrc ? photoBlur(wideSrc) : undefined;
+
   if (missingPhoto && !children) {
     return (
       <PlaceholderSurface className={className} ratio={ratio} />
@@ -214,26 +220,7 @@ export function PhotoSurface({
         fetches the landscape frame and the desktop never fetches the upright
         one. React hoists them into `<head>`.
       */}
-      {priority && !missingPhoto ? (
-        <>
-          <link
-            as="image"
-            fetchPriority="high"
-            href={src}
-            media={wideSrc ? "(max-width: 47.999rem)" : undefined}
-            rel="preload"
-          />
-          {wideSrc ? (
-            <link
-              as="image"
-              fetchPriority="high"
-              href={wideSrc}
-              media="(min-width: 48rem)"
-              rel="preload"
-            />
-          ) : null}
-        </>
-      ) : null}
+      {priority && !missingPhoto ? <HeroPreload src={src} wideSrc={wideSrc} /> : null}
     <section
       aria-label={label}
       className={classes}
@@ -253,6 +240,9 @@ export function PhotoSurface({
         {
           "--photo-image": missingPhoto || asImage ? "none" : photoUrl(src!),
           ...(wideSrc && !missingPhoto ? { "--photo-image-wide": photoUrl(wideSrc) } : {}),
+          // Issue 236: the blurred preview, the lowest background layer.
+          ...(blur ? { "--photo-blur": blur } : {}),
+          ...(blurWide ? { "--photo-blur-wide": blurWide } : {}),
           ...(focal ? { "--photo-focal": focalPosition(focal) } : {}),
           "--photo-ratio": `var(--ratio-${ratio})`,
         } as CSSProperties
@@ -269,7 +259,15 @@ export function PhotoSurface({
       {asImage && !missingPhoto ? (
         <>
           <div aria-hidden="true" className={styles.picture} data-photo-picture="">
-            <Image alt="" className={styles.pictureImage} fill loading="lazy" sizes={imageSizes} src={src!} />
+            <Image
+              alt=""
+              className={styles.pictureImage}
+              height={900}
+              loading="lazy"
+              sizes={imageSizes}
+              src={src!}
+              width={1600}
+            />
           </div>
           <div aria-hidden="true" className={styles.scrim} />
         </>

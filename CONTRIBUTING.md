@@ -128,6 +128,10 @@ Four of its checks carry rules you meet while writing:
   frontmatter with `reviewed_by` and `reviewed_at`, and the slot comment —
   once the owner has approved it in the PR. Until then the PR stays red; that
   is the gate working, not a check to work around.
+- **`check:photo-blur`** — the blurred previews `photo-surface` lays under its
+  background photographs (issue #236). A new or changed file in
+  `public/images` needs `pnpm generate:photo-blur`; the check compares the file
+  set and each source's hash, not the encoded bytes.
 - **`check:stack`** · **`check:brand`** — the stack register and the brand
   rules below.
 

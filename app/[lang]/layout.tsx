@@ -21,8 +21,14 @@ import { SiteChrome } from "./_chrome";
 
 import { FontPreloads } from "../styles/font-preload";
 
+import { DocumentCommitMarker } from "@/src/components/photo-surface/hero-preload";
+
 import "../styles/brand.css";
 import "../styles/base.css";
+// Issue 235: the 1 KB stylesheet only /ueber-uns uses (story-disclosure) rides
+// in the shell's chunk. As its own chunk, React preloaded it into every page
+// whose nav prefetches /ueber-uns, and it stayed unused (console warning).
+import "@/src/components/story-disclosure/story-disclosure.module.css";
 
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
@@ -187,6 +193,7 @@ export default async function RootLayout({
         >
           {children}
         </SiteChrome>
+        <DocumentCommitMarker />
       </body>
     </html>
   );

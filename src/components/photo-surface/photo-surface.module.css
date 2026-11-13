@@ -63,7 +63,13 @@
   );
   align-items: flex-end;
   aspect-ratio: var(--photo-ratio, var(--ratio-hero));
-  background-image: var(--photo-gradient-top), var(--photo-gradient-reading), var(--photo-image);
+  /* Issue 236: `--photo-blur` is the lowest layer, a tiny blurred copy of the
+     photograph that shows until the real file has loaded. The photograph is
+     opaque, so once it paints nothing of the preview is visible; same
+     `cover` and focal point, so the crops line up. */
+  background-image:
+    var(--photo-gradient-top), var(--photo-gradient-reading), var(--photo-image),
+    var(--photo-blur, none);
   /*
    * The crop follows the motif's declared focal point, never `center` by
    * default (DEC-0105 §2): village photographs are sky-heavy, and a centred
@@ -131,7 +137,8 @@
     background-image:
       var(--photo-gradient-top),
       var(--photo-gradient-reading),
-      var(--photo-image-wide, var(--photo-image));
+      var(--photo-image-wide, var(--photo-image)),
+      var(--photo-blur-wide, var(--photo-blur, none));
   }
 }
 
@@ -153,6 +160,11 @@
 }
 
 .pictureImage {
+  /* width/height attributes only carry the aspect hint; the box is `.picture`. */
+  height: 100%;
+  inset: 0;
+  position: absolute;
+  width: 100%;
   object-fit: cover;
   object-position: var(--photo-focal, 50% 40%);
 }
