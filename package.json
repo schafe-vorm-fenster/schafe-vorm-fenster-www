@@ -34,6 +34,7 @@
     "check:contrast": "tsx scripts/check-contrast.ts",
     "check:seo-budget": "tsx scripts/check-seo-budget.ts",
     "check:terms": "tsx scripts/check-terms.ts",
+    "check:image-routes": "tsx scripts/check-image-routes.ts",
     "check:api-routes": "tsx scripts/check-api-routes.ts",
     "check:csp": "tsx scripts/check-csp.ts",
     "check:search-wording": "tsx scripts/check-search-wording.ts",
