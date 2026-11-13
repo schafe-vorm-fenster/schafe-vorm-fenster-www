@@ -163,7 +163,7 @@ for (const route of ROUTES) {
       // The controls that carry a transition when motion is allowed: every
       // link, button and reveal wrapper the page composes.
       const durations = await page.$$eval(
-        'a, button, summary, [class*="motion-reveal"]',
+        'a, button, summary, [data-motion-reveal]',
         (elements, devChrome) =>
           elements
             .filter((element) => element.closest(devChrome) === null)
@@ -204,7 +204,7 @@ for (const route of ROUTES) {
       await page.waitForLoadState("networkidle");
       await scrollThrough(page);
 
-      const transparent = await page.$$eval('[class*="motion-reveal"]', (elements) =>
+      const transparent = await page.$$eval('[data-motion-reveal]', (elements) =>
         elements
           .filter((element) => Number(getComputedStyle(element).opacity) < 1)
           .map((element) => element.firstElementChild?.id || element.id || element.tagName),

@@ -135,7 +135,7 @@ test.describe("/rechtliches", () => {
     const sizes = await page.evaluate(() => {
       const body = Number.parseFloat(getComputedStyle(document.body).fontSize);
       const levels = ["h3", "h4", "h5"].map((tag) => {
-        const element = document.querySelector(`[class*="legal-section"][class*="body"] ${tag}`);
+        const element = document.querySelector(`[data-legal-body] ${tag}`);
         return element ? Number.parseFloat(getComputedStyle(element).fontSize) : null;
       });
       return { body, levels };
@@ -238,7 +238,7 @@ test.describe("/rechtliches", () => {
       await page.setViewportSize({ width, height: 800 });
       await page.goto("/rechtliches");
       const { columnPx, chPx } = await page.evaluate(() => {
-        const body = document.querySelector('[class*="legal-section"][class*="body"]');
+        const body = document.querySelector('[data-legal-body]');
         const probe = document.createElement("div");
         probe.style.width = "80ch";
         probe.style.position = "absolute";

@@ -201,6 +201,7 @@ export function EventRow({
   return (
     <article
       className={classes}
+      data-event-row=""
       data-demo={isMocked(state) ? "true" : undefined}
       data-status={status}
     >

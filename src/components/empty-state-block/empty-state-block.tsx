@@ -48,6 +48,7 @@ export function EmptyStateBlock({
       className={[styles.block, pulse ? styles.pulse : undefined, className]
         .filter(Boolean)
         .join(" ")}
+      data-empty-state-block=""
       role={announced ? "status" : undefined}
     >
       <p className={styles.headline}>{headline}</p>

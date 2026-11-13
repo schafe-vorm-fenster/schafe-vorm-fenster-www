@@ -71,7 +71,7 @@ for (const path of PATHS) {
       const out: { section: string; rule: string }[] = [];
       sections.forEach((section, index) => {
         const quotes = [...section.querySelectorAll("blockquote")].filter(visible);
-        const rows = [...section.querySelectorAll("article[class*='event-row']")].filter(visible);
+        const rows = [...section.querySelectorAll("article[data-event-row]")].filter(visible);
         const lastRow = rows.at(-1);
         if (lastRow && quotes.some((quote) => follows(lastRow, quote))) {
           out.push({ section: name(section), rule: "a proof quote stands under a live list" });

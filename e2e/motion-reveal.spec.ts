@@ -137,7 +137,7 @@ for (const path of PATHS) {
       await page.waitForTimeout(1_000);
 
       const invisible = await page.evaluate(() =>
-        [...document.querySelectorAll<HTMLElement>('[class*="motion-reveal"]')]
+        [...document.querySelectorAll<HTMLElement>('[data-motion-reveal]')]
           .filter((element) => Number(getComputedStyle(element).opacity) < 1)
           .map((element) => {
             const rect = element.getBoundingClientRect();
