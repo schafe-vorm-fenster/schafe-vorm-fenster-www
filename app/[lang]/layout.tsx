@@ -19,6 +19,8 @@ import { heroPhotoByRoute } from "./_chrome-data";
 import { footerCopyright } from "./_footer-data";
 import { SiteChrome } from "./_chrome";
 
+import { FontPreloads } from "../styles/font-preload";
+
 import "../styles/brand.css";
 import "../styles/base.css";
 
@@ -145,6 +147,9 @@ export default async function RootLayout({
   return (
     <html lang={HTML_LANG[locale]}>
       <body>
+        {/* TS-WEB-0003 D3: the faces start loading with the stylesheets
+            (issue 214). React hoists the links into `<head>`. */}
+        <FontPreloads />
         {/* The first focusable element of the document; it jumps to `#main`,
             which `_chrome.tsx` renders (TS-WEB-0002 D5). */}
         <SkipLink locale={locale} />
