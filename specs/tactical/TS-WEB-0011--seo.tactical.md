@@ -313,7 +313,7 @@ check:brand`).
 
 | Surface | Value |
 | --- | --- |
-| `rel="icon"` | the package's SVG mark (`./logo.svg` subpath), emitted under `/_next/static/…` (F-3-13) |
+| `rel="icon"` | the round file from the brand package (`./logo-round.svg`), from `/api/icon/svg` (F-3-13) |
 | `rel="icon"` PNG | 32 px, from `/api/icon/32` |
 | `rel="apple-touch-icon"` | 180 px, from `/api/icon/180` |
 | manifest icons | 192 px and 512 px PNG, from `/api/icon/<size>` |
@@ -325,12 +325,12 @@ build chose (issue #195); no source names them. They stay [PROPOSED] until a
 decision point takes them.
 
 Shape: a full circle on every surface, favicon included (`logo.radius` =
-`radius.pill`); the owner decided so on 2026-11-12 (`Q-0095`). The round
-artwork is new in the brand package, not CSS here; until it ships, the barely
-rounded square of today stays (`state/open.md` row 214). Open until then:
-the brand-package issue the orchestrator opens (number to be entered here).
+`radius.pill`); the owner decided so on 2026-11-12 (`Q-0095`). The SVG and the
+PNG sizes are the round file from the brand package (`./logo-round.svg`,
+`./logo-round.png`, go-to-market-os PR 712, brand-design 2.10.0; corners
+transparent), scaled and not redrawn (issue #199).
 
-The JSON-LD `Organization.logo` is the 512 px rendition above (FUN-WEB-0213, `Q-0098`); the round rendition follows with issue #199.
+The JSON-LD `Organization.logo` is the 512 px rendition above (FUN-WEB-0213, `Q-0098`); the 512 px rendition is round (issue #199).
 
 ### D11 — Inventory of the search and sharing surfaces [FIXED: the requirements named]
 

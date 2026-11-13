@@ -340,7 +340,7 @@ test.describe("TS-WEB-0024: /dein-kalender", () => {
     await expect(
       page
         .locator('[data-block="embed-demo"]')
-        .getByText("Hier seht ihr, was in Schlatkow, Schmatzin und Wolfradshof in den nächsten Wochen ansteht."),
+        .getByText("Hier seht ihr, was in Rothenklempenow, Dorotheenwalde, Glashütte und Mewegen in den nächsten Wochen ansteht."),
     ).toBeVisible();
     // The price section's framing line is the band's, not a transition above
     // it — one sentence, in one place (DEC-0118, DEC-0131 §2).
@@ -461,15 +461,31 @@ test.describe("TS-WEB-0024: /dein-kalender", () => {
     expect(conversions.filter((text) => text.includes("make-contact"))).toHaveLength(1);
   });
 
+  /**
+   * A16 forbids a *conversion* event (TS-WEB-0012 D4: one per completed
+   * trigger; `buy-calendar-licence` completes only at step 4 of the order
+   * flow). The click layer (DEC-0218 §3, TS-WEB-0012 D4 "Click layer") is a
+   * separate event: every CTA click reports category = the goal its target
+   * serves, action = `click`. So the primary CTA here must report exactly that
+   * click — `buy-calendar-licence / click / order.primary` — and no conversion.
+   */
   test("TS-WEB-0024-A16: the primary CTA lands on /dein-kalender/bestellen and fires no conversion event from this page", async ({
     page,
   }) => {
-    const consoleMessages: string[] = [];
-    page.on("console", (message) => consoleMessages.push(message.text()));
+    const conversions: string[] = [];
+    const clicks: string[] = [];
+    page.on("console", (message) => {
+      const text = message.text();
+      if (text.startsWith("[analytics:mock] conversion")) conversions.push(text);
+      if (text.startsWith("[analytics:mock] cta")) clicks.push(text);
+    });
     await page.goto(ROUTE);
     await page.locator('[data-cta="primary"]').click();
     await expect(page).toHaveURL(/\/dein-kalender\/bestellen/);
-    expect(consoleMessages.some((text) => text.includes("buy-calendar-licence"))).toBe(false);
+    expect(conversions).toHaveLength(0);
+    expect(
+      clicks.filter((text) => text.includes("buy-calendar-licence") && text.includes("order.primary")),
+    ).toHaveLength(1);
   });
 
   test("TS-WEB-0024-A18: no local-advertising mention or ad CTA anywhere on the page", async ({

@@ -43,7 +43,7 @@ export async function organizationNode(): Promise<OrganizationNode> {
     name: identity.legalName,
     url: SITE_ORIGIN,
     // FUN-WEB-0213, Q-0098: the brand mark as the existing 512 px PNG rendition
-    // (`/api/icon/512`); the round rendition follows with issue 199.
+    // (`/api/icon/512`); round since issue 199.
     logo: { "@type": "ImageObject", url: `${SITE_ORIGIN}${appIconPath(512)}` },
     ...(identity.email ? { email: identity.email } : {}),
     ...(identity.telephone ? { telephone: identity.telephone } : {}),

@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { expect, test } from "@playwright/test";
-import yaml from "js-yaml";
+import * as yaml from "js-yaml";
 
 import { dictionary } from "../src/lib/i18n/dictionary";
 import { pageFile } from "../src/lib/content/loader";

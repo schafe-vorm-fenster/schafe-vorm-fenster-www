@@ -14,7 +14,7 @@ seo:
 content_type: section
 status: approved
 reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
-reviewed_at: "2026-11-12"
+reviewed_at: "2026-11-13"
 locale: de
 sources:
   - "@schafe-vorm-fenster/messaging@0.1.0#counties--portalize-enterprise"
@@ -249,6 +249,8 @@ dem Proof-Bestand — Karte 2 und Karte 3 im Wortlaut ihrer Datensätze
 1. Die Stiftung führt den Dorfkalender für 17 Orte unter eigenem Namen: LeLender. — Stiftung Lebendiges Lehre, Lehre (Niedersachsen), 2026
 2. Das Vorhaben ist von der EU-Regionalförderung (LEADER) als förderwürdig für die ländliche Entwicklung anerkannt. — LEADER / LAG Vorpommern-Greifswald, 2022
 3. „Mit der Digitalen Terminliste für die Dörfer in Vorpommern-Greifswald werden die Fahrtrouten anderer Unternehmen transparenter." — Elisabeth Kurzweg, Bäckerei Kurzweg
+
+**Link:** Im Archiv ansehen
 
 Keines der drei Elemente ist ein ausgeliefertes
 `portalize-enterprise`-Gebiet — das sagt diese Seite auch nicht.

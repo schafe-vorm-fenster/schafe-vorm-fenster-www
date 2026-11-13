@@ -672,6 +672,7 @@ const de: Dictionary = {
       portrait: "Porträt",
       recognition: "Anerkennung",
       "social-media": "Social Media",
+      testimonial: "Stimme",
     },
   },
   search: {
@@ -903,6 +904,7 @@ const en: Dictionary = {
       portrait: "Portrait",
       recognition: "Recognition",
       "social-media": "Social media",
+      testimonial: "Voice",
     },
   },
   search: {

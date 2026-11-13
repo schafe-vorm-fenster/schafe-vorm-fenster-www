@@ -194,14 +194,19 @@ test.describe("TS-WEB-0025: the order flow", () => {
     const consoleMessages: string[] = [];
     page.on("console", (message) => consoleMessages.push(message.text()));
 
+    // Only conversion lines count: a CTA click on this page legitimately
+    // reports `buy-calendar-licence / click` (DEC-0218 click layer).
+    const isConversion = (text: string) =>
+      text.startsWith("[analytics:mock] conversion") && text.includes("buy-calendar-licence");
+
     await page.goto(`${ROUTE}?orte=schlatkow&schritt=3`);
     await page.waitForTimeout(500);
-    expect(consoleMessages.some((text) => text.includes("buy-calendar-licence"))).toBe(false);
+    expect(consoleMessages.some(isConversion)).toBe(false);
 
     await page.goto(`${ROUTE}?orte=schlatkow&schritt=4`);
     await page.waitForTimeout(500);
     const fires = consoleMessages.filter(
-      (text) => text.includes("buy-calendar-licence") && text.includes("completed"),
+      (text) => isConversion(text) && text.includes("completed"),
     );
     expect(fires).toHaveLength(1);
   });

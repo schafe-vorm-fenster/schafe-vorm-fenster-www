@@ -10,7 +10,7 @@ seo:
 content_type: section
 status: approved
 reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
-reviewed_at: "2026-11-12"
+reviewed_at: "2026-11-13"
 locale: de
 sources:
   - "@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"
@@ -366,7 +366,20 @@ stehen nicht hier: Jede Beleg-Section trägt denselben Kopf aus
 3. Die Volkshochschule veröffentlicht ihr komplettes Kursprogramm im Dorfkalender. — Volkshochschulen in Vorpommern-Greifswald, Pasewalk
 4. „Das Projekt kann einen wertvollen Beitrag zum wirtschaftlichen Wiederaufbau und zur Sichtbarkeit im ländlichen Raum leisten." — Kulturlandbüro Uecker-Randow, Schloss Bröllin
 
+**Link:** Im Archiv ansehen
+
 <!-- note: ab hier Autorennotiz, keine Copy — der Abschnitt zitiert verbotene Begriffe, um sie zu verbieten (DEC-0142 §1) -->
+
+Seit #36 trägt jeder Teaser genau einen Link auf seinen Beleg in
+`/ueber-uns/archiv` (Label: **Link** oben, derselbe für alle vier). Die Sätze
+bleiben unverändert; die Anker sind die media-echo-IDs des Hubs, die der jeweilige
+Beleg in `media_echo` führt: `lehre-lelender` →
+`2026-08-abend-der-engagierten-lehre`, `noerd-award-2026-smart-community` →
+`2026-05-noerd-2026-rostock`, `volkshochschule-uecker-randow` →
+`2024-09-kulturlandbuero-volkshochschule`. `kulturlandbuero-broellin` führt kein
+`media_echo`; sein Abschnitt Usage verweist auf „media-echo 2024-09", dieselbe
+Zeile (Zuordnung in `app/[lang]/_proof-links.ts`). Mit dem Merge dieses PRs
+bestätigt der Owner den Link-Text (DEC-0222 §3).
 
 Namen, Zahlen, Titel und Jahre stehen so in den Belegen: die 17 Orte, der
 Name „LeLender" und die Trägerschaft der Stiftung aus `lehre-lelender`, der

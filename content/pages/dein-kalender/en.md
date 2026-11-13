@@ -10,7 +10,7 @@ seo:
 content_type: section
 status: approved
 reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
-reviewed_at: "2026-11-12"
+reviewed_at: "2026-11-13"
 locale: en
 sources:
   - "@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"
@@ -169,16 +169,16 @@ names a postcode — the copy guide's avoid list (DEC-0079).
 
 <!-- id: dein-kalender-3-embed-demo; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: approved -->
 
-**Heading:** A real calendar from three neighbouring villages
+**Heading:** A real calendar from the municipality of Rothenklempenow
 
-Here is what is coming up in Schlatkow, Schmatzin and Wolfradshof over the
+Here is what is coming up in Rothenklempenow, Dorotheenwalde, Glashütte and Mewegen over the
 next few weeks.
 
 One sentence instead of two (2026-09-22 review, "How it works"; issue #163,
 DEC-0206, DEC-0213): the intro shares no word stem with the heading, and the
 transition "This is what it looks like once it sits on your site:" is gone, as
 it is no text level of its own. The place names come from
-`src/lib/embed/portalize.ts` (`SHOWCASE_CALENDAR`), not from the dictation.
+`src/lib/embed/portalize.ts` (`DEIN_KALENDER_SHOWCASE`), not from the dictation.
 
 ## Slot 3b — What it holds is up to you (configuration block)
 
@@ -331,6 +331,8 @@ frontmatter and in `state/open.md`, not on the page.
 1. "The self-managed and automated provision of the date data reduces our municipality's workload." — Holger Wendt, mayor of Rubkow
 2. "For this project I see our rural population, and mobile traders too, as the winners." — Dr A. Zschiesche, mayor of Groß Kiesow
 3. "The service helps make what's on offer more visible and easier to find across a thinly settled area." — Uwe Eichler, Wasserschloss Quilow
+
+**Link:** View in the archive
 
 None of the three records names an article with a link — the hub's proof
 schema carries no such field

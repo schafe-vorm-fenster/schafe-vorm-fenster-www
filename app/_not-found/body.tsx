@@ -30,8 +30,47 @@ export function notFoundMetadata(locale: Locale): Metadata {
   return { title: `${d.notFound.title} — ${d.siteName}`, robots: "noindex, follow" };
 }
 
-export function NotFoundBody({ locale }: { readonly locale: Locale }): ReactNode {
+export function NotFoundBody({
+  locale,
+  withChrome = false,
+}: {
+  readonly locale: Locale;
+  /**
+   * Issue 217 — the per-language variant renders inside `SiteChrome` (header,
+   * footer, language switch), which owns the skip link and the `main`
+   * landmark. Only the article is rendered then.
+   */
+  readonly withChrome?: boolean;
+}): ReactNode {
   const d = dictionary(locale);
+  const article = (
+    <article data-page="not-found">
+      <h1>{d.notFound.title}</h1>
+      <p>{d.notFound.body}</p>
+
+      {/* The dominant element: the same component, the same submit and
+          the same target as on `/` and `/dein-ort` (TS-WEB-0008 D7 —
+          one place search everywhere it stands). */}
+      <section aria-label={d.search.label} data-module="place-search" id="place-search">
+        <PlaceSearch id="ort-suche-404" locale={locale} submitDataCta="primary" to="place" />
+      </section>
+
+      {/* The jobs band. No focus job belongs to a 404, so all four
+          entries render rather than three (TS-WEB-0006 D5's "minus this
+          page's focus job" has nothing to subtract here). */}
+      <section data-module="context-band" id="context-band">
+        <ContextBand currentJob="home" heading={d.notFound.jobsHeading} locale={locale} />
+      </section>
+
+      <p>
+        <a href={href("home", locale)}>{d.notFound.backHome}</a>
+      </p>
+    </article>
+  );
+  if (withChrome) {
+    // The header carries the hydration signal here (`header-shell.tsx`).
+    return <div className="container">{article}</div>;
+  }
   return (
     <HydrationMark>
       {/* F-3-16 — the one chrome element this surface does take. Routed pages
@@ -40,30 +79,7 @@ export function NotFoundBody({ locale }: { readonly locale: Locale }): ReactNode
           on the postcode input. `#main` exists below. */}
       <SkipLink locale={locale} />
       <main className="site-main" id="main">
-        <div className="container">
-          <article data-page="not-found">
-            <h1>{d.notFound.title}</h1>
-            <p>{d.notFound.body}</p>
-
-            {/* The dominant element: the same component, the same submit and
-                the same target as on `/` and `/dein-ort` (TS-WEB-0008 D7 —
-                one place search everywhere it stands). */}
-            <section aria-label={d.search.label} data-module="place-search" id="place-search">
-              <PlaceSearch id="ort-suche-404" locale={locale} submitDataCta="primary" to="place" />
-            </section>
-
-            {/* The jobs band. No focus job belongs to a 404, so all four
-                entries render rather than three (TS-WEB-0006 D5's "minus this
-                page's focus job" has nothing to subtract here). */}
-            <section data-module="context-band" id="context-band">
-              <ContextBand currentJob="home" heading={d.notFound.jobsHeading} locale={locale} />
-            </section>
-
-            <p>
-              <a href={href("home", locale)}>{d.notFound.backHome}</a>
-            </p>
-          </article>
-        </div>
+        <div className="container">{article}</div>
       </main>
     </HydrationMark>
   );

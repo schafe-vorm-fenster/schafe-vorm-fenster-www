@@ -21,6 +21,7 @@ const bypass = process.env.VERCEL_AUTOMATION_BYPASS_SECRET;
 
 const paths = [
   "/favicon.ico",
+  "/api/icon/svg",
   ...APP_ICON_SIZES.map((size) => `/api/icon/${size}`),
   ...LOCALES.flatMap((lang) => ROUTE_IDS.map((route) => `/api/og/${lang}/${route}`)),
 ];

@@ -46,6 +46,7 @@ import type { GeoBadgeFragment } from "@/src/components/content-fragments";
 import type { DataState } from "@/src/components/data-state";
 import type { Locale } from "@/src/lib/i18n/locales";
 import type { FocusJob, ItemType, RelevanceItem } from "@/src/lib/relevance/types";
+import type { ProofDeeplink } from "./_proof-links";
 import type { RouteId } from "@/src/lib/routes/routes";
 
 /**
@@ -91,6 +92,8 @@ export interface ProofCandidate {
   /** The community the element covers, where it names one. */
   readonly geoCommunity?: string | null;
   readonly geoCounty?: string | null;
+  /** Deeplink to the evidence entry (issue #36); the teaser shows it as one link. */
+  readonly deeplink?: ProofDeeplink;
   /** TS-WEB-0005 D4 — multiplies freshness, never replaces it. */
   readonly editorialWeight?: number;
 }

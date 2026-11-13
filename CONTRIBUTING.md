@@ -1,7 +1,7 @@
 # Contributing
 
 The frontend lives in the repository root: Next.js 16 in the App Router,
-TypeScript, pnpm. The previous website stays archived in `legacy-content/`
+TypeScript 6, pnpm 10 on Node 26 (DEC-0221). The previous website stays archived in `legacy-content/`
 so its copy, assets and helper code remain available to look up; it is not
 built and not linted.
 
@@ -52,24 +52,37 @@ them are worked one after the other, not side by side:
 ## Local Development
 
 ```bash
-export GITHUB_TOKEN=$(gh auth token)      # .npmrc reads it for the GitHub scope
-export LEAFCUTTER_REGISTRY_TOKEN=…        # .npmrc reads it for the STRICT scopes
+fnm use                                   # or `nvm use`: Node 26 from .nvmrc
+export GITHUB_TOKEN=$(gh auth token)      # the GitHub Packages scope
+export LEAFCUTTER_REGISTRY_TOKEN=…        # the STRICT scopes
+sh scripts/registry-auth.sh               # once per machine (see below)
 pnpm install
 pnpm dev                                  # http://localhost:3100
 ```
 
+**Node 26 everywhere** (DEC-0221): `.nvmrc` for a working copy and CI,
+`engines.node` (`26.x`) for Vercel, which reads it ahead of the project
+setting. A change of major touches both files, the README's toolchain table
+and nothing else.
+
 `.npmrc` maps three scopes: `@schafe-vorm-fenster` to GitHub Packages, and
 `@leafcutter-strict` plus `@leafcutter-os` to
 `https://packages.leafcutteros.ai/`, which carries the **STRICT**
-specification method.
+specification method. It holds **no credential**: pnpm ≥ 10.34.2 does not
+expand `${VAR}` from a committed `.npmrc` (GHSA-3qhv-2rgh-x77r).
 
-**Both registries are private, and both variables are required** (DEC-0112).
-If either is unset, `pnpm` discards the **whole** `.npmrc` with
-`Failed to replace env in config` and resolves every scope against
-npmjs.org, so what you see is a `404` on a package that was never public.
-The registry token lives in the Vercel project's environment and as an
-Actions organisation secret, both named `LEAFCUTTER_REGISTRY_TOKEN`; ask
-jan-henrik for a local copy rather than reading it out of a deployment.
+**Both registries are private, and both variables are required** (DEC-0112,
+DEC-0221 §2). `scripts/registry-auth.sh` writes the two token lines into your
+user-level config (`~/.npmrc`) as placeholders —
+`//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}` and the same for
+`packages.leafcutteros.ai` — so pnpm expands them from your environment and
+no value lands on disk. It stops with the name of a variable that is unset.
+Run it once per machine; CI runs it before every install, and `vercel.json`'s
+`installCommand` does the same on Vercel. Without the placeholders a cold
+install answers `401`/`404` on the first private package. The registry token
+lives in the Vercel project's environment and as an Actions organisation
+secret, both named `LEAFCUTTER_REGISTRY_TOKEN`; ask jan-henrik for a local
+copy rather than reading it out of a deployment.
 
 **Port 3100 everywhere.** Port 3000 is taken on the build machine, so the
 `dev` and `start` scripts, the Playwright `webServer` and every documented

@@ -23,6 +23,23 @@ export async function logoDataUri(): Promise<string> {
   return `data:image/png;base64,${bytes.toString("base64")}`;
 }
 
+const BRAND_LOGOS = join(PACKAGES, "@schafe-vorm-fenster/brand-design/logos");
+
+/**
+ * The round sheep mark of the brand package (`./logo-round.png`, Q-0095): a
+ * full circle, corners transparent. Read by path, so the route must trace the
+ * file (`next.config.ts` `outputFileTracingIncludes`).
+ */
+export async function roundLogoDataUri(): Promise<string> {
+  const bytes = await readFile(join(BRAND_LOGOS, "Schafe-vorm-Fenster_Logo_Round_V2.1.png"));
+  return `data:image/png;base64,${bytes.toString("base64")}`;
+}
+
+/** The round sheep mark as SVG (`./logo-round.svg`), the primary `rel="icon"`. */
+export async function roundLogoSvg(): Promise<string> {
+  return readFile(join(BRAND_LOGOS, "Schafe-vorm-Fenster_Logo_Round_V2.1.svg"), "utf8");
+}
+
 /** The brand typeface (DEC-0043), in the `woff` form the image renderer reads. */
 export async function brandFonts(): Promise<
   { name: string; data: Buffer; weight: 400 | 800; style: "normal" }[]

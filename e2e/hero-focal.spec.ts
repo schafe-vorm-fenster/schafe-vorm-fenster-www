@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { expect, test } from "@playwright/test";
-import yaml from "js-yaml";
+import * as yaml from "js-yaml";
 
 /**
  * DEC-0105 §2 in the browser: **the crop follows the motif's declared focal

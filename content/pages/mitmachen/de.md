@@ -10,7 +10,7 @@ seo:
 content_type: section
 status: approved
 reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
-reviewed_at: "2026-11-12"
+reviewed_at: "2026-11-13"
 locale: de
 sources:
   - "@schafe-vorm-fenster/audiences@0.3.3#actors"
@@ -418,6 +418,8 @@ schwächt den Anspruch, wird aber nie durch erfundenen Text ersetzt.
 1. Die Stiftung führt den Dorfkalender für 17 Orte unter eigenem Namen: LeLender. — Stiftung Lebendiges Lehre, Lehre (Niedersachsen)
 2. Die Volkshochschule veröffentlicht ihr komplettes Kursprogramm im Dorfkalender. — Volkshochschulen in Vorpommern-Greifswald, Pasewalk
 3. Das Netzwerk sammelt die Termine für seinen Newsletter über den Dorfkalender. — Zukunftswege Ost-Vorpommern, RAA Mecklenburg-Vorpommern
+
+**Link:** Im Archiv ansehen
 
 Drei reale Einrichtungen, die selbst veröffentlichen — das ist genau der
 Job dieser Seite. Namen, Orte und Zahlen stehen so in den Belegen: die 17

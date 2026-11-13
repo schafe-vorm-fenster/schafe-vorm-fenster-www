@@ -10,7 +10,7 @@ seo:
 content_type: section
 status: approved
 reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
-reviewed_at: "2026-11-12"
+reviewed_at: "2026-11-13"
 locale: de
 sources:
   - "@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"
@@ -174,16 +174,16 @@ herkommt, eine Postleitzahl ist eine Abstraktion).
 
 <!-- id: dein-kalender-3-embed-demo; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: approved -->
 
-**Überschrift:** Ein echter Kalender aus drei Nachbardörfern
+**Überschrift:** Ein echter Kalender aus der Gemeinde Rothenklempenow
 
-Hier seht ihr, was in Schlatkow, Schmatzin und Wolfradshof in den nächsten Wochen
+Hier seht ihr, was in Rothenklempenow, Dorotheenwalde, Glashütte und Mewegen in den nächsten Wochen
 ansteht.
 
 Ein Satz statt zwei (Review 2026-09-22, Abschnitt „So funktioniert es"; Issue
 #163, DEC-0206, DEC-0213): Die Einleitung teilt keinen Wortstamm mit der
 Überschrift, und die Überleitung „So sieht das aus, wenn es bei euch steht:"
 entfällt, weil sie keine eigene Textebene ist. Die Ortsnamen kommen aus
-`src/lib/embed/portalize.ts` (`SHOWCASE_CALENDAR`), nicht aus dem Diktat.
+`src/lib/embed/portalize.ts` (`DEIN_KALENDER_SHOWCASE`), nicht aus dem Diktat.
 
 ## Slot 3b — Was drinsteht, bestimmt ihr (Konfigurationsblock)
 
@@ -348,6 +348,8 @@ Pool von `portalize-calendar`, wörtlich aus den Proof-Datensätzen:
 1. „Die selbstverwaltete und automatisierte Bereitstellung der Termindaten reduziert den Arbeitsaufwand unserer Gemeinde." — Holger Wendt, Bürgermeister in Rubkow
 2. „Für dieses Projekt sehe ich unsere Landbevölkerung, aber auch mobile Händler als Gewinner." — Dr. A. Zschiesche, Bürgermeisterin Groß Kiesow
 3. „Der Dienst hilft dabei, Angebote in einem Flächenland besser sichtbar und auffindbar zu machen." — Uwe Eichler, Wasserschloss Quilow
+
+**Link:** Im Archiv ansehen
 
 Keiner der drei Datensätze nennt einen Artikel mit Link — das
 Proof-Schema des Hubs führt kein solches Feld
