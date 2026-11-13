@@ -269,7 +269,15 @@ export function PhotoSurface({
       {asImage && !missingPhoto ? (
         <>
           <div aria-hidden="true" className={styles.picture} data-photo-picture="">
-            <Image alt="" className={styles.pictureImage} fill loading="lazy" sizes={imageSizes} src={src!} />
+            <Image
+              alt=""
+              className={styles.pictureImage}
+              height={900}
+              loading="lazy"
+              sizes={imageSizes}
+              src={src!}
+              width={1600}
+            />
           </div>
           <div aria-hidden="true" className={styles.scrim} />
         </>
