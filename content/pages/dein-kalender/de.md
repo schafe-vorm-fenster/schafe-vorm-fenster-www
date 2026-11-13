@@ -10,7 +10,7 @@ seo:
 content_type: section
 status: approved
 reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
-reviewed_at: "2026-11-12"
+reviewed_at: "2026-11-13"
 locale: de
 sources:
   - "@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"
@@ -348,6 +348,8 @@ Pool von `portalize-calendar`, wörtlich aus den Proof-Datensätzen:
 1. „Die selbstverwaltete und automatisierte Bereitstellung der Termindaten reduziert den Arbeitsaufwand unserer Gemeinde." — Holger Wendt, Bürgermeister in Rubkow
 2. „Für dieses Projekt sehe ich unsere Landbevölkerung, aber auch mobile Händler als Gewinner." — Dr. A. Zschiesche, Bürgermeisterin Groß Kiesow
 3. „Der Dienst hilft dabei, Angebote in einem Flächenland besser sichtbar und auffindbar zu machen." — Uwe Eichler, Wasserschloss Quilow
+
+**Link:** Im Archiv ansehen
 
 Keiner der drei Datensätze nennt einen Artikel mit Link — das
 Proof-Schema des Hubs führt kein solches Feld

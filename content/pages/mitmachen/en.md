@@ -10,7 +10,7 @@ seo:
 content_type: section
 status: approved
 reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
-reviewed_at: "2026-11-12"
+reviewed_at: "2026-11-13"
 locale: en
 sources:
   - "@schafe-vorm-fenster/audiences@0.3.3#actors"
@@ -414,6 +414,8 @@ weakens the claim, but is never replaced by invented text.
 1. The foundation runs the village calendar for 17 places under its own name: LeLender. — Stiftung Lebendiges Lehre, Lehre (Lower Saxony)
 2. The adult education centre publishes its complete course programme in the village calendar. — Volkshochschulen in Vorpommern-Greifswald, Pasewalk
 3. The network collects the dates for its newsletter through the village calendar. — Zukunftswege Ost-Vorpommern, RAA Mecklenburg-Vorpommern
+
+**Link:** View in the archive
 
 Three real organizations publishing for themselves, which is exactly this
 page's job. Names, places, and figures are taken from the records as they

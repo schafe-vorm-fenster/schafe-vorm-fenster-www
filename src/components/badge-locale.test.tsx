@@ -30,6 +30,27 @@ import type { ReactElement } from "react";
  * payload — because a component with no badge on screen proves nothing.
  */
 
+/** Issue 217 — the scope picker's own strings follow the page's language. */
+describe("scope-picker UI strings (issue 217)", () => {
+  const GERMAN = ["Noch keine Auswahl", "Füge oben", "ganzer Landkreis", "entfernen", "Orte ausgewählt"];
+  const county = [{ id: "k", label: "Kreis", kind: "county" as const, removeQuery: {} }];
+
+  it("renders the empty state and the chips in English on an English page", () => {
+    const html =
+      renderToStaticMarkup(<ScopePicker items={[]} locale="en" to="order" />) +
+      renderToStaticMarkup(<ScopePicker items={county} locale="en" to="order" />);
+    for (const german of GERMAN) expect(html).not.toContain(german);
+    expect(html).toContain("Nothing selected yet.");
+    expect(html).toContain("whole district");
+  });
+
+  it("keeps the German copy by default", () => {
+    expect(renderToStaticMarkup(<ScopePicker items={[]} to="order" />)).toContain(
+      "Noch keine Auswahl.",
+    );
+  });
+});
+
 /** The three strings F-2-33's gate-2 retest measured on the `/en` routes. */
 const GERMAN_BADGES = ["Demo-Daten", "Foto gesucht", "Nicht motivgenau"];
 
