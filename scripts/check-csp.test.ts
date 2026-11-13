@@ -68,6 +68,7 @@ describe("TS-WEB-0014-A1: checkPolicyDirectives — fixture policies", () => {
       "script-src": [
         "'self'",
         "https://code.etracker.com",
+        "https://www.etracker.de",
         "https://portalize.schafe-vorm-fenster.de",
         "https://envoy-api.api.schafe-vorm-fenster.de",
       ],

@@ -42,6 +42,7 @@ off the sibling repositories, not confirmed by their owners.
 | --- | --- | --- | --- |
 | `'self'` | the website, its own bundles, its BFF routes (D10), Vercel Speed Insights and Web Analytics (served first-party under `/_vercel/…`) | all | DEC-0002, TS-WEB-0003 D7 |
 | `https://code.etracker.com` | eTracker loader `e.js` and its beacon; legacy config `data-secure-code="i9strK"`, `data-block-cookies="true"` | `script-src`, `connect-src`, `img-src` | SRC-0010 `legacy-content/app/layout.tsx`, DEC-0004/DEC-0028 |
+| `https://www.etracker.de` | eTracker's collector, measured 2026-11-13 on a production build with the real secure code: `e.js` loads `/cntcc?…` and `/api/v6/tracking/webEvents?…` as scripts and falls back to `fetch` for the latter; no image request observed | `script-src`, `connect-src` — not `img-src` | Playwright against `next start`; CSP violations of the failed Preview E2E Smoke run |
 | `https://portalize.schafe-vorm-fenster.de` | Portalize loader `/api/{organizerId}/load.js`, web-component mode — the embed demo (FUN-WEB-0043) | `script-src`, `connect-src` | DEC-0030, `portalize/DEPLOYMENT.md` |
 | `https://envoy-api.api.schafe-vorm-fenster.de` [PROPOSED] | envoy lead widget: its web-component script and its own submission endpoint | `script-src`, `connect-src` | DEC-0009; host read from `envoy-api`, widget host unconfirmed (Q-0022) |
 | `https://docs.google.com` | the registration form `/start` embeds visibly (TS-WEB-0016 D15, FUN-WEB-0205, DEC-0108), and since DEC-0176 `/mitmachen/registrieren` too (`TS-WEB-0023` D10) — the one framed document on the site; the origin, not the form's path, because this is a table of origins and the form URL is `src/lib/routes/lead-fallback.ts`'s | `frame-src` — and no other: no script, no connection, no image of it is loaded by our document | DEC-0121 (row written 2026-09-25); lapses with the embed (D15 "It lapses") |
@@ -65,11 +66,11 @@ Production policy. `{NONCE}` per D3.
 ```text
 default-src 'self';
 base-uri 'self';
-script-src 'self' 'nonce-{NONCE}' 'strict-dynamic' https://code.etracker.com https://portalize.schafe-vorm-fenster.de https://envoy-api.api.schafe-vorm-fenster.de;
+script-src 'self' 'nonce-{NONCE}' 'strict-dynamic' https://code.etracker.com https://www.etracker.de https://portalize.schafe-vorm-fenster.de https://envoy-api.api.schafe-vorm-fenster.de;
 style-src 'self' 'unsafe-inline';
 img-src 'self' data: https://code.etracker.com;
 font-src 'self';
-connect-src 'self' https://code.etracker.com https://portalize.schafe-vorm-fenster.de https://envoy-api.api.schafe-vorm-fenster.de;
+connect-src 'self' https://code.etracker.com https://www.etracker.de https://portalize.schafe-vorm-fenster.de https://envoy-api.api.schafe-vorm-fenster.de;
 media-src 'self';
 manifest-src 'self';
 worker-src 'self';
@@ -427,11 +428,11 @@ Rules:
   whether the web component then fetches from `assets.api.` or
   `calendar.api.` is not. Either would add a `connect-src` entry. Same
   question round as the cookie-freedom check.
-- **D1 — eTracker's real request surface.** The legacy snippet loads
-  `//code.etracker.com/code/e.js`; whether the beacon posts only there or
-  also to `www.etracker.de` must be measured on the live legacy site
-  before the list is frozen. Guessing costs either broken tracking or a
-  needlessly wide allowlist.
+- **D1 — eTracker's real request surface — measured 2026-11-13.** With the
+  real secure code the loader `code.etracker.com/code/e.js` pulls scripts
+  from `https://www.etracker.de` (`/cntcc`, `/api/v6/tracking/webEvents`);
+  that host is now in `script-src` and `connect-src`. Still open: confirm
+  against eTracker's own CSP documentation.
 - **D4 — HSTS `preload`.** `includeSubDomains` plus `preload` commits
   *every* `schafe-vorm-fenster.de` subdomain — `events.api.`, `geo.api.`,
   `classify.api.`, `assets.api.`, `portalize.`, `app.`, `next.` — to

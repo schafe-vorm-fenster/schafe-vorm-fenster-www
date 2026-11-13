@@ -42,6 +42,13 @@
  */
 export const ALLOWLIST = {
   etracker: "https://code.etracker.com",
+  /**
+   * eTracker's collector, measured on a production build with the real secure
+   * code (2026-11-13): `e.js` loads scripts from `/cntcc` and
+   * `/api/v6/tracking/webEvents` here and falls back to `fetch`. Script and
+   * connect only, no `img-src`.
+   */
+  etrackerCollector: "https://www.etracker.de",
   portalize: "https://portalize.schafe-vorm-fenster.de",
   envoy: "https://envoy-api.api.schafe-vorm-fenster.de",
   /** The ecosystem's image proxy — the embedded calendar's event images. */
@@ -102,7 +109,7 @@ export function policyDirectives({
   scriptHashes = [],
 }: PolicyInput): Record<string, readonly string[]> {
   const isDev = environment === "development";
-  const { etracker, portalize, envoy, assets, googleForms } = ALLOWLIST;
+  const { etracker, etrackerCollector, portalize, envoy, assets, googleForms } = ALLOWLIST;
   // F-2-36: only a well-formed hash source is interpolated. A rejected entry
   // is dropped rather than escaped — there is no legitimate `script-src`
   // hash this predicate refuses, so anything it refuses is a defect or an
@@ -128,6 +135,7 @@ export function policyDirectives({
     // Without it, 'self' matches the chunks and the hashes match the inline
     // scripts, both at once; that combination is what actually hydrates.
     etracker,
+    etrackerCollector,
     portalize,
     envoy,
     // TS-WEB-0014 D5: HMR needs eval, and only in local development.
@@ -150,6 +158,7 @@ export function policyDirectives({
   const connectSrc = [
     "'self'",
     etracker,
+    etrackerCollector,
     portalize,
     envoy,
     ...(isDev ? ["ws:", "http://localhost:*"] : []),
