@@ -5,6 +5,7 @@ import { isMocked, isPending, type DataStateProps } from "../data-state";
 import { PlaceholderSurface } from "../placeholder-surface/placeholder-surface";
 import { Skeleton } from "../skeleton/skeleton";
 
+import { photoBlur } from "./blur";
 import { HeroPreload } from "./hero-preload";
 import { PhotoCredit } from "./photo-credit";
 
@@ -200,6 +201,10 @@ export function PhotoSurface({
   // entirely (the previous behaviour here) silently deleted the page's one
   // `h1` whenever no photograph existed, which is every hero on this site
   // today (no photography asset exists anywhere in the tree yet).
+  const showBlur = !missingPhoto && !asImage;
+  const blur = showBlur ? photoBlur(src!) : undefined;
+  const blurWide = showBlur && wideSrc ? photoBlur(wideSrc) : undefined;
+
   if (missingPhoto && !children) {
     return (
       <PlaceholderSurface className={className} ratio={ratio} />
@@ -235,6 +240,9 @@ export function PhotoSurface({
         {
           "--photo-image": missingPhoto || asImage ? "none" : photoUrl(src!),
           ...(wideSrc && !missingPhoto ? { "--photo-image-wide": photoUrl(wideSrc) } : {}),
+          // Issue 236: the blurred preview, the lowest background layer.
+          ...(blur ? { "--photo-blur": blur } : {}),
+          ...(blurWide ? { "--photo-blur-wide": blurWide } : {}),
           ...(focal ? { "--photo-focal": focalPosition(focal) } : {}),
           "--photo-ratio": `var(--ratio-${ratio})`,
         } as CSSProperties
