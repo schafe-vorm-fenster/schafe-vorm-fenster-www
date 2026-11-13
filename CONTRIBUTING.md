@@ -238,6 +238,17 @@ cannot see whether the small range does anything.
   exactly. A runtime dependency is also registered in `stack.allow.json` with
   its reason; a devDependency gets the decision and the pin only, since
   `check:stack` reads `dependencies`.
+- **Page-only stylesheets ride in the root layout's chunk** (issues 235,
+  240). A CSS module only one page uses becomes its own chunk; Next prefetches
+  linked pages and React preloads that chunk into the current document, where
+  it stays unused (console warning). `app/[lang]/_shared-styles.ts` imports
+  them all; `scripts/check-shared-styles.test.ts` fails when a CSS module
+  imported under `app/[lang]/` is missing there. A component under
+  `src/components/` that only one page renders is not covered by the test: after
+  adding one, run `pnpm build` and check that no CSS file in
+  `.next/static/chunks/` is referenced by a single route only (compare the
+  `cssFiles` of the `page_client-reference-manifest.js` files); if one is,
+  import its module in `_shared-styles.ts`.
 
 ## Deployments
 
