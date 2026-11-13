@@ -25,6 +25,7 @@ const paths = [
   ...LOCALES.flatMap((lang) => ROUTE_IDS.map((route) => `/api/og/${lang}/${route}`)),
 ];
 
+async function main(): Promise<void> {
 let failures = 0;
 for (const path of paths) {
   const response = await fetch(`${base}${path}`, {
@@ -40,3 +41,9 @@ if (failures > 0) {
   process.exit(1);
 }
 console.log(`all ${paths.length} image routes ok on ${base}`);
+}
+
+main().catch((error: unknown) => {
+  console.error(error);
+  process.exit(1);
+});
