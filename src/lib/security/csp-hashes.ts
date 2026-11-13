@@ -122,6 +122,12 @@ export function parseHashMap(raw: unknown): HashMap {
 }
 
 function readHashMap(directory: string): HashMap {
+  // `next dev` never reads a map. A `.next/server/` left by an earlier
+  // `next build` in the same checkout would put hashes into `script-src`, and
+  // csp.ts then drops dev's 'unsafe-inline'; Next 16.4's per-request
+  // `self.__next_r=<uuid>` bootstrap script can never match a build-time hash,
+  // so the browser blocks it and the page never hydrates (issue 213).
+  if (process.env.NODE_ENV === "development" && !process.env.VERCEL_ENV) return EMPTY;
   try {
     return parseHashMap(JSON.parse(readFileSync(join(directory, CSP_HASH_MAP_PATH), "utf8")));
   } catch (error) {

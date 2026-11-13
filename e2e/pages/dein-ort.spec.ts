@@ -610,7 +610,7 @@ test.describe("TS-WEB-0020 — your place", () => {
     // No empty-state markup in S0. The live rows load in the browser
     // (DEC-0163), so without JavaScript their frames hold reserved
     // skeletons — the "no unresolved skeleton" clause is superseded (§4).
-    await expect(page.locator('[class*="empty-state-block"]')).toHaveCount(0);
+    await expect(page.locator('[data-empty-state-block]')).toHaveCount(0);
 
     await context.close();
   });

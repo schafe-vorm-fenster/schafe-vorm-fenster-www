@@ -81,6 +81,12 @@ describe("DEC-0163: one page's hashes, keyed by the path the build wrote", () =>
   it("answers [] when no map exists — `next dev`", () => {
     expect(scriptHashesFor("/", directory)).toEqual([]);
   });
+
+  it("#213: under `next dev` a stale map left by an earlier `next build` is ignored", () => {
+    writeMap({ common: [hash("a")], pages: { "/de": [hash("b")] } });
+    vi.stubEnv("NODE_ENV", "development");
+    expect(scriptHashesFor("/", directory)).toEqual([]);
+  });
 });
 
 describe("F-2-36 defence 1: nothing a request carries selects where the hashes come from", () => {

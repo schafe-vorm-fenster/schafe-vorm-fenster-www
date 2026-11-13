@@ -87,7 +87,7 @@ test.describe("/deine-region", () => {
     page,
   }) => {
     await page.goto("/deine-region");
-    const chips = page.locator('[class*="place-example-set"] [class*="chip"]');
+    const chips = page.locator('[data-place-example-set] > *');
     expect(await chips.count()).toBeLessThanOrEqual(6);
     await expect(page.getByLabel("Dein Ort")).toBeVisible();
   });

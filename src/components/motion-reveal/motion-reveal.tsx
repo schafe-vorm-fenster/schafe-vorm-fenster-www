@@ -88,7 +88,7 @@ export function MotionReveal({ className, children }: MotionRevealProps) {
   return (
     // A wrapper that groups blocks is a content stack itself (DEC-0171): the
     // reveal must not become the box that swallows the gap between them.
-    <div className={[styles.reveal, className].filter(Boolean).join(" ")} data-stack="" ref={ref}>
+    <div className={[styles.reveal, className].filter(Boolean).join(" ")} data-motion-reveal="" data-stack="" ref={ref}>
       {children}
     </div>
   );

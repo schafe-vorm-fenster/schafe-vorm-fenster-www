@@ -60,7 +60,7 @@ export function PlaceExampleSet({
   const shown = examples.slice(0, max);
 
   return (
-    <div className={classes} data-demo={isMocked(state) ? "true" : undefined}>
+    <div className={classes} data-demo={isMocked(state) ? "true" : undefined} data-place-example-set="">
       {shown.map((example) => (
         <Chip key={example.label} locale={locale} query={example.query} to={example.to}>
           {example.label}

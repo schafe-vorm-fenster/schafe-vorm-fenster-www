@@ -196,7 +196,7 @@ test.describe("TS-WEB-0021 — start the calendar in your place", () => {
         if (!main) return [];
         const clone = main.cloneNode(true) as HTMLElement;
         for (const drop of clone.querySelectorAll(
-          "#context-band, #closing-cta, [data-demo], article[class*='event-row']",
+          "#context-band, #closing-cta, [data-demo], article[data-event-row]",
         )) {
           drop.remove();
         }

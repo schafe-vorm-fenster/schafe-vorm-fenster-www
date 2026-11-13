@@ -63,7 +63,7 @@ export function LegalSection({
   }
 
   return (
-    <section className={[styles.section, className].filter(Boolean).join(" ")} id={id}>
+    <section className={[styles.section, className].filter(Boolean).join(" ")} data-legal-section="" id={id}>
       <h2 className={styles.heading} tabIndex={-1}>
         {title}
       </h2>
@@ -77,7 +77,7 @@ export function LegalSection({
           ) : null}
         </p>
       ) : (
-        <div className={styles.body}>{body}</div>
+        <div className={styles.body} data-legal-body="">{body}</div>
       )}
     </section>
   );
