@@ -160,7 +160,14 @@
   height: 100%;
   max-width: 100%;
   object-fit: contain;
-  width: auto;
+  /*
+   * Both dimensions explicit, never `auto` (issue 241):Chrome's
+   * LazyLoadImageIssue fires for a `loading="lazy"` image whose computed
+   * width or height is `auto`, whatever its width/height attributes say. The
+   * width is the mark's own ratio at the content height (40px less the
+   * plate's block padding); `max-width` still caps a wide wordmark.
+   */
+  width: calc((40px - 2 * var(--space-1)) * var(--logo-ratio));
 }
 
 .who {
