@@ -58,13 +58,32 @@ const PLACE_WITH_DATES = "schlatkow";
  */
 const EMPTY_PLACE_CANDIDATES = ["achimswalde", "altenhof", "kattenberg", "zwiedorf", "lassan"];
 
-/** The first candidate the live layer still answers empty for. */
-async function emptyPlace(request: APIRequestContext): Promise<string | undefined> {
+/**
+ * The first candidate the live layer still answers empty for. With
+ * `withNearby`, also one whose surroundings (the same 20 km window the page's
+ * nearby module asks for) hold at least one date: state B's position 2 is the
+ * *first* evidence there (TS-WEB-0008-A6), and a remote village such as
+ * Achimswalde can have an empty week around it on live data — the module is
+ * then rightly empty, which is data, not a defect (issue 181).
+ */
+async function emptyPlace(
+  request: APIRequestContext,
+  { withNearby = false }: { withNearby?: boolean } = {},
+): Promise<string | undefined> {
   for (const slug of EMPTY_PLACE_CANDIDATES) {
     const response = await request.get(`/api/places/${slug}/events?window=upcoming`);
     if (!response.ok()) continue;
-    const body = (await response.json()) as { data?: { events?: unknown[] } };
-    if ((body.data?.events ?? []).length === 0) return slug;
+    const body = (await response.json()) as {
+      data?: { events?: unknown[]; place?: { lat?: number; lng?: number } };
+    };
+    if ((body.data?.events ?? []).length !== 0) continue;
+    if (!withNearby) return slug;
+    const { lat, lng } = body.data?.place ?? {};
+    if (lat === undefined || lng === undefined) continue;
+    const nearby = await request.get(`/api/nearby?lat=${lat}&lng=${lng}`);
+    if (!nearby.ok()) continue;
+    const near = (await nearby.json()) as { data?: { events?: unknown[] } };
+    if ((near.data?.events ?? []).length > 0) return slug;
   }
   return undefined;
 }
@@ -123,8 +142,8 @@ test.describe("TS-WEB-0020 — your place", () => {
     page,
     request,
   }) => {
-    const slug = await emptyPlace(request);
-    test.skip(slug === undefined, "no covered community is empty right now");
+    const slug = await emptyPlace(request, { withNearby: true });
+    test.skip(slug === undefined, "no covered community is empty with dates around it right now");
     await page.setViewportSize(DESKTOP);
     await page.goto(`/dein-ort?ort=${slug}`);
 
