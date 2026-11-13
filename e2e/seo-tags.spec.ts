@@ -131,7 +131,7 @@ test("TS-WEB-0011-A16: favicon, touch icon and manifest are linked and answer", 
   const manifest = await page.locator('head link[rel="manifest"]').getAttribute("href");
   expect(manifest).toBeTruthy();
 
-  for (const url of [touch!, manifest!, "/api/icon/32", "/api/icon/192", "/api/icon/512"]) {
+  for (const url of [touch!, manifest!, "/api/icon/svg", "/api/icon/32", "/api/icon/192", "/api/icon/512"]) {
     const response = await request.get(url);
     expect(response.status(), url).toBe(200);
   }

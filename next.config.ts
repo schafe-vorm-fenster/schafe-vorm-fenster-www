@@ -20,7 +20,8 @@ const nextConfig: NextConfig = {
   // missing from the function bundle (ENOENT, 500). Listed here, they ship with
   // exactly these two routes. Keys are route paths, brackets escaped.
   outputFileTracingIncludes: {
-    "/api/icon/\\[size\\]": ["./node_modules/@schafe-vorm-fenster/brand-design/logos/*.png"],
+    "/api/icon/\\[size\\]": ["./node_modules/@schafe-vorm-fenster/brand-design/logos/*Round*.png"],
+    "/api/icon/svg": ["./node_modules/@schafe-vorm-fenster/brand-design/logos/*Round*.svg"],
     "/api/og/\\[lang\\]/\\[route\\]": [
       "./node_modules/@schafe-vorm-fenster/brand-design/logos/*.png",
       "./node_modules/@fontsource/atkinson-hyperlegible-next/files/atkinson-hyperlegible-next-latin-400-normal.woff",
