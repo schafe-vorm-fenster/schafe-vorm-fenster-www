@@ -21,6 +21,8 @@ import { SiteChrome } from "./_chrome";
 
 import { FontPreloads } from "../styles/font-preload";
 
+import { DocumentCommitMarker } from "@/src/components/photo-surface/hero-preload";
+
 import "../styles/brand.css";
 import "../styles/base.css";
 
@@ -187,6 +189,7 @@ export default async function RootLayout({
         >
           {children}
         </SiteChrome>
+        <DocumentCommitMarker />
       </body>
     </html>
   );
