@@ -60,7 +60,7 @@ images:
       x: 50
       "y": 55
     status: real
-    file: /images/real/home-hero.webp
+    file: /images/real/home-hero.avif
     width: 800
     height: 900
     wide_file: /images/real/home-hero-wide.webp

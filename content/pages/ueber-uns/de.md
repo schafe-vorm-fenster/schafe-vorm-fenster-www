@@ -72,7 +72,7 @@ images:
       x: 38
       "y": 58
     status: real
-    file: /images/real/ueber-uns-hero.webp
+    file: /images/real/ueber-uns-hero.avif
     width: 680
     height: 765
     wide_file: /images/real/ueber-uns-hero-wide.webp

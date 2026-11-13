@@ -61,7 +61,7 @@ images:
     credit_url: "https://commons.wikimedia.org/wiki/File:Dargitz,_Bushaltestelle.jpg"
     place: dargitz
     status: real
-    file: /images/real/dein-ort-hero.webp
+    file: /images/real/dein-ort-hero.avif
     width: 800
     height: 900
     wide_file: /images/real/dein-ort-hero-wide.webp

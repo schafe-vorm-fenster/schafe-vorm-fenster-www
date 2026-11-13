@@ -63,7 +63,7 @@ images:
       x: 45
       "y": 62
     status: real
-    file: /images/real/mitmachen-hero.webp
+    file: /images/real/mitmachen-hero.avif
     width: 800
     height: 900
     wide_file: /images/real/mitmachen-hero-wide.webp

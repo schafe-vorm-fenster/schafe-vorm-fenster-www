@@ -62,7 +62,7 @@ images:
     credit_title: "Güterberg, Ausblick"
     credit_url: "https://commons.wikimedia.org/wiki/File:G%C3%BCterberg,_Ausblick.jpg"
     status: real
-    file: /images/real/deine-region-hero.webp
+    file: /images/real/deine-region-hero.avif
     width: 800
     height: 900
     wide_file: /images/real/deine-region-hero-wide.webp

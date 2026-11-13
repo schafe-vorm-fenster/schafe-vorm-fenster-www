@@ -52,25 +52,9 @@
 @font-face {
   font-family: "Atkinson Hyperlegible Mono";
   font-style: normal;
-  font-weight: 400;
-  font-display: optional;
-  src: url("@fontsource/atkinson-hyperlegible-mono/files/atkinson-hyperlegible-mono-latin-400-normal.woff2") format("woff2");
-}
-
-@font-face {
-  font-family: "Atkinson Hyperlegible Mono";
-  font-style: normal;
   font-weight: 700;
   font-display: optional;
   src: url("@fontsource/atkinson-hyperlegible-mono/files/atkinson-hyperlegible-mono-latin-700-normal.woff2") format("woff2");
-}
-
-@font-face {
-  font-family: "Atkinson Hyperlegible Mono";
-  font-style: normal;
-  font-weight: 800;
-  font-display: optional;
-  src: url("@fontsource/atkinson-hyperlegible-mono/files/atkinson-hyperlegible-mono-latin-800-normal.woff2") format("woff2");
 }
 
 /*
