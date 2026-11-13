@@ -193,9 +193,8 @@ const NOT_FOUND_CASES = [
   // F-3-13 — the door F-2-70's fix was left open on. `isUnservablePath()`
   // exempted **anything** ending in an asset extension, whether or not a file
   // existed, so these never reached the 404 rewrite and rendered
-  // the empty `<html id="__next_error__">` shell instead. `/favicon.ico` is
-  // the one every browser asks for by itself, on every page load.
-  { path: "/favicon.ico", heading: "Seite nicht gefunden", lang: "de" },
+  // the empty `<html id="__next_error__">` shell instead. (`/favicon.ico` is
+  // no longer one of them: it redirects to the generated icon, issue 216.)
   { path: "/does-not-exist.js", heading: "Seite nicht gefunden", lang: "de" },
   { path: "/nope.css", heading: "Seite nicht gefunden", lang: "de" },
   { path: "/robots.txt.map", heading: "Seite nicht gefunden", lang: "de" },
@@ -280,6 +279,13 @@ test("F-3-13: every page links the brand icon, and it resolves", async ({ page, 
     expect(asset.status(), `the icon asset linked from ${path}`).toBe(200);
     expect(await asset.text()).toContain("clipPath");
   }
+});
+
+/** Issue 216 — `/favicon.ico` answers with the generated brand icon, not a 404. */
+test("issue 216: /favicon.ico resolves to the brand icon", async ({ request }) => {
+  const response = await request.get("/favicon.ico");
+  expect(response.status()).toBe(200);
+  expect(response.headers()["content-type"]).toMatch(/^image\//);
 });
 
 /**

@@ -4,7 +4,10 @@
   "description": "The official Schafe vorm Fenster website.",
   "private": true,
   "license": "ISC",
-  "packageManager": "pnpm@10.26.0",
+  "packageManager": "pnpm@10.34.9",
+  "engines": {
+    "node": "26.x"
+  },
   "scripts": {
     "dev": "next dev --port ${PORT:-3100}",
     "build": "next build",
@@ -34,6 +37,7 @@
     "check:contrast": "tsx scripts/check-contrast.ts",
     "check:seo-budget": "tsx scripts/check-seo-budget.ts",
     "check:terms": "tsx scripts/check-terms.ts",
+    "check:image-routes": "tsx scripts/check-image-routes.ts",
     "check:api-routes": "tsx scripts/check-api-routes.ts",
     "check:csp": "tsx scripts/check-csp.ts",
     "check:search-wording": "tsx scripts/check-search-wording.ts",
@@ -53,19 +57,19 @@
     "@fontsource/atkinson-hyperlegible-mono": "5.3.0",
     "@fontsource/atkinson-hyperlegible-next": "5.3.0",
     "@schafe-vorm-fenster/brand-design": "2.9.0",
-    "@vercel/functions": "3.9.7",
-    "js-yaml": "4.3.2",
-    "lucide-react": "1.45.0",
-    "next": "16.3.4",
-    "react": "19.2.8",
-    "react-dom": "19.2.8",
-    "zod": "4.4.3"
+    "@vercel/functions": "3.11.2",
+    "js-yaml": "5.5.0",
+    "lucide-react": "1.72.0",
+    "next": "16.4.6",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "zod": "4.6.7"
   },
   "devDependencies": {
-    "@axe-core/playwright": "4.13.0",
+    "@axe-core/playwright": "4.14.0",
     "@leafcutter-strict/blueprint-complete": "0.2.4",
     "@leafcutter-strict/library-schemas": "0.4.1",
-    "@playwright/test": "1.63.0",
+    "@playwright/test": "1.65.0",
     "@schafe-vorm-fenster/audiences": "^0.3.3",
     "@schafe-vorm-fenster/brand-identity": "^0.1.4",
     "@schafe-vorm-fenster/goals": "^0.3.3",
@@ -76,22 +80,44 @@
     "@schafe-vorm-fenster/people": "^0.3.6",
     "@schafe-vorm-fenster/posts": "^0.4.0",
     "@schafe-vorm-fenster/proof": "^0.3.5",
-    "@types/js-yaml": "4.0.9",
-    "@types/node": "25.9.6",
+    "@types/node": "26.6.6",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
-    "@vitest/coverage-v8": "4.1.11",
-    "ai": "7.0.99",
+    "@vitest/coverage-v8": "5.1.0",
+    "ai": "7.0.170",
     "babel-plugin-react-compiler": "1.0.0",
-    "dotenv": "17.4.2",
-    "eslint": "9.39.5",
-    "eslint-config-next": "16.3.4",
-    "googleapis": "171.4.0",
+    "dotenv": "18.0.10",
+    "eslint": "10.14.0",
+    "eslint-config-next": "16.4.6",
+    "googleapis": "189.0.0",
     "husky": "9.1.7",
-    "sharp": "0.35.4",
-    "tsx": "4.21.0",
-    "typescript": "5.9.3",
-    "vercel": "53.4.0",
-    "vitest": "4.1.11"
+    "sharp": "0.35.5",
+    "tsx": "4.23.15",
+    "typescript": "6.0.3",
+    "vercel": "65.15.0",
+    "vite": "8.3.8",
+    "vitest": "5.1.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "brace-expansion@<1.1.21": "^1.1.22",
+      "brace-expansion@>=5 <5.0.12": "^5.0.13",
+      "js-yaml@>=4 <4.3.2": "^4.3.2",
+      "minimatch@>=10 <10.2.3": "^10.2.6",
+      "path-to-regexp@>=8 <8.4.0": "^8.4.2",
+      "smol-toml@<1.8.1": "^1.9.1",
+      "source-map-js@<1.2.2": "^1.2.2",
+      "tar@>=7 <7.5.21": "^7.5.23",
+      "undici@>=6 <6.29.1": "^6.29.1",
+      "undici@>=7 <7.30.1": "^7.30.2",
+      "zod@>=4 <4.6.6": "^4.6.7"
+    },
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "eslint-plugin-import>eslint": "10",
+        "eslint-plugin-jsx-a11y>eslint": "10",
+        "eslint-plugin-react>eslint": "10"
+      }
+    }
   }
 }

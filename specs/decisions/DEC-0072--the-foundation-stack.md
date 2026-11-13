@@ -128,6 +128,11 @@ because each one changed a file:
 - The deny-set in `stack.allow.json` is [PROPOSED] — no source enumerates
   forbidden frameworks (TS-WEB-0017 D1 says so itself). It is changed by a
   decision, not by a commit.
+- **Amended by DEC-0221 (2026-11-12, #203):** the version line — Vitest 4,
+  ESLint 9, TypeScript 5.9 — is superseded by Vitest 5, ESLint 10 and
+  TypeScript 6.0, on Node 26; deviation 3's reason (siblings and
+  `eslint-config-next` on 5.9) is spent. The tool choices and deviations 1
+  and 2 stand.
 - `knip` and `jscpd` are *not* adopted yet. They belong to the `Quality` job
   of TS-WEB-0015 D4, which is stage-2 pipeline work; adopting the tools before the
   job that runs them would be scope the plan does not ask for.
