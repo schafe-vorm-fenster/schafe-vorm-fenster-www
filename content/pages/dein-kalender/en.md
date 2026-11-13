@@ -169,16 +169,16 @@ names a postcode — the copy guide's avoid list (DEC-0079).
 
 <!-- id: dein-kalender-3-embed-demo; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: approved -->
 
-**Heading:** A real calendar from three neighbouring villages
+**Heading:** A real calendar from the municipality of Rothenklempenow
 
-Here is what is coming up in Schlatkow, Schmatzin and Wolfradshof over the
+Here is what is coming up in Rothenklempenow, Dorotheenwalde, Glashütte and Mewegen over the
 next few weeks.
 
 One sentence instead of two (2026-09-22 review, "How it works"; issue #163,
 DEC-0206, DEC-0213): the intro shares no word stem with the heading, and the
 transition "This is what it looks like once it sits on your site:" is gone, as
 it is no text level of its own. The place names come from
-`src/lib/embed/portalize.ts` (`SHOWCASE_CALENDAR`), not from the dictation.
+`src/lib/embed/portalize.ts` (`DEIN_KALENDER_SHOWCASE`), not from the dictation.
 
 ## Slot 3b — What it holds is up to you (configuration block)
 

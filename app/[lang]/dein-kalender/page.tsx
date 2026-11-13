@@ -27,7 +27,7 @@ import { HERO_IMAGE_ID } from "@/src/lib/pages/hero-images";
 import { slot } from "@/src/lib/content/loader";
 import { isDemoSlot } from "@/src/lib/content/provenance";
 import { CONFIG_REPO_URL } from "@/src/lib/embed/config-repo";
-import { DEFAULT_WEEKS_AHEAD, SHOWCASE_CALENDAR } from "@/src/lib/embed/portalize";
+import { DEFAULT_WEEKS_AHEAD, DEIN_KALENDER_SHOWCASE } from "@/src/lib/embed/portalize";
 import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
 import { tierPrice } from "@/src/lib/pricing/offerings";
 import { dictionary } from "@/src/lib/i18n/dictionary";
@@ -393,11 +393,11 @@ export default async function Page({
           copy={embedParagraphs[0]}
           heading={fieldAt(embedDemo.blocks, 0) ?? ""}
           locale={locale}
-          // The real calendar of Schlatkow, Schmatzin and Wolfradshof —
+          // The real calendar of Rothenklempenow, Dorotheenwalde, Glashütte and Mewegen —
           // `src/lib/embed/portalize.ts` records which one and why.
-          organizerId={SHOWCASE_CALENDAR.organizerId}
+          organizerId={DEIN_KALENDER_SHOWCASE.organizerId}
           ratio="map"
-          showBranding={SHOWCASE_CALENDAR.branding}
+          showBranding={DEIN_KALENDER_SHOWCASE.branding}
           state="ready"
           weeksAhead={DEFAULT_WEEKS_AHEAD}
         />

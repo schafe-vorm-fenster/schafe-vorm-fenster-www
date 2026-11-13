@@ -2,7 +2,7 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
 import { ALLOWLIST } from "../src/lib/security/csp";
-import { SHOWCASE_CALENDAR } from "../src/lib/embed/portalize";
+import { DEIN_KALENDER_SHOWCASE } from "../src/lib/embed/portalize";
 import { href } from "../src/lib/routes/routes";
 
 /**
@@ -109,7 +109,7 @@ test.describe("the embed frame", () => {
     await expect
       .poll(() => loaders.length, { timeout: 15_000 })
       .toBeGreaterThan(0);
-    expect(loaders[0]).toContain(SHOWCASE_CALENDAR.organizerId);
+    expect(loaders[0]).toContain(DEIN_KALENDER_SHOWCASE.organizerId);
   });
 
   test("loads a real calendar without contacting an unlisted host or logging an error", async ({
@@ -182,7 +182,7 @@ test.describe("the embed frame", () => {
 
     // The demo's own copy names the places the calendar is filtered to, next
     // to the widget that shows them.
-    await expect(demo).toContainText("Schlatkow");
+    await expect(demo).toContainText("Rothenklempenow");
 
     // And the configuration block names every setting the embed actually
     // has. The keys are asserted by name rather than by count: a list that

@@ -70,6 +70,28 @@ export const SHOWCASE_CALENDAR = {
   ownEvents: false,
 } as const;
 
+/**
+ * The embedded calendar of `/dein-kalender` only (issue 156).
+ *
+ * A dedicated Starter test organizer created in the CRM (listed in
+ * `MATEO_TEST_USER_IDS`, which only drops *events* whose organizer is a test
+ * account, so the other organizers' dates in this area still show). Its
+ * `filters.communities` are the Rothenklempenow area: Rothenklempenow
+ * `geoname.2844008`, Dorotheenwalde `geoname.2935608`, Glashütte
+ * `geoname.2920094`, Mewegen `geoname.2871423`; no categories, no branding
+ * (read from `GET /api/{organizerId}/config`, 2026-11-13). Its events carry no
+ * image, so the CSP allowlist is unchanged. `/deine-region` keeps
+ * `SHOWCASE_CALENDAR`.
+ */
+export const DEIN_KALENDER_SHOWCASE = {
+  organizerId: "5e266d6e-6f7d-401a-9d64-9da3bc051b12",
+  communities: ["Rothenklempenow", "Dorotheenwalde", "Glashütte", "Mewegen"],
+  categoriesFiltered: false,
+  branding: false,
+  /** No event has this organizer as its own; the showcase stays off (DEC-0173 §2). */
+  ownEvents: false,
+} as const;
+
 /** The loader's default, restated so the page copy and the embed agree. */
 export const DEFAULT_WEEKS_AHEAD = 13;
 
