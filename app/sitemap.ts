@@ -3,6 +3,7 @@ import {
   alternateUrls,
   canonicalUrl,
   ROUTE_IDS,
+  ROUTES,
 } from "@/src/lib/routes/routes";
 
 import type { MetadataRoute } from "next";
@@ -41,7 +42,8 @@ import type { MetadataRoute } from "next";
  * partially.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
-  return ROUTE_IDS.flatMap((route) =>
+  // A `noindex` route is never listed (TS-WEB-0025 D9/A10; issue 228).
+  return ROUTE_IDS.filter((route) => !ROUTES[route].noindex).flatMap((route) =>
     LOCALES.map((locale) => ({
       url: canonicalUrl(route, locale),
       alternates: { languages: alternateUrls(route) },
