@@ -413,7 +413,9 @@ describe("TS-WEB-0004-A5: the three machine surfaces answer, per domain", () => 
       default: () => { url: string; alternates?: { languages?: object } }[];
     };
     const entries = sitemap();
-    expect(entries).toHaveLength(ROUTE_IDS.length * LOCALES.length);
+    expect(entries).toHaveLength(
+      ROUTE_IDS.filter((route) => !ROUTES[route].noindex).length * LOCALES.length,
+    );
     expect(new Set(entries.map((entry) => entry.url)).size).toBe(
       entries.length,
     );

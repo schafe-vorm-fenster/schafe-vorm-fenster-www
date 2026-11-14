@@ -300,7 +300,8 @@ ambiguity would open an unbounded set of indexable URLs. The refinement:
 | 404 and 500 | `noindex, follow`, real status (FUN-WEB-0145, FUN-WEB-0147, CON-WEB-0064, FUN-WEB-0027) |
 | `next.*` preview and `*.vercel.app` | `noindex, nofollow` on **every** response, as both `X-Robots-Tag` header and meta tag (DEC-0035) |
 | Landing-only domains | indexable; self-canonical only (TS-WEB-0001 D6) |
-| `/mitmachen/registrieren`, `/dein-kalender/bestellen`, `/deine-region/angebot` | indexable, no special treatment — they are content pages, not funnels |
+| `/mitmachen/registrieren`, `/deine-region/angebot` | indexable, no special treatment — they are content pages, not funnels |
+| `/dein-kalender/bestellen` | `noindex, follow`, absent from `sitemap.xml` (TS-WEB-0025 D9, A10) — the order flow is transactional; `/dein-kalender` is the search surface. Amended from "indexable" (issue 228: a noindex URL in the sitemap is a Search Console error) |
 
 Rule of thumb behind the table: a query parameter changes what a page
 *shows*, never which page it *is*.
