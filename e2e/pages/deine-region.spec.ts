@@ -11,6 +11,13 @@ const REPO_ROOT = join(__dirname, "..", "..");
 const BRIEFING_MODULE = join("src", "lib", "live", "briefing.ts");
 
 /**
+ * The click-event classifier (DEC-0218 §3) recognises the booking *host* to
+ * name the `appointment` target; it holds the host, not the configured URL,
+ * so it is not a second home for the appointment target (F-2-32).
+ */
+const HOST_CLASSIFIER_MODULE = join("src", "lib", "analytics", "cta-event.ts");
+
+/**
  * Every shipped `.ts`/`.tsx` file under `app/` and `src/`, minus the module
  * that defines the URL and minus test files — the static half of F-2-32 below
  * reads them to prove no second place knows the appointment target. Test
@@ -25,13 +32,22 @@ function shippedSourceFiles(): string[] {
       if (entry.isDirectory()) {
         if (entry.name !== "node_modules" && !entry.name.startsWith(".")) walk(path);
       } else if (/\.tsx?$/.test(entry.name) && !entry.name.includes(".test.")) {
-        if (!path.endsWith(BRIEFING_MODULE)) found.push(path);
+        if (!path.endsWith(BRIEFING_MODULE) && !path.endsWith(HOST_CLASSIFIER_MODULE)) found.push(path);
       }
     }
   };
   for (const directory of ["app", "src"]) walk(join(REPO_ROOT, directory));
   return found;
 }
+
+/**
+ * The `request-licence-quote` *conversion* event (TS-WEB-0012 D4) — not the
+ * CTA click event every primary button now reports too (DEC-0218 §3, issue 198),
+ * whose `category` is the same goal id. The dev tracker logs the two as
+ * `[analytics:mock] conversion {goalId: …}` and `[analytics:mock] cta {…}`.
+ */
+const isQuoteConversion = (text: string): boolean =>
+  text.includes("conversion") && text.includes("request-licence-quote");
 
 /**
  * TS-WEB-0026 — `/deine-region` and `/deine-region/angebot` — acceptance pass.
@@ -467,7 +483,7 @@ test.describe("/deine-region/angebot", () => {
   }) => {
     const fires: string[] = [];
     page.on("console", (message) => {
-      if (message.text().includes("request-licence-quote")) fires.push(message.text());
+      if (isQuoteConversion(message.text())) fires.push(message.text());
     });
 
     await page.goto("/deine-region/angebot");
@@ -486,7 +502,7 @@ test.describe("/deine-region/angebot", () => {
   test("F-2-65 / TS-WEB-0012-A5: a rapid double-click submits once", async ({ page }) => {
     const fires: string[] = [];
     page.on("console", (message) => {
-      if (message.text().includes("request-licence-quote")) fires.push(message.text());
+      if (isQuoteConversion(message.text())) fires.push(message.text());
     });
 
     await page.goto("/deine-region/angebot");
