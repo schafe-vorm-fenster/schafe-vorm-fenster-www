@@ -175,6 +175,10 @@
   flex-direction: column;
   margin: 0;
   min-width: 0;
+  /* A long unbreakable name or role (a German compound in mono 700) may break
+     inside the word at 320 px instead of spilling past the card and widening
+     the document (issue 246). Words that fit are untouched. */
+  overflow-wrap: anywhere;
 }
 
 /* SRC-0014 §Quote card's author: the name mono 15 / 700, the role 15 / 400
