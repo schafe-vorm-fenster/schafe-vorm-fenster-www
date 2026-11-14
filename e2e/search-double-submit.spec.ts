@@ -9,7 +9,8 @@ import { expect, test } from "@playwright/test";
  * the chaos hasty-clicker persona measured the result as
  * `/dein-ort?ort=` — the parameter present and **empty**, the typed value
  * gone (C3-H-2). 100 % on the 404 page's recovery widget, reproduced on `/`
- * and `/dein-ort` too. A single clean click on the same widget preserves the
+ * (before DEC-0194 moved its search into the phone section, where nothing
+ * navigates) and `/dein-ort` too. A single clean click on the same widget preserves the
  * value, so it is a double-submit race rather than a general defect.
  *
  * The gesture is reproduced the way it actually happens — two real clicks
@@ -32,7 +33,6 @@ import { expect, test } from "@playwright/test";
 
 const CASES = [
   { path: "/dies-gibt-es-nicht-xyz", id: "ort-suche-404", value: "quilow", expected: "/dein-ort" },
-  { path: "/", id: "ort-suche-fokus", value: "quilow", expected: "/dein-ort" },
   { path: "/dein-ort", id: "ort-suche-fokus", value: "quilow", expected: "/dein-ort" },
   { path: "/dein-kalender/bestellen", id: "ort-suche", value: "10115", expected: undefined },
 ] as const;
