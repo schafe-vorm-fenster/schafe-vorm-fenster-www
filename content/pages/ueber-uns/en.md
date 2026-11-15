@@ -75,11 +75,11 @@ images:
       "y": 58
     status: real
     file: /images/real/ueber-uns-hero.webp
-    width: 680
-    height: 765
+    width: 800
+    height: 900
     wide_file: /images/real/ueber-uns-hero-wide.webp
-    wide_width: 980
-    wide_height: 420
+    wide_width: 1400
+    wide_height: 600
   - id: ueber-uns-founder-portrait
     slot: ueber-uns-1-origin
     ratio: square

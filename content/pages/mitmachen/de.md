@@ -61,14 +61,14 @@ images:
     credit_url: "https://commons.wikimedia.org/wiki/File:Osterfeuer_2023_in_Schmatzin.jpg"
     focal:
       x: 45
-      "y": 62
+      "y": 52
     status: real
     file: /images/real/mitmachen-hero.webp
-    width: 800
-    height: 900
+    width: 603
+    height: 678
     wide_file: /images/real/mitmachen-hero-wide.webp
-    wide_width: 1190
-    wide_height: 510
+    wide_width: 1400
+    wide_height: 600
   - id: mitmachen-path-whatsapp
     slot: mitmachen-3-path-whatsapp
     ratio: feature
