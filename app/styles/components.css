@@ -78,6 +78,12 @@
 
   /* ── Aspect ratios — SRC-0014 §Media ratios ──────────────────────────── */
   --ratio-hero: 8 / 9; /* 21 / 9 from the lg switch point, below */
+  /* Issue 255, DEC-0153 §4: where a hero's focal point lands in its box. The
+     generator cuts every hero rendition on the same pair
+     (`HERO_ANCHOR`, scripts/lib/focal-crop.mjs) and photo-surface positions
+     the hero's backgrounds on it; the wide pair applies from 48rem. */
+  --hero-anchor-phone: 50% 28%;
+  --hero-anchor-wide: 68% 32%;
   --ratio-feature: 7 / 5;
   --ratio-proof: 5 / 2;
   --ratio-map: 16 / 9;

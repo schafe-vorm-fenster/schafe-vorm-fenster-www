@@ -48,7 +48,7 @@ import { config as loadEnv } from "dotenv";
 import * as yaml from "js-yaml";
 import sharp from "sharp";
 
-import { DEFAULT_FOCAL, anchoredCropWindow, cropWindow } from "./lib/focal-crop.mjs";
+import { DEFAULT_FOCAL, HERO_ANCHOR, anchoredCropWindow, cropWindow } from "./lib/focal-crop.mjs";
 
 const REPO = join(dirname(new URL(import.meta.url).pathname), "..");
 const CONTENT = join(REPO, "content/pages");
@@ -81,6 +81,14 @@ const PRICE_PER_IMAGE_USD = 0.04;
  */
 /** The story stage's media box (DEC-0153): 5:4, wide enough for 2× at 600 px. */
 const STAGE_OUT = { width: 1200, height: 960 };
+
+/**
+ * Issue 255: the phone hero's resolution floor. The phone box is 390 CSS px
+ * wide (780 at 2x); an 8:9 window of 600 px, scaled up to the 800 px file, is
+ * still close to native there, and it is what lets a low, wide master (the
+ * 2400×1018 `/mitmachen` one) put its motif on the 28 % anchor at all.
+ */
+const HERO_PHONE_MIN_WIDTH = 600;
 
 const RATIOS = {
   hero: {
@@ -552,15 +560,15 @@ async function fetchCommonsOriginal(title) {
  * focal point can: it is in the entry, it is what `photo-surface` positions
  * the same photograph with, and the two now agree by construction.
  */
-async function placeRendition(entry, from, out, file, anchor) {
+async function placeRendition(entry, from, out, file, anchor, label = "stage", minWidth) {
   const image = sharp(from, { autoOrient: true });
   const { width, height } = await image.metadata();
   const window = anchor
-    ? anchoredCropWindow({ width, height }, out, entry.focal ?? DEFAULT_FOCAL, anchor)
+    ? anchoredCropWindow({ width, height }, out, entry.focal ?? DEFAULT_FOCAL, anchor, { minWidth })
     : cropWindow({ width, height }, out, entry.focal ?? DEFAULT_FOCAL);
   if (anchor) {
     console.log(
-      `   stage: focal lands at ${window.landed.x}% ${window.landed.y}% ` +
+      `   ${label}: focal lands at ${window.landed.x}% ${window.landed.y}% ` +
         `(anchor ${anchor.x}% ${anchor.y}%)${window.anchored ? "" : " — NOT anchored, the original is too small"}`,
     );
   }
@@ -592,7 +600,18 @@ async function placeRendition(entry, from, out, file, anchor) {
  */
 async function placeReal(entry, from) {
   const spec = RATIOS[entry.ratio];
-  const placed = await placeRendition(entry, from, spec.out, join(REAL_DIR, `${entry.id}.webp`));
+  // Issue 255: a hero is cut so the focal point lands on the hero's anchor
+  // (`HERO_ANCHOR`), per rendition; every other ratio is cut centred on it.
+  const hero = entry.ratio === "hero";
+  const placed = await placeRendition(
+    entry,
+    from,
+    spec.out,
+    join(REAL_DIR, `${entry.id}.webp`),
+    hero ? HERO_ANCHOR.phone : undefined,
+    "hero phone",
+    HERO_PHONE_MIN_WIDTH,
+  );
   const written = {
     file: `${REAL_PREFIX}/${entry.id}.webp`,
     width: placed.width,
@@ -622,6 +641,8 @@ async function placeReal(entry, from) {
     from,
     spec.wide.out,
     join(REAL_DIR, `${entry.id}-wide.webp`),
+    hero ? HERO_ANCHOR.wide : undefined,
+    "hero wide",
   );
   return {
     ...written,

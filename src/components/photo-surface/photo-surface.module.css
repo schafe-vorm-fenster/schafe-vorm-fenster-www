@@ -235,6 +235,24 @@
   justify-content: flex-end;
 }
 
+/*
+ * Issue 255 (DEC-0153 §4, extended to heroes): a hero is positioned on the
+ * system-wide anchor, never on the image's focal point. The generator cut
+ * each rendition so the focal point sits exactly on that anchor, which makes
+ * the motif land there in every box shape (a percentage position keeps the
+ * point at the same share of the box under `cover`). The text stack stands
+ * bottom-left, so the motif goes up and right (wide) or to the top centre
+ * (phone). Covers the background layers, the blur preview among them, and the
+ * `<img>` mode. A surface that is not a hero keeps `--photo-focal`.
+ */
+.surface[data-hero="true"] {
+  background-position: var(--hero-anchor-phone);
+}
+
+.surface[data-hero="true"] .pictureImage {
+  object-position: var(--hero-anchor-phone);
+}
+
 .surface[data-hero="true"]::before {
   content: "";
   flex: none;
@@ -267,6 +285,11 @@
 @media (min-width: 48rem) {
   .surface[data-hero="true"] {
     --photo-headroom: 20 / 3;
+    background-position: var(--hero-anchor-wide);
+  }
+
+  .surface[data-hero="true"] .pictureImage {
+    object-position: var(--hero-anchor-wide);
   }
 
   .surface[data-hero="true"]::before {

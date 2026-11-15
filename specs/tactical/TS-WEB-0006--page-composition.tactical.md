@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0001, FUN-WEB-0133, FUN-WEB-0134, FUN-WEB-0135, FUN-WEB-0136, FUN-WEB-0004, FUN-WEB-0005, FUN-WEB-0006, FUN-WEB-0007, FUN-WEB-0138, CON-WEB-0059, FUN-WEB-0009, FUN-WEB-0139, CON-WEB-0060, BUS-WEB-0015, FUN-WEB-0202, BUS-WEB-0016, FUN-WEB-0203]
 sources: [SRC-0001, SRC-0003, SRC-0014, SRC-0017, SRC-0018]
-decisions: [DEC-0036, DEC-0039, DEC-0080, DEC-0081, DEC-0082, DEC-0083, DEC-0084, DEC-0110, DEC-0170, DEC-0174, DEC-0196, DEC-0206]
+decisions: [DEC-0036, DEC-0039, DEC-0080, DEC-0081, DEC-0082, DEC-0083, DEC-0084, DEC-0110, DEC-0170, DEC-0174, DEC-0196, DEC-0206, DEC-0223]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -420,6 +420,16 @@ form. Which kicker, transition and intro each section keeps is decided page by
 page in the follow-up PRs of issue #163; A21 lists the breaches until then as
 warnings (DEC-0206 §5).
 
+### D13 — The hero photograph sits on the system-wide anchor [PROPOSED: DEC-0223]
+
+A hero's photograph is cut and positioned so that its declared focal point
+lands on one of two anchors of the hero box, never on its own position in the
+photograph: **x 68 % / y 32 %** on the wide rendition (from 48rem), **x 50 % /
+y 28 %** on the phone rendition. The focal point's pixel position then lies
+outside the text stack (headline, lead, CTA or search) at every width. Only
+the per-image `focal` is declared; the anchors are constants (DEC-0223,
+extending DEC-0153 §4).
+
 ## Free for the generator
 
 - [FREE] Visual design and internal layout of every block, within TS-WEB-0002
@@ -459,6 +469,8 @@ warnings (DEC-0206 §5).
 | TS-WEB-0006-A19 | e2e | On every route in both languages, and on `/dein-ort` in state A: no module repeats another's job — the homescreen instructions render at most once; no visible proof quote follows the last live row of its section; no section whose last visible text is a quote is followed by a section carrying a visible quote (SRC-0014 §Module rules, DEC-0170, `e2e/module-rules.spec.ts`). |
 | TS-WEB-0006-A20 | e2e | On every page, no top-level block of `main` other than the context band and the closing block lacks a heading of its own while every link in it points at a job the band offers: a one-sentence hand-off to another job duplicates the band (SRC-0017 CG-045, DEC-0174 §3). |
 | TS-WEB-0006-A21 | e2e | On every route but `/rechtliches`, `/ueber-uns/archiv` and the two flow routes, in both languages, at 390 × 844: every top-level section of `main` after the hero, other than the context band and the contact section, stands at most three text levels (kicker, heading, intro; a line before the heading counts) before its first content element, and no two of those levels share a word stem (D12, DEC-0206). Until the follow-up PRs of issue #163 land, `e2e/section-heads.spec.ts` reports a breach as a `warning` annotation, not a failure (DEC-0206 §5). |
+| TS-WEB-0006-A22 | e2e | On every page with a hero photograph, in both languages, at 360, 390, 700, 1024, 1280, 1470 and 1920 px: the focal point's pixel position in the hero box lies outside the bounding box of the text stack (headline, lead, CTA or search), and the hero's background is positioned on the anchor of the rendition that applies — x 50 % / y 28 % below 48rem, x 68 % / y 32 % from it (D13, DEC-0223). |
+| TS-WEB-0006-A23 | unit | `anchoredCropWindow` cuts a hero source at the phone anchor and at the wide anchor with the focal point exactly on it, inside the frame and at the target ratio; the anchor constants of the generator equal `--hero-anchor-phone` / `--hero-anchor-wide` in `app/styles/components.css` (D13, DEC-0223). |
 
 ## Coverage
 
