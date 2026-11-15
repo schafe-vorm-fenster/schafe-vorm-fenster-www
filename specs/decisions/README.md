@@ -248,3 +248,4 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0202 — The image budget is 200 KB per delivered size, and a photograph is delivered responsively](DEC-0202--the-image-budget-is-200-kb-per-delivered-size.md)
 - [DEC-0221 — Node 26 everywhere, the toolchain on current majors, and the registry credentials out of the committed .npmrc](DEC-0221--node-26-current-toolchain-majors-and-registry-credentials-out-of-npmrc.md)
 - [DEC-0222 — Production renders what preview renders, and the owner approved every page and slot the preview shows](DEC-0222--production-renders-what-preview-renders-and-the-owner-approved-the-content-tree.md)
+- [DEC-0223 — The hero photograph sits on a system-wide anchor, not on its own focal point](DEC-0223--the-hero-photograph-sits-on-a-system-wide-anchor.md)

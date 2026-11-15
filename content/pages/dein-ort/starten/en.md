@@ -47,6 +47,9 @@ images:
     credit: "Schafe vorm Fenster, CC0 1.0, via Wikimedia Commons"
     credit_title: "Groß Luckow, Feuerwehr und Gemeindezentrum"
     credit_url: "https://commons.wikimedia.org/wiki/File:Gro%C3%9F_Luckow,_Feuerwehr_und_Gemeindezentrum.jpg"
+    focal:
+      x: 42
+      "y": 52
     status: real
     file: /images/real/dein-ort-starten-hero.webp
     width: 800

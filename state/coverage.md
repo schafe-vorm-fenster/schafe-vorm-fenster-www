@@ -6,26 +6,26 @@ What verifies each acceptance criterion, at the level the criterion itself
 declares. `pnpm check:coverage` writes this file; `scripts/check-coverage.ts`
 says what the five verdicts mean and what gates.
 
-**520 criteria · 343 closed · 177 open (66 % closed)**
+**522 criteria · 345 closed · 177 open (66 % closed)**
 
 | Verdict | Count | What it means |
 | --- | --- | --- |
-| VERIFIED | 338 | a test title in a file a runner runs carries the id |
+| VERIFIED | 340 | a test title in a file a runner runs carries the id |
 | METERED | 5 | a `check:` meter in the chain, or a CI job, names it (`static` and `tool`) |
 | ATTESTED | 0 | a current row in `specs/verification/manual-checks.md` (`manual` only) |
 | NAMED ONLY | 30 | the id is in a runner file but in no test title — **not coverage** |
 | MISSING | 147 | nothing names it |
 
-Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this commit, 0 without an instrument.
+Rule 1 (a new criterion arrives with its instrument): 2 criterion(a) new in this commit, 0 without an instrument.
 
 ## By level
 
 | Level | Criteria | Closed | Open | Closed |
 | --- | --- | --- | --- | --- |
 | static | 92 | 62 | 30 | 67 % |
-| unit | 36 | 31 | 5 | 86 % |
+| unit | 37 | 32 | 5 | 86 % |
 | integration | 78 | 54 | 24 | 69 % |
-| e2e | 244 | 194 | 50 | 80 % |
+| e2e | 245 | 195 | 50 | 80 % |
 | tool | 39 | 2 | 37 | 5 % |
 | manual | 31 | 0 | 31 | 0 % |
 
@@ -38,7 +38,7 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | TS-WEB-0003 | 8 | 2 | A1 A2 A3 A4 A5 A6 |
 | TS-WEB-0004 | 13 | 10 | A6 A7 A11 |
 | TS-WEB-0005 | 16 | 13 | A9 A10 A15 |
-| TS-WEB-0006 | 21 | 17 | A4 A13 A14 A16 |
+| TS-WEB-0006 | 23 | 19 | A4 A13 A14 A16 |
 | TS-WEB-0007 | 19 | 9 | A2 A3 A4 A5 A6 A9 A10 A11 A15 A16 |
 | TS-WEB-0008 | 22 | 17 | A6 A7 A8 A12 A13 |
 | TS-WEB-0009 | 14 | 7 | A1 A2 A3 A8 A9 A12 A13 |

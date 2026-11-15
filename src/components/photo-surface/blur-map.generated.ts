@@ -3,28 +3,28 @@
 
 export const PHOTO_BLUR: Readonly<Record<string, { readonly sha256: string; readonly uri: string }>> = {
   "/images/real/dein-kalender-hero-wide.webp": {
-    sha256: "3f40eea983e7446c048605cf4d9b9cb86a4d2494f0eb147d5e9f05c88f696f69",
-    uri: "data:image/webp;base64,UklGRoIAAABXRUJQVlA4IHYAAADwAgCdASogAA4AAoBCJaACdL1ACxHaVLwPWjFj0WK9gAD+70mtcKsRMyigKQMj1/51+3ZXrqlLNv2ASaROFU3hQdCcQf67oMqzVbZ2hWXSanphixq28/E+H3HtjxTdphO0SJAhIEDakAmuT1iQMUHmUJ5xAAAA",
+    sha256: "ded3618eee46552e0e13aa6a2292d212e027a67bd0ebfc774c8756d3375c2a8d",
+    uri: "data:image/webp;base64,UklGRqQAAABXRUJQVlA4IJgAAABwBACdASogAA4APrVInkmnJCKhMAgA4BaJYgCdEf/l2ALQtGNSBsdNuOzPwAD+6iqs7C7pvHbSukYAebWrFi00OAJU3BXGQQ+RYaqdGe678e7V0w+NkIJcjih11MH5cpkcmqnsh5SQ2k38zujYQGUmd3qW98k6qeb9XVDi7TrNbuV2YV/J1P5oLv2EjD8VRTRvsCjHBsgAAA==",
   },
   "/images/real/dein-kalender-hero.webp": {
-    sha256: "910df639422e2d76b498ac5d1cf84b3f82a4c456faa7e44eba22f96cb9081964",
-    uri: "data:image/webp;base64,UklGRtwAAABXRUJQVlA4INAAAADQBgCdASogACQAPrVMoEunJCMhsBVYAOAWiWIAv2fVjRuf/AaCNQtehI1uCgr6Ctaq6Wd9f50sg0l/LW06n1AA/ozp6NTxPSqY7380FaNiKS1Dh3+3l+ECRwtncZch0X9eg7YUJE28GEHXJ7ivg0Q1DzRc2hLrrUr4rFytFGInNlrHpHE66uttotQOt05RhgA7MWAvpiL6sUccpZXV1bzGlQL+EDo99uBfgyjW44/aUQjIUz0UKPzi/ir9OQ6NGRfFvr4aezG9swlwqM5gAAAA",
+    sha256: "35b0d7203afc21e0fa0ff80ed044b01b27c81d4508a0f599fc66679d2f335cf0",
+    uri: "data:image/webp;base64,UklGRvQAAABXRUJQVlA4IOgAAADQBgCdASogACQAPq1Km0mmJKKhNVgIAMAViUAWo3JoK+QADpjD+P/AKYjAN95aBKkvS0e21eKWpPiG3ERbyAAA94q+DZMyM2w7ONHxfKr5ov8vnVTpEIUntQdGv7zeU2qMqMSlhkiMGYiJTA0DbqG8UrZsaKnoklwHux/2erwCMuw4vLLXjQ5od82a8UnkECW3aGGHAop9Kcgrdkx1BnMj5ozsYx2RLDwVCgzoUla8MxHIBjP3ZL2QqQTRzbD/35C1o+YBjhlOktBFbpF1ImcqLGWuHhBZdAUPd96sKmMkdQaa5wCpAAAA",
   },
   "/images/real/dein-ort-hero-wide.webp": {
-    sha256: "d0a93e0f4c376d52834ce64aee565cb08f477ceca81678b94ec9839ccf7ac953",
-    uri: "data:image/webp;base64,UklGRowAAABXRUJQVlA4IIAAAACQBACdASogAA4APrVOoUmnJKOhMAgA4BaJYwC7AGlhC5J+zu3BD5Bd6EKUPgAA/vvKPFWDqmzNzMWH+bnu5mvVbbjVit4yroJoLwvcvKo8Fhl4LsLDjALd/sb0BEHOWlGgxvWGHf2rGd5Mrk8cQL43vwmehFP7q78GigGtbagAAA==",
+    sha256: "fc4e97518b05c517577191d8acb6511cd26c29ced9a6e1d95f9cfbb6769cc329",
+    uri: "data:image/webp;base64,UklGRogAAABXRUJQVlA4IHwAAAAwBACdASogAA4APrVMnkmnJKKhMAgA4BaJZACdBazEsmK4hXP2rDU3yAAA96YRNlLByqcAMmvEbDjanKS2f3MJmIqLsuFP5I6bSZCZjvInVwGU+HL76ZxT2+6n5hKIt7APml9u9UN85LlhzxKkl4lXARXBpAs9Af+UFAAA",
   },
   "/images/real/dein-ort-hero.webp": {
-    sha256: "6ebf81b9bc3a79438d3c1c56e86ebdc92b788572a61b89a2d221f846ffc87af7",
-    uri: "data:image/webp;base64,UklGRvIAAABXRUJQVlA4IOYAAADQBgCdASogACQAPrVKnksnJCKhsBqoAOAWiUATpl9wtvig5cc6pWwKI3OvZFefMZl5t/8CiSoF08M6ojdMNgAA/vNyX3bsp+T+sUp/tpSFofsgKaEJDAPMwUWryKI9Y1L+l+E/dtl26SSHUYUQtTPp420Fsz1zx6idtXa1ufiIn0WQT20/WvGCNTBJrza0s+8gatHk4nShbfB4Qdd8Q3Lc2axJoafha+8nwWCIE/MT8q9f6Q/oYIHk6aqPEUwNJKqi4l51HZNEx+UPr1QvWT2I4WT8gGIIAnT7UcqzHnzBpHnbIYQAAA==",
+    sha256: "10d72a7a6ec1096a76cc1e98be48a684f60a17481c5b0859c034736e6003b80c",
+    uri: "data:image/webp;base64,UklGRuYAAABXRUJQVlA4INoAAACQBgCdASogACQAPp0+mkmlo6KhNUwAsBOJYwC9WCRhrb3XbEsYn/6cU7Vb5yMFIF+xRKz3iXFicHClj9iwAP6rp21HZD+r8wF+c/h6iXgyOche+Ft0F0/rDRO8lQenfA6PrdO88oPZv3FC9vv4TALHgjWHsD2e0qGEG/p6TbONW8c4NFBddvCOVBKOygQNzFwmTEoHVOOAzKGlP8UWiBrYrCgXKLqJwonkX2TshOCMx7bWim10RysdwDS8+1/RK7fVWmqWf6HBYgCJ4tCJs475PSyiGMkYIQpAAA==",
   },
   "/images/real/dein-ort-starten-hero-wide.webp": {
-    sha256: "f730382a3a2fed8a6cd900729dd3381534c0861120d32d707a63c27671e82b87",
-    uri: "data:image/webp;base64,UklGRpYAAABXRUJQVlA4IIoAAABQBACdASogAA4APrVMnkonJCKhsAgA4BaJYgCdMoAKRqf6CXRKiWE3jgSAAP7uKhnd1S4xsK7rUep+xy5PkTElBAT4yKxCoWC2sCwnTANTPII/CcD2aS6YIT/j9uRMVZ+sbt2WX0Nsu5J5p76JqYGnydCortgfezo8RoWo2fF5hMBiUsFgwLAAAAA=",
+    sha256: "177bdb5d264e5e04ebc6919037cfb27ed3c660c8a5d01343787816d4a538f543",
+    uri: "data:image/webp;base64,UklGRpgAAABXRUJQVlA4IIwAAABwBACdASogAA4APrVWoUsnJSMhsAgA4BaJYwCdIIjJi3eAHM2tUIdU7q2zaAD+t3lqT5+FNFnivRXRK5CxDh4YHakW/CyVZV7NQtqVQWJQspxNydNMUTkRSrZgtn2uh9iJWRlU5S02/N5gJ1pI8cPuWUeD7NjVq97T7RISgNTYzwWkdHHZN+S6bvgAAA==",
   },
   "/images/real/dein-ort-starten-hero.webp": {
-    sha256: "3365e467aaf603893a8cc01228dc4413fd3dd6a118471a72cf05dbc9a9ef2092",
-    uri: "data:image/webp;base64,UklGRgABAABXRUJQVlA4IPQAAACQBwCdASogACQAPrFMnEmnJKKhMBVdUOAWCWIArDNPgXwqiNnRkv43RytmK0TEu7Evkm/PqpcFSu6CNGKZ+dCOMPE8hpAA/vwdFS8OiWi1t9z8BuWn0PJPcZE8Qfxp5iL3W2rwUmUQfesegqkzd4/hiMElKq/0HnBm8Fztd85ezaIQSBIw+NEwZGNbETiNKceHP3OAT9R0XFu9Fg+AZ0CAoYL+T15sZXgrrSyKDmyt4CuvJyfxJvwnYRFAun5JGmA1MBw/+H5evgUb+K8qXYVAZjb7wamSqdeFhKVL4vfrF+YXKeeLz5lLrVuhR34LbAJMeAAA",
+    sha256: "224900bdad6865a39be725b69ff4a16a36c46008ff9b45e1f579e91562802740",
+    uri: "data:image/webp;base64,UklGRtAAAABXRUJQVlA4IMQAAABwBgCdASogACQAPp04mEmloyKhOrzIALATiWMAvOApiVjLtwnm4ud+JUuEQBUs1qxG4lyJmsQoghAUUIAA/XgvcuhqUI7vhmXAfTr3EipsxQ5SP0XjaZbtlVTOGnyyrtA4OZnc4k/FXw2AjXrFFFfPN/IKllnpzhQzKMGJ934R46KcHfBqF0WcqOr5VfE2OTCc5M9q6caCWat53oEnppaUXbZbca5Uph/YmY5HpousY/QsbimFUc2DdNF1zGcALp5bgAAA",
   },
   "/images/real/dein-ort-story-baeckerwagen-stage.webp": {
     sha256: "c7c881b929cc029de649e0ac3c40e5a79839f1ac5dc3107b60f301f9928ac654",
@@ -43,32 +43,32 @@ export const PHOTO_BLUR: Readonly<Record<string, { readonly sha256: string; read
     uri: "data:image/webp;base64,UklGRsIAAABXRUJQVlA4ILYAAACwBQCdASogABcAPrVKnUmnJCKhMAgA4BaJZACdMzQ6SIKaarQFlckLiwCmuYCwlf8v1RuwHMAA/v1AtOSHs3oghGEr4z8mgtI2mh+9dTKPtx7u7HTpWyf0grGtYK89/XuSDmYRuaGm/5E4ZbRdNIOJP7UsLKCkwY3CrZmv1nRCj7wvOk8IHC4ViMaZhZrBv+wVFIFfbKJTcTsDgNW5rZkfh51ZHduOtvDSn1KTtdzLO/xUZp3EAA==",
   },
   "/images/real/deine-region-angebot-hero-wide.webp": {
-    sha256: "bb79df5c2fe2a8c3c62c523a4cad9e17742c29c1688caf8d51bf6ffae13fde81",
-    uri: "data:image/webp;base64,UklGRvAAAABXRUJQVlA4IOQAAAAwBgCdASogAA4APrVInkmnJCKhMAgA4BaJbACdMoRwIsB9gLsr9ADpVf2mAkcGJXvg/N5mkVsmquugAP6Iv6dRfz37E3lD+dq4+IB+xnSoZlhw6Qfcz5uVgXW4s3p7C/NB1rLx46xTMuGi8u6KZu7Sb64yytyUYE2LPP8fm9/zkH3AusD5MTAxeFWav9XDYliRXGu3e3JC837+ex5qleXeMkMLcZRBAyMiM6kqT2f3VfpGj3IxlvsrhrH451JZ+H+E7F2quP9x/z/wxwKIf3ZLQ9oxnSJjnUJYNBm76HVMjMAAAAA=",
+    sha256: "ebe0043cd9b0b7edfefaaf4c68531b34a554e93ab7c5d002b8d5733c0cd18f8d",
+    uri: "data:image/webp;base64,UklGRugAAABXRUJQVlA4INwAAACQBQCdASogAA4APrVOoUmnJKOhMAgA4BaJbACdMoRwN6BTAPUz9ADpVQlSe/ZFsDbKc3LYsAD+6l9r0gm/+xO6d+XzvHTSjOfRidIKzeBvdbvBO8PzWQO9WO9Kc8U6DLf9c5WRcpVdwah42Grv/0c1PNdn/pdhUuHquiZgs3D+9/vxNDb6z5nJeOlUf/iWsZL+C+dj0L82sQs2ADZWvjEXsdhab3TSIjyp/T6RkCPTvWGh/QMXwkiq5QB7Zsah1ooWe/DowaBp8K4WMTcEkiLy4npgNJ3FDUiVgAAA",
   },
   "/images/real/deine-region-angebot-hero.webp": {
-    sha256: "d326ada92948a81a908000ae628f75cb04ee1e626a55bc32c2a9d8a2ea0c1964",
-    uri: "data:image/webp;base64,UklGRlABAABXRUJQVlA4IEQBAADwBwCdASogACQAPqFAlUmmI6IhNUwAwBQJbACdMu0D18i41eb3aJvNAH34sowtwBU6fXRaLku/SINRtEWEav32rB1lMq+6p8AA/ukEJpiGzcFRuzvYZsv5L8SXrw7k72YffDEwb0xuSwE8cFaswnur4iE3A00tys2KVG2anGibNVAWtONOomx7uUuYvJs7nci3zdEf2wj2Xdug0WFcYvDaGnikEDCE3JeMFOU8jbO2O5oXtUCLIY6QgQvZ8hkzP4yOX+tQy34z6x/q6vuqvm6JLC7Ayr2qKq3yFzD2If7qbnOsn3byDsH2Q/kAn1KqUBFozFyL0hThnIcZzNISzPjkU7/IjXJbBWcvWfU14Z0mNZaSdlj9nzmpfoGmButSNvGhvL+dcn3G1jiaP5poFz9KUO79/d+99lA8NALMUeiGwqoSAAA=",
+    sha256: "cd5578efd5cdb8a88aaf0b1fc143e5b82f8ab9ffdb498ae08b2dd637e2fa99ff",
+    uri: "data:image/webp;base64,UklGRjYBAABXRUJQVlA4ICoBAADQBwCdASogACQAPqlKmUmmJKIhNVv4AMAVCWwAnTLtBLfcqKXcl6AHSvgaVbBwV3ggQbR+dkX5rzOYr++hL3SOeo16Nqzx8AD+JxI/tXDHzkRQZFKBO7hltFyhQQMBBHRj481r3ou6tWeuq0H9VgEM5HkubdKSbxb50t6o4ydlEmmH1q1mfLpK7lkWwz74zRD0e2zOR9IN3KgWChE0xVF0J0wUj2a4xMdp6rtCiv6wYj5wyPBFfRgGDqtf5ElsmlyRqS51AjLRPzgGxrJGYYzIPy1xUbrE+hs/apXr5CftJbwFgj0jz2TsH6FhpM7RUmwvDztEdC8j3XXhEaSmRHHV+kO9ZiKBa2CnIRiCi6SNJFW/ZUh/AfYyNdGWbKDtoaSHp2omhotMkVAA",
   },
   "/images/real/deine-region-gebietsschnitt.webp": {
     sha256: "2ba56d8b417d609726c0b7600f3f45620a683240d1cf881a74467aaa7d9abf03",
     uri: "data:image/webp;base64,UklGRqAAAABXRUJQVlA4IJQAAAAQBgCdASogABcAPqVEmUmmJCKhN/qoAMAUiWQAnTLetNAlFWSN7jlmtGRef+I5Gj32VXjk6YMWOCAA/Z1yh0oZipBoJgt8dmvU2OLzUsWss3vrV5LTDYA49C6h3/2qGk8SuhjD9a2vhH/PzcMfK6b2Pe4s4exD6DbfAqH60TOpLctt9F6DdYqS+OjLBv4rQErkLvwA",
   },
   "/images/real/deine-region-hero-wide.webp": {
-    sha256: "d0b49355bcc4915b2ec2613bab76794d9652c07e68f42cdf433e492838545360",
-    uri: "data:image/webp;base64,UklGRnIAAABXRUJQVlA4IGYAAAAQBACdASogAA4APrVKoUqnJCMhsAgA4BaJYgCdMoGv/gNr5aworqoD4AD+1LZcodw24tjljnRBROvdVJLIMVWLUFW9TZ/coMJBGbAz6X7AetSmi01h8lrRsAi+rNjExXqIuTa6AAA=",
+    sha256: "e4285b710916223594cf0d6d2801d9f30bc1c28fb166c1a9c16861d378e17e26",
+    uri: "data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAACwAgCdASogAA4AAoBCJZACdEf/ggb1HwIh5udnDhQA/u/qFn/1LnyQJTUhuJzKFbX7IYKLLnHD56YdjNVw8yl+OWFiAqVSMCxra9fBbXMLbkDEFHwJToAA",
   },
   "/images/real/deine-region-hero.webp": {
-    sha256: "49ecf6ecd7178ec34e33d6baeb1e8a584a2929011591e0ebfb04a4a243f3e592",
-    uri: "data:image/webp;base64,UklGRq4AAABXRUJQVlA4IKIAAACQBgCdASogACQAPrVMnkmnJCKhMAgA4BaJQBdmbHi+v/wHoQVAGHpmWoO4OolADAhUMoMC9nQPYuBI8z/QAP6QPqeGi422+7vfB0dDVt/kwEChhZlHpvCQ4hdGDtOTZ58Vv0jE1r5TkrOj3AQURpkXCgCgjDO7AeBpeAc9TcwFnrMFrO1YAhECyy6f/o4w9Sd/ogUfA4PDhcdK1diyOp6jAAA=",
+    sha256: "c6e00525703cf17fc8a09077c4d726523426316ca3a2c030e954775e4022440d",
+    uri: "data:image/webp;base64,UklGRrgAAABXRUJQVlA4IKwAAADQBQCdASogACQAPrFGnEmnI6KhNVgIAOAWCUAXZmCY3wN7uyu9esw44+DA5xjd50XDfQEUjRWYAP7V/BA0WQpDU9gZXFQP3/iCxxtlRoNs1CsjdovTEMtkUh3M9WzPYAdz9gtsBrA+akzhll0Y7sKOWe+P1l1r0UDwqv+zCjLY2VRQQeGM3yRhDl7o+FcGIzXBqHv3SDeao3wsB3MTHtxs4IkDRQ2U0f6sqAAA",
   },
   "/images/real/home-hero-wide.webp": {
-    sha256: "2662268c22b9c03cc9edf429ae115b791645b2ae016845a4ea04d660b35eb65e",
-    uri: "data:image/webp;base64,UklGRqIAAABXRUJQVlA4IJYAAAAwBACdASogAA4APrVIn0onJCKhsAgA4BaJbACdOUACwlK9ylPVffyBuwAA/v4U5eP/xcpfLxhAC8QDcz7YLmuX+TItQ2wVKEVtrKDoMTlKZsUASNgm5Zwz4WrY+LnUdcz6CQTr9+oRsfg1YGbcbYP8WgQimuzkMo2Fv7B9VYd3UlUsXT3bI2kaiHofcGOc/IEkcqQAAAA=",
+    sha256: "876b457844b9bb84097a2932a4aa54f736acd9b123340cf6a513b1ab2370dff8",
+    uri: "data:image/webp;base64,UklGRqgAAABXRUJQVlA4IJwAAABQBACdASogAA4APrVKnkmnJCKhMAgA4BaJZAC7MoADSFppPNv4KshxIFKAAP72kcTlJV5b0ff5RRxubC7fKztLdfAYnS2+Soiwvaa+Eh5lk7mHKLu6WtSWfWDYoYTc7beegfY0PVONdI9Ecm0f1BjN3hapYmRjuqY247d9hUai/8nGsd3RUkG1EC7RAav/7Pvqj2NsZ1zk8NIAAAA=",
   },
   "/images/real/home-hero.webp": {
-    sha256: "6ce384f753705fe8291c2f149c8a97bf3d9f97b5de287796df509e64288962fc",
-    uri: "data:image/webp;base64,UklGRv4AAABXRUJQVlA4IPIAAABwBwCdASogACQAPqFClUmmJCIhNUwAwBQJaAC7MzLzTcBt4Of/AgzKupwvFke7mrvMlnjsovKp/sfeoEK/inT2FEUX0AD9trJ73ZMUch8giBBorBs2NQkY1XB5qnaMQkyB/zqZN+OfZUsxGNcfTLsJB/ote9NyYDDA47WCfuKKXw2OUVq8AxjQbgTTJY1ypu7KLKa7O7aqUp2lnMeXUwM6iuClAekowb9ZDneNIGTBHAeaGMBoVco8VwiylMurovfi77v/t/grpU92MGTq0N+VQbSrQlAsqL3sth0uDOYjYbf+wnRWLnt/zrgVPZdyAAAAAA==",
+    sha256: "d55d9f46edc00203c7d29a599e6f6634533df00fd013c4e2d149cfc838084e54",
+    uri: "data:image/webp;base64,UklGRuIAAABXRUJQVlA4INYAAACwBQCdASogACQAPq1Kn0mmJKMhMBVdUMAViWQAs4AubWZB+mu3nZzYUkJCG3xjLw2gRBCUUkAA/rj1G2cxSNwJ1GeaRO0rfOt8UnYGJvr7yeSzDPK/JL1JQye2VHTP41h4s7bFj2BWRDZ2qihrVQl0DldBDw8XXR5Th4kf16Og7OptsoPzPGLh9MQ3EdOZ3lHHGaN+vMmZhW9+/TKbw+nqeqO5FGvx7hDnyZqJAz2IT+h8xj/v8XEVvrfprjVl1wsZjaG/Uw4YHrRfiFokJOL5C4iqnQAA",
   },
   "/images/real/home-scene-embed.webp": {
     sha256: "ce22a0170e4e9a5dd13ca95808d52a23e527b389048d23f6ca5b8d8194fb7185",
@@ -79,12 +79,12 @@ export const PHOTO_BLUR: Readonly<Record<string, { readonly sha256: string; read
     uri: "data:image/webp;base64,UklGRsoAAABXRUJQVlA4IL4AAADQBQCdASogABcAPrVSoEynJKMiKAqo4BaJQBOmUGbxuwAlf29JPM7hR/5mLtMrvt1ezlLSRNDQAP7m/2ZzrvT3cM+GK0+sxT6fLQwhOO3KposwQbTIx1WBj2h7fQU9RbuWa9H/tea5VEwwYD4Hb5WXBskWnljeWeBh2qSTLpY8ajFlaaNFHqeN8tWdRpy1T+Ibje2O8aM82BkYuRnG1xg9D+W5Yh8tKJiyt5miRVaRbNNlWxupb6oY+gdXXYAA",
   },
   "/images/real/mitmachen-hero-wide.webp": {
-    sha256: "11f8c01ac72d04a735e3f7ee32e55735c5278829bffbdbc61547f72b018f9ccd",
-    uri: "data:image/webp;base64,UklGRpwAAABXRUJQVlA4IJAAAABQBACdASogAA4APrVKnkmnJCKhMAgA4BaJbACdH8AB8cARJQe6H3phPLtIAPkF6UJCLzuNzRg5KC+0dlosBuK7+CsYssXaLNyge0x3Bo3i1Bmrh9UfTlYzVGn7bL1heoQuJFPlHuC9B0XtbJkUJycveKYOxTkURtZ5Kpj3N3mV+jWTMznKJsboNwnnnrjgAAA=",
+    sha256: "f4fcbb71f93eb8bd382274ff9642ca69b72267c37e402f6ef7d84a6e4cedcbb6",
+    uri: "data:image/webp;base64,UklGRpgAAABXRUJQVlA4IIwAAADQAwCdASogAA4APrVInkmnJCKhMAgA4BaJbACdH8AAlBaKEtC9X5AA+FsTNze33GNOJ5FacXPsiZXfjg8lcNXTGWS6Zzg2V4+T3dg939GkRl8k8R9d7O5xAV5bpmIctqvs9mJlgQ2UU320C436RTany3PH2Am9tp0tI5qlpJPPFtfLYqUEdp8gKoAAAA==",
   },
   "/images/real/mitmachen-hero.webp": {
-    sha256: "c251e7aad09c682bada8fba52b2c7b931dccb4103e54c5cf1da1a76f343254a3",
-    uri: "data:image/webp;base64,UklGRgQBAABXRUJQVlA4IPgAAADwBgCdASogACQAPqVCmkmmJCKhNVv8AMAUiWIAtRtDR05i+OVuuds3CXeGfMEqPJywZ4fcmR4Z1QbJpvBWM9EAANWtbgkmnmCuCM6qcTB2bD/IeLG6cNTf+KQq4mQovXkbdYC9RtbuLs+Xtq6oJarU9yZ4GoQcdc8EUK8KLjfNCSXdJ+R+3tAZ28UYiitTNYRcZrchvYhhFd3SnzmbMWqMlKoq32IoXn/v8WcA1AB5xrf1bDPXJXQcymaUD7smTTe8NMKEOqzA+T139YapnqUkaWBEqTJCP5NksoQcnkhwYcu5RtWJ1ZXYFzYlX77bqqZg70G4ZLIAAA==",
+    sha256: "a8def63ea8a88e5795758751c36f16907554fc2866826229c416a51f5d7aefef",
+    uri: "data:image/webp;base64,UklGRu4AAABXRUJQVlA4IOIAAABwBwCdASogACQAPrFGnEmnI6KhNVgIAOAWCWYAuzLnAfiOLXYZcu+d4lp0C2IeNkzb4MWURp9VXFh1s6ywlwzuiEggwAD9mw4GiFuayf8s7VUP8TYn8Y4xGhcW+6cyy1qgGDktQsU98UNYE0C8IJuXxNb5IMcut3dhMjd3BOtg1cKk4aBMhgRtpUA2apBGu/j/bsbgtSebAzqAkHgg2FMzYVuNtJWmouwYxjXqp2TmzCnQCbOlkUqS2Ysfd/FtXslxLwwN4p2bcIgLhkjKlQf+Nny/qa8MYNvjhWvmzCgcrAAA",
   },
   "/images/real/mitmachen-path-calendar.webp": {
     sha256: "e484f3d3fb9698823c23329a7ce31b93e240b05821caf8e978cb343b69d2b712",
@@ -103,12 +103,12 @@ export const PHOTO_BLUR: Readonly<Record<string, { readonly sha256: string; read
     uri: "data:image/webp;base64,UklGRiQBAABXRUJQVlA4IBgBAAAQBwCdASogACAAPrVQo0wnJKMiKAqo4BaJZgCdMtVCv8ZOR501aDBc3FsmPL0Wr7Wj3XXuyqesVN80M07qK0DXYAD+9nOMPBpIhw8wN5Lrh7/0XsW9VKZkKT5IehmIfeBfa52teGdWU5QNWh36D9yn0p8bCtyBRmGdlWvJ/DHkP4U7P91VVkVUr/GaQCvqDpbYTqXoBO3IIWzLZRVujJIckiw/4L3MS9qV+DjVrlFf9UwGU0vFcSCnbpP8UbZaEqQmaiRjodoQhEb40lSiHZk8W/7qICb4lKAOT6yTk8tYLCSy5gp9mFdysdx+GsStIxGyOBx5ImOSR53UNsl9V+Y8pfc6uJA24iZPZwRtOEvPJTxf749IS7AA",
   },
   "/images/real/ueber-uns-hero-wide.webp": {
-    sha256: "ca1d3b3fdb7acaeb9208b83a1abbc3f1ac95ba6c5d26ac54cfc47c084019b0a2",
-    uri: "data:image/webp;base64,UklGRqIAAABXRUJQVlA4IJYAAAAQBACdASogAA4APrVMn0onJCKhsAgA4BaJbACdMoR8eCAOgGKHs9DuQAD+2pIbzIp8X/2kDUOYv4uoxoFA6yBfaOop/mKHS4A+0qRRzYBrzigBnK8Vb4WEXR/fnhXzsbUDWSAodZwUef6sCH7KLksP+kX8y9L0301ZWcTRFDs/ey2WfQFfagUp3Jal+LGwFFQewdJzAAA=",
+    sha256: "073f6d4bc7840d91ba32fd5ec25d6c3f44499704b39f7bb40d8457caf3719562",
+    uri: "data:image/webp;base64,UklGRqwAAABXRUJQVlA4IKAAAABQBACdASogAA4APrVKoEonJCMhsAgA4BaJbACdMoKBKAn4htu/vYELCPrgAP7M+CRFYzmvrlazE5vnFTeXIJrXtK1ATGNJ8sCpIZSofh6uFfmgqy3t76bxHdP4272l31kBoPyMmkkcHdOos09faUG77eZi81ll9+CkD08oUkGkW6pmdws5Ie1AeM9h5ljVTMmAIiD6ju79Pgfa876+QogA",
   },
   "/images/real/ueber-uns-hero.webp": {
-    sha256: "cb4259d5f61d3616e67d6253f116251d2b498beaee71c16fc46f05e9ba5c0e8f",
-    uri: "data:image/webp;base64,UklGRhQBAABXRUJQVlA4IAgBAABwBwCdASogACQAPq1Cm0mmI6IhNVgMAMAViWwAnTL7PJ9gB18jRzhf4doGhsb/IQAVkzr+0XVGSZGrzLXvB6ifdLaNgAD+74ZPsdeJkTwkZCTVXmhQkEV5WxKXD1BsuwB1E7lDLPSEs7Ag0SI1auxyHQUqtZh84V+gdQ2O5myWKg/UDUQuFzVDs/sceNOXdi1nWKtn5LFHe/mih9Qy88lzd30IV6BWKgIOjSe4d4hsOsVKCpU19AQOJH61JbzctLoZsybHQp7zuoTwhhRqElhrUCzp9eQDwk1PGNGNyBSzioC41XfzdI/vLRU0zYOnbSSlG/ZW0ORTdnfIiyLtsq7zV5SYiwAAAAA=",
+    sha256: "e336d4bfe6aa812f1baa322fbef49d6c31796f4935681b28ca12fe6a729d0aed",
+    uri: "data:image/webp;base64,UklGRvwAAABXRUJQVlA4IPAAAABQBgCdASogACQAPpk+l0mlo6IhOrzIALATCWwArDOq/6/lAuGkv9C/1cYgiVe2/S8ZnvHxVPo3WGHIAAD+VOyB0iPTDd6l/0INPBtzmdlcq46I1jsUCTnimhCAdQ/Z6R/h34oO3j02JkHYwqMt7bkDBjVElxUiebVb8AQ6XW1xeMG6ecaeIUh42BdYdw33gIjUIQNtxNt1/P3ubsUw7+pZ5fzhZ3vLGT3fYktrqUL4HOeH/HveI+4aBWWH52YA1DpF8Kd5+3VFxniGSdROHxeciH9/YnI5oGm0M+y+m7oIwbAbyJhOa7cq1H5hwhOFAAA=",
   },
   "/images/real/ueber-uns-team-jan-henrik-hempel.webp": {
     sha256: "9c7e393015d5bf61d1cfbc84a1391827554d8ad6e1191ee75a0b4e8eaee3b0ca",

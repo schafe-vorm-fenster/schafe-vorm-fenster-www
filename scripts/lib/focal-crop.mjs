@@ -25,6 +25,21 @@
  */
 export const DEFAULT_FOCAL = Object.freeze({ x: 50, y: 40 });
 
+/**
+ * The hero's two system-wide anchors (issue 255, DEC-0153 §4): where in the
+ * hero box the motif's focal point lands, per rendition. Constants of the hero,
+ * not values per image. The text stack stands bottom-left from 48rem and
+ * across the full width on the phone, with the top ~35 % a reserved free band,
+ * so the motif goes to the upper right (wide) or the top centre (phone).
+ * `photo-surface.module.css` positions the hero's backgrounds on the same
+ * pair (`--hero-anchor-*` in `app/styles/components.css`);
+ * `scripts/lib/focal-crop.test.ts` holds the two to each other.
+ */
+export const HERO_ANCHOR = Object.freeze({
+  phone: Object.freeze({ x: 50, y: 28 }),
+  wide: Object.freeze({ x: 68, y: 32 }),
+});
+
 const percent = (value, name) => {
   if (!Number.isFinite(value) || value < 0 || value > 100) {
     throw new Error(`focal-crop: ${name} is a percentage of the frame, 0–100: ${value}`);
