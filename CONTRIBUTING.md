@@ -135,6 +135,10 @@ Four of its checks carry rules you meet while writing:
 - **`check:stack`** · **`check:brand`** — the stack register and the brand
   rules below.
 
+### Dependency Overrides
+
+Transitive security fixes live in `pnpm.overrides` in `package.json`, each scoped to the vulnerable range (`pkg@<fixed`: `^fixed`). Most chains hang off the dev-only `vercel` CLI and `googleapis`; an override is dropped once the parent ships the fix. Issue 259 added: `undici@<6.29.1` (vercel 5.x chain), `qs@<6.16.1` (googleapis-common), `minimatch@>=10 <11.0.1` (eslint 10, typescript-eslint), `esbuild@>=0.27.3 <0.28.1` (tsx).
+
 ### Writing Tests
 
 The level is chosen by what the thing actually is, per
