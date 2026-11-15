@@ -65,6 +65,32 @@ describe("event-row: the category is words, never colour alone", () => {
     }
   });
 
+  it("names the category placement on the row, with the longest label and either placement (#247)", () => {
+    // The glyph/pill form is CSS; the e2e criterion (TS-WEB-0017-A43) needs the
+    // placement in the markup to tell a `below` row (pill on a line of its
+    // own, issue 152) from a side row. Independent of live data.
+    for (const placement of ["side", "below"] as const) {
+      for (const category of EVENT_CATEGORIES) {
+        const html = renderToStaticMarkup(
+          <EventRow
+            category={category}
+            categoryLabel="Bildung & Gesundheit"
+            categoryPlacement={placement}
+            date="2026-11-14T15:00:00+01:00"
+            locale="de"
+            meta="Wolgast · 19 km · 15:00"
+            title="Testtermin"
+          />,
+        );
+        expect(html, `${category}/${placement}`).toContain(`data-category-placement="${placement}"`);
+        // Exactly one 24 px glyph with explicit dimensions, whatever the label length.
+        const svg = /<svg\b[^>]*>/.exec(html)?.[0] ?? "";
+        expect(svg, `${category}/${placement}`).toMatch(/width="24"/);
+        expect(svg, `${category}/${placement}`).toMatch(/height="24"/);
+      }
+    }
+  });
+
   it("keeps the meta its own element, outside the category", () => {
     const html = markup("official", "Bildung und Gesundheit");
     // The meta's parts are spans (place · rest, so a picture can stack them);

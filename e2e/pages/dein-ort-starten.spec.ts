@@ -225,10 +225,12 @@ test.describe("TS-WEB-0021 — start the calendar in your place", () => {
     expect(text).not.toContain("du könntest die Erste sein");
   });
 
-  test("TS-WEB-0021-A6 (first half): searching an uncovered place from `/` or `/dein-ort` lands here", async ({
+  test("TS-WEB-0021-A6 (first half): searching an uncovered place from `/dein-ort` lands here", async ({
     page,
   }) => {
-    for (const entry of ["/", "/dein-ort"]) {
+    // `/` is not an entry: its search loads the place in place and never
+    // navigates (DEC-0194, TS-WEB-0019-A5 as amended by DEC-0195).
+    for (const entry of ["/dein-ort"]) {
       await page.goto(entry);
       // `input[type="search"]`, not `getByRole("searchbox")`: the typeahead
       // sets `role="combobox"` on the same input once it mounts, so the role
@@ -450,7 +452,7 @@ test.describe("TS-WEB-0021 — start the calendar in your place", () => {
     }
   });
 
-  test("TS-WEB-0021-A14: walk `/` → search an uncovered place → this page → CTA → registration", async ({
+  test("TS-WEB-0021-A14: walk `/dein-ort` → search an uncovered place → this page → CTA → registration", async ({
     page,
   }) => {
     const visited: string[] = [];
@@ -458,7 +460,7 @@ test.describe("TS-WEB-0021 — start the calendar in your place", () => {
       if (frame === page.mainFrame()) visited.push(new URL(frame.url()).pathname);
     });
 
-    await page.goto("/");
+    await page.goto("/dein-ort");
     const field = page.locator('input[type="search"]').first();
     await field.fill(UNCOVERED_ZIP);
     await field.press("Enter");

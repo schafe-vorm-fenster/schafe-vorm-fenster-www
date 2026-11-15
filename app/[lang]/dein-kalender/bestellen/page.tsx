@@ -5,6 +5,7 @@ import { slot } from "@/src/lib/content/loader";
 import { jobLabelKey } from "@/src/lib/pages/page-meta";
 import { formatPriceFigure } from "@/src/components/price-tag/format";
 import { offeringPrice } from "@/src/lib/pricing/offerings";
+import { ROUTES } from "@/src/lib/routes/routes";
 
 import { PageJsonLd } from "../../_structured-data";
 import { pageContent } from "../../_content";
@@ -49,7 +50,8 @@ export async function generateMetadata({
   params: Promise<{ lang: string }>;
 }): Promise<Metadata> {
   const base = await pageMetadataFor(ROUTE, params);
-  return { ...base, robots: { index: false, follow: true } };
+  // `noindex` lives on the route row, so the sitemap can honour it (issue 228).
+  return ROUTES[ROUTE].noindex ? { ...base, robots: { index: false, follow: true } } : base;
 }
 
 const SCOPE_QUESTION_FALLBACK: Record<Locale, string> = {

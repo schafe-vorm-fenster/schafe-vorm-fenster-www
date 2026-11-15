@@ -25,10 +25,8 @@ import { DocumentCommitMarker } from "@/src/components/photo-surface/hero-preloa
 
 import "../styles/brand.css";
 import "../styles/base.css";
-// Issue 235: the 1 KB stylesheet only /ueber-uns uses (story-disclosure) rides
-// in the shell's chunk. As its own chunk, React preloaded it into every page
-// whose nav prefetches /ueber-uns, and it stayed unused (console warning).
-import "@/src/components/story-disclosure/story-disclosure.module.css";
+// Issues 235, 240: page-only stylesheets ride in the shell's chunk (see file).
+import "./_shared-styles";
 
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";

@@ -60,22 +60,24 @@ const TYPED = "Quilow";
 interface SearchRoute {
   /** The path to open. */
   readonly path: string;
-  /** The id of the field that stands above the fold on it. */
-  readonly inputId: string;
-  /** Where a submit of that field has to land, value intact. */
-  readonly submitsTo: string;
+  /** CSS selector of the field that carries the place search on it. */
+  readonly selector: string;
+  /** Where a submit of that field has to land, value intact; absent where the search loads the place in place (DEC-0194). */
+  readonly submitsTo?: string;
 }
 
 const SEARCH_ROUTES: readonly SearchRoute[] = [
   // The two the defect was measured on. Since DEC-0194 the stage of `/` has no
-  // search; the field that navigates is the closing block's.
-  { path: "/", inputId: "ort-suche-abschluss", submitsTo: `/dein-ort?ort=${TYPED}` },
-  { path: "/en", inputId: "ort-suche-abschluss", submitsTo: `/en/your-place?ort=${TYPED}` },
+  // search and DEC-0195 removed the closing block; the one field is the
+  // search of "Dein digitaler Dorfkalender." (`#dorfkalender`, generated id),
+  // which loads the place into the phone in place and does not navigate.
+  { path: "/", selector: `#dorfkalender input[type="search"]` },
+  { path: "/en", selector: `#dorfkalender input[type="search"]` },
   // Every other route carrying a place search — the same rule, checked
   // rather than assumed.
-  { path: "/dein-ort", inputId: "ort-suche-fokus", submitsTo: `/dein-ort?ort=${TYPED}` },
-  { path: "/deine-region", inputId: "ort-suche", submitsTo: `/dein-ort?ort=${TYPED}` },
-  { path: "/dein-ort/starten", inputId: "ort-suche-nochmal", submitsTo: `/dein-ort?ort=${TYPED}` },
+  { path: "/dein-ort", selector: "#ort-suche-fokus", submitsTo: `/dein-ort?ort=${TYPED}` },
+  { path: "/deine-region", selector: "#ort-suche", submitsTo: `/dein-ort?ort=${TYPED}` },
+  { path: "/dein-ort/starten", selector: "#ort-suche-nochmal", submitsTo: `/dein-ort?ort=${TYPED}` },
 ];
 
 /**
@@ -83,13 +85,13 @@ const SEARCH_ROUTES: readonly SearchRoute[] = [
  * document's own scripts run. A boundary reveal replaces DOM nodes, so a
  * replaced field shows up here as a second one even when nothing was typed.
  */
-async function watchFieldIdentity(page: Page, id: string): Promise<void> {
+async function watchFieldIdentity(page: Page, selector: string): Promise<void> {
   await page.addInitScript((fieldId: string) => {
     const w = window as unknown as { __fieldNodes?: number };
     w.__fieldNodes = 0;
     const seen = new WeakSet<Element>();
     const count = () => {
-      const element = document.getElementById(fieldId);
+      const element = document.querySelector(fieldId);
       if (element && !seen.has(element)) {
         seen.add(element);
         w.__fieldNodes = (w.__fieldNodes ?? 0) + 1;
@@ -101,7 +103,7 @@ async function watchFieldIdentity(page: Page, id: string): Promise<void> {
     new MutationObserver(count).observe(document, { childList: true, subtree: true });
     document.addEventListener("DOMContentLoaded", count);
     window.addEventListener("load", count);
-  }, id);
+  }, selector);
 }
 
 /** The page has stopped rearranging itself: every boundary revealed, nothing in flight. */
@@ -118,15 +120,15 @@ test.describe("DEC-0078 — a streamed boundary never holds what a visitor types
     test(`TS-WEB-0019-A16: the field on ${route.path} is never replaced after first paint`, async ({
       page,
     }) => {
-      await watchFieldIdentity(page, route.inputId);
+      await watchFieldIdentity(page, route.selector);
       await page.goto(route.path, { waitUntil: "commit" });
-      await page.locator(`#${route.inputId}`).waitFor({ state: "attached" });
+      await page.locator(route.selector).waitFor({ state: "attached" });
       await settled(page);
 
       const nodes = await page.evaluate(
         () => (window as unknown as { __fieldNodes?: number }).__fieldNodes ?? 0,
       );
-      expect(nodes, `distinct #${route.inputId} elements on ${route.path}`).toBe(1);
+      expect(nodes, `distinct ${route.selector} elements on ${route.path}`).toBe(1);
     });
 
     test(`TS-WEB-0019-A16: a value typed into ${route.path} in the first frames survives and submits`, async ({
@@ -139,7 +141,7 @@ test.describe("DEC-0078 — a streamed boundary never holds what a visitor types
       await cdp.send("Network.emulateNetworkConditions", SLOW_LINK);
 
       await page.goto(route.path, { waitUntil: "commit" });
-      const field = page.locator(`#${route.inputId}`);
+      const field = page.locator(route.selector);
       await field.waitFor({ state: "attached" });
       // Real key events, not `fill()`: row 213 measured the loss with both,
       // and the one a visitor produces is the one worth asserting on.
@@ -156,10 +158,16 @@ test.describe("DEC-0078 — a streamed boundary never holds what a visitor types
         uploadThroughput: -1,
       });
       await settled(page);
-      await expect(page.locator(`#${route.inputId}`)).toHaveValue(TYPED);
+      await expect(page.locator(route.selector)).toHaveValue(TYPED);
 
-      await page.locator(`#${route.inputId}`).press("Enter");
-      await page.waitForURL(`**${route.submitsTo}`);
+      await page.locator(route.selector).press("Enter");
+      if (route.submitsTo === undefined) {
+        // In place (DEC-0194): the page does not navigate.
+        await page.waitForTimeout(500);
+        expect(new URL(page.url()).pathname).toBe(route.path);
+      } else {
+        await page.waitForURL(`**${route.submitsTo}`);
+      }
     });
   }
 

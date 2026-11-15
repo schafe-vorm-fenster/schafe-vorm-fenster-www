@@ -160,7 +160,14 @@
   height: 100%;
   max-width: 100%;
   object-fit: contain;
-  width: auto;
+  /*
+   * Both dimensions explicit, never `auto` (issue 241):Chrome's
+   * LazyLoadImageIssue fires for a `loading="lazy"` image whose computed
+   * width or height is `auto`, whatever its width/height attributes say. The
+   * width is the mark's own ratio at the content height (40px less the
+   * plate's block padding); `max-width` still caps a wide wordmark.
+   */
+  width: calc((40px - 2 * var(--space-1)) * var(--logo-ratio));
 }
 
 .who {
@@ -168,6 +175,10 @@
   flex-direction: column;
   margin: 0;
   min-width: 0;
+  /* A long unbreakable name or role (a German compound in mono 700) may break
+     inside the word at 320 px instead of spilling past the card and widening
+     the document (issue 246). Words that fit are untouched. */
+  overflow-wrap: anywhere;
 }
 
 /* SRC-0014 §Quote card's author: the name mono 15 / 700, the role 15 / 400

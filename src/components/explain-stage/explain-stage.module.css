@@ -271,6 +271,29 @@
   );
 }
 
+/* A row with a status badge (the "verschoben" sample of path 2). The row's own
+   grid gives the badge the title's trailing column, and "Verschoben" is wider
+   than this picture's rows have room for beside a title: the title and the
+   stacked meta shared a column of 30 px and broke character by character,
+   which grew the picture from 404 to 527 px and the module past one viewport
+   (TS-WEB-0022-A19, issue 248). Here the badge stands on a line of its own
+   under the title, as `categoryPlacement="below"` does for the category. */
+.rows > [data-status] {
+  grid-template-areas:
+    "date title title"
+    "date status status"
+    "date meta badge";
+  row-gap: var(--space-1);
+}
+
+.rows > [data-status][data-status] > h3 {
+  grid-column: title-start / status-end;
+}
+
+.rows > [data-status] > span[data-status] {
+  justify-self: start;
+}
+
 @media (min-width: 48rem) {
   .rows {
     --calendar-meta-extra-lines: 2;

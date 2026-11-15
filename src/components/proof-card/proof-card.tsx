@@ -7,6 +7,7 @@ import { OutboundLink } from "../outbound-link/outbound-link";
 import { RouteLink } from "../route-link/route-link";
 import { Skeleton } from "../skeleton/skeleton";
 
+import type { CSSProperties } from "react";
 import type { GeoBadgeFragment } from "../content-fragments";
 import type { Locale } from "@/src/lib/i18n/locales";
 import type { RouteId } from "@/src/lib/routes/routes";
@@ -167,7 +168,12 @@ export function ProofCard({
             <p className={styles.claim}>{claim}</p>
             <div className={styles.byline}>
               {logo ? (
-                <span aria-hidden="true" className={styles.logo} data-logo>
+                <span
+                  aria-hidden="true"
+                  className={styles.logo}
+                  data-logo
+                  style={{ "--logo-ratio": logo.width / logo.height } as CSSProperties}
+                >
                   <Image alt="" height={logo.height} src={logo.src} width={logo.width} />
                 </span>
               ) : (

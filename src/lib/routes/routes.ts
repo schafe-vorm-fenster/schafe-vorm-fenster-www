@@ -77,6 +77,12 @@ export interface RouteDefinition {
   readonly spec: string;
   /** The parent route, for the breadcrumb trail of TS-WEB-0006 D2 / DEC-0071. */
   readonly parent?: RouteId;
+  /**
+   * The route answers `noindex, follow` (its page's `robots`). Such a route is
+   * absent from the sitemap: a sitemap URL marked noindex is a Search Console
+   * error (issue 228). Page metadata and `app/sitemap.ts` both read this flag.
+   */
+  readonly noindex?: true;
 }
 
 /**
@@ -105,6 +111,8 @@ export const ROUTES: Readonly<Record<RouteId, RouteDefinition>> = {
     path: { de: "/dein-kalender/bestellen", en: "/your-calendar/order" },
     spec: "TS-WEB-0025",
     parent: "calendar",
+    // TS-WEB-0025 D9 / A10: a transactional flow, `noindex, follow`, not in the sitemap.
+    noindex: true,
   },
   region: { path: { de: "/deine-region", en: "/your-region" }, spec: "TS-WEB-0026" },
   regionQuote: {

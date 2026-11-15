@@ -103,6 +103,9 @@ interface RowFacts {
   readonly rowWidth: number;
   readonly categoryWidth: number;
   readonly categoryLabel: string;
+  readonly placement: string;
+  readonly categoryTop: number;
+  readonly metaBottom: number;
   readonly inStage: boolean;
 }
 
@@ -124,6 +127,9 @@ async function readRows(page: Page): Promise<RowFacts[]> {
           rowWidth: row.getBoundingClientRect().width,
           categoryWidth: category ? category.getBoundingClientRect().width : 0,
           categoryLabel: (category?.textContent ?? "").trim(),
+          placement: row.getAttribute("data-category-placement") ?? "side",
+          categoryTop: category ? category.getBoundingClientRect().top : 0,
+          metaBottom: meta ? meta.getBoundingClientRect().bottom : 0,
           inStage: row.closest('[data-block="story-stage"]') !== null,
         };
       }),
@@ -151,6 +157,12 @@ for (const path of ["/", "/dein-ort?ort=schlatkow"]) {
         // The form follows the row, not the viewport.
         if (row.rowWidth >= BADGE_MIN_ROW_PX) {
           expect(row.categoryWidth, `badge for "${row.categoryLabel}": ${where}`).toBeGreaterThan(40);
+        } else if (row.placement === "below") {
+          // The nearby list (issue 152, owner design): on a narrow row the pill
+          // stands on a line of its own under the meta, so it cannot starve the
+          // meta; the meta check above already holds. Not a glyph row.
+          expect(row.categoryWidth, `pill for "${row.categoryLabel}": ${where}`).toBeGreaterThan(40);
+          expect(row.categoryTop, `pill under the meta: ${where}`).toBeGreaterThanOrEqual(row.metaBottom - 1);
         } else {
           expect(row.categoryWidth, `glyph for "${row.categoryLabel}": ${where}`).toBeLessThanOrEqual(40);
         }
