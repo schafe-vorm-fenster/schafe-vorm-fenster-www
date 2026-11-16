@@ -19,11 +19,11 @@ derived_from:
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "sourced — page-level composition/navigation copy only; the seven sections themselves are content/legal/*.md, imported (5), generated-pending-counsel (1, accessibility) or maintained here (1, image credits)"
+provenance: "sourced — page-level composition/navigation copy only; the seven sections themselves are content/legal/*.md, imported (5), generated and owner-approved (1, accessibility) or maintained here (1, image credits)"
 compliance_check: "state/content-map.md#compliance-checks — TS-WEB-0029"
 schema_note: "see content/pages/home/de.md — same TS-WEB-0007/schema gap, state/open.md #37"
 open_points:
-  - "state/open.md #21 — accessibility statement is generated, provenance: generated, flagged for legal-counsel review before production. Re-checked 2026-09-12 against the hub packages and go-to-market-os (including the brand-identity org-profile intake, which holds only .gdoc pointers): no source exists anywhere, so this slot stays generated"
+  - "state/open.md #21 — accessibility statement is generated (no source exists, re-checked 2026-09-12) and was rewritten and approved by the owner on 2026-11-15 as a self-assessed statement against WCAG 2.2 AA, without the draft notice"
   - "TS-WEB-0029 open point #2 / state/open.md — English siblings of the five imported documents do not exist yet; this playbook never machine-translates legal text"
 ---
 
@@ -56,7 +56,7 @@ Rolle Content & Translation, „Must not: touch code outside content files
 | `#nutzungsbedingungen` | Nutzungsbedingungen | `content/legal/terms-of-use.md` (importiert) |
 | `#community-richtlinien` | Community-Richtlinien | `content/legal/community-guidelines.md` (importiert) |
 | `#auftragsverarbeitung` | Auftragsverarbeitung (AVV) | `content/legal/dpa.md` (importiert, öffentlich, ohne Zugangssperre) |
-| `#barrierefreiheit` | Barrierefreiheit | `content/legal/accessibility.md` (generiert, siehe unten) |
+| `#barrierefreiheit` | Barrierefreiheit | `content/legal/accessibility.md` (generiert, vom Owner freigegeben, siehe unten) |
 | `#bildnachweise` | Bildnachweise | `content/legal/image-credits.md` (in diesem Repository gepflegt, Verweis auf die Nachweise am Bild) |
 
 ## Fußzeilen-Linktexte
@@ -80,9 +80,10 @@ Datensatz zur Barrierefreiheit; die Intake-Dokumente unter
 Abschnitt bleibt deshalb `provenance: generated`. Diese Seite kann ohne
 ihn nicht in Produktion gehen (Release-Blocker). Der Text liegt separat
 unter `content/legal/accessibility.md`, generiert nach der
-Dummy-Content-Regel: zurückhaltend formuliert, ohne erfundenes
-Prüfdatum, ohne behauptete Konformitätsstufe — und ausdrücklich zur
-Prüfung durch Rechtsberatung markiert, bevor er produktiv geht
+Dummy-Content-Regel. Am 2026-11-15 hat der Owner den Entwurfsvermerk
+gestrichen und eine Selbstbewertung gegen WCAG 2.2 AA freigegeben: was die
+Website leistet, wie geprüft wird (axe-Sweep aller Routen, `check:contrast`),
+was noch nicht barrierefrei ist, Kontakt und Durchsetzungsstelle
 (`state/open.md` #21).
 
 ## Englische Geschwisterdokumente
